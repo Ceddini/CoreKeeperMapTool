@@ -1,6 +1,8 @@
 <html>
   <head>
+    <script src="https://unpkg.com/@panzoom/panzoom@4.4.4/dist/panzoom.min.js"></script>
     <script src="js/pako-inflate-2.0.4.min.js"></script>
+    <script src="data/tilecolormap.js"></script>
     <script src="js/maploader.js"></script>
     <script src="js/canvastools.js"></script>
   </head>
@@ -14,18 +16,18 @@
       Select your world folder number<br/>
       Then pick one of the #.mapparts.gzip files to display <br/>
 
-      <input id="mapupload" type="file"/> <input id="savemap" type="button" value = "Download Map"/> 
+      <input id="mapupload" type="file"/> <input id="savemap" type="button" value = "Download Map"/> <select id="highlighttype" onchange="redrawMap();"></select>
     </div>
     <div>
-      <input type="button" value="+" onclick="changeZoom(1.1);" /><input type="button" value="-" onclick="changeZoom(0.9);" />
+      <input type="button" value="+" onclick="changeZoom(0.1);" /><input type="button" value="-" onclick="changeZoom(-0.1);" />
     </div>
     <div>
-      <input type="button" value="<" onclick="panImage(-100,0);" /><input type="button" value=">" onclick="panImage(100,0);" />
-      <input type="button" value="^" onclick="panImage(0,-100);" /><input type="button" value="V" onclick="panImage(0,100);" />
+      <input type="button" value="<" onclick="panImage(-10,0);" /><input type="button" value=">" onclick="panImage(10,0);" />
+      <input type="button" value="^" onclick="panImage(0,-10);" /><input type="button" value="V" onclick="panImage(0,10);" />
       <input type="checkbox" id="bosscircle"/> Show Bosses
     </div>
     <div>
-      <canvas id="mapcanvas" width="1200px" height="800px" onclick="//toclick">
+      <canvas id="mapcanvas" width="1200px" height="800px" style="image-rendering: pixelated;" onclick="//toclick">
     </div>
     <script src="js/page.js"></script>
     <script>
