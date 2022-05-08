@@ -1,3 +1,4 @@
+
 let tilecolormap = [
   {
     "index": "0",
@@ -38,16 +39,6 @@ let tilecolormap = [
     "r": "127",
     "g": "95",
     "b": "48"
-  },
-  {
-    "index": "4",
-    "tileset": "0",
-    "tilesetname": "Dirt",
-    "type": "lava",
-    "name": "unused",
-    "r": "255",
-    "g": "0",
-    "b": "0"
   },
   {
     "index": "5",
@@ -470,16 +461,6 @@ let tilecolormap = [
     "b": "118"
   },
   {
-    "index": "48",
-    "tileset": "8",
-    "tilesetname": "Nature",
-    "type": "pit",
-    "name": "unused?",
-    "r": "1",
-    "g": "1",
-    "b": "1"
-  },
-  {
     "index": "49",
     "tileset": "8",
     "tilesetname": "Nature",
@@ -498,16 +479,6 @@ let tilecolormap = [
     "r": "61",
     "g": "155",
     "b": "65"
-  },
-  {
-    "index": "51",
-    "tileset": "8",
-    "tilesetname": "Nature",
-    "type": "lava",
-    "name": "unused",
-    "r": "255",
-    "g": "1",
-    "b": "0"
   },
   {
     "index": "52",
@@ -820,3 +791,9 @@ let tilecolormap = [
     "b": "130"
   }
 ];
+let KnownTypes = [
+  {name:'Ground', values:['ground', 'floor', 'rug', 'bridge']},
+  {name:'Walls', values:['ground', 'floor', 'fence']},
+  {name:'Ore', values:['ore']},
+  {name:'Water', values:['water']}
+]

@@ -32,11 +32,18 @@ window.addEventListener('DOMContentLoaded', () => {
   fileupload.addEventListener('change', function handleFile(event) {
     loadMapFile(fileupload, tilelist, updatemap);
   });
-  const savemap = document.getElementById("savemap");
-  savemap.addEventListener('click', ()=>{
-    downloadMap(document.getElementById("mapcanvas"));
-  });
   panzoomele = Panzoom(document.getElementById("mapcanvas"), {
     maxScale: 5
   });
 }, false);
+
+function toggleBosses(){
+  //class="active"
+  let ele = document.getElementById("bosscircle");
+  if(ele.classList.contains("active")){
+    ele.classList.remove("active");
+  } else {
+    ele.classList.add("active");
+  }
+  redrawMap();
+}

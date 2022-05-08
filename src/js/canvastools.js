@@ -42,13 +42,13 @@ function redrawMap() {
   const canvas = document.getElementById("mapcanvas");
   setContext(_global_ctx, canvas.width, canvas.height);
   _global_ctx.drawImage(_image_cache, 0, 0);
-  decorateMap();
+  decorateMap(canvas.width, canvas.height);
 }
 
-function decorateMap(){
+function decorateMap(width, height){
   highlightSelected();
-  if (document.getElementById("bosscircle").checked) {
-    drawBosses(_global_ctx, canvas.width, canvas.height);
+  if (document.getElementById("bosscircle").classList.contains("active")) {
+    drawBosses(_global_ctx, width, height);
   }
 }
 
@@ -137,7 +137,7 @@ function drawMap(tiles) {
   _image_cache = new Image();
   _image_cache.src = canvas.toDataURL();
   //scanImage(pixelmap);
-  decorateMap();
+  decorateMap(canvas.width, canvas.height);
 }
 
 function scanImage(colormap) {
