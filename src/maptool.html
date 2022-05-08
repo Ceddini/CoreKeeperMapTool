@@ -1,0 +1,35 @@
+<html>
+  <head>
+    <script src="js/pako-inflate-2.0.4.min.js"></script>
+    <script src="js/maploader.js"></script>
+    <script src="js/canvastools.js"></script>
+  </head>
+  <body>
+    <div>
+      <p>Core Keeper Map Tool -- Created by Mz, nineforty, and Craigins</p>
+    </div>
+    <div>
+      Open the folder: c:\users\%USERNAME%\AppData\LocalLow\Pugstorm\Core Keeper\Steam\ <br/>
+      double click on your steam id folder, then on the maps folder.<br/>
+      Select your world folder number<br/>
+      Then pick one of the #.mapparts.gzip files to display <br/>
+
+      <input id="mapupload" type="file"/> <input id="savemap" type="button" value = "Download Map"/> 
+    </div>
+    <div>
+      <input type="button" value="+" onclick="changeZoom(1.1);" /><input type="button" value="-" onclick="changeZoom(0.9);" />
+    </div>
+    <div>
+      <input type="button" value="<" onclick="panImage(-100,0);" /><input type="button" value=">" onclick="panImage(100,0);" />
+      <input type="button" value="^" onclick="panImage(0,-100);" /><input type="button" value="V" onclick="panImage(0,100);" />
+      <input type="checkbox" id="bosscircle"/> Show Bosses
+    </div>
+    <div>
+      <canvas id="mapcanvas" width="1200px" height="800px" onclick="//toclick">
+    </div>
+    <script src="js/page.js"></script>
+    <script>
+      
+    </script>
+  </body>
+</html>
