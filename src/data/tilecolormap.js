@@ -1,18 +1,6 @@
 
 let tilecolormap = [
   {
-    "index": "0",
-    "tileset": "0",
-    "tilesetname": "Dirt",
-    "type": "none",
-    "name": "Unexplored",
-    "r": "0",
-    "g": "0",
-    "b": "0"
-  },
-  {
-    "index": "1",
-    "tileset": "0",
     "tilesetname": "Dirt",
     "type": "pit",
     "name": "Pit",
@@ -21,8 +9,6 @@ let tilecolormap = [
     "b": "31"
   },
   {
-    "index": "2",
-    "tileset": "0",
     "tilesetname": "Dirt",
     "type": "wall",
     "name": "Dirt Wall",
@@ -31,8 +17,6 @@ let tilecolormap = [
     "b": "39"
   },
   {
-    "index": "3",
-    "tileset": "0",
     "tilesetname": "Dirt",
     "type": "ground",
     "name": "Dirt Ground",
@@ -41,8 +25,6 @@ let tilecolormap = [
     "b": "48"
   },
   {
-    "index": "5",
-    "tileset": "0",
     "tilesetname": "Dirt",
     "type": "water",
     "name": "Water",
@@ -51,8 +33,6 @@ let tilecolormap = [
     "b": "129"
   },
   {
-    "index": "6",
-    "tileset": "0",
     "tilesetname": "Dirt",
     "type": "ore",
     "name": "Copper Ore",
@@ -61,68 +41,54 @@ let tilecolormap = [
     "b": "87"
   },
   {
-    "index": "7",
-    "tileset": "0",
     "tilesetname": "Dirt",
-    "type": "bigRoot",
+    "type": "ore",
     "name": "Root",
     "r": "225",
     "g": "163",
     "b": "104"
   },
   {
-    "index": "8",
-    "tileset": "0",
     "tilesetname": "Dirt",
-    "type": "dugUpGround",
+    "type": "ground",
     "name": "Tilled Dirt Ground",
     "r": "180",
     "g": "127",
     "b": "73"
   },
   {
-    "index": "9",
-    "tileset": "0",
     "tilesetname": "Dirt",
-    "type": "ancientCrystal",
+    "type": "ore",
     "name": "Ancient Gemstone Ore",
     "r": "0",
     "g": "147",
     "b": "255"
   },
   {
-    "index": "10",
-    "tileset": "0",
     "tilesetname": "Dirt",
-    "type": "wateredGround",
+    "type": "round",
     "name": "Watered Dirt Ground",
     "r": "141",
     "g": "102",
     "b": "62"
   },
   {
-    "index": "11",
-    "tileset": "0",
     "tilesetname": "Dirt",
-    "type": "groundSlime",
+    "type": "ground",
     "name": "Ground Slime",
     "r": "217",
     "g": "98",
     "b": "23"
   },
   {
-    "index": "12",
-    "tileset": "0",
-    "tilesetname": "Dirt",
-    "type": "chrysalis",
+    "tilesetname": "Hive",
+    "type": "ground",
     "name": "Chrysalis",
     "r": "252",
     "g": "166",
     "b": "148"
   },
   {
-    "index": "13",
-    "tileset": "12",
     "tilesetname": "Sand",
     "type": "wall",
     "name": "Sand Wall",
@@ -131,8 +97,6 @@ let tilecolormap = [
     "b": "58"
   },
   {
-    "index": "14",
-    "tileset": "12",
     "tilesetname": "Sand",
     "type": "ground",
     "name": "Sand Ground",
@@ -141,9 +105,7 @@ let tilecolormap = [
     "b": "89"
   },
   {
-    "index": "15",
-    "tileset": "13",
-    "tilesetname": "Turf",
+    "tilesetname": "Dirt",
     "type": "wall",
     "name": "Turf Wall",
     "r": "70",
@@ -151,9 +113,7 @@ let tilecolormap = [
     "b": "81"
   },
   {
-    "index": "16",
-    "tileset": "13",
-    "tilesetname": "Turf",
+    "tilesetname": "Dirt",
     "type": "ground",
     "name": "Turf Ground",
     "r": "86",
@@ -161,8 +121,6 @@ let tilecolormap = [
     "b": "100"
   },
   {
-    "index": "17",
-    "tileset": "11",
     "tilesetname": "Clay",
     "type": "wall",
     "name": "Clay Wall",
@@ -171,8 +129,6 @@ let tilecolormap = [
     "b": "54"
   },
   {
-    "index": "18",
-    "tileset": "11",
     "tilesetname": "Clay",
     "type": "ground",
     "name": "Clay Ground",
@@ -181,8 +137,6 @@ let tilecolormap = [
     "b": "105"
   },
   {
-    "index": "19",
-    "tileset": "1",
     "tilesetname": "Stone",
     "type": "wall",
     "name": "Stone Wall",
@@ -191,8 +145,6 @@ let tilecolormap = [
     "b": "125"
   },
   {
-    "index": "20",
-    "tileset": "1",
     "tilesetname": "Stone",
     "type": "ground",
     "name": "Stone Ground",
@@ -201,8 +153,6 @@ let tilecolormap = [
     "b": "151"
   },
   {
-    "index": "21",
-    "tileset": "1",
     "tilesetname": "Stone",
     "type": "ore",
     "name": "Iron Ore",
@@ -211,8 +161,6 @@ let tilecolormap = [
     "b": "203"
   },
   {
-    "index": "22",
-    "tileset": "2",
     "tilesetname": "Obsidian",
     "type": "wall",
     "name": "Obsidian Wall",
@@ -221,8 +169,6 @@ let tilecolormap = [
     "b": "39"
   },
   {
-    "index": "23",
-    "tileset": "2",
     "tilesetname": "Obsidian",
     "type": "ground",
     "name": "Obsidian Ground",
@@ -231,49 +177,39 @@ let tilecolormap = [
     "b": "62"
   },
   {
-    "index": "25",
-    "tileset": "4",
-    "tilesetname": "Extras",
-    "type": "circuitPlate",
+    "tilesetname": "Structures",
+    "type": "floor",
     "name": "Electrical Wire",
     "r": "89",
     "g": "80",
     "b": "73"
   },
   {
-    "index": "26",
-    "tileset": "4",
-    "tilesetname": "Extras",
-    "type": "ancientCircuitPlate",
+    "tilesetname": "Structures",
+    "type": "floor",
     "name": "Ancient Wire (core)",
     "r": "66",
     "g": "93",
     "b": "94"
   },
   {
-    "index": "27",
-    "tileset": "4",
-    "tilesetname": "Extras",
-    "type": "rail",
+    "tilesetname": "Structures",
+    "type": "floor",
     "name": "Rail",
     "r": "122",
     "g": "122",
     "b": "122"
   },
   {
-    "index": "28",
-    "tileset": "4",
-    "tilesetname": "Extras",
-    "type": "greatWall",
+    "tilesetname": "Obsidian",
+    "type": "wall",
     "name": "Great Wall",
     "r": "19",
     "g": "94",
     "b": "82"
   },
   {
-    "index": "29",
-    "tileset": "5",
-    "tilesetname": "BaseBuildingWood",
+    "tilesetname": "Structures",
     "type": "wall",
     "name": "Wood Wall",
     "r": "148",
@@ -281,9 +217,7 @@ let tilecolormap = [
     "b": "51"
   },
   {
-    "index": "30",
-    "tileset": "5",
-    "tilesetname": "BaseBuildingWood",
+    "tilesetname": "Structures",
     "type": "floor",
     "name": "Wood Floor",
     "r": "199",
@@ -291,39 +225,31 @@ let tilecolormap = [
     "b": "79"
   },
   {
-    "index": "31",
-    "tileset": "5",
-    "tilesetname": "BaseBuildingWood",
-    "type": "bridge",
+    "tilesetname": "Structures",
+    "type": "floor",
     "name": "Wood Bridge",
     "r": "140",
     "g": "88",
     "b": "38"
   },
   {
-    "index": "32",
-    "tileset": "5",
-    "tilesetname": "BaseBuildingWood",
-    "type": "fence",
+    "tilesetname": "Structures",
+    "type": "wall",
     "name": "Wood Fence",
     "r": "112",
     "g": "72",
     "b": "33"
   },
   {
-    "index": "33",
-    "tileset": "5",
-    "tilesetname": "BaseBuildingWood",
-    "type": "rug",
+    "tilesetname": "Structures",
+    "type": "floor",
     "name": "Rug",
     "r": "124",
     "g": "71",
     "b": "123"
   },
   {
-    "index": "34",
-    "tileset": "7",
-    "tilesetname": "BaseBuildingStone",
+    "tilesetname": "Structures",
     "type": "wall",
     "name": "Stone Bricks Wall",
     "r": "106",
@@ -331,9 +257,7 @@ let tilecolormap = [
     "b": "114"
   },
   {
-    "index": "35",
-    "tileset": "7",
-    "tilesetname": "BaseBuildingStone",
+    "tilesetname": "Structures",
     "type": "floor",
     "name": "Stone Floor",
     "r": "129",
@@ -341,39 +265,31 @@ let tilecolormap = [
     "b": "140"
   },
   {
-    "index": "36",
-    "tileset": "7",
-    "tilesetname": "BaseBuildingStone",
-    "type": "bridge",
+    "tilesetname": "Structures",
+    "type": "floor",
     "name": "Stone Bridge",
     "r": "123",
     "g": "116",
     "b": "108"
   },
   {
-    "index": "37",
-    "tileset": "7",
-    "tilesetname": "BaseBuildingStone",
-    "type": "fence",
+    "tilesetname": "Structures",
+    "type": "wall",
     "name": "Stone Fence",
     "r": "97",
     "g": "91",
     "b": "85"
   },
   {
-    "index": "38",
-    "tileset": "7",
-    "tilesetname": "BaseBuildingStone",
-    "type": "rug",
+    "tilesetname": "Structures",
+    "type": "floor",
     "name": "Woven Mat",
     "r": "58",
     "g": "139",
     "b": "65"
   },
   {
-    "index": "39",
-    "tileset": "23",
-    "tilesetname": "BaseBuildingScarlet",
+    "tilesetname": "Structures",
     "type": "wall",
     "name": "Scarlet Wall",
     "r": "144",
@@ -381,9 +297,7 @@ let tilecolormap = [
     "b": "19"
   },
   {
-    "index": "40",
-    "tileset": "23",
-    "tilesetname": "BaseBuildingScarlet",
+    "tilesetname": "Structures",
     "type": "floor",
     "name": "Scarlet Floor",
     "r": "178",
@@ -391,29 +305,23 @@ let tilecolormap = [
     "b": "38"
   },
   {
-    "index": "41",
-    "tileset": "23",
-    "tilesetname": "BaseBuildingScarlet",
-    "type": "bridge",
+    "tilesetname": "Structures",
+    "type": "floor",
     "name": "Scarlet Bridge",
     "r": "168",
     "g": "30",
     "b": "46"
   },
   {
-    "index": "42",
-    "tileset": "23",
-    "tilesetname": "BaseBuildingScarlet",
-    "type": "fence",
+    "tilesetname": "Structures",
+    "type": "wall",
     "name": "Scarlet Fence",
     "r": "128",
     "g": "36",
     "b": "46"
   },
   {
-    "index": "43",
-    "tileset": "6",
-    "tilesetname": "LarvaHive",
+    "tilesetname": "Hive",
     "type": "wall",
     "name": "Larva Hive Wall",
     "r": "163",
@@ -421,9 +329,7 @@ let tilecolormap = [
     "b": "83"
   },
   {
-    "index": "44",
-    "tileset": "6",
-    "tilesetname": "LarvaHive",
+    "tilesetname": "Hive",
     "type": "ground",
     "name": "Larva Hive Ground",
     "r": "199",
@@ -431,9 +337,7 @@ let tilecolormap = [
     "b": "99"
   },
   {
-    "index": "45",
-    "tileset": "6",
-    "tilesetname": "LarvaHive",
+    "tilesetname": "Hive",
     "type": "water",
     "name": "Larva Hive Water",
     "r": "117",
@@ -441,19 +345,15 @@ let tilecolormap = [
     "b": "48"
   },
   {
-    "index": "46",
-    "tileset": "6",
-    "tilesetname": "LarvaHive",
-    "type": "groundSlime",
+    "tilesetname": "Hive",
+    "type": "ground",
     "name": "Ground Acid Slime",
     "r": "193",
     "g": "170",
     "b": "33"
   },
   {
-    "index": "47",
-    "tileset": "6",
-    "tilesetname": "LarvaHive",
+    "tilesetname": "Clay",
     "type": "ore",
     "name": "Tin Ore",
     "r": "142",
@@ -461,9 +361,7 @@ let tilecolormap = [
     "b": "118"
   },
   {
-    "index": "49",
-    "tileset": "8",
-    "tilesetname": "Nature",
+    "tilesetname": "Wilderness",
     "type": "wall",
     "name": "Grass Wall",
     "r": "22",
@@ -471,9 +369,7 @@ let tilecolormap = [
     "b": "27"
   },
   {
-    "index": "50",
-    "tileset": "8",
-    "tilesetname": "Nature",
+    "tilesetname": "Wilderness",
     "type": "ground",
     "name": "Grass Ground",
     "r": "61",
@@ -481,9 +377,7 @@ let tilecolormap = [
     "b": "65"
   },
   {
-    "index": "52",
-    "tileset": "8",
-    "tilesetname": "Nature",
+    "tilesetname": "Wilderness",
     "type": "ore",
     "name": "Scarlet Ore",
     "r": "206",
@@ -491,38 +385,30 @@ let tilecolormap = [
     "b": "59"
   },
   {
-    "index": "53",
-    "tileset": "8",
-    "tilesetname": "Nature",
-    "type": "dugUpGround",
+    "tilesetname": "Wilderness",
+    "type": "ground",
     "name": "Tilled Grass Ground",
     "r": "12",
     "g": "115",
     "b": "43"
   },
   {
-    "index": "54",
-    "tileset": "8",
-    "tilesetname": "Nature",
-    "type": "wateredGround",
+    "tilesetname": "Wilderness",
+    "type": "ground",
     "name": "Watered Grass Ground",
     "r": "26",
     "g": "93",
     "b": "46"
   },
   {
-    "index": "55",
-    "tileset": "8",
-    "tilesetname": "Nature",
-    "type": "groundSlime",
+    "tilesetname": "Wilderness",
+    "type": "ground",
     "name": "Ground Poison Slime",
     "r": "184",
     "g": "86",
     "b": "165"
   },
   {
-    "index": "56",
-    "tileset": "9",
     "tilesetname": "Mold",
     "type": "wall",
     "name": "Mold Wall",
@@ -531,8 +417,6 @@ let tilecolormap = [
     "b": "186"
   },
   {
-    "index": "57",
-    "tileset": "9",
     "tilesetname": "Mold",
     "type": "ground",
     "name": "Mold Ground",
@@ -541,8 +425,6 @@ let tilecolormap = [
     "b": "224"
   },
   {
-    "index": "58",
-    "tileset": "9",
     "tilesetname": "Mold",
     "type": "water",
     "name": "Mold Water",
@@ -551,9 +433,7 @@ let tilecolormap = [
     "b": "135"
   },
   {
-    "index": "65",
-    "tileset": "14",
-    "tilesetname": "BaseBuildingUnpainted",
+    "tilesetname": "Structures",
     "type": "wall",
     "name": "Unpainted Wall",
     "r": "154",
@@ -561,9 +441,7 @@ let tilecolormap = [
     "b": "212"
   },
   {
-    "index": "66",
-    "tileset": "14",
-    "tilesetname": "BaseBuildingUnpainted",
+    "tilesetname": "Structures",
     "type": "floor",
     "name": "Unpainted Floor",
     "r": "174",
@@ -571,9 +449,7 @@ let tilecolormap = [
     "b": "241"
   },
   {
-    "index": "67",
-    "tileset": "15",
-    "tilesetname": "BaseBuildingYellow",
+    "tilesetname": "Structures",
     "type": "wall",
     "name": "Yellow Wall",
     "r": "212",
@@ -581,9 +457,7 @@ let tilecolormap = [
     "b": "42"
   },
   {
-    "index": "68",
-    "tileset": "15",
-    "tilesetname": "BaseBuildingYellow",
+    "tilesetname": "Structures",
     "type": "floor",
     "name": "Yellow Floor",
     "r": "255",
@@ -591,9 +465,7 @@ let tilecolormap = [
     "b": "46"
   },
   {
-    "index": "69",
-    "tileset": "16",
-    "tilesetname": "BaseBuildingGreen",
+    "tilesetname": "Structures",
     "type": "wall",
     "name": "Green Wall",
     "r": "64",
@@ -601,9 +473,7 @@ let tilecolormap = [
     "b": "16"
   },
   {
-    "index": "70",
-    "tileset": "16",
-    "tilesetname": "BaseBuildingGreen",
+    "tilesetname": "Structures",
     "type": "floor",
     "name": "Green Floor",
     "r": "85",
@@ -611,9 +481,7 @@ let tilecolormap = [
     "b": "39"
   },
   {
-    "index": "71",
-    "tileset": "17",
-    "tilesetname": "BaseBuildingRed",
+    "tilesetname": "Structures",
     "type": "wall",
     "name": "Red Wall",
     "r": "187",
@@ -621,9 +489,7 @@ let tilecolormap = [
     "b": "10"
   },
   {
-    "index": "72",
-    "tileset": "17",
-    "tilesetname": "BaseBuildingRed",
+    "tilesetname": "Structures",
     "type": "floor",
     "name": "Red Floor",
     "r": "223",
@@ -631,9 +497,7 @@ let tilecolormap = [
     "b": "0"
   },
   {
-    "index": "73",
-    "tileset": "18",
-    "tilesetname": "BaseBuildingPurple",
+    "tilesetname": "Structures",
     "type": "wall",
     "name": "Purple Wall",
     "r": "109",
@@ -641,9 +505,7 @@ let tilecolormap = [
     "b": "137"
   },
   {
-    "index": "74",
-    "tileset": "18",
-    "tilesetname": "BaseBuildingPurple",
+    "tilesetname": "Structures",
     "type": "floor",
     "name": "Purple Floor",
     "r": "139",
@@ -651,9 +513,7 @@ let tilecolormap = [
     "b": "167"
   },
   {
-    "index": "75",
-    "tileset": "19",
-    "tilesetname": "BaseBuildingBlue",
+    "tilesetname": "Structures",
     "type": "wall",
     "name": "Blue Wall",
     "r": "28",
@@ -661,9 +521,7 @@ let tilecolormap = [
     "b": "216"
   },
   {
-    "index": "76",
-    "tileset": "19",
-    "tilesetname": "BaseBuildingBlue",
+    "tilesetname": "Structures",
     "type": "floor",
     "name": "Blue Floor",
     "r": "43",
@@ -671,9 +529,7 @@ let tilecolormap = [
     "b": "228"
   },
   {
-    "index": "77",
-    "tileset": "20",
-    "tilesetname": "BaseBuildingBrown",
+    "tilesetname": "Structures",
     "type": "wall",
     "name": "Brown Wall",
     "r": "124",
@@ -681,9 +537,7 @@ let tilecolormap = [
     "b": "28"
   },
   {
-    "index": "78",
-    "tileset": "20",
-    "tilesetname": "BaseBuildingBrown",
+    "tilesetname": "Structures",
     "type": "floor",
     "name": "Brown Floor",
     "r": "151",
@@ -691,9 +545,7 @@ let tilecolormap = [
     "b": "40"
   },
   {
-    "index": "79",
-    "tileset": "21",
-    "tilesetname": "BaseBuildingWhite",
+    "tilesetname": "Structures",
     "type": "wall",
     "name": "White Wall",
     "r": "157",
@@ -701,9 +553,7 @@ let tilecolormap = [
     "b": "203"
   },
   {
-    "index": "80",
-    "tileset": "21",
-    "tilesetname": "BaseBuildingWhite",
+    "tilesetname": "Structures",
     "type": "floor",
     "name": "White Floor",
     "r": "178",
@@ -711,9 +561,7 @@ let tilecolormap = [
     "b": "233"
   },
   {
-    "index": "81",
-    "tileset": "22",
-    "tilesetname": "BaseBuildingBlack",
+    "tilesetname": "Structures",
     "type": "wall",
     "name": "Black Wall",
     "r": "62",
@@ -721,9 +569,7 @@ let tilecolormap = [
     "b": "62"
   },
   {
-    "index": "82",
-    "tileset": "22",
-    "tilesetname": "BaseBuildingBlack",
+    "tilesetname": "Structures",
     "type": "floor",
     "name": "Black Floor",
     "r": "76",
@@ -731,69 +577,51 @@ let tilecolormap = [
     "b": "85"
   },
   {
-    "index": "",
-    "tileset": "",
-    "tilesetname": "",
-    "type": "",
+    "tilesetname": "Furniture",
+    "type": "furniture",
     "name": "Flower Vessel",
     "r": "205",
     "g": "189",
     "b": "50"
   },
   {
-    "index": "",
-    "tileset": "",
-    "tilesetname": "",
-    "type": "",
+    "tilesetname": "Furniture",
+    "type": "furniture",
     "name": "Wooden Crate",
     "r": "114",
     "g": "61",
     "b": "13"
   },
   {
-    "index": "",
-    "tileset": "",
-    "tilesetname": "",
-    "type": "",
+    "tilesetname": "Furniture",
+    "type": "furniture",
     "name": "Mold Vessel",
     "r": "229",
     "g": "229",
     "b": "229"
   },
   {
-    "index": "",
-    "tileset": "",
-    "tilesetname": "",
-    "type": "",
+    "tilesetname": "Furniture",
+    "type": "furniture",
     "name": "Ancient Crate",
     "r": "77",
     "g": "168",
     "b": "202"
   },
   {
-    "index": "",
-    "tileset": "",
-    "tilesetname": "",
-    "type": "",
+    "tilesetname": "Structures",
+    "type": "floor",
     "name": "Conveyor Belt",
     "r": "104",
     "g": "127",
     "b": "174"
   },
   {
-    "index": "",
-    "tileset": "",
-    "tilesetname": "",
-    "type": "",
+    "tilesetname": "Stone",
+    "type": "ground",
     "name": "Caveling Floor Tile",
     "r": "130",
     "g": "130",
     "b": "130"
   }
 ];
-let KnownTypes = [
-  {name:'Ground', values:['ground', 'floor', 'rug', 'bridge']},
-  {name:'Walls', values:['ground', 'floor', 'fence']},
-  {name:'Ore', values:['ore']},
-  {name:'Water', values:['water']}
-]

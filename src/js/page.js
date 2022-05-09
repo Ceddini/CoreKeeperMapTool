@@ -1,31 +1,4 @@
 window.addEventListener('DOMContentLoaded', () => {
-  function setTerrainSelect(){
-    const selTerrain = document.getElementById("highlighttype");
-    /*
-      {
-    "index": "3",
-    "tileset": "0",
-    "tilesetname": "Dirt",
-    "type": "ground",
-    "name": "Dirt Ground",
-    "r": "127",
-    "g": "95",
-    "b": "48"
-  },
-    */
-    var option = document.createElement("option");
-    option.text = `None`;
-    option.value = ``;
-    selTerrain.add(option);
-    for(let row of tilecolormap){
-      option = document.createElement("option");
-      option.text = `${row.tilesetname} - ${row.name}`;
-      option.value = `${row.r},${row.g},${row.b}`;
-      selTerrain.add(option);
-    }
-  }
-
-  setTerrainSelect();
   const tilelist = [];
   const fileupload = document.getElementById("mapupload");
   const updatemap = () => { drawMap(tilelist) };
@@ -46,4 +19,25 @@ function toggleBosses(){
     ele.classList.add("active");
   }
   redrawMap();
+}
+
+function toggleDirections(){
+  let ele = document.getElementById("directions");
+  if(ele.style.display == "none"){
+    ele.style.display = "block"
+  } else {
+    ele.style.display = "none";
+  }
+}
+
+function toggleDarkMode(){
+  let ele = document.body;
+  let toggleele = document.getElementById("darkmodeui");
+  if(ele.style.backgroundColor == "white"){
+    ele.style.backgroundColor = "black";
+    toggleele.style.boxShadow = "#0088cc -15px 0px";
+  } else {
+    ele.style.backgroundColor = "white";
+    toggleele.style.boxShadow = "rgb(220,220,220) -15px 0px";
+  }
 }

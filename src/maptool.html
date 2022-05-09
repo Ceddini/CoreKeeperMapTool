@@ -15,51 +15,54 @@
   <script src="https://kit.fontawesome.com/75173a9880.js" crossorigin="anonymous"></script>
 </head>
 
-<body>
-  <div>
-    <p>Core Keeper Map Tool -- Created by Mz, nineforty, and Craigins</p>
-  </div>
-  <div>
-    Open the folder: c:\users\%USERNAME%\AppData\LocalLow\Pugstorm\Core Keeper\Steam\ <br />
-    double click on your steam id folder, then on the maps folder.<br />
-    Select your world folder number<br />
-    Then pick one of the #.mapparts.gzip files to display <br />
+<body style="background-color: black">
+  <div class="nav_controls_container">
+    <div>
+      <p>Core Keeper Map Tool -- Created by Mz, nineforty, and Craigins</p>
+    </div>
+    <div>
+      <div>
+        <a href="#" onclick="toggleDirections()"><i class="fas fa-question-circle"></i> Directions</a>
+        <div id="directions" style="display: none">
+          <ol>
+            <li>Open the folder: c:\users\%USERNAME%\AppData\LocalLow\Pugstorm\Core Keeper\Steam\</li>
+            <li>Open your steam id folder</li>
+            <li>Open the maps folder</li>
+            <li>Open your world # folder</li>
+            <li>Select one of the #.mapparts.gzip files to display</li>
+          </ol>
+        </div>
+      </div>
+      <div>
+        <input id="mapupload" type="file" /> <div class="toggle-container" onclick="toggleDarkMode();"><label id="darkmodeui" class="toggle-switch">Dark Mode</label></div>
+      </div>
+    </div>
+    <div>
+      <ul class="nav nav-pills movement-nav">
+        <li><a href="#" onclick="changeZoom(0.1);"><i class="fas fa-search-plus"></i></a></li>
+        <li><input style="margin-top: 8px;width: 30px;" type="text" id="zoomval" value="1.0" /></li>
+        <li><a href="#" onclick="changeZoom(-0.1);"><i class="fas fa-search-minus"></i></a></li>
+        <li><a href="#" onclick="panImage(-10,0);"><i class="fas fa-arrow-left"></i></a></li>
+        <li><a href="#" onclick="panImage(10,0);"><i class="fas fa-arrow-right"></i></a></li>
+        <li><a href="#" onclick="panImage(0,-10);"><i class="fas fa-arrow-up"></i></a></li>
+        <li><a href="#" onclick="panImage(0,10);"><i class="fas fa-arrow-down"></i></a></li>
+        <li id="bosscircle"><a href="#" onclick="toggleBosses();">Show Bosses</i></a></li>
+        <li><a href="#" onclick="downloadMap(document.getElementById('mapcanvas'));"><i class="fas fa-download"></i>
+            Download Map</a></li>
+      </ul>
+    </div>
+    <div>
 
-    <input id="mapupload" type="file" /> 
-    <select id="highlighttype" onchange="redrawMap();"></select>
-  </div>
-  <div>
-    <ul class="nav nav-pills movement-nav">
-      <li><a href="#" onclick="changeZoom(0.1);"><i class="fas fa-search-plus"></i></a></li>
-      <li><a href="#" onclick="changeZoom(-0.1);"><i class="fas fa-search-minus"></i></a></li>
-      <li><a href="#" onclick="panImage(-10,0);"><i class="fas fa-arrow-left"></i></a></li>
-      <li><a href="#" onclick="panImage(10,0);"><i class="fas fa-arrow-right"></i></a></li>
-      <li><a href="#" onclick="panImage(0,-10);"><i class="fas fa-arrow-up"></i></a></li>
-      <li><a href="#" onclick="panImage(0,10);"><i class="fas fa-arrow-down"></i></a></li>
-      <li id="bosscircle"><a href="#" onclick="toggleBosses();">Show Bosses</i></a></li>
-      <li><a href="#" onclick="downloadMap(document.getElementById('mapcanvas'));"><i class="fas fa-download"></i> Download Map</a></li>
-    </ul>
-  </div>
-  <div>
-    
-    <ul id="tilefilter" class="nav nav-pills">
-      <li><label class="highlight-label">Filter Tiles</label></li>
-      <li class="dropdown">
-        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-          Dropdown
-          <b class="caret"></b>
-        </a>
-        <ul class="dropdown-menu">
-          <li>Item 1</li>
-          <li>Item 2</li>
-        </ul>
-      </li>
-    </ul>
+      <ul id="tilefilter" class="nav nav-pills">
+        <li><a href="#" onclick="clearAllHighlights();">Clear</a></li>
+      </ul>
+    </div>
   </div>
   <div>
     <canvas id="mapcanvas" width="1200px" height="800px" style="image-rendering: pixelated;" onclick="//toclick">
   </div>
   <script src="js/page.js"></script>
+  <script src="js/menubuilder.js"></script>
   <script src="js/vendor/bootstrap.js"></script>
 
   <script>

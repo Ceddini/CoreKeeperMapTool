@@ -11,3 +11,29 @@
   padding-right: 12px;
   padding-top: 8px;
 }
+
+.nav_controls_container {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 1;
+  background: #FFFC;
+  padding: 5px;
+  font-family: sans-serif;
+}
+
+.toggle-switch {
+  cursor: pointer;
+  box-shadow: #0088cc -15px 0px;
+  color:#0088cc;
+  border-radius: 5px;
+  display: inline;
+  padding-left: 5px;
+  user-select: none;
+}
+
+.toggle-container {
+  cursor: pointer;
+  display: inline;
+  padding-left: 20px;
+}

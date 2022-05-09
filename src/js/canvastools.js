@@ -10,7 +10,19 @@ let panzoomele;
 
 function changeZoom(delta) {
   cameraZoom += delta;
-  panzoomele.zoom(cameraZoom, { animate: true })
+  panzoomele.zoom(cameraZoom, { animate: true });
+  let scaleregex = /^scale\(([0-9]*[.0-9]*)\) /gmi;
+  let stylestr = document.getElementById("mapcanvas").style.transform;
+  if (stylestr != undefined) {
+    let matches = scaleregex.exec(stylestr);
+    let scaleval = parseFloat(matches[1]);
+    document.getElementById('zoomval').value = scaleval;
+    if(scaleval < 1.0){
+      document.getElementById("mapcanvas").style.imageRendering = "auto";
+    } else {
+      document.getElementById("mapcanvas").style.imageRendering = "pixelated";
+    }
+  }
   /*if (_image_cache !== undefined) {
     redrawMap();
   }*/
@@ -45,7 +57,7 @@ function redrawMap() {
   decorateMap(canvas.width, canvas.height);
 }
 
-function decorateMap(width, height){
+function decorateMap(width, height) {
   highlightSelected();
   if (document.getElementById("bosscircle").classList.contains("active")) {
     drawBosses(_global_ctx, width, height);
@@ -179,13 +191,11 @@ function scanImage(colormap) {
   console.log("End", count, new Date());
 }
 
-function highlightSelected(){
-  const selTerrain = document.getElementById("highlighttype");
-  if(selTerrain.value == '')return;
-  const searchrgb = selTerrain.value.split(',');
-  let searchobj = {};
-  ((searchobj[searchrgb[0]] = {})[searchrgb[1]] = {})[searchrgb[2]] = true;
-  highlightColors(searchobj);
+function highlightSelected() {
+  let searchobj = {count:0};
+  buildHighlightSelection(searchobj);
+  if(searchobj.count > 0)
+    highlightColors(searchobj);
 }
 
 function highlightColors(search) {
