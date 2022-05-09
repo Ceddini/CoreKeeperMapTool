@@ -10,7 +10,7 @@ let panzoomele;
 
 function changeZoom(delta) {
   cameraZoom += delta;
-  panzoomele.zoom(cameraZoom, { animate: true });
+  panzoomele.zoom(cameraZoom, { animate: false });
   let scaleregex = /^scale\(([0-9]*[.0-9]*)\) /gmi;
   let stylestr = document.getElementById("mapcanvas").style.transform;
   if (stylestr != undefined) {

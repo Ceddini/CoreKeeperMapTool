@@ -66,7 +66,7 @@ let tilecolormap = [
   },
   {
     "tilesetname": "Dirt",
-    "type": "round",
+    "type": "ground",
     "name": "Watered Dirt Ground",
     "r": "141",
     "g": "102",
