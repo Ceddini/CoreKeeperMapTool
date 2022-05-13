@@ -1,5 +1,5 @@
 let cameraZoom = 1
-let MAX_ZOOM = 5
+let MAX_ZOOM = 10
 let MIN_ZOOM = 0.1
 let _image_cache = undefined;
 let cameraOffset = { x: 0, y: 0 }
@@ -9,19 +9,25 @@ let pixelmap = {};
 let panzoomele;
 
 function changeZoom(delta) {
+  if (cameraZoom >= MAX_ZOOM && delta > 0) {
+    return;
+  }
+  else if (cameraZoom <= MIN_ZOOM && delta < 0) {
+    return;
+  }
+  if (cameraZoom < 1 || (cameraZoom === 1 && delta < 0)) {
+    // Smaller steps for zooming out, otherwise we jump straight to 0
+    delta /= 10;
+  }
   cameraZoom += delta;
+  // Cut off floating point errors
+  cameraZoom = Math.round(cameraZoom * 100) / 100;
   panzoomele.zoom(cameraZoom, { animate: false });
-  let scaleregex = /^scale\(([0-9]*[.0-9]*)\) /gmi;
-  let stylestr = document.getElementById("mapcanvas").style.transform;
-  if (stylestr != undefined) {
-    let matches = scaleregex.exec(stylestr);
-    let scaleval = parseFloat(matches[1]);
-    document.getElementById('zoomval').value = scaleval;
-    if (scaleval < 1.0) {
-      document.getElementById("mapcanvas").style.imageRendering = "auto";
-    } else {
-      document.getElementById("mapcanvas").style.imageRendering = "pixelated";
-    }
+  document.getElementById('zoomval').value = cameraZoom;
+  if (cameraZoom < 1.0) {
+    document.getElementById("mapcanvas").style.imageRendering = "auto";
+  } else {
+    document.getElementById("mapcanvas").style.imageRendering = "pixelated";
   }
   /*if (_image_cache !== undefined) {
     redrawMap();
@@ -37,6 +43,11 @@ function panImage(dx, dy) {
   if (_image_cache !== undefined) {
     redrawMap();
   }*/
+}
+
+function zoomWithMouseWheel(event) {
+  const delta = event.deltaY > 0 ? -1 : 1;
+  changeZoom(delta);
 }
 
 function setContext(ctx, width, height) {

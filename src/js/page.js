@@ -1,13 +1,15 @@
 window.addEventListener('DOMContentLoaded', () => {
   const tilelist = [];
   const fileupload = document.getElementById("mapupload");
+  const mapCanvas = document.getElementById("mapcanvas");
   const updatemap = () => { drawMap(tilelist) };
   fileupload.addEventListener('change', function handleFile(event) {
     loadMapFile(fileupload, tilelist, updatemap);
   });
-  panzoomele = Panzoom(document.getElementById("mapcanvas"), {
-    maxScale: 5
+  panzoomele = Panzoom(mapCanvas, {
+    maxScale: MAX_ZOOM
   });
+  mapCanvas.addEventListener('wheel', zoomWithMouseWheel);
 }, false);
 
 function toggleBosses(){
