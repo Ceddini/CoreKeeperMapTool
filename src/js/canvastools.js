@@ -17,7 +17,7 @@ function changeZoom(delta) {
     let matches = scaleregex.exec(stylestr);
     let scaleval = parseFloat(matches[1]);
     document.getElementById('zoomval').value = scaleval;
-    if(scaleval < 1.0){
+    if (scaleval < 1.0) {
       document.getElementById("mapcanvas").style.imageRendering = "auto";
     } else {
       document.getElementById("mapcanvas").style.imageRendering = "pixelated";
@@ -111,7 +111,13 @@ function drawBosses(ctx, width, height) {
   ctx.beginPath();
   ctx.arc(coreloc.x, coreloc.y, radius, 0, 2 * Math.PI);
   ctx.stroke();
-
+  
+  /*
+  _global_ctx.fillStyle = MAZE_HIGLIGHT;
+  _global_ctx.beginPath();
+  //ARC starts 0 at 3 oclock
+  _global_ctx.arc(coreloc.x, coreloc.y, SEARCH_RADII.max, stoneArc.start - Math.PI / 2, stoneArc.end - Math.PI / 2);
+  _global_ctx.fill();*/
 
   ctx.globalAlpha = 1.0;
 }
@@ -192,15 +198,20 @@ function scanImage(colormap) {
 }
 
 function highlightSelected() {
-  let searchobj = {count:0};
+  let searchobj = { count: 0 };
   buildHighlightSelection(searchobj);
-  if(searchobj.count > 0)
-    highlightColors(searchobj);
-}
-
-function highlightColors(search) {
   const canvas = document.getElementById("mapcanvas");
   const myImage = _global_ctx.getImageData(0, 0, canvas.width, canvas.height);
+  if (searchobj.count > 0)
+    highlightColors(myImage, searchobj);
+  let ele = document.getElementById("mazeholes");
+  if (ele.classList.contains("active")) {
+    findStone(myImage.data, canvas.width);
+  }
+  _global_ctx.putImageData(myImage, 0, 0);
+}
+
+function highlightColors(myImage, search) {
   const myImageData = myImage.data;
   for (let i = 0; i < myImageData.length; i += 4) {
     if (myImageData[i + 3] != 0) { //if not transparent
@@ -213,5 +224,5 @@ function highlightColors(search) {
       }
     }
   }
-  _global_ctx.putImageData(myImage, 0, 0);
+
 }
