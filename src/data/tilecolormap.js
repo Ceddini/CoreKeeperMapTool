@@ -43,6 +43,14 @@ let tilecolormap = [
   {
     "tilesetname": "Dirt",
     "type": "ore",
+    "name": "Gold Ore",
+    "r": "242",
+    "g": "204",
+    "b": "61"
+  },
+  {
+    "tilesetname": "Dirt",
+    "type": "ore",
     "name": "Root",
     "r": "225",
     "g": "163",
@@ -582,15 +590,15 @@ let tilecolormap = [
     "name": "Flower Vessel",
     "r": "205",
     "g": "189",
-    "b": "50"
+    "b": "48"
   },
   {
     "tilesetname": "Furniture",
     "type": "furniture",
     "name": "Wooden Crate",
     "r": "114",
-    "g": "61",
-    "b": "13"
+    "g": "60",
+    "b": "17"
   },
   {
     "tilesetname": "Furniture",
