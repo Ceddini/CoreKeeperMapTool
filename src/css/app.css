@@ -22,10 +22,21 @@
   font-family: sans-serif;
 }
 
+.legend-container {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  z-index: 1;
+  background: #FFFC;
+  padding: 5px;
+  padding-left: 25px;
+  font-family: sans-serif;
+}
+
 .toggle-switch {
   cursor: pointer;
   box-shadow: #0088cc -15px 0px;
-  color:#0088cc;
+  color: #0088cc;
   border-radius: 5px;
   display: inline;
   padding-left: 5px;
@@ -38,10 +49,60 @@
   padding-left: 20px;
 }
 
-.canvas-container{
-  position:absolute;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
+.canvas-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.ivy-legend {
+  box-shadow: #FF00FF -15px 0px;
+  margin-right: 20px;
+}
+
+.mold-legend {
+  box-shadow: #6cbbe0 -15px 0px;
+  margin-right: 20px;
+}
+
+.azeos-legend {
+  box-shadow: #3d9b41 -15px 0px;
+  margin-right: 20px;
+}
+
+.malugaz-legend {
+  box-shadow: #678397 -15px 0px;
+  margin-right: 20px;
+}
+
+.hive-mother-legend {
+  box-shadow: #fca694 -15px 0px;
+  margin-right: 20px;
+}
+
+.ghorm-legend {
+  box-shadow: #d95917 -15px 0px;
+  margin-right: 20px;
+}
+
+.glurch-legend {
+  box-shadow: #7f5f30 -15px 0px;
+  margin-right: 20px;
+}
+
+.large-maze-legend {
+  box-shadow: #0F0 -15px 0px;
+  margin-right: 20px;
+}
+
+.medium-maze-legend {
+  box-shadow: #0FF -15px 0px;
+  margin-right: 20px;
+}
+
+.small-maze-legend {
+  box-shadow: #F0F -15px 0px;
+  margin-right: 20px;
 }
