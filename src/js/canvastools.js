@@ -77,46 +77,52 @@ function decorateMap(width, height) {
 
 function drawBosses(ctx, width, height) {
 
-  let radius = 900;
   ctx.globalAlpha = 0.3;
   ctx.lineWidth = 20;
+
+  //Ivy
+  let radius = 900;
   ctx.strokeStyle = "#FF00FF";
   ctx.beginPath();
   ctx.arc(coreloc.x, coreloc.y, radius, 0, 2 * Math.PI);
   ctx.stroke();
 
+  //Mold Dungeon
   radius = 750;
   ctx.strokeStyle = "#6cbbe0";
   ctx.beginPath();
   ctx.arc(coreloc.x, coreloc.y, radius, 0, 2 * Math.PI);
   ctx.stroke();
 
+  //Azeos
   radius = 600;
   ctx.strokeStyle = "#3d9b41";
   ctx.beginPath();
   ctx.arc(coreloc.x, coreloc.y, radius, 0, 2 * Math.PI);
   ctx.stroke();
 
+  //Malugaz the Corrupted
   radius = 350;
   ctx.strokeStyle = "#678397";
   ctx.beginPath();
   ctx.arc(coreloc.x, coreloc.y, radius, 0, 2 * Math.PI);
   ctx.stroke();
 
+  //Hive Mother
   radius = 330;
   ctx.strokeStyle = "#fca694";
   ctx.beginPath();
   ctx.arc(coreloc.x, coreloc.y, radius, 0, 2 * Math.PI);
   ctx.stroke();
 
-
+  //Ghorm
   radius = 250;
   ctx.strokeStyle = "#d95917";
   ctx.beginPath();
   ctx.arc(coreloc.x, coreloc.y, radius, 0, 2 * Math.PI);
   ctx.stroke();
 
-
+  //Glurch
   radius = 65;
   ctx.strokeStyle = "#7f5f30";
   ctx.beginPath();

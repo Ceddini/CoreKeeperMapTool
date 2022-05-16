@@ -1,5 +1,5 @@
 const SEARCH_RADII = { min: 140, min2: 19600, max: 500, max2: 250000 };
-const MAZE_HIGLIGHT = "#FF0000";
+const MAZE_HIGLIGHT = { 1: { r: 255, g: 0, b: 255 }, 2: { r: 0, g: 255, b: 255 }, 3: { r: 0, g: 255, b: 0 } };
 const STONE_FILTER = { count: 0 };
 const CLAY_FILTER = { count: 0 };
 const stoneArc = { start: 0, end: 0 };
@@ -72,27 +72,40 @@ function recordBiomeChange(rad, deltastone) {
 
 function findStone(myImageData, width) {
   let deltastone = countStoneClay(myImageData, width);
-  let prevavg = undefined;
   stoneArc.start = stoneArc.end = undefined;
   //change to:
   //  for every tick, sum the half arc, push it to a new array
   //  find the max value slot in the array, that is the start angle, add half of arcticks and that is the end angle
+  let countwidth = arcticks / 2;
+  let maxstone = { index: -1, count: 0 }, maxclay = { index: -1, count: 0 };
+  let tally = 0;
   for (let rad = 0; rad < arcticks; ++rad) {
-    let davg = averageAround(rad, deltastone, 18);
-    if (prevavg === undefined) {
-      prevavg = davg;
-    } else if ((davg <= 0 && prevavg > 0) || (prevavg <= 0 && davg > 0)) {
-      if (recordBiomeChange(rad, deltastone)) {
-        break;
-      }
+    tally = 0;
+    for (let i = 0; i < countwidth; i++) {
+      let idx = (i + rad) % arcticks;
+      tally += deltastone[idx];
     }
-    prevavg = davg;
+    if (tally > maxstone.count) {
+      maxstone.index = rad;
+      maxstone.count = tally;
+    }
+    if (tally < maxclay.count) {
+      maxclay.index = rad;
+      maxclay.count = tally;
+    }
   }
+  stoneArc.startticks = maxstone.index;
+  stoneArc.start = maxstone.index * deltaRadians;
+  stoneArc.endticks = maxclay.index;
+  stoneArc.end = maxclay.index * deltaRadians;
   findHole(myImageData, width);
 }
 function findHole(myImageData, width) {
   let visited = {};
   let prevx, prevy, x, y, i;
+  let b = 0;
+  let g = 0;
+  let r = 0;
 
   for (let rad = stoneArc.startticks; rad < stoneArc.endticks; ++rad) {
     let angle = rad * deltaRadians;
@@ -108,9 +121,14 @@ function findHole(myImageData, width) {
           continue;
         }
         i = (y * width + x) * 4;
-        let r = myImageData[i], g = myImageData[i + 1], b = myImageData[i + 2], a = myImageData[i + 3];
+        let /*r = myImageData[i], g = myImageData[i + 1], b = myImageData[i + 2],*/ a = myImageData[i + 3];
         if (a == 0) { //if transparent
-          traverseHole(x, y, myImageData, width, visited);
+          let hole = traverseHole(x, y, myImageData, width, visited);
+          if (hole._fits > 0) {
+            let holecolor = MAZE_HIGLIGHT[hole._fits];
+            delete hole._fits;
+            colorHole(myImageData, width, hole, holecolor);
+          }
         }
       }
     }
@@ -119,6 +137,22 @@ function findHole(myImageData, width) {
     myImageData[i + 3] = 255;*/
   }
 }
+
+function colorHole(myImageData, width, hole, color) {
+  let i, yc, xc;
+  for (let y in hole) {
+    yc = parseInt(y);
+    for (let x in hole[y]) {
+      xc = parseInt(x);
+      i = (yc * width + xc) * 4;
+      myImageData[i] = color.r;
+      myImageData[i + 1] = color.g;
+      myImageData[i + 2] = color.b;
+      myImageData[i + 3] = 255;
+    }
+  }
+}
+
 
 function hasVisited(visited, x, y) {
   if (!visited[y]) {
@@ -134,11 +168,27 @@ function addToHole(hole, x, y) {
     hole[y] = {};
   }
   hole[y][x] = true;
+  if (x < hole.minx) {
+    hole.minx = x;
+  } 
+  if (x > hole.maxx) {
+    hole.maxx = x;
+  }
+  if (y < hole.miny) {
+    hole.miny = y;
+  } 
+  if (y > hole.maxy) {
+    hole.maxy = y;
+  }
 }
 
 function traverseHole(startx, starty, myImageData, width, visited) {
   let tovisit = [{ x: startx, y: starty }];
-  let hole = {};
+  let hole = {
+    maxx: Number.NEGATIVE_INFINITY, maxy: Number.NEGATIVE_INFINITY,
+    minx: Number.POSITIVE_INFINITY, miny: Number.POSITIVE_INFINITY,
+    _fits: -1
+  };
   let idx = 0;
   while (idx < tovisit.length) {
     let { x, y } = tovisit[idx];
@@ -174,22 +224,66 @@ function traverseHole(startx, starty, myImageData, width, visited) {
     }
     visited[y][x] = true;
     addToHole(hole, x, y);
-    myImageData[i] = 255;
-    myImageData[i + 2] = 255;
-    myImageData[i + 3] = 255;
+    //myImageData[i] = 255;
+    //myImageData[i + 2] = 255;
+    //myImageData[i + 3] = 255;
     tovisit.push({ x: x, y: y - 1 });
     tovisit.push({ x: x, y: y + 1 });
     tovisit.push({ x: x - 1, y });
     tovisit.push({ x: x + 1, y });
   }
   testHole(hole);
-  return;
+  return hole;
 }
-const SMALL_MAZE = { width: 20, height: 18 };
-const MEDIUM_MAZE = { width: 39, height: 39 };
-const LARGE_MAZE = { width: 51, height: 53 };
+const SMALL_MAZE = { width: 20, height: 18, size: 1 };
+const MEDIUM_MAZE = { width: 39, height: 39, size: 2 };
+const LARGE_MAZE = { width: 51, height: 53, size: 3 };
+const TEST_MAZES = [LARGE_MAZE, MEDIUM_MAZE, SMALL_MAZE];
 function testHole(hole) {
+  let holeWidth = hole.maxx - hole.minx;
+  let holeHeight = hole.maxy - hole.miny;
+  for (let test of TEST_MAZES) {
+    //check if hole is big enough for maze
+    if (holeWidth < test.width || holeHeight < test.height) {
+      continue;
+    }
+    let validcols = 0;
+    let startcol = 0;
+    let fits = false;
+    for (let y = hole.miny; !fits && y < hole.maxy; y++) {
+      for (let x = hole.minx; !fits && x < hole.maxx; x++) {
+        if (!hole[y][x]) {
+          validcols = -1;
+        } else if (validcols == 0) {
+          startcol = x;
+        } else if (validcols >= test.width) {
+          fits = isBigEnough(hole, startcol, y, test);
+        }
+        validcols++;
+      }
+    }
+    if (fits) {
+      hole._fits = test.size;
+      break;
+    }
+  }
+  delete hole.minx;
+  delete hole.maxx;
+  delete hole.miny;
+  delete hole.maxy;
+}
 
+function isBigEnough(hole, x, y, maze) {
+  let endx = x + maze.width;
+  let endy = y + maze.height;
+  for (; y < endy; y++) {
+    for (; x < endx; x++) {
+      if (!hole[y][x]) {
+        return false;
+      }
+    }
+  }
+  return true;
 }
 
 function findMazes() {
