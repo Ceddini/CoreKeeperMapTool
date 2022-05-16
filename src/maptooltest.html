@@ -1,0 +1,88 @@
+<html>
+
+<head>
+  <meta charset="utf8" />
+  <title>Map Tool</title>
+  <link href="css/vendor/bootstrap.css" rel="stylesheet">
+  <link href="css/vendor/bootstrap-responsive.css" rel="stylesheet">
+  <link href="css/app.css" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-1.12.4.min.js"
+    integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+  <script src="js/vendor/jqueryBrowser.js"></script>
+  <script src="https://unpkg.com/@panzoom/panzoom@4.4.4/dist/panzoom.min.js"></script>
+  <script src="js/pako-inflate-2.0.4.min.js"></script>
+  <script src="data/tilecolormap.js"></script>
+  <script src="js/maploader.js"></script>
+  <script src="js/canvastools.js"></script>
+  <script src="https://kit.fontawesome.com/75173a9880.js" crossorigin="anonymous"></script>
+</head>
+
+<body style="background-color: black">
+  <div class="nav_controls_container">
+    <div>
+      <p>Core Keeper Map Tool -- Created by Mz, nineforty, and Craigins</p>
+    </div>
+    <div>
+      <div>
+        <a href="#" onclick="toggleDirections()"><i class="fas fa-question-circle"></i> Directions</a>
+        <div id="directions" style="display: none">
+          <ol>
+            <li>Open the folder: c:\users\%USERNAME%\AppData\LocalLow\Pugstorm\Core Keeper\Steam\</li>
+            <li>Open your steam id folder</li>
+            <li>Open the maps folder</li>
+            <li>Open your world # folder</li>
+            <li>Select one of the #.mapparts.gzip files to display</li>
+          </ol>
+        </div>
+      </div>
+      <div>
+        <input id="mapupload" type="file" /> <div class="toggle-container" onclick="toggleDarkMode();"><label id="darkmodeui" class="toggle-switch">Dark Mode</label></div>
+      </div>
+    </div>
+    <div>
+      <ul class="nav nav-pills movement-nav">
+        <!--li><a href="#" onclick="changeZoom(1);"><i class="fas fa-search-plus"></i></a></li>
+        <li><input style="margin-top: 8px;width: 30px;" type="text" id="zoomval" value="1.0" /></li>
+        <li><a href="#" onclick="changeZoom(-1);"><i class="fas fa-search-minus"></i></a></li>
+        <li><a href="#" onclick="panImage(-10,0);"><i class="fas fa-arrow-left"></i></a></li>
+        <li><a href="#" onclick="panImage(10,0);"><i class="fas fa-arrow-right"></i></a></li>
+        <li><a href="#" onclick="panImage(0,-10);"><i class="fas fa-arrow-up"></i></a></li>
+        <li><a href="#" onclick="panImage(0,10);"><i class="fas fa-arrow-down"></i></a></li-->
+        <li id="bosscircle"><a href="#" onclick="toggleBosses();">Show Bosses</i></a></li>
+        <li id="mazeholes"><a href="#" onclick="findMazes();">Find Mazes Gaps</i></a></li>
+        <li><a href="#" onclick="downloadMap(document.getElementById('mapcanvas'));"><i class="fas fa-download"></i>
+            Download Map</a></li>
+      </ul>
+    </div>
+  </div>
+  <div id="tilefilter" class="highlight-container">
+    <label class="collapsable-menu" onclick="clearAllHighlights();">Clear</label>
+  </div>
+  <div class="canvas-container">
+    <canvas id="mapcanvas" width="1200px" height="800px" style="image-rendering: pixelated;" onclick="//toclick">
+  </div>
+  <div class="legend-container">
+    <span class="ivy-legend">&nbsp;Ivy</span>
+    <span class="mold-legend">&nbsp;Main Mold Dungeon</span>
+    <span class="azeos-legend">&nbsp;Azeos</span>
+    <span class="malugaz-legend">&nbsp;Malugaz</span>
+    <span class="hive-mother-legend">&nbsp;Hive Mother</span>
+    <span class="ghorm-legend">&nbsp;Ghorm</span>
+    <span class="glurch-legend">&nbsp;Glurch</span><br/>
+    <span style="padding-right: 20px">Maze Gaps: </span>
+    <span class="large-maze-legend">&nbsp;Large</span>
+    <span class="medium-maze-legend">&nbsp;Medium</span>
+    <span class="small-maze-legend">&nbsp;Small</span>
+
+  </div>
+  <script src="js/page.js"></script>
+  <script src="js/menubuilder.js"></script>
+  <script src="js/mazehunter.js"></script>
+  <script src="js/vendor/bootstrap.js"></script>
+
+  <script>
+
+  </script>
+</body>
+
+</html>

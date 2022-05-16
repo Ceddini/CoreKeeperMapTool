@@ -49,6 +49,12 @@ function zoomWithMouseWheel(event) {
   const delta = event.deltaY > 0 ? -1 : 1;
   changeZoom(delta);
 }
+function updateCoordinates(event) {
+  let tempX = event.pageX;
+  let tempY = event.pageY;
+  if (tempX < 0) { tempX = 0; }
+  if (tempY < 0) { tempY = 0; }
+}
 
 function setContext(ctx, width, height) {
   ctx.imageSmoothingEnabled = false;
@@ -128,7 +134,7 @@ function drawBosses(ctx, width, height) {
   ctx.beginPath();
   ctx.arc(coreloc.x, coreloc.y, radius, 0, 2 * Math.PI);
   ctx.stroke();
-  
+
   /*
   _global_ctx.fillStyle = MAZE_HIGLIGHT;
   _global_ctx.beginPath();

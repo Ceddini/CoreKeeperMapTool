@@ -22,6 +22,16 @@
   font-family: sans-serif;
 }
 
+.highlight-container {
+  position: absolute;
+  top: 200px;
+  left: 10px;
+  z-index: 1;
+  background: #FFFC;
+  padding: 10px;
+  font-family: sans-serif;
+}
+
 .legend-container {
   position: absolute;
   bottom: 10px;
@@ -31,6 +41,18 @@
   padding: 5px;
   padding-left: 25px;
   font-family: sans-serif;
+}
+
+.collapsable-menu {
+  cursor: pointer;
+  user-select: none;
+  color: #0088cc;
+  padding: 5px;
+}
+
+.collapsable-menu-ul {
+  list-style-type: none;
+  display: none;
 }
 
 .toggle-switch {
