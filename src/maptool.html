@@ -30,7 +30,7 @@
             <li>Open the folder: c:\users\%USERNAME%\AppData\LocalLow\Pugstorm\Core Keeper\Steam\</li>
             <li>Open your steam id folder</li>
             <li>Open the maps folder</li>
-            <li>Open your world # folder</li>
+            <li>Open your character # folder</li>
             <li>Select one of the #.mapparts.gzip files to display</li>
           </ol>
         </div>
@@ -41,25 +41,24 @@
     </div>
     <div>
       <ul class="nav nav-pills movement-nav">
-        <li><a href="#" onclick="changeZoom(1);"><i class="fas fa-search-plus"></i></a></li>
+        <!--li><a href="#" onclick="changeZoom(1);"><i class="fas fa-search-plus"></i></a></li>
         <li><input style="margin-top: 8px;width: 30px;" type="text" id="zoomval" value="1.0" /></li>
         <li><a href="#" onclick="changeZoom(-1);"><i class="fas fa-search-minus"></i></a></li>
         <li><a href="#" onclick="panImage(-10,0);"><i class="fas fa-arrow-left"></i></a></li>
         <li><a href="#" onclick="panImage(10,0);"><i class="fas fa-arrow-right"></i></a></li>
         <li><a href="#" onclick="panImage(0,-10);"><i class="fas fa-arrow-up"></i></a></li>
-        <li><a href="#" onclick="panImage(0,10);"><i class="fas fa-arrow-down"></i></a></li>
+        <li><a href="#" onclick="panImage(0,10);"><i class="fas fa-arrow-down"></i></a></li-->
         <li id="bosscircle"><a href="#" onclick="toggleBosses();">Show Bosses</i></a></li>
         <li id="mazeholes"><a href="#" onclick="findMazes();">Find Mazes Gaps</i></a></li>
         <li><a href="#" onclick="downloadMap(document.getElementById('mapcanvas'));"><i class="fas fa-download"></i>
             Download Map</a></li>
       </ul>
     </div>
-    <div>
-
-      <ul id="tilefilter" class="nav nav-pills">
-        <li><a href="#" onclick="clearAllHighlights();">Clear</a></li>
-      </ul>
-    </div>
+  </div>
+  <div id="tilefilter" class="highlight-container">
+    <span>Transparency</span>
+    <div class="transparency-slider"><div class="transparency-knob"></div></div>
+    <label class="collapsable-menu" onclick="clearAllHighlights();">Clear</label>
   </div>
   <div class="canvas-container">
     <canvas id="mapcanvas" width="1200px" height="800px" style="image-rendering: pixelated;" onclick="//toclick">

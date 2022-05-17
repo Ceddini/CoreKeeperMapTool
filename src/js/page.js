@@ -25,7 +25,46 @@ window.addEventListener('DOMContentLoaded', () => {
     if (mnu.innerHTML.trim() == "Clear") continue;
     mnu.onclick = mnuclick;
   }
+
+  const slider = document.querySelector(".transparency-knob");
+  slider.onmousedown = sliderDown;
+  slider.onmouseup = sliderUp;
+  slider.onmousemove = sliderDrag;
+  SliderInfo.element = slider;
+
 }, false);
+
+const SliderInfo = {
+  element: undefined,
+  minx: 0,
+  maxx: 174,
+  down: false,
+  x: 20, y: 0,
+  transparency: function () { return parseInt((SliderInfo.x / 174) * 255); }
+}
+
+function sliderUp(event) {
+  SliderInfo.down = false;
+  let tempX = event.pageX;
+  let tempY = event.pageY;
+  if (tempX < 10) { tempX = 10; }
+  if (tempY < 0) { tempY = 0; }
+  redrawMap();
+  //console.log(tempX, tempY, SliderInfo.x, SliderInfo.transparency());
+}
+
+function sliderDown(event) {
+  SliderInfo.down = true;
+}
+function sliderDrag(event) {
+  if (SliderInfo.down) {
+    let tempX = event.pageX;
+    if (tempX < 32) { tempX = 32; }
+    if (tempX > 206) { tempX = 206; }
+    SliderInfo.x = tempX - 20 - 12;
+    SliderInfo.element.style.left = `${SliderInfo.x}px`;
+  }
+}
 
 function toggleBosses() {
   //class="active"
@@ -42,8 +81,10 @@ function toggleDirections() {
   let ele = document.getElementById("directions");
   if (ele.style.display == "none") {
     ele.style.display = "block"
+    document.querySelector(".highlight-container").style.top = "250px";
   } else {
     ele.style.display = "none";
+    document.querySelector(".highlight-container").style.top = "150px";
   }
 }
 

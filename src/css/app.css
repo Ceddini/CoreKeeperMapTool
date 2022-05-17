@@ -2,6 +2,20 @@
   margin-bottom: 0px;
 }
 
+.transparency-slider{
+  width:200px;
+  height:25px;
+  background-color: #AAA;
+}
+.transparency-knob{
+  position: relative;
+  height:25px;
+  width:25px;
+  left: 25px;
+  top: 0px;
+  background-color: #66F;
+}
+
 .highlight-label {
   margin-bottom: 2px;
   margin-right: 2px;
@@ -24,12 +38,14 @@
 
 .highlight-container {
   position: absolute;
-  top: 200px;
+  top: 150px;
   left: 10px;
   z-index: 1;
   background: #FFFC;
   padding: 10px;
   font-family: sans-serif;
+  overflow: auto;
+  max-height: calc(100vh - 180px);
 }
 
 .legend-container {

@@ -243,7 +243,7 @@ function highlightColors(myImage, search) {
         myImageData[i + 3] = 255;
       }
       else {
-        myImageData[i + 3] = 30;
+        myImageData[i + 3] = SliderInfo.transparency();
       }
     }
   }
