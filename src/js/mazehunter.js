@@ -106,9 +106,13 @@ function findHole(myImageData, width) {
   let b = 0;
   let g = 0;
   let r = 0;
+  let end = stoneArc.endticks;
+  if (end < stoneArc.startticks) {
+    end += arcticks;
+  }
 
-  for (let rad = stoneArc.startticks; rad < stoneArc.endticks; ++rad) {
-    let angle = rad * deltaRadians;
+  for (let rad = stoneArc.startticks; rad < end; ++rad) {
+    let angle = (rad % arcticks) * deltaRadians;
     for (let radius = SEARCH_RADII.min; radius < SEARCH_RADII.max; radius++) {
       x = parseInt(radius * Math.sin(angle));
       y = parseInt(radius * Math.cos(angle));
@@ -132,9 +136,6 @@ function findHole(myImageData, width) {
         }
       }
     }
-    /*myImageData[i] = 255;
-    myImageData[i + 2] = 255;
-    myImageData[i + 3] = 255;*/
   }
 }
 
@@ -170,13 +171,13 @@ function addToHole(hole, x, y) {
   hole[y][x] = true;
   if (x < hole.minx) {
     hole.minx = x;
-  } 
+  }
   if (x > hole.maxx) {
     hole.maxx = x;
   }
   if (y < hole.miny) {
     hole.miny = y;
-  } 
+  }
   if (y > hole.maxy) {
     hole.maxy = y;
   }
@@ -218,15 +219,16 @@ function traverseHole(startx, starty, myImageData, width, visited) {
       angle = Math.PI * 2 + angle;
     }
     //outside the stone biome
-    if ((stoneArc.end < stoneArc.start && angle > stoneArc.end && angle < stoneArc.start) ||
-      (angle < stoneArc.start || angle > stoneArc.end)) {
+    if (stoneArc.end < stoneArc.start) {
+      if (angle > stoneArc.end && angle < stoneArc.start) {
+        continue;
+      }
+    } else if (angle < stoneArc.start || angle > stoneArc.end) {
       continue;
     }
+
     visited[y][x] = true;
     addToHole(hole, x, y);
-    //myImageData[i] = 255;
-    //myImageData[i + 2] = 255;
-    //myImageData[i + 3] = 255;
     tovisit.push({ x: x, y: y - 1 });
     tovisit.push({ x: x, y: y + 1 });
     tovisit.push({ x: x - 1, y });

@@ -81,7 +81,7 @@ function toggleDirections() {
   let ele = document.getElementById("directions");
   if (ele.style.display == "none") {
     ele.style.display = "block"
-    document.querySelector(".highlight-container").style.top = "250px";
+    document.querySelector(".highlight-container").style.top = "260px";
   } else {
     ele.style.display = "none";
     document.querySelector(".highlight-container").style.top = "150px";

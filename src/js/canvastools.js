@@ -23,26 +23,16 @@ function changeZoom(delta) {
   // Cut off floating point errors
   cameraZoom = Math.round(cameraZoom * 100) / 100;
   panzoomele.zoom(cameraZoom, { animate: false });
-  document.getElementById('zoomval').value = cameraZoom;
   if (cameraZoom < 1.0) {
     document.getElementById("mapcanvas").style.imageRendering = "auto";
   } else {
     document.getElementById("mapcanvas").style.imageRendering = "pixelated";
   }
-  /*if (_image_cache !== undefined) {
-    redrawMap();
-  }*/
 }
 function panImage(dx, dy) {
   cameraOffset.x += dx;
   cameraOffset.y += dy;
   panzoomele.pan(cameraOffset.x, cameraOffset.y);
-  /*
-  cameraOffset.x = dx;
-  cameraOffset.y = dy;
-  if (_image_cache !== undefined) {
-    redrawMap();
-  }*/
 }
 
 function zoomWithMouseWheel(event) {
@@ -59,12 +49,6 @@ function updateCoordinates(event) {
 function setContext(ctx, width, height) {
   ctx.imageSmoothingEnabled = false;
   ctx.clearRect(0, 0, width, height);
-  /*ctx.translate(width / 2.0, height / 2.0);
-  ctx.scale(cameraZoom, cameraZoom);
-  ctx.translate(width / -2.0, height / -2.0);
-  ctx.translate(cameraOffset.x, cameraOffset.y);
-  cameraZoom = 1.0;
-  cameraOffset.x = cameraOffset.y = 0;*/
 }
 
 function redrawMap() {
@@ -135,12 +119,12 @@ function drawBosses(ctx, width, height) {
   ctx.arc(coreloc.x, coreloc.y, radius, 0, 2 * Math.PI);
   ctx.stroke();
 
-  /*
+  
   _global_ctx.fillStyle = MAZE_HIGLIGHT;
   _global_ctx.beginPath();
   //ARC starts 0 at 3 oclock
   _global_ctx.arc(coreloc.x, coreloc.y, SEARCH_RADII.max, stoneArc.start - Math.PI / 2, stoneArc.end - Math.PI / 2);
-  _global_ctx.fill();*/
+  _global_ctx.fill();
 
   ctx.globalAlpha = 1.0;
 }
@@ -171,62 +155,22 @@ function drawMap(tiles) {
     if (tiles[i].image) {
       let px = (tiles[i].key.x - minx) * TILE_SIZE;
       let py = (maxy - tiles[i].key.y) * TILE_SIZE;
-      //console.log(`(${tiles[i].key.x}, ${tiles[i].key.y}) = > (${px}, ${py})`);
       ctx.drawImage(tiles[i].image, px, py);
     }
   }
   _image_cache = new Image();
   _image_cache.src = canvas.toDataURL();
-  //scanImage(pixelmap);
   decorateMap(canvas.width, canvas.height);
 }
 
-function scanImage(colormap) {
-  const canvas = document.getElementById("mapcanvas");
-  /* https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Pixel_manipulation_with_canvas
-    RGBA Order pixel info
-    Uint8ClampedArray contains height × width × 4 bytes of data, with index values ranging from 0 to (height×width×4)-1.
-  */
-  const myImage = _global_ctx.getImageData(0, 0, canvas.width, canvas.height);
-  const myImageData = myImage.data;
-  //console.log(myImageData[0],myImageData[1],myImageData[2],myImageData[3]);
-  console.log("Start", new Date());
-  let count = 0;
-  for (let i = 0; i < myImageData.length; i += 4) {
-    if (myImageData[i + 3] != 0) { //if not transparent
-      let x = parseInt(i % myImage.width);
-      let y = parseInt(i / myImage.width);
-      let r = myImageData[i], g = myImageData[i + 1], b = myImageData[i + 2];
-      if (!colormap[r]) {
-        colormap[r] = {};
-      }
-      if (!colormap[r][g]) {
-        colormap[r][g] = {};
-      }
-      if (!colormap[r][g][b]) {
-        colormap[r][g][b] = {
-          pixels: {
-
-          }
-        }
-      }
-      if (!colormap[r][g][b].pixels[x]) {
-        colormap[r][g][b].pixels[x] = {};
-      }
-      colormap[r][g][b].pixels[x][y] = true;
-      ++count;
-    }
-  }
-  console.log("End", count, new Date());
-}
-
 function highlightSelected() {
-  let searchobj = { count: 0 };
+  let searchobj = { count: 0, boulders: {} };
   buildHighlightSelection(searchobj);
   const canvas = document.getElementById("mapcanvas");
   const myImage = _global_ctx.getImageData(0, 0, canvas.width, canvas.height);
-  if (searchobj.count > 0)
+  if (searchobj.count > 0) {
     highlightColors(myImage, searchobj);
+  }
   let ele = document.getElementById("mazeholes");
   if (ele.classList.contains("active")) {
     findStone(myImage.data, canvas.width);
@@ -234,16 +178,75 @@ function highlightSelected() {
   _global_ctx.putImageData(myImage, 0, 0);
 }
 
+function testPixel(width, myImageData, r, g, b, x, y) {
+  let i = y * width + x;
+  return (r == myImageData[i] && g == myImageData[i + 1] && b == myImageData[i + 2]);
+}
+
+function highlightPixel(width, myImageData, x, y) {
+  let i = y * width + x;
+  myImageData[i + 3] = 255;
+}
+
+function testBoulder(width, myImageData, r, g, b, x, y, x1, y1) {
+  let count = 0;
+  if (testPixel(width, myImageData, r, g, b, x1, y1)) {
+    count++;
+  }
+  if (testPixel(width, myImageData, r, g, b, x, y1)) {
+    count++;
+  }
+  if (testPixel(width, myImageData, r, g, b, x1, y)) {
+    count++;
+  }
+  if (count == 3) {
+    highlightPixel(width, myImageData, x1, y1);
+    highlightPixel(width, myImageData, x, y1);
+    highlightPixel(width, myImageData, x1, y);
+    highlightPixel(width, myImageData, x, y);
+  } else {
+    let alpha = SliderInfo.transparency();
+    let i = y * width + x;
+    myImageData[i + 3] = alpha;
+  }
+}
+
+function highlightBoulder(myImage, r, g, b, x, y) {
+  const myImageData = myImage.data;
+  let count = 0;
+
+  //test top left
+  count = 0;
+  if (x > 0 && y > 0) {
+    testBoulder(myImage.width, myImageData, r, g, b, x, y, x - 1, y - 1);
+  }
+  //test bottom left
+  if (x > 0 && y < myImage.height) {
+    testBoulder(myImage.width, myImageData, r, g, b, x, y, x - 1, y + 1);
+  }
+  //test bottom right
+  if (x < myImage.width && y < myImage.height) {
+    testBoulder(myImage.width, myImageData, r, g, b, x, y, x + 1, y + 1);
+  }
+  if (x < myImage.width && y > 0) {
+    testBoulder(myImage.width, myImageData, r, g, b, x, y, x + 1, y - 1);
+  }
+}
+
 function highlightColors(myImage, search) {
   const myImageData = myImage.data;
+  let alpha = SliderInfo.transparency();
   for (let i = 0; i < myImageData.length; i += 4) {
     if (myImageData[i + 3] != 0) { //if not transparent
       let r = myImageData[i], g = myImageData[i + 1], b = myImageData[i + 2];
-      if (search[r] && search[r][g] && search[r][g][b]) {
+      if (search.boulders[r] && search.boulders[r][g] && search.boulders[r][g][b]) {
+        let x = parseInt(i % myImage.width);
+        let y = parseInt(i / myImage.width);
+        highlightBoulder(myImage, r, g, b, x, y);
+      } else if (search[r] && search[r][g] && search[r][g][b]) {
         myImageData[i + 3] = 255;
-      }
-      else {
-        myImageData[i + 3] = SliderInfo.transparency();
+      } else {
+        myImageData[i + 3] = alpha;
       }
     }
   }

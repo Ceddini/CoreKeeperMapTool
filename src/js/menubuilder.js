@@ -77,20 +77,27 @@ function clearAllHighlights() {
   redrawMap();
 }
 
+function isBoulder(ele) {
+  let parentmenu = ele.parentElement.parentElement.parentElement;
+  return parentmenu.getAttribute("ID") == "boulder-menu";
+}
+
 function buildHighlightSelection(search) {
   let filterchecks = document.querySelectorAll('input[type="checkbox"][data-block-id]');
   var selected = [].filter.call(filterchecks, function (el) {
     return el.checked
   });
+  let filterobj;
   for (let chkbox of selected) {
     search.count++;
+    filterobj = isBoulder(chkbox) ? search.boulders : search;
     let tiletype = tilecolormap[chkbox.getAttribute("data-block-id")];
-    if (!search[tiletype.r]) {
-      ((search[tiletype.r] = {})[tiletype.g] = {})[tiletype.b] = true;
-    } else if (!search[tiletype.r][tiletype.g]) {
-      (search[tiletype.r][tiletype.g] = {})[tiletype.b] = true;
+    if (!filterobj[tiletype.r]) {
+      ((filterobj[tiletype.r] = {})[tiletype.g] = {})[tiletype.b] = true;
+    } else if (!filterobj[tiletype.r][tiletype.g]) {
+      (filterobj[tiletype.r][tiletype.g] = {})[tiletype.b] = true;
     } else {
-      search[tiletype.r][tiletype.g][tiletype.b] = true;
+      filterobj[tiletype.r][tiletype.g][tiletype.b] = true;
     }
   }
 }

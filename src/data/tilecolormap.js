@@ -33,6 +33,22 @@ let tilecolormap = [
     "b": "129"
   },
   {
+    "tilesetname": "Boulder",
+    "type": "boulder",
+    "name": "Copper Boulder",
+    "r": "237",
+    "g": "96",
+    "b": "87"
+  },
+  {
+    "tilesetname": "Boulder",
+    "type": "boulder",
+    "name": "Gold Boulder",
+    "r": "242",
+    "g": "204",
+    "b": "61"
+  },
+  {
     "tilesetname": "Dirt",
     "type": "ore",
     "name": "Copper Ore",
@@ -164,6 +180,14 @@ let tilecolormap = [
     "tilesetname": "Stone",
     "type": "ore",
     "name": "Iron Ore",
+    "r": "130",
+    "g": "155",
+    "b": "203"
+  },
+  {
+    "tilesetname": "Boulder",
+    "type": "boulder",
+    "name": "Iron Boulder",
     "r": "130",
     "g": "155",
     "b": "203"
@@ -361,6 +385,14 @@ let tilecolormap = [
     "b": "33"
   },
   {
+    "tilesetname": "Boulder",
+    "type": "bolder",
+    "name": "Tin Boulder",
+    "r": "142",
+    "g": "122",
+    "b": "118"
+  },
+  {
     "tilesetname": "Clay",
     "type": "ore",
     "name": "Tin Ore",
@@ -383,6 +415,14 @@ let tilecolormap = [
     "r": "61",
     "g": "155",
     "b": "65"
+  },
+  {
+    "tilesetname": "Boulder",
+    "type": "boulder",
+    "name": "Scarlet Boulder",
+    "r": "206",
+    "g": "59",
+    "b": "59"
   },
   {
     "tilesetname": "Wilderness",
