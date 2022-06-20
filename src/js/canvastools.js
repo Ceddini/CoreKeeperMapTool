@@ -14,6 +14,13 @@ function panImage(dx, dy) {
   panzoomele.pan(cameraOffset.x, cameraOffset.y);
 }
 
+function panToCore() {
+  const boundingRect = document.querySelector('.canvas-container').getBoundingClientRect();
+  const x = (boundingRect.width / 2) - coreloc.x;
+  const y = (boundingRect.height / 2) - coreloc.y;
+  panzoomele.pan(x, y);
+}
+
 function zoomWithMouseWheel(event) {
   const opts = {
     animate: false,
@@ -215,6 +222,7 @@ function drawMap(tiles) {
   _image_cache = new Image();
   _image_cache.src = canvas.toDataURL();
   decorateMap(canvas.width, canvas.height);
+  panToCore();
 }
 
 function highlightSelected() {
