@@ -94,6 +94,10 @@
   width: 100%;
   height: 100%;
 }
+.canvas-container,
+.canvas-container canvas {
+  background-color: inherit;
+}
 
 .ivy-legend {
   box-shadow: #FF00FF -15px 0px;

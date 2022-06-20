@@ -7,9 +7,10 @@ window.addEventListener('DOMContentLoaded', () => {
     loadMapFile(fileupload, tilelist, updatemap);
   });
   panzoomele = Panzoom(mapCanvas, {
-    maxScale: MAX_ZOOM
+    maxScale: MAX_ZOOM,
+    canvas: true,
   });
-  mapCanvas.addEventListener('wheel', zoomWithMouseWheel);
+  mapCanvas.parentElement.addEventListener('wheel', zoomWithMouseWheel);
   mapCanvas.addEventListener('mousemove', updateCoordinates);
 
   const menuheaders = document.querySelectorAll(".collapsable-menu");

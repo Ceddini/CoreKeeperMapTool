@@ -1,6 +1,6 @@
-let cameraZoom = 1
-let MAX_ZOOM = 10
-let MIN_ZOOM = 0.1
+let currentZoom = 1
+let MAX_ZOOM = 12;
+let MIN_ZOOM = 0.1;
 let _image_cache = undefined;
 let cameraOffset = { x: 0, y: 0 }
 let _global_ctx;
@@ -8,27 +8,6 @@ let coreloc = { x: 0, y: 0 };
 let pixelmap = {};
 let panzoomele;
 
-function changeZoom(delta) {
-  if (cameraZoom >= MAX_ZOOM && delta > 0) {
-    return;
-  }
-  else if (cameraZoom <= MIN_ZOOM && delta < 0) {
-    return;
-  }
-  if (cameraZoom < 1 || (cameraZoom === 1 && delta < 0)) {
-    // Smaller steps for zooming out, otherwise we jump straight to 0
-    delta /= 10;
-  }
-  cameraZoom += delta;
-  // Cut off floating point errors
-  cameraZoom = Math.round(cameraZoom * 100) / 100;
-  panzoomele.zoom(cameraZoom, { animate: false });
-  if (cameraZoom < 1.0) {
-    document.getElementById("mapcanvas").style.imageRendering = "auto";
-  } else {
-    document.getElementById("mapcanvas").style.imageRendering = "pixelated";
-  }
-}
 function panImage(dx, dy) {
   cameraOffset.x += dx;
   cameraOffset.y += dy;
@@ -36,8 +15,30 @@ function panImage(dx, dy) {
 }
 
 function zoomWithMouseWheel(event) {
-  const delta = event.deltaY > 0 ? -1 : 1;
-  changeZoom(delta);
+  const opts = {
+    animate: false,
+    step: 2.0,
+  };
+  const scale = panzoomele.getScale();
+  const delta = event.deltaY === 0 && event.deltaX ? event.deltaX : event.deltaY;
+  const wheel = delta < 0 ? 1 : -1;
+  let targetScale = scale * Math.exp((wheel * opts.step) / 3);
+  if (targetScale >= MAX_ZOOM && delta > 0) {
+    return;
+  }
+  else if (targetScale <= MIN_ZOOM && delta < 0) {
+    return;
+  }
+  // Round zoom scales larger than 1 for pixel-perfect zoom-in
+  if (targetScale > 1) {
+    targetScale = Math.round(targetScale);
+  }
+  panzoomele.zoomToPoint(targetScale, event, opts);
+  if (panzoomele.getScale() < 1.0) {
+    document.getElementById("mapcanvas").style.imageRendering = "auto";
+  } else {
+    document.getElementById("mapcanvas").style.imageRendering = "pixelated";
+  }
 }
 function updateCoordinates(event) {
   let tempX = event.pageX;
