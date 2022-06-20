@@ -76,6 +76,16 @@ function toggleBosses() {
   }
   redrawMap();
 }
+function toggleGrid() {
+  //class="active"
+  let ele = document.getElementById("chunkgrid");
+  if (ele.classList.contains("active")) {
+    ele.classList.remove("active");
+  } else {
+    ele.classList.add("active");
+  }
+  redrawMap();
+}
 
 function toggleDirections() {
   let ele = document.getElementById("directions");

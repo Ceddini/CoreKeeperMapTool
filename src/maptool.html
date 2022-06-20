@@ -24,7 +24,7 @@
     </div>
     <div>
       <div>
-        <a href="#" onclick="toggleDirections()"><i class="fas fa-question-circle"></i> Directions</a>
+        <a href="#" onclick="toggleDirections()"><i class="fas fa-question-circle"></i> Click for Directions</a>
         <div id="directions" style="display: none">
           <ol>
             <li>Open the folder: c:\users\%USERNAME%\AppData\LocalLow\Pugstorm\Core Keeper\Steam\</li>
@@ -49,10 +49,16 @@
         <li><a href="#" onclick="panImage(10,0);"><i class="fas fa-arrow-right"></i></a></li>
         <li><a href="#" onclick="panImage(0,-10);"><i class="fas fa-arrow-up"></i></a></li>
         <li><a href="#" onclick="panImage(0,10);"><i class="fas fa-arrow-down"></i></a></li-->
-        <li id="bosscircle"><a href="#" onclick="toggleBosses();">Show Bosses</i></a></li>
-        <li id="mazeholes"><a href="#" onclick="findMazes();">Find Mazes Gaps</i></a></li>
+        <li id="bosscircle"><a href="#" onclick="toggleBosses();">Show Bosses</a></li>
+        <li id="mazeholes"><a href="#" onclick="findMazes();">Find Mazes Gaps</a></li>
+        <li id="chunkgrid"><a href="#" onclick="toggleGrid();">Chunk Grid</a></li>
         <li><a href="#" onclick="downloadMap(document.getElementById('mapcanvas'));"><i class="fas fa-download"></i>
             Download Map</a></li>
+      </ul>
+      <ul class="nav nav-pills movement-nav">
+        <li>
+          User Defined Radius: <input type="text"  id="userradius" value="" onKeyPress="userDefinedChanged();">
+        </li>
       </ul>
     </div>
   </div>

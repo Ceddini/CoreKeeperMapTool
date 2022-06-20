@@ -60,9 +60,62 @@ function redrawMap() {
 
 function decorateMap(width, height) {
   highlightSelected();
+  if (document.getElementById("userradius").value.trim() != "") {
+    let radius = parseFloat(document.getElementById("userradius").value.trim());
+    drawCircle(_global_ctx, radius);
+  }
   if (document.getElementById("bosscircle").classList.contains("active")) {
     drawBosses(_global_ctx, width, height);
   }
+  if (document.getElementById("chunkgrid").classList.contains("active")) {
+    drawGrid(_global_ctx, width, height);
+  }
+}
+
+function drawGrid(ctx, width, height) {
+  ctx.globalAlpha = 0.3;
+  ctx.lineWidth = 3;
+  ctx.strokeStyle = "#AAAAAA";
+  const gridsize = 64;
+  let x = 0;
+  while (x <= width) {
+    ctx.beginPath();
+    ctx.moveTo(x, 0);
+    ctx.lineTo(x, height);
+    ctx.stroke();
+    x += gridsize;
+  }
+  let y = 0;
+  while (y <= height) {
+    ctx.beginPath();
+    ctx.moveTo(0, y);
+    ctx.lineTo(width, y);
+    ctx.stroke();
+    y += gridsize;
+  }
+  ctx.globalAlpha = 1.0;
+}
+
+let userdefinedTimeout = undefined;
+function userDefinedChanged(){
+  if(userdefinedTimeout == undefined){
+    console.log('setting timeout');
+    userdefinedTimeout = setTimeout(()=>{
+      userdefinedTimeout = undefined;
+      console.log('redrawing userdefined');
+      redrawMap();
+    }, 1000);
+  }
+}
+
+function drawCircle(ctx, radius){
+  ctx.globalAlpha = 0.3;
+  ctx.lineWidth = 20;
+  ctx.strokeStyle = "#FFFFFF";
+  ctx.beginPath();
+  ctx.arc(coreloc.x, coreloc.y, radius, 0, 2 * Math.PI);
+  ctx.stroke();
+  ctx.globalAlpha = 1.0;
 }
 
 function drawBosses(ctx, width, height) {
@@ -119,7 +172,7 @@ function drawBosses(ctx, width, height) {
   ctx.arc(coreloc.x, coreloc.y, radius, 0, 2 * Math.PI);
   ctx.stroke();
 
-  
+
   _global_ctx.fillStyle = MAZE_HIGLIGHT;
   _global_ctx.beginPath();
   //ARC starts 0 at 3 oclock
