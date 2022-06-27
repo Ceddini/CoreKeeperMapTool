@@ -75,6 +75,9 @@ function decorateMap(width, height) {
   if (document.getElementById("bosscircle").classList.contains("active")) {
     drawBosses(_global_ctx, width, height);
   }
+  if (document.getElementById("seacircle").classList.contains("active")) {
+    drawSeaBiome(_global_ctx, width, height);
+  }
   if (document.getElementById("chunkgrid").classList.contains("active")) {
     drawGrid(_global_ctx, width, height);
   }
@@ -124,6 +127,44 @@ function drawCircle(ctx, radius){
   ctx.arc(coreloc.x, coreloc.y, radius, 0, 2 * Math.PI);
   ctx.stroke();
   ctx.globalAlpha = 1.0;
+}
+
+function drawSeaBiome(ctx, width, height){
+
+  ctx.globalAlpha = 0.3;
+  ctx.lineWidth = 20;
+
+  let radius = 1100;
+
+  ctx.strokeStyle = "#9e3f9b";
+  ctx.beginPath();
+  ctx.arc(coreloc.x, coreloc.y, radius, 0, 2 * Math.PI);
+  ctx.stroke();
+  
+  radius = 1250;
+  ctx.strokeStyle = "#AAAAAA";
+  ctx.beginPath();
+  ctx.arc(coreloc.x, coreloc.y, radius, 0, 2 * Math.PI);
+  ctx.stroke();
+
+  //Morpha
+  radius = 1400;
+  ctx.strokeStyle = "#1898F4";
+  ctx.beginPath();
+  ctx.arc(coreloc.x, coreloc.y, radius, 0, 2 * Math.PI);
+  ctx.stroke();
+
+  radius = 1550;
+  ctx.strokeStyle = "#AAAAAA";
+  ctx.beginPath();
+  ctx.arc(coreloc.x, coreloc.y, radius, 0, 2 * Math.PI);
+  ctx.stroke();
+
+  radius = 1750;
+  ctx.strokeStyle = "#AAAAAA";
+  ctx.beginPath();
+  ctx.arc(coreloc.x, coreloc.y, radius, 0, 2 * Math.PI);
+  ctx.stroke();
 }
 
 function drawBosses(ctx, width, height) {

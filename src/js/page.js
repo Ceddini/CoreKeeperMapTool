@@ -77,6 +77,18 @@ function toggleBosses() {
   }
   redrawMap();
 }
+function toggleSea() {
+  //class="active"
+  let ele = document.getElementById("seacircle");
+  if (ele.classList.contains("active")) {
+    ele.classList.remove("active");
+  } else {
+    ele.classList.add("active");
+  }
+  redrawMap();
+}
+
+
 function toggleGrid() {
   //class="active"
   let ele = document.getElementById("chunkgrid");

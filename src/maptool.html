@@ -56,6 +56,7 @@
             Download Map</a></li>
       </ul>
       <ul class="nav nav-pills movement-nav">
+        <li id="seacircle"><a href="#" onclick="toggleSea();">Sea POIs</a></li>
         <li>
           User Defined Radius: <input type="text"  id="userradius" value="" onKeyPress="userDefinedChanged();">
         </li>
@@ -71,6 +72,10 @@
     <canvas id="mapcanvas" width="1200px" height="800px" style="image-rendering: pixelated;" onclick="//toclick">
   </div>
   <div class="legend-container">
+    <span class="omoroth-legend">&nbsp;Omoroth</span>
+    <span class="morpha-legend">&nbsp;Morpha</span>
+    <span class="bowcity-legend">&nbsp;Bow Cities</span>
+    <br/>
     <span class="ivy-legend">&nbsp;Ivy</span>
     <span class="mold-legend">&nbsp;Main Mold Dungeon</span>
     <span class="azeos-legend">&nbsp;Azeos</span>

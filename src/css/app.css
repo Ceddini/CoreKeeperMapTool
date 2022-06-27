@@ -98,6 +98,18 @@
 .canvas-container canvas {
   background-color: inherit;
 }
+.omoroth-legend {
+  box-shadow: #9e3f9b -15px 0px;
+  margin-right: 20px;
+}
+.morpha-legend {
+  box-shadow: #1898F4 -15px 0px;
+  margin-right: 20px;
+}
+.bowcity-legend {
+  box-shadow: #AAAAAA -15px 0px;
+  margin-right: 20px;
+}
 
 .ivy-legend {
   box-shadow: #FF00FF -15px 0px;
