@@ -134,13 +134,19 @@ function drawSeaBiome(ctx, width, height){
   ctx.globalAlpha = 0.3;
   ctx.lineWidth = 20;
 
-  let radius = 1100;
+  let radius = 1000;
 
+  ctx.strokeStyle = "#ff6a00";
+  ctx.beginPath();
+  ctx.arc(coreloc.x, coreloc.y, radius, 0, 2 * Math.PI);
+  ctx.stroke();
+
+  radius = 1100;
   ctx.strokeStyle = "#9e3f9b";
   ctx.beginPath();
   ctx.arc(coreloc.x, coreloc.y, radius, 0, 2 * Math.PI);
   ctx.stroke();
-  
+
   radius = 1250;
   ctx.strokeStyle = "#AAAAAA";
   ctx.beginPath();
@@ -165,6 +171,8 @@ function drawSeaBiome(ctx, width, height){
   ctx.beginPath();
   ctx.arc(coreloc.x, coreloc.y, radius, 0, 2 * Math.PI);
   ctx.stroke();
+
+  ctx.globalAlpha = 1.0;
 }
 
 function drawBosses(ctx, width, height) {
