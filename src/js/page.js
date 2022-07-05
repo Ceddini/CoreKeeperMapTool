@@ -32,8 +32,17 @@ window.addEventListener('DOMContentLoaded', () => {
   slider.onmouseup = sliderUp;
   slider.onmousemove = sliderDrag;
   SliderInfo.element = slider;
+  setFilterTop();
+
 
 }, false);
+
+function setFilterTop(){
+
+  let filterdiv = document.getElementById("tilefilter");
+  let navdiv = document.getElementById("navdiv").getBoundingClientRect();
+  filterdiv.style.top = navdiv.bottom;
+}
 
 const SliderInfo = {
   element: undefined,
@@ -109,6 +118,7 @@ function toggleDirections() {
     ele.style.display = "none";
     document.querySelector(".highlight-container").style.top = "150px";
   }
+  setFilterTop();
 }
 
 function toggleDarkMode() {
