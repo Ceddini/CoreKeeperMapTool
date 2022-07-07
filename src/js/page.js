@@ -12,6 +12,7 @@ window.addEventListener('DOMContentLoaded', () => {
   });
   mapCanvas.parentElement.addEventListener('wheel', zoomWithMouseWheel);
   mapCanvas.addEventListener('mousemove', updateCoordinates);
+  mapCanvas.addEventListener('panzoomend', storeCoreRelativeOffset);
 
   const menuheaders = document.querySelectorAll(".collapsable-menu");
   const mnuclick = function (event) {

@@ -3,6 +3,7 @@ let MAX_ZOOM = 12;
 let MIN_ZOOM = 0.1;
 let _image_cache = undefined;
 let cameraOffset = { x: 0, y: 0 }
+let previousCoreRelativeOffset = undefined;
 let _global_ctx;
 let coreloc = { x: 0, y: 0 };
 let pixelmap = {};
@@ -14,11 +15,46 @@ function panImage(dx, dy) {
   panzoomele.pan(cameraOffset.x, cameraOffset.y);
 }
 
-function panToCore() {
+function getCoreOffset() {
   const boundingRect = document.querySelector('.canvas-container').getBoundingClientRect();
-  const x = (boundingRect.width / 2) - coreloc.x;
-  const y = (boundingRect.height / 2) - coreloc.y;
+  const mapCanvas = document.getElementById('mapcanvas');
+  const scale = panzoomele.getScale();
+  // Panzoom forces transform-origin: center, which needs to be accounted for
+  const originOffsetX = (mapCanvas.width / 2) - (mapCanvas.width * scale / 2);
+  const originOffsetY = (mapCanvas.height / 2) - (mapCanvas.height * scale / 2);
+  // Panzoom sets transform: scale(n) translate(x, y); which scales the x and y.
+  // Calculate the core location as if it was scaled, then account for the transform scaling by dividing by scale.
+  const x = ((boundingRect.width / 2) - (coreloc.x * scale) - originOffsetX) / scale;
+  const y = ((boundingRect.height / 2) - (coreloc.y * scale) - originOffsetY) / scale;
+  return {x, y};
+}
+
+function panToCore() {
+  const {x, y} = getCoreOffset();
   panzoomele.pan(x, y);
+}
+
+function panToPreviousCoreRelativeOffset() {
+  const {x: coreOffsetX, y: coreOffsetY} = getCoreOffset();
+  const {x: relativeOffsetX, y: relativeOffsetY} = previousCoreRelativeOffset;
+  const x = coreOffsetX - relativeOffsetX;
+  const y = coreOffsetY - relativeOffsetY;
+  panzoomele.pan(x, y);
+}
+
+function getCoreRelativeOffset() {
+  const {x: coreOffsetX, y: coreOffsetY} = getCoreOffset();
+  const {x: currentOffsetX, y: currentOffsetY} = panzoomele.getPan();
+  const relativeOffsetX = coreOffsetX - currentOffsetX;
+  const relativeOffsetY = coreOffsetY - currentOffsetY;
+  return {
+    x: relativeOffsetX,
+    y: relativeOffsetY,
+  };
+}
+
+function storeCoreRelativeOffset() {
+  previousCoreRelativeOffset = getCoreRelativeOffset();
 }
 
 function zoomWithMouseWheel(event) {
@@ -46,6 +82,7 @@ function zoomWithMouseWheel(event) {
   } else {
     document.getElementById("mapcanvas").style.imageRendering = "pixelated";
   }
+  storeCoreRelativeOffset();
 }
 function updateCoordinates(event) {
   let tempX = event.pageX;
@@ -271,7 +308,12 @@ function drawMap(tiles) {
   _image_cache = new Image();
   _image_cache.src = canvas.toDataURL();
   decorateMap(canvas.width, canvas.height);
-  panToCore();
+  if (previousCoreRelativeOffset) {
+    panToPreviousCoreRelativeOffset();
+  }
+  else {
+    panToCore();
+  }
 }
 
 function highlightSelected() {
