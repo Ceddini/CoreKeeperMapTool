@@ -332,16 +332,19 @@ function highlightSelected() {
 }
 
 function testPixel(width, myImageData, r, g, b, x, y) {
-  let i = y * width + x;
-  return (r == myImageData[i] && g == myImageData[i + 1] && b == myImageData[i + 2]);
+  let i = (y * width + x) * 4;
+  let r1 = myImageData[i], g1 = myImageData[i + 1], b1 = myImageData[i + 2];
+
+  return (r == r1 && g == g1 && b == b1);
 }
 
 function highlightPixel(width, myImageData, x, y) {
-  let i = y * width + x;
+  let i = (y * width + x) * 4;
   myImageData[i + 3] = 255;
 }
 
 function testBoulder(width, myImageData, r, g, b, x, y, x1, y1) {
+  let i = (y * width + x) * 4;
   let count = 0;
   if (testPixel(width, myImageData, r, g, b, x1, y1)) {
     count++;
@@ -357,9 +360,8 @@ function testBoulder(width, myImageData, r, g, b, x, y, x1, y1) {
     highlightPixel(width, myImageData, x, y1);
     highlightPixel(width, myImageData, x1, y);
     highlightPixel(width, myImageData, x, y);
-  } else {
+  } else if(myImageData[i + 3] != 255) {
     let alpha = SliderInfo.transparency();
-    let i = y * width + x;
     myImageData[i + 3] = alpha;
   }
 }
@@ -368,40 +370,46 @@ function highlightBoulder(myImage, r, g, b, x, y) {
   const myImageData = myImage.data;
   let count = 0;
 
-  //test top left
   count = 0;
-  if (x > 0 && y > 0) {
+  /*if (x > 0 &&  y > 0) {
     testBoulder(myImage.width, myImageData, r, g, b, x, y, x - 1, y - 1);
   }
   //test bottom left
   if (x > 0 && y < myImage.height) {
     testBoulder(myImage.width, myImageData, r, g, b, x, y, x - 1, y + 1);
-  }
+  }*/
   //test bottom right
   if (x < myImage.width && y < myImage.height) {
     testBoulder(myImage.width, myImageData, r, g, b, x, y, x + 1, y + 1);
-  }
+  }/*
   if (x < myImage.width && y > 0) {
     testBoulder(myImage.width, myImageData, r, g, b, x, y, x + 1, y - 1);
-  }
+  }*/
 }
 
 function highlightColors(myImage, search) {
   const myImageData = myImage.data;
-  let alpha = SliderInfo.transparency();
+  let alpha = Math.max(SliderInfo.transparency(), 1);
+  
   for (let i = 0; i < myImageData.length; i += 4) {
     if (myImageData[i + 3] != 0) { //if not transparent
       let r = myImageData[i], g = myImageData[i + 1], b = myImageData[i + 2];
-      if (search.boulders[r] && search.boulders[r][g] && search.boulders[r][g][b]) {
-        let x = parseInt(i % myImage.width);
-        let y = parseInt(i / myImage.width);
-        highlightBoulder(myImage, r, g, b, x, y);
-      } else if (search[r] && search[r][g] && search[r][g][b]) {
+      if (search[r] && search[r][g] && search[r][g][b]) {
         myImageData[i + 3] = 255;
       } else {
         myImageData[i + 3] = alpha;
       }
     }
   }
+  for (let i = 0, p = 0; i < myImageData.length; i += 4, ++p) {
+    if (myImageData[i + 3] != 0) { //if not transparent
 
+      let x = parseInt(p % myImage.width);
+      let y = parseInt(p / myImage.width);
+      let r = myImageData[i], g = myImageData[i + 1], b = myImageData[i + 2];
+      if (search.boulders[r] && search.boulders[r][g] && search.boulders[r][g][b]) {
+        highlightBoulder(myImage, r, g, b, x, y);
+      }
+    }
+  }
 }
