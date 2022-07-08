@@ -15,6 +15,7 @@
   <script src="js/maploader.js"></script>
   <script src="js/canvastools.js"></script>
   <script src="https://kit.fontawesome.com/75173a9880.js" crossorigin="anonymous"></script>
+  <script src="js/mapmonitor.js"></script>
 </head>
 
 <body style="background-color: black">
@@ -37,7 +38,7 @@
         </div>
       </div>
       <div>
-        <input id="mapupload" type="file" /> <div class="toggle-container" onclick="toggleDarkMode();"><label id="darkmodeui" class="toggle-switch">Dark Mode</label></div>
+        <input id="mapupload" type="file" /><input type="button" onclick="registerMapFile();" value="Monitor Map"/> <div class="toggle-container" onclick="toggleDarkMode();"><label id="darkmodeui" class="toggle-switch">Dark Mode</label></div>
       </div>
     </div>
     <div>
