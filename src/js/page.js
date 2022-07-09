@@ -10,9 +10,12 @@ window.addEventListener('DOMContentLoaded', () => {
     maxScale: MAX_ZOOM,
     canvas: true,
   });
+
   mapCanvas.parentElement.addEventListener('wheel', zoomWithMouseWheel);
   mapCanvas.addEventListener('mousemove', updateCoordinates);
   mapCanvas.addEventListener('panzoomend', storeCoreRelativeOffset);
+  mapCanvas.addEventListener('panzoomend', ()=>{MapMonitor.isPanning = false;});
+  mapCanvas.addEventListener('panzoomstart', ()=>{MapMonitor.isPanning = true;});
 
   const menuheaders = document.querySelectorAll(".collapsable-menu");
   const mnuclick = function (event) {

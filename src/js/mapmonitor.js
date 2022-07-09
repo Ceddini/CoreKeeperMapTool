@@ -1,22 +1,29 @@
 const MapMonitor = {
   fileHandle: undefined,
+  isPanning: false,
+  lastModified: undefined,
   refreshMap: async function (){
-    console.log("refreshing map...");
-    const file = await fileHandle.getFile();
-    let contents = await file.arrayBuffer();
-    const tilelist = [];
-    const updatemap = () => { drawMap(tilelist) };
-    this.loadFile(contents, tilelist, updatemap);
+    let file = await fileHandle.getFile();
+    if(file.lastModified != MapMonitor.lastModified) {
+      MapMonitor.lastModified = file.lastModified;
+      let contents = await file.arrayBuffer();
+      this.loadFile(contents, drawMap);
+    } else {
+      console.log(file.lastModified);
+    }
   },
-  loadFile: function(dataarr, gridarr, callback){
-    const dataAsUint8Array = pako.inflate(dataarr);
-    const dataAsJsonString = new TextDecoder().decode(dataAsUint8Array);
-    const data = JSON.parse(dataAsJsonString);
-    loadParts(0, gridarr, data.mapParts, callback);
+  loadFile: function(dataarr, callback){
+    let dataAsUint8Array = pako.inflate(dataarr);
+    let dataAsJsonString = new TextDecoder().decode(dataAsUint8Array);
+    let data = JSON.parse(dataAsJsonString);
+    loadParts(0, [], data.mapParts, callback);
   },
   startMonitoring: function(){
     setInterval(()=>{
-      MapMonitor.refreshMap();
+      let shouldrefresh = document.getElementById("shouldrefresh").value;
+      if(shouldrefresh && !MapMonitor.isPanning) {
+        MapMonitor.refreshMap();
+      }
     }, 10000);
     MapMonitor.refreshMap();
   }
