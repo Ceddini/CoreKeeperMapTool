@@ -10,8 +10,12 @@ window.addEventListener('DOMContentLoaded', () => {
     maxScale: MAX_ZOOM,
     canvas: true,
   });
+
   mapCanvas.parentElement.addEventListener('wheel', zoomWithMouseWheel);
   mapCanvas.addEventListener('mousemove', updateCoordinates);
+  mapCanvas.addEventListener('panzoomend', storeCoreRelativeOffset);
+  mapCanvas.addEventListener('panzoomend', ()=>{MapMonitor.isPanning = false;});
+  mapCanvas.addEventListener('panzoomstart', ()=>{MapMonitor.isPanning = true;});
 
   const menuheaders = document.querySelectorAll(".collapsable-menu");
   const mnuclick = function (event) {
@@ -32,8 +36,17 @@ window.addEventListener('DOMContentLoaded', () => {
   slider.onmouseup = sliderUp;
   slider.onmousemove = sliderDrag;
   SliderInfo.element = slider;
+  setFilterTop();
+
 
 }, false);
+
+function setFilterTop(){
+
+  let filterdiv = document.getElementById("tilefilter");
+  let navdiv = document.getElementById("navdiv").getBoundingClientRect();
+  filterdiv.style.top = navdiv.bottom;
+}
 
 const SliderInfo = {
   element: undefined,
@@ -109,6 +122,7 @@ function toggleDirections() {
     ele.style.display = "none";
     document.querySelector(".highlight-container").style.top = "150px";
   }
+  setFilterTop();
 }
 
 function toggleDarkMode() {

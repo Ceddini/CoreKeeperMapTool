@@ -671,5 +671,85 @@ let tilecolormap = [
     "r": "130",
     "g": "130",
     "b": "130"
+  },
+  {
+    "tilesetname": "SunkenSea",
+    "type": "ground",
+    "name": "Beach Sand Ground",
+    "r": "235",
+    "g": "192",
+    "b": "190"
+  },
+  {
+    "tilesetname": "SunkenSea",
+    "type": "wall",
+    "name": "Limestone Wall",
+    "r": "180",
+    "g": "147",
+    "b": "154"
+  },
+  {
+    "tilesetname": "SunkenSea",
+    "type": "ore",
+    "name": "Octarine Ore",
+    "r": "139",
+    "g": "82",
+    "b": "238"
+  },
+  {
+    "tilesetname": "Boulder",
+    "type": "boulder",
+    "name": "Octarine Boulder",
+    "r": "139",
+    "g": "82",
+    "b": "238"
+  },
+  {
+    "tilesetname": "SunkenSea",
+    "type": "ore",
+    "name": "Coral Wood",
+    "r": "250",
+    "g": "89",
+    "b": "163"
+  },
+  {
+    "tilesetname": "SunkenSea",
+    "type": "ore",
+    "name": "Jellyfish",
+    "r": "48",
+    "g": "124",
+    "b": "205"
+  },
+  {
+    "tilesetname": "Boulder",
+    "type": "boulder",
+    "name": "Large Jellyfish",
+    "r": "48",
+    "g": "124",
+    "b": "205"
+  },
+  {
+    "tilesetname": "SunkenSea",
+    "type": "water",
+    "name": "Sea Water",
+    "r": "52",
+    "g": "208",
+    "b": "255"
+  },
+  {
+    "tilesetname": "SunkenSea",
+    "type": "wall",
+    "name": "City Wall",
+    "r": "49",
+    "g": "77",
+    "b": "87"
+  },
+  {
+    "tilesetname": "SunkenSea",
+    "type": "ground",
+    "name": "City Floor",
+    "r": "87",
+    "g": "128",
+    "b": "132"
   }
 ];

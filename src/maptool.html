@@ -15,16 +15,17 @@
   <script src="js/maploader.js"></script>
   <script src="js/canvastools.js"></script>
   <script src="https://kit.fontawesome.com/75173a9880.js" crossorigin="anonymous"></script>
+  <script src="js/mapmonitor.js"></script>
 </head>
 
 <body style="background-color: black">
-  <div class="nav_controls_container">
+  <div id="navdiv" class="nav_controls_container">
     <div>
       <p>Core Keeper Map Tool -- Created by Mz, nineforty, and Craigins <a href="img/fullmap_cropped.png" target="_blank">Example Map</a></p>
     </div>
     <div>
       <div>
-        <a href="#" onclick="toggleDirections()"><i class="fas fa-question-circle"></i> Click for Directions</a>
+        <a href="#" onclick="toggleDirections()"><h2><i class="fas fa-question-circle"></i> Click for Directions</h2></a>
         <div id="directions" style="display: none">
           <ol>
             <li>Open the folder: c:\users\%USERNAME%\AppData\LocalLow\Pugstorm\Core Keeper\Steam\</li>
@@ -32,12 +33,15 @@
             <li>Open the maps folder</li>
             <li>Open your character # folder</li>
             <li>Select one of the #.mapparts.gzip files to display</li>
-            <li>Still confused?  <a href="https://docs.google.com/presentation/d/1Gf8zR5TkG-hpFjnDU9xPqTFHCkGT9_t-xrtDCMUTee4/" target="_blank">Read this</a></li>
+            <li>Still confused?  <a href="https://www.youtube.com/watch?v=7YZCPm6i50E" target="_blank">Watch this video by Dakon The Mad</a></li>
           </ol>
         </div>
       </div>
       <div>
-        <input id="mapupload" type="file" /> <div class="toggle-container" onclick="toggleDarkMode();"><label id="darkmodeui" class="toggle-switch">Dark Mode</label></div>
+        <input id="mapupload" type="file" />
+        <input type="checkbox" id="shouldrefresh" checked/>
+        <input type="button" onclick="registerMapFile();" value="Monitor Map"/> 
+        <div class="toggle-container" onclick="toggleDarkMode();"><label id="darkmodeui" class="toggle-switch">Dark Mode</label></div>
       </div>
     </div>
     <div>
@@ -88,7 +92,8 @@
     <span class="large-maze-legend">&nbsp;Large</span>
     <span class="medium-maze-legend">&nbsp;Medium</span>
     <span class="small-maze-legend">&nbsp;Small</span>
-
+    <br/>
+    <span><a target="_blank" href="https://github.com/craigins/CoreKeeperMapTool/discussions">Feedback / Requests</a></span>
   </div>
   <script src="js/page.js"></script>
   <script src="js/menubuilder.js"></script>

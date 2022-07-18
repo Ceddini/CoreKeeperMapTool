@@ -2,7 +2,7 @@
 
 function loadParts(i, gridarr, mapParts, callback) {
   if (i >= mapParts.keys.length) {
-    return callback();
+    return callback(gridarr);
   }
   if(mapParts.values[i] == undefined || mapParts.values[i].png == undefined) {
     return loadParts(i + 1, gridarr, mapParts, callback);

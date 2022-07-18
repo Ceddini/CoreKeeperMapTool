@@ -38,7 +38,7 @@
 
 .highlight-container {
   position: absolute;
-  top: 170px;
+  top: 200px;
   left: 10px;
   z-index: 1;
   background: #FFFC;
@@ -163,4 +163,8 @@
 .small-maze-legend {
   box-shadow: #F0F -15px 0px;
   margin-right: 20px;
+}
+
+#shouldrefresh{
+  margin-bottom: 13px;
 }

@@ -3,6 +3,7 @@ let MAX_ZOOM = 12;
 let MIN_ZOOM = 0.1;
 let _image_cache = undefined;
 let cameraOffset = { x: 0, y: 0 }
+let previousCoreRelativeOffset = undefined;
 let _global_ctx;
 let coreloc = { x: 0, y: 0 };
 let pixelmap = {};
@@ -14,11 +15,46 @@ function panImage(dx, dy) {
   panzoomele.pan(cameraOffset.x, cameraOffset.y);
 }
 
-function panToCore() {
+function getCoreOffset() {
   const boundingRect = document.querySelector('.canvas-container').getBoundingClientRect();
-  const x = (boundingRect.width / 2) - coreloc.x;
-  const y = (boundingRect.height / 2) - coreloc.y;
+  const mapCanvas = document.getElementById('mapcanvas');
+  const scale = panzoomele.getScale();
+  // Panzoom forces transform-origin: center, which needs to be accounted for
+  const originOffsetX = (mapCanvas.width / 2) - (mapCanvas.width * scale / 2);
+  const originOffsetY = (mapCanvas.height / 2) - (mapCanvas.height * scale / 2);
+  // Panzoom sets transform: scale(n) translate(x, y); which scales the x and y.
+  // Calculate the core location as if it was scaled, then account for the transform scaling by dividing by scale.
+  const x = ((boundingRect.width / 2) - (coreloc.x * scale) - originOffsetX) / scale;
+  const y = ((boundingRect.height / 2) - (coreloc.y * scale) - originOffsetY) / scale;
+  return {x, y};
+}
+
+function panToCore() {
+  const {x, y} = getCoreOffset();
   panzoomele.pan(x, y);
+}
+
+function panToPreviousCoreRelativeOffset() {
+  const {x: coreOffsetX, y: coreOffsetY} = getCoreOffset();
+  const {x: relativeOffsetX, y: relativeOffsetY} = previousCoreRelativeOffset;
+  const x = coreOffsetX - relativeOffsetX;
+  const y = coreOffsetY - relativeOffsetY;
+  panzoomele.pan(x, y);
+}
+
+function getCoreRelativeOffset() {
+  const {x: coreOffsetX, y: coreOffsetY} = getCoreOffset();
+  const {x: currentOffsetX, y: currentOffsetY} = panzoomele.getPan();
+  const relativeOffsetX = coreOffsetX - currentOffsetX;
+  const relativeOffsetY = coreOffsetY - currentOffsetY;
+  return {
+    x: relativeOffsetX,
+    y: relativeOffsetY,
+  };
+}
+
+function storeCoreRelativeOffset() {
+  previousCoreRelativeOffset = getCoreRelativeOffset();
 }
 
 function zoomWithMouseWheel(event) {
@@ -46,6 +82,7 @@ function zoomWithMouseWheel(event) {
   } else {
     document.getElementById("mapcanvas").style.imageRendering = "pixelated";
   }
+  storeCoreRelativeOffset();
 }
 function updateCoordinates(event) {
   let tempX = event.pageX;
@@ -271,7 +308,12 @@ function drawMap(tiles) {
   _image_cache = new Image();
   _image_cache.src = canvas.toDataURL();
   decorateMap(canvas.width, canvas.height);
-  panToCore();
+  if (previousCoreRelativeOffset) {
+    panToPreviousCoreRelativeOffset();
+  }
+  else {
+    panToCore();
+  }
 }
 
 function highlightSelected() {
@@ -290,16 +332,19 @@ function highlightSelected() {
 }
 
 function testPixel(width, myImageData, r, g, b, x, y) {
-  let i = y * width + x;
-  return (r == myImageData[i] && g == myImageData[i + 1] && b == myImageData[i + 2]);
+  let i = (y * width + x) * 4;
+  let r1 = myImageData[i], g1 = myImageData[i + 1], b1 = myImageData[i + 2];
+
+  return (r == r1 && g == g1 && b == b1);
 }
 
 function highlightPixel(width, myImageData, x, y) {
-  let i = y * width + x;
+  let i = (y * width + x) * 4;
   myImageData[i + 3] = 255;
 }
 
 function testBoulder(width, myImageData, r, g, b, x, y, x1, y1) {
+  let i = (y * width + x) * 4;
   let count = 0;
   if (testPixel(width, myImageData, r, g, b, x1, y1)) {
     count++;
@@ -315,9 +360,8 @@ function testBoulder(width, myImageData, r, g, b, x, y, x1, y1) {
     highlightPixel(width, myImageData, x, y1);
     highlightPixel(width, myImageData, x1, y);
     highlightPixel(width, myImageData, x, y);
-  } else {
+  } else if(myImageData[i + 3] != 255) {
     let alpha = SliderInfo.transparency();
-    let i = y * width + x;
     myImageData[i + 3] = alpha;
   }
 }
@@ -326,40 +370,46 @@ function highlightBoulder(myImage, r, g, b, x, y) {
   const myImageData = myImage.data;
   let count = 0;
 
-  //test top left
   count = 0;
-  if (x > 0 && y > 0) {
+  /*if (x > 0 &&  y > 0) {
     testBoulder(myImage.width, myImageData, r, g, b, x, y, x - 1, y - 1);
   }
   //test bottom left
   if (x > 0 && y < myImage.height) {
     testBoulder(myImage.width, myImageData, r, g, b, x, y, x - 1, y + 1);
-  }
+  }*/
   //test bottom right
   if (x < myImage.width && y < myImage.height) {
     testBoulder(myImage.width, myImageData, r, g, b, x, y, x + 1, y + 1);
-  }
+  }/*
   if (x < myImage.width && y > 0) {
     testBoulder(myImage.width, myImageData, r, g, b, x, y, x + 1, y - 1);
-  }
+  }*/
 }
 
 function highlightColors(myImage, search) {
   const myImageData = myImage.data;
-  let alpha = SliderInfo.transparency();
+  let alpha = Math.max(SliderInfo.transparency(), 1);
+  
   for (let i = 0; i < myImageData.length; i += 4) {
     if (myImageData[i + 3] != 0) { //if not transparent
       let r = myImageData[i], g = myImageData[i + 1], b = myImageData[i + 2];
-      if (search.boulders[r] && search.boulders[r][g] && search.boulders[r][g][b]) {
-        let x = parseInt(i % myImage.width);
-        let y = parseInt(i / myImage.width);
-        highlightBoulder(myImage, r, g, b, x, y);
-      } else if (search[r] && search[r][g] && search[r][g][b]) {
+      if (search[r] && search[r][g] && search[r][g][b]) {
         myImageData[i + 3] = 255;
       } else {
         myImageData[i + 3] = alpha;
       }
     }
   }
+  for (let i = 0, p = 0; i < myImageData.length; i += 4, ++p) {
+    if (myImageData[i + 3] != 0) { //if not transparent
 
+      let x = parseInt(p % myImage.width);
+      let y = parseInt(p / myImage.width);
+      let r = myImageData[i], g = myImageData[i + 1], b = myImageData[i + 2];
+      if (search.boulders[r] && search.boulders[r][g] && search.boulders[r][g][b]) {
+        highlightBoulder(myImage, r, g, b, x, y);
+      }
+    }
+  }
 }
