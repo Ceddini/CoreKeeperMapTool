@@ -31,13 +31,15 @@ window.addEventListener('DOMContentLoaded', () => {
 		mnu.onclick = mnuclick;
 	}
 
-	const slider = document.querySelector(".transparency-knob");
-	slider.onmousedown = sliderDown;
-	slider.onmouseup = sliderUp;
-	slider.onmousemove = sliderDrag;
-	SliderInfo.element = slider;
-	setFilterTop();
+	const ringSlider = document.getElementById("ringSlider");
+	ringSlider.value = RingSliderInfo.value;
+	ringSlider.onchange = ringOnChange;
 
+	const tileSlider = document.getElementById("tileSlider");
+	tileSlider.value = TileSliderInfo.value;
+	tileSlider.onchange = tileOnChange;
+
+	setFilterTop();
 
 }, false);
 
@@ -48,17 +50,33 @@ function setFilterTop() {
 	filterdiv.style.top = navdiv.bottom;
 }
 
-const SliderInfo = {
-	element: undefined,
-	minx: 0,
-	maxx: 174,
-	down: false,
-	x: 20, y: 0,
-	transparency: function () { return parseInt((SliderInfo.x / 174) * 255); }
+const TileSliderInfo = {
+	value: 80,
+	transparency: function () { return TileSliderInfo.value; }
 }
 
-function sliderUp(event) {
-	SliderInfo.down = false;
+const RingSliderInfo = {
+	value: 80,
+	transparency: function () { return RingSliderInfo.value / 100; }
+}
+
+function tileOnChange(event) {
+	sliderOnChange(event, TileSliderInfo);
+}
+
+function ringOnChange(event) {
+	sliderOnChange(event, RingSliderInfo);
+}
+
+function sliderOnChange(event, sliderInfo) {
+	const val = event.target.value;
+
+	sliderInfo.value = val;
+	redrawMap();
+}
+
+function sliderUp(event, sliderInfo) {
+	sliderInfo.down = false;
 	let tempX = event.pageX;
 	let tempY = event.pageY;
 	if (tempX < 10) { tempX = 10; }
@@ -67,16 +85,16 @@ function sliderUp(event) {
 	//console.log(tempX, tempY, SliderInfo.x, SliderInfo.transparency());
 }
 
-function sliderDown(event) {
-	SliderInfo.down = true;
+function sliderDown(event, sliderInfo) {
+	sliderInfo.down = true;
 }
-function sliderDrag(event) {
-	if (SliderInfo.down) {
+function sliderDrag(event, sliderInfo) {
+	if (sliderInfo.down) {
 		let tempX = event.pageX;
 		if (tempX < 32) { tempX = 32; }
 		if (tempX > 206) { tempX = 206; }
-		SliderInfo.x = tempX - 20 - 12;
-		SliderInfo.element.style.left = `${SliderInfo.x}px`;
+		sliderInfo.x = tempX - 20 - 12;
+		sliderInfo.element.style.left = `${sliderInfo.x}px`;
 	}
 }
 

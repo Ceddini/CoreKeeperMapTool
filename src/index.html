@@ -84,9 +84,14 @@
 				
 				<hr />
 
+				<div>
+					<span>Ring Transparency</span>
+					<input type="range" name="" min="0" max="100" id="ringSlider" class="w-100">
+				</div>
+
 				<div id="tilefilter" >
-					<span>Transparency</span>
-					<div class="transparency-slider"><div class="transparency-knob"></div></div>
+					<span>Tile Transparency</span>
+					<input type="range" name="" min="0" max="255" id="tileSlider" class="w-100">
 					<label class="collapsable-menu" onclick="clearAllHighlights();">Clear All Highlights</label>
 				</div>
 			</div>
@@ -112,16 +117,16 @@
 					<span class="omoroth-legend">&nbsp;Omoroth</span>
 					<span class="morpha-legend">&nbsp;Morpha</span>
 				</div>
-				<div id="dungeon-legend" class="d-flex flex-column mb-3">
-					<span class="mold-legend">&nbsp;Main Mold Dungeon</span>
-					<span class="bowcity-legend">&nbsp;Bow Cities</span>
-					<span class="bowvault-legend">&nbsp;Bow Vault</span>
-				</div>
 				<div id="mazes-legend" class="d-flex flex-column mb-3 d-none">
 					<span style="padding-right: 20px">Maze Gaps: </span>
 					<span class="small-maze-legend">&nbsp;Small</span>
 					<span class="medium-maze-legend">&nbsp;Medium</span>
 					<span class="large-maze-legend">&nbsp;Large</span>
+				</div>
+				<div id="dungeon-legend" class="d-flex flex-column">
+					<span class="mold-legend">&nbsp;Main Mold Dungeon</span>
+					<span class="bowcity-legend">&nbsp;Bow Cities</span>
+					<span class="bowvault-legend">&nbsp;Bow Vault</span>
 				</div>
 			</div>
 			</div>

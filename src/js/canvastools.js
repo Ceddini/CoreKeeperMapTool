@@ -184,7 +184,7 @@ function userDefinedChanged() {
 }
 
 function drawCircle(ctx, radius) {
-	ctx.globalAlpha = 0.3;
+	ctx.globalAlpha = RingSliderInfo.transparency();
 	ctx.lineWidth = 20;
 	ctx.strokeStyle = "#FFFFFF";
 	ctx.beginPath();
@@ -195,7 +195,7 @@ function drawCircle(ctx, radius) {
 
 function drawSeaBiome(ctx, width, height) {
 
-	ctx.globalAlpha = 0.3;
+	ctx.globalAlpha = RingSliderInfo.transparency();
 	ctx.lineWidth = 20;
 
 	let radius = 1000;
@@ -241,8 +241,10 @@ function drawSeaBiome(ctx, width, height) {
 
 function drawBosses(ctx, width, height) {
 
-	ctx.globalAlpha = 0.3;
+	ctx.globalAlpha = RingSliderInfo.transparency();
 	ctx.lineWidth = 20;
+
+	console.log(RingSliderInfo.transparency());
 
 	//Ivy
 	let radius = 900;
@@ -388,7 +390,7 @@ function testBoulder(width, myImageData, r, g, b, x, y, x1, y1) {
 		highlightPixel(width, myImageData, x1, y);
 		highlightPixel(width, myImageData, x, y);
 	} else if (myImageData[i + 3] != 255) {
-		let alpha = SliderInfo.transparency();
+		let alpha = TileSliderInfo.transparency();
 		myImageData[i + 3] = alpha;
 	}
 }
@@ -416,7 +418,7 @@ function highlightBoulder(myImage, r, g, b, x, y) {
 
 function highlightColors(myImage, search) {
 	const myImageData = myImage.data;
-	let alpha = Math.max(SliderInfo.transparency(), 1);
+	let alpha = Math.max(TileSliderInfo.transparency(), 1);
 
 	for (let i = 0; i < myImageData.length; i += 4) {
 		if (myImageData[i + 3] != 0) { //if not transparent
