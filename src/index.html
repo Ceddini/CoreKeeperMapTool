@@ -1,151 +1,192 @@
 <html>
 
 <head>
-  <title>Ivy Distance Finder</title>
+  <meta charset="utf8" />
+  <title>Map Tool</title>
+  <link href="css/vendor/bootstrap.min.css" rel="stylesheet">
+  <link href="css/vendor/bootstrap-grid.min.css" rel="stylesheet">
+  <link href="css/vendor/bootstrap-utilities.min.css" rel="stylesheet">
+  <link href="css/app.css" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-1.12.4.min.js"
+    integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+  <script src="js/vendor/jqueryBrowser.js"></script>
+  <script src="https://unpkg.com/@panzoom/panzoom@4.4.4/dist/panzoom.min.js"></script>
+  <script src="js/pako-inflate-2.0.4.min.js"></script>
+  <script src="data/tilecolormap.js"></script>
+  <script src="js/maploader.js"></script>
+  <script src="js/canvastools.js"></script>
+  <script src="https://kit.fontawesome.com/75173a9880.js" crossorigin="anonymous"></script>
+  <script src="js/mapmonitor.js"></script>
 </head>
 
-<body>
-  <p>Ivy Distance Finder Instructions:
-  <ol>
-    <li>Open your map in Core Keeper and hit the Print Screen Button</li>
-    <li>Switch back to the browser and press ctrl+v</li>
-    <li>Click the Center Core of your map</li>
-    <li>Click on the Great Wall ring</li>
-    <li>Ivy will be along the drawn circle</li>
-  </ol>
-  </p>
-  <p></p>
-  <p></p>
-  <canvas id="mycanvas" width="100%" height="75%" onclick="userinteract(this, event);">
-  </canvas>
+<body style="background-color: black">
+
+	<div class="offcanvas offcanvas-start text-bg-dark show" data-bs-backdrop="false" tabindex="-1" id="offcanvas" aria-labelledby="offcanvasLabel">
+		<div class="offcanvas-header">
+			<div>
+		  		<h5 class="offcanvas-title" id="offcanvasLabel">Core Keeper Map Tool</h5>
+			  	<h6 class="text-secondary">By Mz, nineforty, Craigins and Ceddini</h6>
+			</div>
+		  	<button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+		</div>
+		<div class="offcanvas-body">
+			<a href="img/fullmap_cropped.png" target="_blank">Example Map</a><br />
+			<hr>
+			
+			<div>
+				<a href="#" onclick="toggleDirections()"><h4><i class="fas fa-question-circle"></i> Click for Directions</h4></a>
+				<div id="directions" style="display: none">
+					<ol>
+						<li>
+							Open the folder:<br />
+							<span style="font-family: monospace">C:\Users\%USERNAME%\AppData\LocalLow\Pugstorm\Core Keeper\Steam\</span>
+						</li>
+						<li>Open your steam id folder</li>
+						<li>Open the maps folder</li>
+						<li>Open your character # folder</li>
+						<li>Select one of the #.mapparts.gzip files to display</li>
+					</ol>
+					Still confused?<br /><a href="https://www.youtube.com/watch?v=7YZCPm6i50E" target="_blank">Watch this video by Dakon The Mad</a>
+				</div>
+			</div>
+
+			<hr>
+
+			<div class="d-flex flex-column">
+				<div class="mb-2">
+					<input id="mapupload" type="file" class="form-control" />
+				</div>
+				<div class="d-flex mb-2 align-items-baseline">
+					<input class="form-check-input" type="checkbox" id="shouldrefresh" checked>
+					<input type="button" onclick="registerMapFile();" class="btn btn-primary ms-2" value="Monitor Map"/> 
+				</div>
+				<div class="form-check form-switch">
+					<input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" onclick="toggleDarkMode();" checked>
+					<label class="form-check-label" for="flexSwitchCheckChecked">Dark Mode</label>
+				</div>
+				
+				<hr />
+
+				<ul class="nav nav-pills movement-nav">
+					<li id="bosscircle" class="nav-item"><a href="#" class="nav-link" onclick="toggleBosses();">Show Bosses</a></li>
+					<li id="mazeholes" class="nav-item"><a href="#" class="nav-link" onclick="findMazes();">Find Mazes Gaps</a></li>
+					<li id="chunkgrid" class="nav-item"><a href="#" class="nav-link" onclick="toggleChunkGrid();">Chunk Grid</a></li>
+					<li id="mobgrid" class="nav-item"><a href="#" class="nav-link" onclick="toggleMobGrid();">Mob Grid</a></li>
+					<li id="seacircle" class="nav-item"><a href="#" class="nav-link" onclick="toggleSea();">Sea POIs</a></li>
+		
+					<li class="nav-item">
+						<a href="#" class="nav-link" onclick="downloadMap(document.getElementById('mapcanvas'));"><i class="fas fa-download"></i>Download Map</a>
+					</li>
+					<li>
+						User Defined Radius: <input type="text"  id="userradius" onKeyPress="userDefinedChanged();">
+				  	</li>
+				</ul>
+				
+				<hr />
+
+				<div id="tilefilter" >
+					<span>Transparency</span>
+					<div class="transparency-slider"><div class="transparency-knob"></div></div>
+					<label class="collapsable-menu" onclick="clearAllHighlights();">Clear All Highlights</label>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="legendAccordion" class="accordion">
+		<div class="accordion-item text-bg-dark">
+			<h2 class="accordion-header" id="headingOne">
+			<button class="accordion-button text-bg-dark" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+				Legend&nbsp;
+			</button>
+			</h2>
+			<div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+			<div class="accordion-body d-flex flex-column">
+				<div id="bosses-legend" class="d-flex flex-column mb-3 d-none">
+					<span class="glurch-legend">&nbsp;Glurch</span>
+					<span class="ghorm-legend">&nbsp;Ghorm</span>
+					<span class="hive-mother-legend">&nbsp;Hive Mother</span>
+					<span class="malugaz-legend">&nbsp;Malugaz</span>
+					<span class="azeos-legend">&nbsp;Azeos</span>
+					<span class="ivy-legend">&nbsp;Ivy</span>
+					<span class="omoroth-legend">&nbsp;Omoroth</span>
+					<span class="morpha-legend">&nbsp;Morpha</span>
+				</div>
+				<div id="dungeon-legend" class="d-flex flex-column mb-3">
+					<span class="mold-legend">&nbsp;Main Mold Dungeon</span>
+					<span class="bowcity-legend">&nbsp;Bow Cities</span>
+					<span class="bowvault-legend">&nbsp;Bow Vault</span>
+				</div>
+				<div id="mazes-legend" class="d-flex flex-column mb-3 d-none">
+					<span style="padding-right: 20px">Maze Gaps: </span>
+					<span class="small-maze-legend">&nbsp;Small</span>
+					<span class="medium-maze-legend">&nbsp;Medium</span>
+					<span class="large-maze-legend">&nbsp;Large</span>
+				</div>
+			</div>
+			</div>
+		</div>
+	</div>
+<!--
+	<div class="offcanvas offcanvas-end text-bg-dark" data-bs-backdrop="false" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasLabel">
+		<div class="offcanvas-header">
+			<div>
+		  		<h5 class="offcanvas-title" id="offcanvasLabel">Legend</h5>
+			</div>
+		  	<button type="button" class="btn-close" data-bs-dismiss="offcanvasRight" aria-label="Close"></button>
+		</div>
+		<div class="offcanvas-body">
+			<div class="d-flex flex-column">
+				<div class="ms-3 d-flex flex-column">
+					<span class="omoroth-legend">&nbsp;Omoroth</span>
+					<span class="morpha-legend">&nbsp;Morpha</span>
+					<span class="bowcity-legend">&nbsp;Bow Cities</span>
+					<span class="bowvault-legend">&nbsp;Bow Vault</span>
+					<br/>
+					<span class="ivy-legend">&nbsp;Ivy</span>
+					<span class="mold-legend">&nbsp;Main Mold Dungeon</span>
+					<span class="azeos-legend">&nbsp;Azeos</span>
+					<span class="malugaz-legend">&nbsp;Malugaz</span>
+					<span class="hive-mother-legend">&nbsp;Hive Mother</span>
+					<span class="ghorm-legend">&nbsp;Ghorm</span>
+					<span class="glurch-legend">&nbsp;Glurch</span><br/>
+					<span style="padding-right: 20px">Maze Gaps: </span>
+					<span class="large-maze-legend">&nbsp;Large</span>
+					<span class="medium-maze-legend">&nbsp;Medium</span>
+					<span class="small-maze-legend">&nbsp;Small</span>
+				</div>
+			</div>
+		</div>
+	</div>
+-->
+	  
+
+	<div id="navdiv" class="nav_controls_container">
+		<button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvas" aria-controls="offcanvas">
+			Show Settings
+		</button>
+    </div>
+
+  	<div class="canvas-container">
+    	<canvas id="mapcanvas" width="1200px" height="800px" style="image-rendering: pixelated;" onclick="//toclick">
+  	</div>
+
+	<a target="_blank" href="https://github.com/Ceddini/CoreKeeperMapTool/discussions" id="feedback">Feedback / Requests</a>
 
 
-  <script>
-    let state = "paste";
-    let centerpt;
-    let wallring;
-    function getMousePos(canvas, evt) {
-      var rect = canvas.getBoundingClientRect();
-      return {
-        x: evt.clientX - rect.left,
-        y: evt.clientY - rect.top
-      };
-    }
-    function userinteract(element, evt) {
-      if (state == "paste") return;
-      if (state == "center") {
-        state = "wall";
-        centerpt = getMousePos(element, evt);
-        drawCenterPoint();
-        return;
-      }
-      if (state == "wall") {
-        wallring = getMousePos(element, evt);
-        state = "paste";
-        drawWallringPoint();
-        return drawIvyCircle();
-      }
-    }
-    function drawCenterPoint(){
-      var canvas = document.getElementById("mycanvas");
-      var ctx = canvas.getContext('2d');
-      ctx.beginPath();
-      let radius = 10;
-      ctx.fillStyle = "#FFFFFF";
-      ctx.lineWidth = 5;
-      ctx.arc(centerpt.x, centerpt.y, radius, 0, 2 * Math.PI);
-      ctx.fill();
-    }
-    function drawWallringPoint(){
-      var canvas = document.getElementById("mycanvas");
-      var ctx = canvas.getContext('2d');
-      ctx.beginPath();
-      let radius = 10;
-      ctx.fillStyle = "#FFFFFF";
-      ctx.lineWidth = 5;
-      ctx.arc(wallring.x, wallring.y, radius, 0, 2 * Math.PI);
-      ctx.fill();
-    }
+	<!--
+	<div class="legend-container">
+		<button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvas">
+			Show Legend
+		</button>
+  	</div>
+	-->
 
-    function drawIvyCircle() {
-      var canvas = document.getElementById("mycanvas");
-      var ctx = canvas.getContext('2d');
-      ctx.beginPath();
-      let radius = Math.sqrt(Math.pow(centerpt.x - wallring.x, 2) + Math.pow(centerpt.y - wallring.y, 2));
-      radius = radius * 1.9;
-      ctx.globalAlpha = 0.3;
-      ctx.strokeStyle = "#FF00FF";
-      ctx.lineWidth = 20;
-      ctx.arc(centerpt.x, centerpt.y, radius, 0, 2 * Math.PI);
-      ctx.stroke();
-    }
 
-    /**
-     * This handler retrieves the images from the clipboard as a blob and returns it in a callback.
-     * 
-     * @see http://ourcodeworld.com/articles/read/491/how-to-retrieve-images-from-the-clipboard-with-javascript-in-the-browser
-     * @param pasteEvent
-     * @param callback
-    */
-    function retrieveImageFromClipboardAsBlob(pasteEvent, callback) {
-      if (pasteEvent.clipboardData == false) {
-        if (typeof (callback) == "function") {
-          callback(undefined);
-        }
-      };
-
-      var items = pasteEvent.clipboardData.items;
-
-      if (items == undefined) {
-        if (typeof (callback) == "function") {
-          callback(undefined);
-        }
-      };
-
-      for (var i = 0; i < items.length; i++) {
-        // Skip content if not image
-        if (items[i].type.indexOf("image") == -1) continue;
-        // Retrieve image on clipboard as blob
-        var blob = items[i].getAsFile();
-
-        if (typeof (callback) == "function") {
-          callback(blob);
-        }
-      }
-    }
-
-    window.addEventListener("paste", function (e) {
-      // Handle the event
-      retrieveImageFromClipboardAsBlob(e, function (imageBlob) {
-        // If there's an image, display it in the canvas
-        if (imageBlob) {
-          var canvas = document.getElementById("mycanvas");
-          var ctx = canvas.getContext('2d');
-
-          // Create an image to render the blob on the canvas
-          var img = new Image();
-
-          // Once the image loads, render the img on the canvas
-          img.onload = function () {
-            // Update dimensions of the canvas with the dimensions of the image
-            canvas.width = this.width;
-            canvas.height = this.height;
-
-            // Draw the image
-            ctx.drawImage(img, 0, 0);
-            state = "center";
-          };
-          // Crossbrowser support for URL
-          var URLObj = window.URL || window.webkitURL;
-
-          // Creates a DOMString containing a URL representing the object given in the parameter
-          // namely the original Blob
-          img.src = URLObj.createObjectURL(imageBlob);
-        }
-      });
-    }, false);
-
-  </script>
+  	<script src="js/page.js"></script>
+  	<script src="js/menubuilder.js"></script>
+  	<script src="js/mazehunter.js"></script>
+  	<script src="js/vendor/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

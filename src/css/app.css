@@ -1,3 +1,31 @@
+a {
+	text-decoration: none;
+}
+
+.text-bg-dark .btn-close {
+	background: transparent url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23FFF'%3e%3cpath d='M.293.293a1 1 0 0 1 1.414 0L8 6.586 14.293.293a1 1 0 1 1 1.414 1.414L9.414 8l6.293 6.293a1 1 0 0 1-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L6.586 8 .293 1.707a1 1 0 0 1 0-1.414z'/%3e%3c/svg%3e") center/1em auto no-repeat;
+}
+
+.text-bg-dark {
+	--bs-accordion-border-color: #333333;
+}
+
+#feedback {
+	position: absolute;
+	top: 4px;
+	right: 4px;
+	z-index: 1;
+}
+
+#directions {
+	border: 1px solid rgba(0,0,0,0.3);
+	border-radius: 8px;
+	padding: 8px;
+}
+#directions ol {
+	padding-left: 18px;
+}
+
 .movement-nav {
   margin-bottom: 0px;
 }
@@ -28,11 +56,9 @@
 
 .nav_controls_container {
   position: absolute;
-  top: 10px;
-  left: 10px;
+  top: 4px;
+  left: 4px;
   z-index: 1;
-  background: #FFFC;
-  padding: 5px;
   font-family: sans-serif;
 }
 
@@ -50,13 +76,20 @@
 
 .legend-container {
   position: absolute;
-  bottom: 10px;
-  right: 10px;
-  z-index: 1;
-  background: #FFFC;
-  padding: 5px;
+  bottom: 4px;
+  right: 4px;
+  z-index: -1;
   padding-left: 25px;
   font-family: sans-serif;
+}
+
+#legendAccordion {
+	position: absolute;
+	bottom: 4px;
+	right: 4px;
+	z-index: 1;
+	font-family: sans-serif;
+	width: auto;
 }
 
 .collapsable-menu {
