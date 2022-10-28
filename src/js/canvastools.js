@@ -5,33 +5,33 @@ let _image_cache = undefined;
 let cameraOffset = { x: 0, y: 0 }
 let previousCoreRelativeOffset = undefined;
 let _global_ctx;
-let coreloc = { x: 0, y: 0 };
-let pixelmap = {};
-let panzoomele;
+let coreLoc = { x: 0, y: 0 };
+let pixelMap = {};
+let panZoomElem;
 
 function panImage(dx, dy) {
 	cameraOffset.x += dx;
 	cameraOffset.y += dy;
-	panzoomele.pan(cameraOffset.x, cameraOffset.y);
+	panZoomElem.pan(cameraOffset.x, cameraOffset.y);
 }
 
 function getCoreOffset() {
 	const boundingRect = document.querySelector('.canvas-container').getBoundingClientRect();
 	const mapCanvas = document.getElementById('mapcanvas');
-	const scale = panzoomele.getScale();
+	const scale = panZoomElem.getScale();
 	// Panzoom forces transform-origin: center, which needs to be accounted for
 	const originOffsetX = (mapCanvas.width / 2) - (mapCanvas.width * scale / 2);
 	const originOffsetY = (mapCanvas.height / 2) - (mapCanvas.height * scale / 2);
 	// Panzoom sets transform: scale(n) translate(x, y); which scales the x and y.
 	// Calculate the core location as if it was scaled, then account for the transform scaling by dividing by scale.
-	const x = ((boundingRect.width / 2) - (coreloc.x * scale) - originOffsetX) / scale;
-	const y = ((boundingRect.height / 2) - (coreloc.y * scale) - originOffsetY) / scale;
+	const x = ((boundingRect.width / 2) - (coreLoc.x * scale) - originOffsetX) / scale;
+	const y = ((boundingRect.height / 2) - (coreLoc.y * scale) - originOffsetY) / scale;
 	return { x, y };
 }
 
 function panToCore() {
 	const { x, y } = getCoreOffset();
-	panzoomele.pan(x, y);
+	panZoomElem.pan(x, y);
 }
 
 function panToPreviousCoreRelativeOffset() {
@@ -39,12 +39,12 @@ function panToPreviousCoreRelativeOffset() {
 	const { x: relativeOffsetX, y: relativeOffsetY } = previousCoreRelativeOffset;
 	const x = coreOffsetX - relativeOffsetX;
 	const y = coreOffsetY - relativeOffsetY;
-	panzoomele.pan(x, y);
+	panZoomElem.pan(x, y);
 }
 
 function getCoreRelativeOffset() {
 	const { x: coreOffsetX, y: coreOffsetY } = getCoreOffset();
-	const { x: currentOffsetX, y: currentOffsetY } = panzoomele.getPan();
+	const { x: currentOffsetX, y: currentOffsetY } = panZoomElem.getPan();
 	const relativeOffsetX = coreOffsetX - currentOffsetX;
 	const relativeOffsetY = coreOffsetY - currentOffsetY;
 	return {
@@ -62,7 +62,7 @@ function zoomWithMouseWheel(event) {
 		animate: false,
 		step: 2.0,
 	};
-	const scale = panzoomele.getScale();
+	const scale = panZoomElem.getScale();
 	const delta = event.deltaY === 0 && event.deltaX ? event.deltaX : event.deltaY;
 	const wheel = delta < 0 ? 1 : -1;
 	let targetScale = scale * Math.exp((wheel * opts.step) / 3);
@@ -76,8 +76,8 @@ function zoomWithMouseWheel(event) {
 	if (targetScale > 1) {
 		targetScale = Math.round(targetScale);
 	}
-	panzoomele.zoomToPoint(targetScale, event, opts);
-	if (panzoomele.getScale() < 1.0) {
+	panZoomElem.zoomToPoint(targetScale, event, opts);
+	if (panZoomElem.getScale() < 1.0) {
 		document.getElementById("mapcanvas").style.imageRendering = "auto";
 	} else {
 		document.getElementById("mapcanvas").style.imageRendering = "pixelated";
@@ -197,7 +197,7 @@ function drawCircle(ctx, radius) {
 	ctx.lineWidth = 20;
 	ctx.strokeStyle = "#FFFFFF";
 	ctx.beginPath();
-	ctx.arc(coreloc.x, coreloc.y, radius, 0, 2 * Math.PI);
+	ctx.arc(coreLoc.x, coreLoc.y, radius, 0, 2 * Math.PI);
 	ctx.stroke();
 	ctx.globalAlpha = 1.0;
 }
@@ -211,38 +211,38 @@ function drawSeaBiome(ctx, width, height) {
 
 	ctx.strokeStyle = "#ff6a00";
 	ctx.beginPath();
-	ctx.arc(coreloc.x, coreloc.y, radius, 0, 2 * Math.PI);
+	ctx.arc(coreLoc.x, coreLoc.y, radius, 0, 2 * Math.PI);
 	ctx.stroke();
 
 	radius = 1100;
 	ctx.strokeStyle = "#9e3f9b";
 	ctx.beginPath();
-	ctx.arc(coreloc.x, coreloc.y, radius, 0, 2 * Math.PI);
+	ctx.arc(coreLoc.x, coreLoc.y, radius, 0, 2 * Math.PI);
 	ctx.stroke();
 
 	radius = 1250;
 	ctx.strokeStyle = "#AAAAAA";
 	ctx.beginPath();
-	ctx.arc(coreloc.x, coreloc.y, radius, 0, 2 * Math.PI);
+	ctx.arc(coreLoc.x, coreLoc.y, radius, 0, 2 * Math.PI);
 	ctx.stroke();
 
 	//Morpha
 	radius = 1400;
 	ctx.strokeStyle = "#1898F4";
 	ctx.beginPath();
-	ctx.arc(coreloc.x, coreloc.y, radius, 0, 2 * Math.PI);
+	ctx.arc(coreLoc.x, coreLoc.y, radius, 0, 2 * Math.PI);
 	ctx.stroke();
 
 	radius = 1550;
 	ctx.strokeStyle = "#AAAAAA";
 	ctx.beginPath();
-	ctx.arc(coreloc.x, coreloc.y, radius, 0, 2 * Math.PI);
+	ctx.arc(coreLoc.x, coreLoc.y, radius, 0, 2 * Math.PI);
 	ctx.stroke();
 
 	radius = 1750;
 	ctx.strokeStyle = "#AAAAAA";
 	ctx.beginPath();
-	ctx.arc(coreloc.x, coreloc.y, radius, 0, 2 * Math.PI);
+	ctx.arc(coreLoc.x, coreLoc.y, radius, 0, 2 * Math.PI);
 	ctx.stroke();
 
 	ctx.globalAlpha = 1.0;
@@ -254,12 +254,12 @@ function drawArcs(ctx) {
 	//ARC starts 0 at 3 oclock
 	_global_ctx.fillStyle = "#C2C2C2";
 	_global_ctx.beginPath();
-	_global_ctx.arc(coreloc.x, coreloc.y, SEARCH_RADII.max, stoneArc.start - Math.PI / 2, stoneArc.end - Math.PI / 2);
+	_global_ctx.arc(coreLoc.x, coreLoc.y, SEARCH_RADII.max, stoneArc.start - Math.PI / 2, stoneArc.end - Math.PI / 2);
 	_global_ctx.fill();
 
 	_global_ctx.beginPath();
 	_global_ctx.fillStyle = "#A66829";
-	_global_ctx.arc(coreloc.x, coreloc.y, SEARCH_RADII.max, stoneArc.start + Math.PI / 2, stoneArc.end + Math.PI / 2);
+	_global_ctx.arc(coreLoc.x, coreLoc.y, SEARCH_RADII.max, stoneArc.start + Math.PI / 2, stoneArc.end + Math.PI / 2);
 	_global_ctx.fill();
 
 	ctx.globalAlpha = 1.0;
@@ -276,49 +276,49 @@ function drawBosses(ctx, width, height) {
 	let radius = 900;
 	ctx.strokeStyle = "#FF00FF";
 	ctx.beginPath();
-	ctx.arc(coreloc.x, coreloc.y, radius, 0, 2 * Math.PI);
+	ctx.arc(coreLoc.x, coreLoc.y, radius, 0, 2 * Math.PI);
 	ctx.stroke();
 
 	//Mold Dungeon
 	radius = 750;
 	ctx.strokeStyle = "#6cbbe0";
 	ctx.beginPath();
-	ctx.arc(coreloc.x, coreloc.y, radius, 0, 2 * Math.PI);
+	ctx.arc(coreLoc.x, coreLoc.y, radius, 0, 2 * Math.PI);
 	ctx.stroke();
 
 	//Azeos
 	radius = 600;
 	ctx.strokeStyle = "#3d9b41";
 	ctx.beginPath();
-	ctx.arc(coreloc.x, coreloc.y, radius, 0, 2 * Math.PI);
+	ctx.arc(coreLoc.x, coreLoc.y, radius, 0, 2 * Math.PI);
 	ctx.stroke();
 
 	//Malugaz the Corrupted
 	radius = 350;
 	ctx.strokeStyle = "#678397";
 	ctx.beginPath();
-	ctx.arc(coreloc.x, coreloc.y, radius, 0, 2 * Math.PI);
+	ctx.arc(coreLoc.x, coreLoc.y, radius, 0, 2 * Math.PI);
 	ctx.stroke();
 
 	//Hive Mother
 	radius = 330;
 	ctx.strokeStyle = "#fca694";
 	ctx.beginPath();
-	ctx.arc(coreloc.x, coreloc.y, radius, 0, 2 * Math.PI);
+	ctx.arc(coreLoc.x, coreLoc.y, radius, 0, 2 * Math.PI);
 	ctx.stroke();
 
 	//Ghorm
 	radius = 250;
 	ctx.strokeStyle = "#d95917";
 	ctx.beginPath();
-	ctx.arc(coreloc.x, coreloc.y, radius, 0, 2 * Math.PI);
+	ctx.arc(coreLoc.x, coreLoc.y, radius, 0, 2 * Math.PI);
 	ctx.stroke();
 
 	//Glurch
 	radius = 65;
 	ctx.strokeStyle = "#7f5f30";
 	ctx.beginPath();
-	ctx.arc(coreloc.x, coreloc.y, radius, 0, 2 * Math.PI);
+	ctx.arc(coreLoc.x, coreLoc.y, radius, 0, 2 * Math.PI);
 	ctx.stroke();
 
 	ctx.globalAlpha = 1.0;
@@ -337,8 +337,8 @@ function drawMap(tiles) {
 		if (maxx < key.x) maxx = key.x;
 		if (maxy < key.y) maxy = key.y;
 	}
-	coreloc.x = -minx * TILE_SIZE;
-	coreloc.y = (maxy + 1) * TILE_SIZE;
+	coreLoc.x = -minx * TILE_SIZE;
+	coreLoc.y = (maxy + 1) * TILE_SIZE;
 	const canvas = document.getElementById("mapcanvas");
 	canvas.width = (maxx - minx + 1) * TILE_SIZE;
 	canvas.height = (maxy - miny + 1) * TILE_SIZE;

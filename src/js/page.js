@@ -16,7 +16,7 @@ window.addEventListener('DOMContentLoaded', () => {
 		resetMap();
 		loadMapFile(fileupload, tilelist, updatemap);
 	});
-	panzoomele = Panzoom(mapCanvas, {
+	panZoomElem = Panzoom(mapCanvas, {
 		maxScale: MAX_ZOOM,
 		canvas: true,
 	});

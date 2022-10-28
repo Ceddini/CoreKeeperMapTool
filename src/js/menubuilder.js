@@ -1,65 +1,43 @@
-/*
-		<li class="dropdown">
-		  <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-			Dropdown
-			<b class="caret"></b>
-		  </a>
-		  <ul class="dropdown-menu">
-			<li>Item 1</li>
-			<li>Item 2</li>
-		  </ul>
-		</li>
-*/
-
-/*
-<label label-for="stone-menu" class="collapsable-menu">Stone</label>
-	<ul id="stone-menu" class="collapsable-menu-ul">
-	  <li style="padding-left: 30px;"><label class="checkbox" style="box-shadow: rgb(73, 103, 125) -25px 0px;"><input type="checkbox" data-color-type="single" data-block-id="18" style="margin-left: -14px;">Stone Wall</label></li>
-	  <li style="padding-left: 30px;"><label class="checkbox" style="box-shadow: rgb(103, 131, 151) -25px 0px;"><input type="checkbox" data-color-type="single" data-block-id="19" style="margin-left: -14px;">Stone Ground</label></li>
-	  <li style="padding-left: 30px;"><label class="checkbox" style="box-shadow: rgb(130, 155, 203) -25px 0px;"><input type="checkbox" data-color-type="single" data-block-id="20" style="margin-left: -14px;">Iron Ore</label></li>
-	  <li style="padding-left: 30px;"><label class="checkbox" style="box-shadow: rgb(130, 130, 130) -25px 0px;"><input type="checkbox" data-color-type="single" data-block-id="78" style="margin-left: -14px;">Caveling Floor Tile</label></li>
-	</ul>
-*/
 function buildDropdownMenu(name) {
 	let menuid = (name + "-menu").toLowerCase();
 	let div = document.createElement('div');
-	let labelele = document.createElement("label");
-	labelele.setAttribute("label-for", menuid);
-	labelele.classList.add("collapsable-menu");
-	labelele.appendChild(document.createTextNode(name));
-	div.appendChild(labelele);
-	let elemenu = document.createElement("ul");
-	elemenu.setAttribute("id", menuid);
-	elemenu.classList.add("collapsable-menu-ul");
-	div.appendChild(elemenu);
-	return { root: div, menu: elemenu };
+	let labelElem = document.createElement("label");
+	labelElem.setAttribute("label-for", menuid);
+	labelElem.classList.add("collapsable-menu");
+	labelElem.appendChild(document.createTextNode(name));
+	div.appendChild(labelElem);
+	let menuElem = document.createElement("ul");
+	menuElem.setAttribute("id", menuid);
+	menuElem.classList.add("collapsable-menu-ul");
+	div.appendChild(menuElem);
+	return { root: div, menu: menuElem };
 }
 
-function buildTileCheckBox(tiletype) {
+function buildTileCheckBox(tileType) {
 	//  <label style='box-shadow:#{DIRT_WALL_COLOR_HERE} -25px 0px'><input type="checkbox" data-color-type='single' data-block-color='color identifier here'>Dirt Wall</label>
-	let labelele = document.createElement("label");
-	labelele.style.boxShadow = `rgb(${tiletype.r},${tiletype.g},${tiletype.b}) -25px 0px`;
-	let chkele = document.createElement("input");
-	chkele.setAttribute("type", "checkbox");
-	chkele.setAttribute("data-color-type", "single");
-	chkele.setAttribute("data-block-id", `${tiletype.id}`);
-	chkele.style.marginLeft = "4px";
-	chkele.style.marginRight = "4px";
-	chkele.onchange = () => {
-		chkele.setAttribute("disabled", "true");
+	let labelElem = document.createElement("label");
+	labelElem.style.boxShadow = `rgb(${tileType.r},${tileType.g},${tileType.b}) -25px 0px`;
+	let checkboxElem = document.createElement("input");
+	checkboxElem.setAttribute("type", "checkbox");
+	checkboxElem.setAttribute("data-color-type", "single");
+	checkboxElem.setAttribute("data-block-id", `${tileType.id}`);
+	checkboxElem.style.marginLeft = "4px";
+	checkboxElem.style.marginRight = "4px";
+	checkboxElem.onchange = () => {
+		checkboxElem.setAttribute("disabled", "true");
 		//toggleAllCheckboxes(tiletype.id, chkele.checked);
 		redrawMap();
 		setTimeout(() => {
-			chkele.removeAttribute("disabled");
+			checkboxElem.removeAttribute("disabled");
 		}, 10);
 	};
-	labelele.appendChild(chkele);
-	labelele.appendChild(document.createTextNode(tiletype.name));
-	labelele.classList.add("checkbox");
-	let liele = document.createElement("li");
-	liele.style.paddingLeft = "30px"
-	liele.appendChild(labelele);
-	return liele;
+	labelElem.appendChild(checkboxElem);
+	labelElem.appendChild(document.createTextNode(tileType.name));
+	labelElem.classList.add("checkbox");
+	let liElem = document.createElement("li");
+	liElem.style.paddingLeft = "30px"
+	liElem.appendChild(labelElem);
+	return liElem;
 }
 
 
@@ -75,27 +53,27 @@ function clearAllHighlights() {
 	redrawMap();
 }
 
-function isBoulder(ele) {
-	let parentmenu = ele.parentElement.parentElement.parentElement;
-	return parentmenu.getAttribute("ID") == "boulder-menu";
+function isBoulder(elem) {
+	let parentMenu = elem.parentElement.parentElement.parentElement;
+	return parentMenu.getAttribute("ID") == "boulder-menu";
 }
 
 function buildHighlightSelection(search) {
-	let filterchecks = document.querySelectorAll('input[type="checkbox"][data-block-id]');
-	var selected = [].filter.call(filterchecks, function (el) {
+	let filterChecks = document.querySelectorAll('input[type="checkbox"][data-block-id]');
+	var selected = [].filter.call(filterChecks, function (el) {
 		return el.checked
 	});
-	let filterobj;
+	let filterObj;
 	for (let chkbox of selected) {
 		search.count++;
-		filterobj = isBoulder(chkbox) ? search.boulders : search;
-		let tiletype = tilecolormap[chkbox.getAttribute("data-block-id")];
-		if (!filterobj[tiletype.r]) {
-			((filterobj[tiletype.r] = {})[tiletype.g] = {})[tiletype.b] = true;
-		} else if (!filterobj[tiletype.r][tiletype.g]) {
-			(filterobj[tiletype.r][tiletype.g] = {})[tiletype.b] = true;
+		filterObj = isBoulder(chkbox) ? search.boulders : search;
+		let tileType = tileColorMap[chkbox.getAttribute("data-block-id")];
+		if (!filterObj[tileType.r]) {
+			((filterObj[tileType.r] = {})[tileType.g] = {})[tileType.b] = true;
+		} else if (!filterObj[tileType.r][tileType.g]) {
+			(filterObj[tileType.r][tileType.g] = {})[tileType.b] = true;
 		} else {
-			filterobj[tiletype.r][tiletype.g][tiletype.b] = true;
+			filterObj[tileType.r][tileType.g][tileType.b] = true;
 		}
 	}
 }
@@ -105,23 +83,23 @@ function buildSelectAll(items) {
 	 *<ul class="nav nav-pills movement-nav">
 		  <li><a href="#" onclick="changeZoom(0.1);"><i class="fas fa-search-plus"></i></a></li> 
 	 */
-	let ulele = document.createElement("ul");
-	ulele.classList.add("nav");
-	ulele.classList.add("nav-pills");
+	let ulElem = document.createElement("ul");
+	ulElem.classList.add("nav");
+	ulElem.classList.add("nav-pills");
 	let liele = document.createElement("li");
-	let aele = document.createElement("a");
-	aele.setAttribute("href", "#");
-	aele.onclick = () => {
-		if (aele.classList.contains("active")) {
-			aele.classList.remove("active");
+	let linkElem = document.createElement("a");
+	linkElem.setAttribute("href", "#");
+	linkElem.onclick = () => {
+		if (linkElem.classList.contains("active")) {
+			linkElem.classList.remove("active");
 		} else {
-			aele.classList.add("active");
+			linkElem.classList.add("active");
 		}
-		if (aele.classList.contains("active")) {
+		if (linkElem.classList.contains("active")) {
 
 		}
 	};
-	aele.appendChild(document.createTextNode("Select All"));
+	linkElem.appendChild(document.createTextNode("Select All"));
 }
 
 function buildDropdownMenuItem(name, items) {
@@ -134,7 +112,7 @@ function buildDropdownMenuItem(name, items) {
 }
 
 function buildTileMenu() {
-	let mainmenu = document.getElementById("tilefilter");
+	let mainMenu = document.getElementById("tilefilter");
 	/*  
 	{
 	  "tilesetname": "Stone",
@@ -145,24 +123,24 @@ function buildTileMenu() {
 	  "b": "130"
 	}
 	*/
-	let bysetname = {};
-	let bytiletype = {};
+	let bySetName = {};
+	let byTileType = {};
 	let id = 0;
-	for (let tiletype of tilecolormap) {
-		tiletype.id = id++;
-		if (!bysetname[tiletype.tilesetname]) {
-			bysetname[tiletype.tilesetname] = [tiletype];
+	for (let tileType of tileColorMap) {
+		tileType.id = id++;
+		if (!bySetName[tileType.tilesetname]) {
+			bySetName[tileType.tilesetname] = [tileType];
 		} else {
-			bysetname[tiletype.tilesetname].push(tiletype);
+			bySetName[tileType.tilesetname].push(tileType);
 		}
-		if (!bytiletype[tiletype.type]) {
-			bytiletype[tiletype.type] = [tiletype];
+		if (!byTileType[tileType.type]) {
+			byTileType[tileType.type] = [tileType];
 		} else {
-			bytiletype[tiletype.type].push(tiletype);
+			byTileType[tileType.type].push(tileType);
 		}
 	}
-	for (let setname in bysetname) {
-		mainmenu.appendChild(buildDropdownMenuItem(setname, bysetname[setname]));
+	for (let setName in bySetName) {
+		mainMenu.appendChild(buildDropdownMenuItem(setName, bySetName[setName]));
 	}
 	/*
 	for (let tiletype in bytiletype) {
