@@ -60,22 +60,52 @@ function storeCoreRelativeOffset() {
 function zoomWithMouseWheel(event) {
 	const opts = {
 		animate: false,
-		step: 2.0,
+		step: 1,
 	};
+	// const scale = panZoomElem.getScale();
+	// const delta = event.deltaY === 0 && event.deltaX ? event.deltaX : event.deltaY;
+	// const wheel = delta < 0 ? 1 : -1;
+	// let targetScale = scale * Math.exp((wheel * opts.step) / 3);
+	// console.log(targetScale);
+	// console.log(delta);
+
+	// console.log(targetScale >= MAX_ZOOM);
+	// console.log(targetScale <= MIN_ZOOM);
+
+	// if (targetScale >= MAX_ZOOM && delta > 0) {
+	// 	return;
+	// }
+	// else if (targetScale <= MIN_ZOOM && delta < 0) {
+	// 	return;
+	// }
+	// // Round zoom scales larger than 1 for pixel-perfect zoom-in
+	// if (targetScale > 1) {
+	// 	targetScale = Math.round(targetScale * 10) / 10;
+	// 	console.log(targetScale);
+	// }
+
 	const scale = panZoomElem.getScale();
 	const delta = event.deltaY === 0 && event.deltaX ? event.deltaX : event.deltaY;
-	const wheel = delta < 0 ? 1 : -1;
-	let targetScale = scale * Math.exp((wheel * opts.step) / 3);
-	if (targetScale >= MAX_ZOOM && delta > 0) {
-		return;
+	let targetScale = scale;
+
+	if (delta < 0) {
+		if (scale >= 8)
+			targetScale = scale + 2;
+		else if (scale >= 1)
+			targetScale = scale + 1;
+		else
+			targetScale = scale + 0.1;
+	} else {
+		if (scale > 8)
+			targetScale = scale - 2;
+		else if (scale > 1)
+			targetScale = scale - 1;
+		else
+			targetScale = scale - 0.1;
 	}
-	else if (targetScale <= MIN_ZOOM && delta < 0) {
-		return;
-	}
-	// Round zoom scales larger than 1 for pixel-perfect zoom-in
-	if (targetScale > 1) {
-		targetScale = Math.round(targetScale);
-	}
+
+	console.log(targetScale);
+
 	panZoomElem.zoomToPoint(targetScale, event, opts);
 	if (panZoomElem.getScale() < 1.0) {
 		document.getElementById("mapcanvas").style.imageRendering = "auto";
