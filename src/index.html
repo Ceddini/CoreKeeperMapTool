@@ -1,149 +1,115 @@
 <html>
 
 <head>
-  <title>Ivy Distance Finder</title>
+  <meta charset="utf8" />
+  <title>Map Tool</title>
+  <link href="css/vendor/bootstrap.css" rel="stylesheet">
+  <link href="css/vendor/bootstrap-responsive.css" rel="stylesheet">
+  <link href="css/app.css" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-1.12.4.min.js"
+    integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+  <script src="js/vendor/jqueryBrowser.js"></script>
+  <script src="https://unpkg.com/@panzoom/panzoom@4.4.4/dist/panzoom.min.js"></script>
+  <script src="js/pako-inflate-2.0.4.min.js"></script>
+  <script src="data/tilecolormap.js"></script>
+  <script src="js/maploader.js"></script>
+  <script src="js/canvastools.js"></script>
+  <script src="https://kit.fontawesome.com/75173a9880.js" crossorigin="anonymous"></script>
+  <script src="js/mapmonitor.js"></script>
 </head>
 
-<body>
-  <p>Ivy Distance Finder Instructions:
-  <ol>
-    <li>Open your map in Core Keeper and hit the Print Screen Button</li>
-    <li>Switch back to the browser and press ctrl+v</li>
-    <li>Click the Center Core of your map</li>
-    <li>Click on the Great Wall ring</li>
-    <li>Ivy will be along the drawn circle</li>
-  </ol>
-  </p>
-  <p></p>
-  <p></p>
-  <canvas id="mycanvas" width="100%" height="75%" onclick="userinteract(this, event);">
-  </canvas>
+<body style="background-color: black">
+  <div id="navdiv" class="nav_controls_container">
+    <div>
+      <p>Core Keeper Map Tool -- Created by Mz, nineforty, Craigins and Ceddini <a href="img/fullmap_cropped.png" target="_blank">Example Map</a></p>
+    </div>
+    <div>
+      <div>
+        <a href="#" onclick="toggleDirections()"><h2><i class="fas fa-question-circle"></i> Click for Directions</h2></a>
+        <div id="directions" style="display: none">
+          <ol>
+            <li>Open the folder: c:\users\%USERNAME%\AppData\LocalLow\Pugstorm\Core Keeper\Steam\</li>
+            <li>Open your steam id folder</li>
+            <li>Open the maps folder</li>
+            <li>Open your character # folder</li>
+            <li>Select one of the #.mapparts.gzip files to display</li>
+            <li>Still confused?  <a href="https://www.youtube.com/watch?v=7YZCPm6i50E" target="_blank">Watch this video by Dakon The Mad</a></li>
+          </ol>
+        </div>
+      </div>
+      <div>
+        <input id="mapupload" type="file" />
+        <input type="checkbox" id="shouldrefresh" checked/>
+        <input type="button" onclick="registerMapFile();" value="Monitor Map"/> 
+        <div class="toggle-container" onclick="toggleDarkMode();"><label id="darkmodeui" class="toggle-switch">Dark Mode</label></div>
+      </div>
+    </div>
+    <div>
+      <ul class="nav nav-pills movement-nav">
+        <!--<li><a href="#" onclick="changeZoom(1);"><i class="fas fa-search-plus"></i></a></li>
+        <li><input style="margin-top: 8px;width: 30px;" type="text" id="zoomval" value="1.0" /></li>
+        <li><a href="#" onclick="changeZoom(-1);"><i class="fas fa-search-minus"></i></a></li>
+        <li><a href="#" onclick="panImage(-10,0);"><i class="fas fa-arrow-left"></i></a></li>
+        <li><a href="#" onclick="panImage(10,0);"><i class="fas fa-arrow-right"></i></a></li>
+        <li><a href="#" onclick="panImage(0,-10);"><i class="fas fa-arrow-up"></i></a></li>
+        <li><a href="#" onclick="panImage(0,10);"><i class="fas fa-arrow-down"></i></a></li-->
+        <li id="bosscircle"><a href="#" onclick="toggleBosses();">Show Bosses</a></li>
+        <li id="mazeholes"><a href="#" onclick="findMazes();">Find Mazes Gaps</a></li>
+        <li id="chunkgrid"><a href="#" onclick="toggleChunkGrid();">Chunk Grid</a></li>
+        <li id="mobgrid"><a href="#" onclick="toggleMobGrid();">Mob Grid</a></li>
+        <li><a href="#" onclick="downloadMap(document.getElementById('mapcanvas'));"><i class="fas fa-download"></i>
+            Download Map</a></li>
+      </ul>
+      <ul class="nav nav-pills movement-nav">
+        <li id="seacircle"><a href="#" onclick="toggleSea();">Sea POIs</a></li>
+        <li>
+          User Defined Radius: <input type="text"  id="userradius" value="" onKeyPress="userDefinedChanged();">
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div id="tilefilter" class="highlight-container">
+    <span>Transparency</span>
+    <div class="transparency-slider"><div class="transparency-knob"></div></div>
+    <label class="collapsable-menu" onclick="clearAllHighlights();">Clear</label>
+  </div>
+  <div class="canvas-container">
+    <canvas id="mapcanvas" width="1200px" height="800px" style="image-rendering: pixelated;" onclick="//toclick">
+  </div>
+  <div class="legend-container">
+    <span class="omoroth-legend">&nbsp;Omoroth</span>
+    <span class="morpha-legend">&nbsp;Morpha</span>
+    <span class="bowcity-legend">&nbsp;Bow Cities</span>
+    <span class="bowvault-legend">&nbsp;Bow Vault</span>
+    <br/>
+    <span class="ivy-legend">&nbsp;Ivy</span>
+    <span class="mold-legend">&nbsp;Main Mold Dungeon</span>
+    <span class="azeos-legend">&nbsp;Azeos</span>
+    <span class="malugaz-legend">&nbsp;Malugaz</span>
+    <span class="hive-mother-legend">&nbsp;Hive Mother</span>
+    <span class="ghorm-legend">&nbsp;Ghorm</span>
+    <span class="glurch-legend">&nbsp;Glurch</span><br/>
+    <span style="padding-right: 20px">Maze Gaps: </span>
+    <span class="large-maze-legend">&nbsp;Large</span>
+    <span class="medium-maze-legend">&nbsp;Medium</span>
+    <span class="small-maze-legend">&nbsp;Small</span>
+    <br/>
+    <span><a target="_blank" href="https://github.com/Ceddini/CoreKeeperMapTool/discussions">Feedback / Requests</a></span>
+  </div>
 
+
+  	<div style="position: absolute; top: 8px; right: 8px; background-color: #FF97A0; padding: 16px;">
+		There's a redesign / rewrite happening.<br>
+		Check it out over <a href="https://maptool-dev.ceschmitt.de/" target="_blank">here</a>
+	</div>
+
+
+  <script src="js/page.js"></script>
+  <script src="js/menubuilder.js"></script>
+  <script src="js/mazehunter.js"></script>
+  <script src="js/vendor/bootstrap.js"></script>
 
   <script>
-    let state = "paste";
-    let centerpt;
-    let wallring;
-    function getMousePos(canvas, evt) {
-      var rect = canvas.getBoundingClientRect();
-      return {
-        x: evt.clientX - rect.left,
-        y: evt.clientY - rect.top
-      };
-    }
-    function userinteract(element, evt) {
-      if (state == "paste") return;
-      if (state == "center") {
-        state = "wall";
-        centerpt = getMousePos(element, evt);
-        drawCenterPoint();
-        return;
-      }
-      if (state == "wall") {
-        wallring = getMousePos(element, evt);
-        state = "paste";
-        drawWallringPoint();
-        return drawIvyCircle();
-      }
-    }
-    function drawCenterPoint(){
-      var canvas = document.getElementById("mycanvas");
-      var ctx = canvas.getContext('2d');
-      ctx.beginPath();
-      let radius = 10;
-      ctx.fillStyle = "#FFFFFF";
-      ctx.lineWidth = 5;
-      ctx.arc(centerpt.x, centerpt.y, radius, 0, 2 * Math.PI);
-      ctx.fill();
-    }
-    function drawWallringPoint(){
-      var canvas = document.getElementById("mycanvas");
-      var ctx = canvas.getContext('2d');
-      ctx.beginPath();
-      let radius = 10;
-      ctx.fillStyle = "#FFFFFF";
-      ctx.lineWidth = 5;
-      ctx.arc(wallring.x, wallring.y, radius, 0, 2 * Math.PI);
-      ctx.fill();
-    }
-
-    function drawIvyCircle() {
-      var canvas = document.getElementById("mycanvas");
-      var ctx = canvas.getContext('2d');
-      ctx.beginPath();
-      let radius = Math.sqrt(Math.pow(centerpt.x - wallring.x, 2) + Math.pow(centerpt.y - wallring.y, 2));
-      radius = radius * 1.9;
-      ctx.globalAlpha = 0.3;
-      ctx.strokeStyle = "#FF00FF";
-      ctx.lineWidth = 20;
-      ctx.arc(centerpt.x, centerpt.y, radius, 0, 2 * Math.PI);
-      ctx.stroke();
-    }
-
-    /**
-     * This handler retrieves the images from the clipboard as a blob and returns it in a callback.
-     * 
-     * @see http://ourcodeworld.com/articles/read/491/how-to-retrieve-images-from-the-clipboard-with-javascript-in-the-browser
-     * @param pasteEvent
-     * @param callback
-    */
-    function retrieveImageFromClipboardAsBlob(pasteEvent, callback) {
-      if (pasteEvent.clipboardData == false) {
-        if (typeof (callback) == "function") {
-          callback(undefined);
-        }
-      };
-
-      var items = pasteEvent.clipboardData.items;
-
-      if (items == undefined) {
-        if (typeof (callback) == "function") {
-          callback(undefined);
-        }
-      };
-
-      for (var i = 0; i < items.length; i++) {
-        // Skip content if not image
-        if (items[i].type.indexOf("image") == -1) continue;
-        // Retrieve image on clipboard as blob
-        var blob = items[i].getAsFile();
-
-        if (typeof (callback) == "function") {
-          callback(blob);
-        }
-      }
-    }
-
-    window.addEventListener("paste", function (e) {
-      // Handle the event
-      retrieveImageFromClipboardAsBlob(e, function (imageBlob) {
-        // If there's an image, display it in the canvas
-        if (imageBlob) {
-          var canvas = document.getElementById("mycanvas");
-          var ctx = canvas.getContext('2d');
-
-          // Create an image to render the blob on the canvas
-          var img = new Image();
-
-          // Once the image loads, render the img on the canvas
-          img.onload = function () {
-            // Update dimensions of the canvas with the dimensions of the image
-            canvas.width = this.width;
-            canvas.height = this.height;
-
-            // Draw the image
-            ctx.drawImage(img, 0, 0);
-            state = "center";
-          };
-          // Crossbrowser support for URL
-          var URLObj = window.URL || window.webkitURL;
-
-          // Creates a DOMString containing a URL representing the object given in the parameter
-          // namely the original Blob
-          img.src = URLObj.createObjectURL(imageBlob);
-        }
-      });
-    }, false);
 
   </script>
 </body>
