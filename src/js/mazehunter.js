@@ -288,20 +288,6 @@ function isBigEnough(hole, x, y, maze) {
 	return true;
 }
 
-function findMazes() {
-	const mazesLegend = document.getElementById('mazes-legend');
-
-	let ele = document.querySelector("#mazeholes > a");
-	if (ele.classList.contains("active")) {
-		ele.classList.remove("active");
-		mazesLegend.classList.add("d-none");
-	} else {
-		ele.classList.add("active");
-		mazesLegend.classList.remove("d-none");
-	}
-	redrawMap();
-}
-
 function buildStoneFilter() {
 	for (let tiletype of tilecolormap) {
 		let filterobj = undefined;

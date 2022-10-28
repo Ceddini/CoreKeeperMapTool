@@ -1,9 +1,19 @@
+const toggleBossElem = document.querySelector("#bosscircle > a");
+const toggleArcsElem = document.querySelector("#arcs > a");
+const toggleSeaElem = document.querySelector("#seacircle > a");
+const toggleChunkGridElem = document.querySelector("#chunkgrid > a");
+const toggleMobGridElem = document.querySelector("#mobgrid > a");
+const toggleDirectionsElem = document.getElementById("directions");
+const toggleMazesElem = document.querySelector("#mazeholes > a");
+const updatemap = () => { drawMap(tilelist) };
+
+let tilelist = [];
+
 window.addEventListener('DOMContentLoaded', () => {
-	const tilelist = [];
 	const fileupload = document.getElementById("mapupload");
 	const mapCanvas = document.getElementById("mapcanvas");
-	const updatemap = () => { drawMap(tilelist) };
 	fileupload.addEventListener('change', function handleFile(event) {
+		resetMap();
 		loadMapFile(fileupload, tilelist, updatemap);
 	});
 	panzoomele = Panzoom(mapCanvas, {
@@ -42,6 +52,17 @@ window.addEventListener('DOMContentLoaded', () => {
 	setFilterTop();
 
 }, false);
+
+function loadExample() {
+	resetMap();
+	loadStandardFile(tilelist, updatemap);
+}
+
+function resetMap() {
+	tilelist = [];
+	toggleArcsElem.classList.remove("active");
+	toggleMazesElem.classList.remove("active");
+}
 
 function setFilterTop() {
 
@@ -99,60 +120,78 @@ function sliderDrag(event, sliderInfo) {
 }
 
 function toggleBosses() {
-	let ele = document.querySelector("#bosscircle > a");
-
 	const bossesLegend = document.getElementById('bosses-legend');
 
-	if (ele.classList.contains("active")) {
-		ele.classList.remove("active");
+	if (toggleBossElem.classList.contains("active")) {
+		toggleBossElem.classList.remove("active");
 		bossesLegend.classList.add("d-none");
 
 	} else {
-		ele.classList.add("active");
+		toggleBossElem.classList.add("active");
 		bossesLegend.classList.remove("d-none");
 	}
 	redrawMap();
 }
 
-function toggleSea() {
-	let ele = document.querySelector("#seacircle > a");
-	if (ele.classList.contains("active")) {
-		ele.classList.remove("active");
+function toggleArcs() {
+	if (toggleArcsElem.classList.contains("active")) {
+		toggleArcsElem.classList.remove("active");
 	} else {
-		ele.classList.add("active");
+		const canvas = document.getElementById("mapcanvas");
+		const myImage = _global_ctx.getImageData(0, 0, canvas.width, canvas.height);
+		findStone(myImage.data, canvas.width);
+		toggleArcsElem.classList.add("active");
 	}
 	redrawMap();
 }
 
+function toggleSea() {
+	if (toggleSeaElem.classList.contains("active")) {
+		toggleSeaElem.classList.remove("active");
+	} else {
+		toggleSeaElem.classList.add("active");
+	}
+	redrawMap();
+}
+
+function toggleMazes() {
+	const mazesLegend = document.getElementById('mazes-legend');
+
+	if (toggleMazesElem.classList.contains("active")) {
+		toggleMazesElem.classList.remove("active");
+		mazesLegend.classList.add("d-none");
+	} else {
+		toggleMazesElem.classList.add("active");
+		mazesLegend.classList.remove("d-none");
+	}
+	redrawMap();
+}
 
 function toggleChunkGrid() {
-	let ele = document.querySelector("#chunkgrid > a");
-	if (ele.classList.contains("active")) {
-		ele.classList.remove("active");
+	if (toggleChunkGridElem.classList.contains("active")) {
+		toggleChunkGridElem.classList.remove("active");
 	} else {
-		ele.classList.add("active");
+		toggleChunkGridElem.classList.add("active");
 	}
 	redrawMap();
 }
 
 
 function toggleMobGrid() {
-	let ele = document.querySelector("#mobgrid > a");
-	if (ele.classList.contains("active")) {
-		ele.classList.remove("active");
+	if (toggleMobGridElem.classList.contains("active")) {
+		toggleMobGridElem.classList.remove("active");
 	} else {
-		ele.classList.add("active");
+		toggleMobGridElem.classList.add("active");
 	}
 	redrawMap();
 }
 
 function toggleDirections() {
-	let ele = document.getElementById("directions");
-	if (ele.style.display == "none") {
-		ele.style.display = "block"
+	if (toggleDirectionsElem.style.display == "none") {
+		toggleDirectionsElem.style.display = "block"
 		document.querySelector(".highlight-container").style.top = "260px";
 	} else {
-		ele.style.display = "none";
+		toggleDirectionsElem.style.display = "none";
 		document.querySelector(".highlight-container").style.top = "150px";
 	}
 	setFilterTop();

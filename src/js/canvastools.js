@@ -105,19 +105,28 @@ function redrawMap() {
 
 function decorateMap(width, height) {
 	highlightSelected();
+
+	if (document.querySelector("#arcs > a").classList.contains("active")) {
+		drawArcs(_global_ctx);
+	}
+
 	if (document.getElementById("userradius").value.trim() != "") {
 		let radius = parseFloat(document.getElementById("userradius").value.trim());
 		drawCircle(_global_ctx, radius);
 	}
+
 	if (document.querySelector("#bosscircle > a").classList.contains("active")) {
 		drawBosses(_global_ctx, width, height);
 	}
+
 	if (document.querySelector("#seacircle > a").classList.contains("active")) {
 		drawSeaBiome(_global_ctx, width, height);
 	}
+
 	if (document.querySelector("#chunkgrid > a").classList.contains("active")) {
 		drawChunkGrid(_global_ctx, width, height);
 	}
+
 	if (document.querySelector("#mobgrid > a").classList.contains("active")) {
 		drawMobGrid(_global_ctx, width, height);
 	}
@@ -239,6 +248,23 @@ function drawSeaBiome(ctx, width, height) {
 	ctx.globalAlpha = 1.0;
 }
 
+function drawArcs(ctx) {
+	ctx.globalAlpha = RingSliderInfo.transparency() * 0.5;
+
+	//ARC starts 0 at 3 oclock
+	_global_ctx.fillStyle = "#C2C2C2";
+	_global_ctx.beginPath();
+	_global_ctx.arc(coreloc.x, coreloc.y, SEARCH_RADII.max, stoneArc.start - Math.PI / 2, stoneArc.end - Math.PI / 2);
+	_global_ctx.fill();
+
+	_global_ctx.beginPath();
+	_global_ctx.fillStyle = "#A66829";
+	_global_ctx.arc(coreloc.x, coreloc.y, SEARCH_RADII.max, stoneArc.start + Math.PI / 2, stoneArc.end + Math.PI / 2);
+	_global_ctx.fill();
+
+	ctx.globalAlpha = 1.0;
+}
+
 function drawBosses(ctx, width, height) {
 
 	ctx.globalAlpha = RingSliderInfo.transparency();
@@ -295,13 +321,6 @@ function drawBosses(ctx, width, height) {
 	ctx.arc(coreloc.x, coreloc.y, radius, 0, 2 * Math.PI);
 	ctx.stroke();
 
-
-	_global_ctx.fillStyle = MAZE_HIGLIGHT;
-	_global_ctx.beginPath();
-	//ARC starts 0 at 3 oclock
-	_global_ctx.arc(coreloc.x, coreloc.y, SEARCH_RADII.max, stoneArc.start - Math.PI / 2, stoneArc.end - Math.PI / 2);
-	_global_ctx.fill();
-
 	ctx.globalAlpha = 1.0;
 }
 
@@ -347,12 +366,16 @@ function drawMap(tiles) {
 
 function highlightSelected() {
 	let searchobj = { count: 0, boulders: {} };
+
 	buildHighlightSelection(searchobj);
+
 	const canvas = document.getElementById("mapcanvas");
 	const myImage = _global_ctx.getImageData(0, 0, canvas.width, canvas.height);
+
 	if (searchobj.count > 0) {
 		highlightColors(myImage, searchobj);
 	}
+
 	let ele = document.querySelector("#mazeholes > a");
 	if (ele.classList.contains("active")) {
 		findStone(myImage.data, canvas.width);

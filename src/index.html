@@ -30,7 +30,7 @@
 		  	<button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
 		</div>
 		<div class="offcanvas-body">
-			<a href="img/fullmap_cropped.png" target="_blank">Example Map</a><br />
+			<a href="#" onclick="loadExample()">Load Example Map (by Craigins)</a><br />
 			<hr>
 			
 			<div>
@@ -69,7 +69,8 @@
 
 				<ul class="nav nav-pills movement-nav">
 					<li id="bosscircle" class="nav-item"><a href="#" class="nav-link" onclick="toggleBosses();">Show Bosses</a></li>
-					<li id="mazeholes" class="nav-item"><a href="#" class="nav-link" onclick="findMazes();">Find Mazes Gaps</a></li>
+					<li id="arcs" class="nav-item"><a href="#" class="nav-link" onclick="toggleArcs();">Draw Arcs</a></li>
+					<li id="mazeholes" class="nav-item"><a href="#" class="nav-link" onclick="toggleMazes();">Find Mazes Gaps</a></li>
 					<li id="chunkgrid" class="nav-item"><a href="#" class="nav-link" onclick="toggleChunkGrid();">Chunk Grid</a></li>
 					<li id="mobgrid" class="nav-item"><a href="#" class="nav-link" onclick="toggleMobGrid();">Mob Grid</a></li>
 					<li id="seacircle" class="nav-item"><a href="#" class="nav-link" onclick="toggleSea();">Sea POIs</a></li>
@@ -92,7 +93,7 @@
 				<div id="tilefilter" >
 					<span>Tile Transparency</span>
 					<input type="range" name="" min="0" max="255" id="tileSlider" class="w-100">
-					<label class="collapsable-menu" onclick="clearAllHighlights();">Clear All Highlights</label>
+					<a href="#" onclick="clearAllHighlights();">Clear All Highlights</a>
 				</div>
 			</div>
 		</div>

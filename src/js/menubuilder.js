@@ -46,10 +46,12 @@ function buildTileCheckBox(tiletype) {
 	chkele.style.marginLeft = "4px";
 	chkele.style.marginRight = "4px";
 	chkele.onchange = () => {
-		if (!togglelock) {
-			toggleAllCheckboxes(tiletype.id, chkele.checked);
-			redrawMap();
-		}
+		chkele.setAttribute("disabled", "true");
+		//toggleAllCheckboxes(tiletype.id, chkele.checked);
+		redrawMap();
+		setTimeout(() => {
+			chkele.removeAttribute("disabled");
+		}, 10);
 	};
 	labelele.appendChild(chkele);
 	labelele.appendChild(document.createTextNode(tiletype.name));
@@ -60,21 +62,16 @@ function buildTileCheckBox(tiletype) {
 	return liele;
 }
 
-let togglelock = false;
 
 function toggleAllCheckboxes(id, state) {
-	togglelock = true;
 	for (let chkbox of document.querySelectorAll('input[type="checkbox"][data-block-id="' + id + '"]')) {
 		chkbox.checked = state;
 	}
-	togglelock = false;
 }
 function clearAllHighlights() {
-	togglelock = true;
 	for (let chkbox of document.querySelectorAll('input[type="checkbox"][data-block-id]')) {
 		chkbox.checked = false;
 	}
-	togglelock = false;
 	redrawMap();
 }
 
