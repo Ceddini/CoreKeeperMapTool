@@ -1,5 +1,6 @@
 const toggleBossElem = document.querySelector("#bosscircle > a");
 const toggleArcsElem = document.querySelector("#arcs > a");
+const toggleOuterArcsElem = document.querySelector("#outerArcs > a");
 const toggleSeaElem = document.querySelector("#seacircle > a");
 const toggleChunkGridElem = document.querySelector("#chunkgrid > a");
 const toggleMobGridElem = document.querySelector("#mobgrid > a");
@@ -9,10 +10,31 @@ const updatemap = () => { drawMap(tilelist) };
 
 let tilelist = [];
 
+document.addEventListener('alpine:init', function () {
+
+	const canWatchFile = typeof window.showOpenFilePicker !== "undefined";
+
+	Alpine.store('data', {
+		mapLoaded: false,
+		firstTimeLoaded: false,
+		isExampleMap: false,
+		canWatchFile,
+
+		manualArcRotation: false,
+		showArcs: false,
+		innerSlider: 0,
+		outerSlider: 0,
+	});
+});
+
 window.addEventListener('DOMContentLoaded', () => {
 	const fileupload = document.getElementById("mapupload");
 	const mapCanvas = document.getElementById("mapcanvas");
-	fileupload.addEventListener('change', function handleFile(event) {
+	const uploadButton = document.getElementById("uploadbutton");
+	fileupload?.addEventListener('change', function handleFile(event) {
+		Alpine.store('data').isExampleMap = false;
+		Alpine.store('data').mapLoaded = false;
+		uploadButton.value = fileupload.files[0].name;
 		resetMap();
 		loadMapFile(fileupload, tilelist, updatemap);
 	});
@@ -49,19 +71,34 @@ window.addEventListener('DOMContentLoaded', () => {
 	tileSlider.value = TileSliderInfo.value;
 	tileSlider.onchange = tileOnChange;
 
+	const innerArcSlider = document.getElementById("innerArcSlider");
+	const outerArcSlider = document.getElementById("outerArcSlider");
+	const showArcsCheckbox = document.getElementById("showArcs");
+	const manualArcRotation = document.getElementById("manualArcRotation");
+
+	innerArcSlider.onchange = onChangeInnerArcSlider;
+	outerArcSlider.onchange = onChangeOuterArcSlider;
+	showArcsCheckbox.onchange = onChangeShowArcs;
+	manualArcRotation.onchange = onChangeManualArcRotation;
+
 	setFilterTop();
 
 }, false);
 
 function loadExample() {
+	Alpine.store('data').isExampleMap = true;
+	Alpine.store('data').mapLoaded = false;
 	resetMap();
 	loadStandardFile(tilelist, updatemap);
 }
 
 function resetMap() {
 	tilelist = [];
-	toggleArcsElem.classList.remove("active");
-	toggleMazesElem.classList.remove("active");
+	HIGHEST_STONE = 0;
+	HIGHEST_WILDERNESS = 0;
+	document.getElementById('showArcs').checked = false;
+	// toggleArcsElem.classList.remove("active");
+	// toggleMazesElem.classList.remove("active");
 }
 
 function setFilterTop() {
@@ -119,6 +156,43 @@ function sliderDrag(event, sliderInfo) {
 	}
 }
 
+function onChangeInnerArcSlider(event) {
+	redrawMap();
+}
+
+function onChangeOuterArcSlider(event) {
+	redrawMap();
+}
+
+function onChangeShowArcs(event) {
+	const checked = event.target.checked;
+	event.target.setAttribute("disabled", "true");
+
+	if (checked) {
+		const canvas = document.getElementById("mapcanvas");
+		const myImage = _global_ctx.getImageData(0, 0, canvas.width, canvas.height);
+		findStone(myImage.data, canvas.width);
+		findWilderness(myImage.data, canvas.width);
+	}
+
+	redrawMap();
+
+	setTimeout(() => {
+		event.target.removeAttribute("disabled");
+	}, 10);
+}
+
+function onChangeManualArcRotation(event) {
+	const checked = event.target.checked;
+
+	console.log("YES");
+
+	if (checked) {
+		Alpine.store('data').innerSlider = Math.round(stoneArc.start * 180 / Math.PI);
+		Alpine.store('data').outerSlider = Math.round(wildernessArc.start * 180 / Math.PI);
+	}
+}
+
 function toggleBosses() {
 	const bossesLegend = document.getElementById('bosses-legend');
 
@@ -137,9 +211,11 @@ function toggleArcs() {
 	if (toggleArcsElem.classList.contains("active")) {
 		toggleArcsElem.classList.remove("active");
 	} else {
+
 		const canvas = document.getElementById("mapcanvas");
 		const myImage = _global_ctx.getImageData(0, 0, canvas.width, canvas.height);
 		findStone(myImage.data, canvas.width);
+		findWilderness(myImage.data, canvas.width);
 		toggleArcsElem.classList.add("active");
 	}
 	redrawMap();

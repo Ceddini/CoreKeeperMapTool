@@ -1,10 +1,20 @@
 const SEARCH_RADII = { min: 140, min2: 19600, max: 500, max2: 250000 };
+const OUTER_SEARCH_RADII = { min: 500, max: 800 }
 const MAZE_HIGLIGHT = { 1: { r: 255, g: 0, b: 255 }, 2: { r: 0, g: 255, b: 255 }, 3: { r: 0, g: 255, b: 0 } };
 const STONE_FILTER = { count: 0 };
 const CLAY_FILTER = { count: 0 };
+
+const WILDERNESS_FILTER = { count: 0 };
+const SUNKENSEA_FILTER = { count: 0 };
+
 const stoneArc = { start: 0, end: 0 };
+const wildernessArc = { start: 0, end: 0 };
+
 const arcticks = 1440.0;
 const deltaRadians = (Math.PI * 2.0) / arcticks;
+
+let HIGHEST_STONE = 0;
+let HIGHEST_WILDERNESS = 0;
 
 function averageAround(i, arr, width) {
 	let sval = i - width;
@@ -48,6 +58,34 @@ function countStoneClay(myImageData, width) {
 	return deltaStone;
 }
 
+function countWildernessSunkenSea(myImageData, width) {
+	let prevX, prevY, x, y, i;
+	let deltaWilderness = [];
+	for (let rad = 0; rad < arcticks; rad++) {
+		let angle = rad * deltaRadians;
+		let numWilderness = 0, numSunkenSea = 0;
+		for (let radius = OUTER_SEARCH_RADII.min; radius < OUTER_SEARCH_RADII.max; radius++) {
+			x = parseInt(radius * Math.sin(angle));
+			y = parseInt(radius * Math.cos(angle));
+			if (x != prevX || y != prevY) {
+				prevX = x;
+				prevY = y;
+				x += coreLoc.x;
+				y = coreLoc.y - y;
+				i = (y * width + x) * 4;
+				let r = myImageData[i], g = myImageData[i + 1], b = myImageData[i + 2];
+				if (WILDERNESS_FILTER[r] && WILDERNESS_FILTER[r][g] && WILDERNESS_FILTER[r][g][b]) {
+					++numWilderness;
+				} else if (SUNKENSEA_FILTER[r] && SUNKENSEA_FILTER[r][g] && SUNKENSEA_FILTER[r][g][b]) {
+					++numSunkenSea;
+				}
+			}
+		}
+		deltaWilderness.push(numWilderness - numSunkenSea);
+	}
+	return deltaWilderness;
+}
+
 function recordBiomeChange(rad, deltastone) {
 	if (stoneArc.end === undefined && stoneArc.start === undefined) {
 		let test = averageAround(rad + arcticks / 4, deltastone, 18);
@@ -77,7 +115,7 @@ function findStone(myImageData, width) {
 	//  for every tick, sum the half arc, push it to a new array
 	//  find the max value slot in the array, that is the start angle, add half of arcticks and that is the end angle
 	let countWidth = arcticks / 2;
-	let maxStone = { index: -1, count: 0 }, maxclay = { index: -1, count: 0 };
+	let maxStone = { index: -1, count: 0 }, maxClay = { index: -1, count: 0 };
 	let tally = 0;
 	for (let rad = 0; rad < arcticks; ++rad) {
 		tally = 0;
@@ -89,17 +127,56 @@ function findStone(myImageData, width) {
 			maxStone.index = rad;
 			maxStone.count = tally;
 		}
-		if (tally < maxclay.count) {
-			maxclay.index = rad;
-			maxclay.count = tally;
+		if (tally < maxClay.count) {
+			maxClay.index = rad;
+			maxClay.count = tally;
 		}
 	}
+
+	HIGHEST_STONE = maxStone.count > maxClay.count * -1 ? maxStone.count : maxClay.count * -1;
+
 	stoneArc.startTicks = maxStone.index;
 	stoneArc.start = maxStone.index * deltaRadians;
-	stoneArc.endTicks = maxclay.index;
-	stoneArc.end = maxclay.index * deltaRadians;
+	stoneArc.endTicks = maxClay.index;
+	stoneArc.end = maxClay.index * deltaRadians;
 	findHole(myImageData, width);
 }
+
+function findWilderness(myImageData, width) {
+	let deltaWilderness = countWildernessSunkenSea(myImageData, width);
+	wildernessArc.start = wildernessArc.end = undefined;
+	//change to:
+	//  for every tick, sum the half arc, push it to a new array
+	//  find the max value slot in the array, that is the start angle, add half of arcticks and that is the end angle
+	let countWidth = arcticks / 2;
+	let maxWilderness = { index: -1, count: 0 }, maxSunkenSea = { index: -1, count: 0 };
+	let tally = 0;
+	for (let rad = 0; rad < arcticks; ++rad) {
+		tally = 0;
+		for (let i = 0; i < countWidth; i++) {
+			let idx = (i + rad) % arcticks;
+			tally += deltaWilderness[idx];
+		}
+		if (tally > maxWilderness.count) {
+			maxWilderness.index = rad;
+			maxWilderness.count = tally;
+		}
+		if (tally < maxSunkenSea.count) {
+			maxSunkenSea.index = rad;
+			maxSunkenSea.count = tally;
+		}
+	}
+
+	HIGHEST_WILDERNESS = maxWilderness.count > maxSunkenSea.count * -1 ? maxWilderness.count : maxSunkenSea.count * -1;
+
+	wildernessArc.startTicks = maxWilderness.index;
+	wildernessArc.start = maxWilderness.index * deltaRadians;
+	wildernessArc.endTicks = maxSunkenSea.index;
+	wildernessArc.end = maxWilderness.index * deltaRadians - (2 * Math.PI) / 3;
+}
+
+
+
 function findHole(myImageData, width) {
 	let visited = {};
 	let prevX, prevY, x, y, i;
@@ -113,7 +190,7 @@ function findHole(myImageData, width) {
 
 	for (let rad = stoneArc.startTicks; rad < end; ++rad) {
 		let angle = (rad % arcticks) * deltaRadians;
-		for (let radius = SEARCH_RADII.min; radius < SEARCH_RADII.max; radius++) {
+		for (let radius = SEARCH_RADII.min; radius < 471; radius++) {
 			x = parseInt(radius * Math.sin(angle));
 			y = parseInt(radius * Math.cos(angle));
 			if (x != prevX || y != prevY) {
@@ -296,7 +373,12 @@ function buildStoneFilter() {
 			filterObj = STONE_FILTER;
 		} else if (tileType.tilesetname == "Clay") {
 			filterObj = CLAY_FILTER;
+		} else if (tileType.tilesetname == "Wilderness") {
+			filterObj = WILDERNESS_FILTER;
+		} else if (tileType.tilesetname == "SunkenSea") {
+			filterObj = SUNKENSEA_FILTER;
 		}
+
 		if (filterObj) {
 			filterObj.count++;
 			if (!filterObj[tileType.r]) {

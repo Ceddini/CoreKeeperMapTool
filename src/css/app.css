@@ -17,11 +17,20 @@ a {
 	z-index: 1;
 }
 
-#directions {
+.bordered-box {
 	border: 1px solid rgba(0,0,0,0.3);
 	border-radius: 8px;
 	padding: 8px;
 }
+
+.bordered-box:not(:last-child) {
+	margin-bottom: 12px;
+}
+
+.bordered-box > .bordered-box-section:not(:last-child) {
+	margin-bottom: 12px;
+}
+
 #directions ol {
 	padding-left: 18px;
 }
@@ -201,6 +210,16 @@ a {
   margin-right: 20px;
 }
 
-#shouldrefresh{
-  margin-bottom: 13px;
+.custom-tooltip > .tooltip-inner {
+	text-align: left;
+}
+
+.circle-image {
+	width: 24px;
+	height: 24px;
+
+
+	background-position: center; 
+	background-size: contain;
+	background-repeat: no-repeat;
 }
