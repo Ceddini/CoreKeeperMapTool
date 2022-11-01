@@ -189,17 +189,20 @@ function toggleDarkMode() {
 	const legendItems = document.querySelector("#legendAccordion .accordion-item");
 	const legendButton = document.querySelector("#legendAccordion button");
 
+	const logo = document.getElementById("logo");
+	const favicon = document.getElementById("favicon");
+
 	if (offcanvas.classList.contains("text-bg-dark")) {
-		// ele.style.backgroundColor = "white";
 		offcanvas.classList.remove("text-bg-dark");
-		// offcanvasRight.classList.remove("text-bg-dark");
 		legendItems.classList.remove("text-bg-dark");
 		legendButton.classList.remove("text-bg-dark");
+		logo.src = "img/logo_light.png";
+		favicon.href = "img/favicon_light.png";
 	} else {
-		// ele.style.backgroundColor = "black";
 		offcanvas.classList.add("text-bg-dark");
-		// offcanvasRight.classList.add("text-bg-dark");
 		legendItems.classList.add("text-bg-dark");
 		legendButton.classList.add("text-bg-dark");
+		logo.src = "img/logo_dark.png";
+		favicon.href = "img/favicon_dark.png";
 	}
 }

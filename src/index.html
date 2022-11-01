@@ -11,6 +11,8 @@
 	<link href="css/vendor/bootstrap-grid.min.css" rel="stylesheet">
 	<link href="css/vendor/bootstrap-utilities.min.css" rel="stylesheet">
 	<link href="css/app.css" rel="stylesheet">
+
+	<link id="favicon" rel="icon" href="img/favicon_dark.png" type="image/png"  sizes="32x32">
 	
 	<script src="https://code.jquery.com/jquery-1.12.4.min.js"
 		integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
@@ -30,7 +32,7 @@
 	<div class="offcanvas offcanvas-start text-bg-dark show" data-bs-backdrop="false" tabindex="-1" id="offcanvas" aria-labelledby="offcanvasLabel">
 		<div class="offcanvas-header">
 			<div>
-				<img src="img/ck_map_tool_logo.png" alt="Core Keeper Map Tool Logo" class="w-100">
+				<img src="img/logo_dark.png" id="logo" alt="Core Keeper Map Tool Logo" class="w-100">
 				<!--
 		  		<h5 class="offcanvas-title" id="offcanvasLabel">Core Keeper Map Tool</h5>
 			  	<h6 class="text-secondary" style="margin-bottom: 4px;">Rewrite by Ceddini and ZeroGravitas</h6>
@@ -159,14 +161,14 @@
 						</button>
 
 						<!-- HOW TO FIND MAP-->
-						<div class="mt-2">
-							<a href="#" onclick="toggleDirections()">
+						<div class="mt-2" x-data="{visible: false}">
+							<a href="#" @click="visible = !visible">
 								<h6 class="d-flex align-items-center">
 									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" style="fill: currentColor;" class="me-1"><path d="M11,18H13V16H11V18M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,6A4,4 0 0,0 8,10H10A2,2 0 0,1 12,8A2,2 0 0,1 14,10C14,12 11,11.75 11,15H13C13,12.75 16,12.5 16,10A4,4 0 0,0 12,6Z" /></svg> 
 									<span>How to find your map file</span>
 								</h6>
 							</a>
-							<div id="directions" class="bordered-box" style="display: none">
+							<div id="directions" x-show="visible" class="bordered-box" style="display: none" x-transition>
 								<ol>
 									<li>
 										<div class="d-flex align-items-center justify-content-between mb-1">
