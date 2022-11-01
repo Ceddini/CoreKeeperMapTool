@@ -1,11 +1,3 @@
-const toggleBossElem = document.querySelector("#bosscircle > a");
-const toggleArcsElem = document.querySelector("#arcs > a");
-const toggleOuterArcsElem = document.querySelector("#outerArcs > a");
-const toggleSeaElem = document.querySelector("#seacircle > a");
-const toggleChunkGridElem = document.querySelector("#chunkgrid > a");
-const toggleMobGridElem = document.querySelector("#mobgrid > a");
-const toggleDirectionsElem = document.getElementById("directions");
-const toggleMazesElem = document.querySelector("#mazeholes > a");
 const updatemap = () => { drawMap(tilelist) };
 
 let tilelist = [];
@@ -20,10 +12,22 @@ document.addEventListener('alpine:init', function () {
 		isExampleMap: false,
 		canWatchFile,
 
-		manualArcRotation: false,
+		arcSlidersPrefilled: false,
+
 		showArcs: false,
+		showChunkGrid: false,
+		showMobGrid: false,
+		showCustomRing: false,
+		showMazeHoles: false,
+		manualArcRotation: false,
+		cropRingsToBiome: false,
+
 		innerSlider: 0,
 		outerSlider: 0,
+		ringTransparency: 50,
+		biomeTransparency: 50,
+		gridTransparency: 30,
+		customRing: 25,
 	});
 });
 
@@ -63,24 +67,6 @@ window.addEventListener('DOMContentLoaded', () => {
 		mnu.onclick = mnuclick;
 	}
 
-	const ringSlider = document.getElementById("ringSlider");
-	ringSlider.value = RingSliderInfo.value;
-	ringSlider.onchange = ringOnChange;
-
-	const tileSlider = document.getElementById("tileSlider");
-	tileSlider.value = TileSliderInfo.value;
-	tileSlider.onchange = tileOnChange;
-
-	const innerArcSlider = document.getElementById("innerArcSlider");
-	const outerArcSlider = document.getElementById("outerArcSlider");
-	const showArcsCheckbox = document.getElementById("showArcs");
-	const manualArcRotation = document.getElementById("manualArcRotation");
-
-	innerArcSlider.onchange = onChangeInnerArcSlider;
-	outerArcSlider.onchange = onChangeOuterArcSlider;
-	showArcsCheckbox.onchange = onChangeShowArcs;
-	manualArcRotation.onchange = onChangeManualArcRotation;
-
 	setFilterTop();
 
 }, false);
@@ -97,71 +83,64 @@ function resetMap() {
 	HIGHEST_STONE = 0;
 	HIGHEST_WILDERNESS = 0;
 	document.getElementById('showArcs').checked = false;
-	// toggleArcsElem.classList.remove("active");
-	// toggleMazesElem.classList.remove("active");
 }
 
 function setFilterTop() {
-
 	let filterdiv = document.getElementById("tilefilter");
 	let navdiv = document.getElementById("navdiv").getBoundingClientRect();
 	filterdiv.style.top = navdiv.bottom;
 }
 
-const TileSliderInfo = {
-	value: 80,
-	transparency: function () { return TileSliderInfo.value; }
+function redrawDebounce(event) {
+	event.target.setAttribute("disabled", "true");
+
+	redrawMap();
+
+	setTimeout(() => {
+		event.target.removeAttribute("disabled");
+	}, 10);
 }
 
-const RingSliderInfo = {
-	value: 80,
-	transparency: function () { return RingSliderInfo.value / 100; }
-}
+// ON CHANGE EVENTS
 
-function tileOnChange(event) {
-	sliderOnChange(event, TileSliderInfo);
-}
-
-function ringOnChange(event) {
-	sliderOnChange(event, RingSliderInfo);
-}
-
-function sliderOnChange(event, sliderInfo) {
-	const val = event.target.value;
-
-	sliderInfo.value = val;
+function onChangeInnerArc(event) {
 	redrawMap();
 }
 
-function sliderUp(event, sliderInfo) {
-	sliderInfo.down = false;
-	let tempX = event.pageX;
-	let tempY = event.pageY;
-	if (tempX < 10) { tempX = 10; }
-	if (tempY < 0) { tempY = 0; }
-	redrawMap();
-	//console.log(tempX, tempY, SliderInfo.x, SliderInfo.transparency());
-}
-
-function sliderDown(event, sliderInfo) {
-	sliderInfo.down = true;
-}
-function sliderDrag(event, sliderInfo) {
-	if (sliderInfo.down) {
-		let tempX = event.pageX;
-		if (tempX < 32) { tempX = 32; }
-		if (tempX > 206) { tempX = 206; }
-		sliderInfo.x = tempX - 20 - 12;
-		sliderInfo.element.style.left = `${sliderInfo.x}px`;
-	}
-}
-
-function onChangeInnerArcSlider(event) {
+function onChangeOuterArc(event) {
 	redrawMap();
 }
 
-function onChangeOuterArcSlider(event) {
+function onChangeRingTransparency(event) {
 	redrawMap();
+}
+
+function onChangeBiomeTransparency(event) {
+	redrawMap();
+}
+
+function onChangeGridTransparency(event) {
+	redrawMap();
+}
+
+function onChangeShowCustomRing(event) {
+	redrawDebounce(event);
+}
+
+function onChangeCustomRing(event) {
+	redrawMap();
+}
+
+function onChangeShowChunkGrid(event) {
+	redrawDebounce(event);
+}
+
+function onChangeShowMobGrid(event) {
+	redrawDebounce(event);
+}
+
+function onChangeShowMazeHoles(event) {
+	redrawDebounce(event);
 }
 
 function onChangeShowArcs(event) {
@@ -184,99 +163,27 @@ function onChangeShowArcs(event) {
 
 function onChangeManualArcRotation(event) {
 	const checked = event.target.checked;
+	event.target.setAttribute("disabled", "true");
 
-	console.log("YES");
-
-	if (checked) {
+	if (checked && Alpine.store('data').arcSlidersPrefilled === false) {
 		Alpine.store('data').innerSlider = Math.round(stoneArc.start * 180 / Math.PI);
 		Alpine.store('data').outerSlider = Math.round(wildernessArc.start * 180 / Math.PI);
+
+		if (Alpine.store('data').innerSlider !== 0 && Alpine.store('data').outerSlider !== 0)
+			Alpine.store('data').arcSlidersPrefilled = true;
 	}
+
+	setTimeout(() => {
+		redrawMap();
+	}, 10)
+
+	setTimeout(() => {
+		event.target.removeAttribute("disabled");
+	}, 10);
 }
-
-function toggleBosses() {
-	const bossesLegend = document.getElementById('bosses-legend');
-
-	if (toggleBossElem.classList.contains("active")) {
-		toggleBossElem.classList.remove("active");
-		bossesLegend.classList.add("d-none");
-
-	} else {
-		toggleBossElem.classList.add("active");
-		bossesLegend.classList.remove("d-none");
-	}
-	redrawMap();
-}
-
-function toggleArcs() {
-	if (toggleArcsElem.classList.contains("active")) {
-		toggleArcsElem.classList.remove("active");
-	} else {
-
-		const canvas = document.getElementById("mapcanvas");
-		const myImage = _global_ctx.getImageData(0, 0, canvas.width, canvas.height);
-		findStone(myImage.data, canvas.width);
-		findWilderness(myImage.data, canvas.width);
-		toggleArcsElem.classList.add("active");
-	}
-	redrawMap();
-}
-
-function toggleSea() {
-	if (toggleSeaElem.classList.contains("active")) {
-		toggleSeaElem.classList.remove("active");
-	} else {
-		toggleSeaElem.classList.add("active");
-	}
-	redrawMap();
-}
-
-function toggleMazes() {
-	const mazesLegend = document.getElementById('mazes-legend');
-
-	if (toggleMazesElem.classList.contains("active")) {
-		toggleMazesElem.classList.remove("active");
-		mazesLegend.classList.add("d-none");
-	} else {
-		toggleMazesElem.classList.add("active");
-		mazesLegend.classList.remove("d-none");
-	}
-	redrawMap();
-}
-
-function toggleChunkGrid() {
-	if (toggleChunkGridElem.classList.contains("active")) {
-		toggleChunkGridElem.classList.remove("active");
-	} else {
-		toggleChunkGridElem.classList.add("active");
-	}
-	redrawMap();
-}
-
-
-function toggleMobGrid() {
-	if (toggleMobGridElem.classList.contains("active")) {
-		toggleMobGridElem.classList.remove("active");
-	} else {
-		toggleMobGridElem.classList.add("active");
-	}
-	redrawMap();
-}
-
-function toggleDirections() {
-	if (toggleDirectionsElem.style.display == "none") {
-		toggleDirectionsElem.style.display = "block"
-		document.querySelector(".highlight-container").style.top = "260px";
-	} else {
-		toggleDirectionsElem.style.display = "none";
-		document.querySelector(".highlight-container").style.top = "150px";
-	}
-	setFilterTop();
-}
-
 
 function toggleDarkMode() {
 	const offcanvas = document.getElementById("offcanvas");
-	// const offcanvasRight = document.getElementById("offcanvasRight");
 
 	const legendAccordion = document.getElementById("legendAccordion");
 	const legendItems = document.querySelector("#legendAccordion .accordion-item");

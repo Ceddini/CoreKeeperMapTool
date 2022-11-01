@@ -141,8 +141,7 @@ function decorateMap(width, height) {
 
 	const showArcsCheckbox = document.getElementById("showArcs");
 
-
-	if (document.querySelector("#arcs > a").classList.contains("active") || showArcsCheckbox.checked) {
+	if (showArcsCheckbox.checked) {
 		const manualArcRotation = Alpine.store('data').manualArcRotation;
 
 		if (HIGHEST_STONE > 10000 || manualArcRotation) {
@@ -160,9 +159,8 @@ function decorateMap(width, height) {
 		}
 	}
 
-	if (document.getElementById("userradius").value.trim() != "") {
-		let radius = parseFloat(document.getElementById("userradius").value.trim());
-		drawCircle(_global_ctx, radius);
+	if (Alpine.store('data').showCustomRing) {
+		drawCircle(_global_ctx, Alpine.store('data').customRing);
 	}
 
 	if (Alpine.store('data').mapLoaded) {
@@ -176,26 +174,18 @@ function decorateMap(width, height) {
 		});
 	}
 
-
-	if (document.querySelector("#bosscircle > a").classList.contains("active")) {
-		drawBosses(_global_ctx, width, height);
-	}
-
-	if (document.querySelector("#seacircle > a").classList.contains("active")) {
-		drawSeaBiome(_global_ctx, width, height);
-	}
-
-	if (document.querySelector("#chunkgrid > a").classList.contains("active")) {
+	if (Alpine.store('data').showChunkGrid) {
 		drawChunkGrid(_global_ctx, width, height);
 	}
 
-	if (document.querySelector("#mobgrid > a").classList.contains("active")) {
+	if (Alpine.store('data').showMobGrid) {
 		drawMobGrid(_global_ctx, width, height);
 	}
 }
 
 function drawChunkGrid(ctx, width, height) {
-	ctx.globalAlpha = 0.3;
+	ctx.globalAlpha = Alpine.store('data').gridTransparency / 100;
+
 	ctx.lineWidth = 3;
 	ctx.strokeStyle = "#AAAAAA";
 	const gridsize = 64;
@@ -219,7 +209,8 @@ function drawChunkGrid(ctx, width, height) {
 }
 
 function drawMobGrid(ctx, width, height) {
-	ctx.globalAlpha = 0.3;
+	ctx.globalAlpha = Alpine.store('data').gridTransparency / 100;
+
 	ctx.lineWidth = 1;
 	ctx.strokeStyle = "#CCCCCC";
 	const gridsize = 16;
@@ -255,62 +246,12 @@ function userDefinedChanged() {
 }
 
 function drawCircle(ctx, radius, color = "#FFFFFF") {
-	ctx.globalAlpha = RingSliderInfo.transparency();
+	ctx.globalAlpha = Alpine.store('data').ringTransparency / 100;
 	ctx.lineWidth = 20;
 	ctx.strokeStyle = color;
 	ctx.beginPath();
 	ctx.arc(coreLoc.x, coreLoc.y, radius, 0, 2 * Math.PI);
 	ctx.stroke();
-	ctx.globalAlpha = 1.0;
-}
-
-function drawSeaBiome(ctx, width, height) {
-
-	ctx.globalAlpha = RingSliderInfo.transparency();
-	ctx.lineWidth = 20;
-
-	// Bow Vault
-	let radius = 1000;
-	ctx.strokeStyle = "#ff6a00";
-	ctx.beginPath();
-	ctx.arc(coreLoc.x, coreLoc.y, radius, 0, 2 * Math.PI);
-	ctx.stroke();
-
-	// Omoroth
-	radius = 1100;
-	ctx.strokeStyle = "#9e3f9b";
-	ctx.beginPath();
-	ctx.arc(coreLoc.x, coreLoc.y, radius, 0, 2 * Math.PI);
-	ctx.stroke();
-
-	// Bow City
-	radius = 1250;
-	ctx.strokeStyle = "#AAAAAA";
-	ctx.beginPath();
-	ctx.arc(coreLoc.x, coreLoc.y, radius, 0, 2 * Math.PI);
-	ctx.stroke();
-
-	// Morpha
-	radius = 1400;
-	ctx.strokeStyle = "#1898F4";
-	ctx.beginPath();
-	ctx.arc(coreLoc.x, coreLoc.y, radius, 0, 2 * Math.PI);
-	ctx.stroke();
-
-	// Bow Cities?
-	radius = 1550;
-	ctx.strokeStyle = "#AAAAAA";
-	ctx.beginPath();
-	ctx.arc(coreLoc.x, coreLoc.y, radius, 0, 2 * Math.PI);
-	ctx.stroke();
-
-	// Bow Cities?
-	radius = 1750;
-	ctx.strokeStyle = "#AAAAAA";
-	ctx.beginPath();
-	ctx.arc(coreLoc.x, coreLoc.y, radius, 0, 2 * Math.PI);
-	ctx.stroke();
-
 	ctx.globalAlpha = 1.0;
 }
 
@@ -332,7 +273,7 @@ function annulus(centerX, centerY,
 }
 
 function drawArcs(ctx, start, end) {
-	ctx.globalAlpha = RingSliderInfo.transparency() * 0.5;
+	ctx.globalAlpha = Alpine.store('data').biomeTransparency / 100;
 
 	start = start + (2.5 * Math.PI / 180);
 	end = end - (2.5 * Math.PI / 180);
@@ -356,7 +297,7 @@ function drawArcs(ctx, start, end) {
 }
 
 function drawOuterArcs(ctx, start, end) {
-	ctx.globalAlpha = RingSliderInfo.transparency() * 0.5;
+	ctx.globalAlpha = Alpine.store('data').biomeTransparency / 100;
 
 	_global_ctx.fillStyle = "#3B7EDB";
 	annulus(coreLoc.x, coreLoc.y, OUTER_SEARCH_RADII.min + 20, OUTER_SEARCH_RADII.max + 700, start - Math.PI / 2 - (2.25 * Math.PI / 180), end - Math.PI / 2 + (2.25 * Math.PI / 180), true);
@@ -372,65 +313,6 @@ function drawOuterArcs(ctx, start, end) {
 	//_global_ctx.lineTo()
 	//_global_ctx.arc(coreLoc.x, coreLoc.y, SEARCH_RADII.max, wildernessArc.start - Math.PI / 2, wildernessArc.end - Math.PI / 2, false);
 	// _global_ctx.fill();
-	ctx.globalAlpha = 1.0;
-}
-
-function drawBosses(ctx, width, height) {
-
-	ctx.globalAlpha = RingSliderInfo.transparency();
-	ctx.lineWidth = 20;
-
-	console.log(RingSliderInfo.transparency());
-
-	//Ivy
-	let radius = 900;
-	ctx.strokeStyle = "#FF00FF";
-	ctx.beginPath();
-	ctx.arc(coreLoc.x, coreLoc.y, radius, 0, 2 * Math.PI);
-	ctx.stroke();
-
-	// Mold Dungeon
-	radius = 750;
-	ctx.strokeStyle = "#6cbbe0";
-	ctx.beginPath();
-	ctx.arc(coreLoc.x, coreLoc.y, radius, 0, 2 * Math.PI);
-	ctx.stroke();
-
-	//Azeos
-	radius = 600;
-	ctx.strokeStyle = "#3d9b41";
-	ctx.beginPath();
-	ctx.arc(coreLoc.x, coreLoc.y, radius, 0, 2 * Math.PI);
-	ctx.stroke();
-
-	//Malugaz the Corrupted
-	radius = 350;
-	ctx.strokeStyle = "#678397";
-	ctx.beginPath();
-	ctx.arc(coreLoc.x, coreLoc.y, radius, 0, 2 * Math.PI);
-	ctx.stroke();
-
-	//Hive Mother
-	radius = 330;
-	ctx.strokeStyle = "#fca694";
-	ctx.beginPath();
-	ctx.arc(coreLoc.x, coreLoc.y, radius, 0, 2 * Math.PI);
-	ctx.stroke();
-
-	//Ghorm
-	radius = 250;
-	ctx.strokeStyle = "#d95917";
-	ctx.beginPath();
-	ctx.arc(coreLoc.x, coreLoc.y, radius, 0, 2 * Math.PI);
-	ctx.stroke();
-
-	//Glurch
-	radius = 65;
-	ctx.strokeStyle = "#7f5f30";
-	ctx.beginPath();
-	ctx.arc(coreLoc.x, coreLoc.y, radius, 0, 2 * Math.PI);
-	ctx.stroke();
-
 	ctx.globalAlpha = 1.0;
 }
 
@@ -491,8 +373,7 @@ function highlightSelected() {
 		highlightColors(myImage, searchobj);
 	}
 
-	let ele = document.querySelector("#mazeholes > a");
-	if (ele.classList.contains("active")) {
+	if (Alpine.store('data').showMazeHoles) {
 		findStone(myImage.data, canvas.width);
 	}
 	_global_ctx.putImageData(myImage, 0, 0);

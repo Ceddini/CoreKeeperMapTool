@@ -47,9 +47,6 @@ const bosses = new Category("Bosses", [
 	new CircleItem("Omoroth", "Omoroth the Sea Titan", "Sunken Sea", [1100], "#9E3F9B", "#FFFFFF", true, "#", "bosses/omoroth.png"),
 ]);
 
-// TODO: Manual arc rotation
-// TODO: Ease of loading the file
-// TODO: Refresh button
 // TODO: Neatening up every available feature
 
 const optionalBosses = new Category("Optional Bosses", [

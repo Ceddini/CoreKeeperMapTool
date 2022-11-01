@@ -1,23 +1,28 @@
-<html>
+<html lang="en">
 
 <head>
-  <meta charset="utf8" />
-  <title>Map Tool</title>
-  <link href="css/vendor/bootstrap.min.css" rel="stylesheet">
-  <link href="css/vendor/bootstrap-grid.min.css" rel="stylesheet">
-  <link href="css/vendor/bootstrap-utilities.min.css" rel="stylesheet">
-  <link href="css/app.css" rel="stylesheet">
-  <script src="https://code.jquery.com/jquery-1.12.4.min.js"
-    integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
-  <script src="js/vendor/jqueryBrowser.js"></script>
-  <script src="https://unpkg.com/@panzoom/panzoom@4.5.1/dist/panzoom.min.js"></script>
-  <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
-  <script src="js/pako-inflate-2.0.4.min.js"></script>
-  <script src="data/pois.js"></script>
-  <script src="data/tilecolormap.js"></script>
-  <script src="js/maploader.js"></script>
-  <script src="js/canvastools.js"></script>
-  <script src="js/mapmonitor.js"></script>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<title>CK Map Tool</title>
+
+	<link href="css/vendor/bootstrap.min.css" rel="stylesheet">
+	<link href="css/vendor/bootstrap-grid.min.css" rel="stylesheet">
+	<link href="css/vendor/bootstrap-utilities.min.css" rel="stylesheet">
+	<link href="css/app.css" rel="stylesheet">
+	
+	<script src="https://code.jquery.com/jquery-1.12.4.min.js"
+		integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+	<script src="js/vendor/jqueryBrowser.js"></script>
+	<script src="https://unpkg.com/@panzoom/panzoom@4.5.1/dist/panzoom.min.js"></script>
+	<script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+	<script src="js/pako-inflate-2.0.4.min.js"></script>
+	<script src="data/pois.js"></script>
+	<script src="data/tilecolormap.js"></script>
+	<script src="js/maploader.js"></script>
+	<script src="js/canvastools.js"></script>
+	<script src="js/mapmonitor.js"></script>
 </head>
 
 <body style="background-color: black" x-data="">
@@ -25,21 +30,26 @@
 	<div class="offcanvas offcanvas-start text-bg-dark show" data-bs-backdrop="false" tabindex="-1" id="offcanvas" aria-labelledby="offcanvasLabel">
 		<div class="offcanvas-header">
 			<div>
+				<img src="img/ck_map_tool_logo.png" alt="Core Keeper Map Tool Logo" class="w-100">
+				<!--
 		  		<h5 class="offcanvas-title" id="offcanvasLabel">Core Keeper Map Tool</h5>
 			  	<h6 class="text-secondary" style="margin-bottom: 4px;">Rewrite by Ceddini and ZeroGravitas</h6>
 			  	<h6 class="text-secondary" style="font-size: 10pt;">Originally by Mz, nineforty and Craigins</h6>
+				-->
 			</div>
 		  	<button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
 		</div>
 		<div class="offcanvas-body">
+			<h6 class="text-secondary" style="margin-bottom: 4px;">Rewrite by Ceddini and ZeroGravitas</h6>
+			<h6 class="text-secondary" style="font-size: 10pt;">Originally by Mz, nineforty and Craigins</h6>
+
 			
 			<div class="form-check form-switch">
 				<input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" onclick="toggleDarkMode();" checked>
 				<label class="form-check-label" for="flexSwitchCheckChecked">Dark Mode</label>
 			</div>
+
 			<hr>
-			
-			
 
 			<!-- HOW TO USE TOOL -->
 			<a href="https://www.youtube.com/watch?v=7YZCPm6i50E" target="_blank">
@@ -106,7 +116,7 @@
 						<input id="mapupload" type="file" class="form-control d-none" />
 
 						<div class="input-group">
-							<input id="uploadbutton" type="button" onclick="registerMapFile();" class="btn btn-primary" value="Select File"/> 
+							<input id="uploadbutton" type="button" onclick="registerMapFile();" class="btn btn-primary btn-sm" value="Select File"/> 
 							<span 
 								:class="($store.data.canWatchFile) ? 'input-group-text' : 'input-group-text text-secondary'"
 								:data-bs-toggle="($store.data.canWatchFile) ? '' : 'tooltip'" 
@@ -140,6 +150,13 @@
 								</svg>
 							</button>
 						</div>
+
+						<button x-show="$store.data.mapLoaded" href="#" class="btn btn-outline-primary mt-2" style="display: none;" onclick="downloadMap(document.getElementById('mapcanvas'));">
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor;">
+								<path d="M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z" />
+							</svg>
+							Download Map
+						</button>
 
 						<!-- HOW TO FIND MAP-->
 						<div class="mt-2">
@@ -192,7 +209,7 @@
 										<div class="flex-fill border-bottom border-secondary mx-2"></div>
 										<span x-on:click="toggleCategoryCircles(category.items)" class="fs-6 text-secondary" style="cursor: pointer;">Toggle all</span>
 									</div>
-									<div x-show="visible" x-transition style="display: none;">
+									<div x-show="visible" x-transition style="display: none;" class="px-1">
 										<template x-for="circle in category.items" :key="circle.name">
 											<button type="button" :disabled="circle.disabled" 
 											:class="'btn btn-sm me-2 mb-2 d-inline-flex align-items-center'" 
@@ -230,8 +247,8 @@
 									<div>
 										<span>Ring Transparency</span>
 										<div class="d-flex align-items-center">
-											<input type="range" class="form-range me-2" name="ringTransparency" id="ringTransparency" min="0" max="100">
-											<input class="form-control form-control-sm me-1" type="number" min="0" max="100" style="width: 60px;">
+											<input type="range" class="form-range me-2" name="ringTransparency" id="ringTransparency" min="0" max="100" x-model="$store.data.ringTransparency" @change="onChangeRingTransparency">
+											<input class="form-control form-control-sm me-1" type="number" min="0" max="100" style="width: 60px;" x-model="$store.data.ringTransparency" @change.debounce.100ms="onChangeRingTransparency">
 											<span>%</span>
 										</div>
 									</div>
@@ -244,10 +261,15 @@
 										</div>
 									</div>
 									<div>
-										<span>Custom Ring</span>
+										<div class="form-check">
+											<input class="form-check-input" type="checkbox" value="" id="showCustomRing" x-model="$store.data.showCustomRing" @change="onChangeShowCustomRing">
+											<label class="form-check-label" for="showCustomRing">
+											Custom Ring
+											</label>
+										</div>
 										<div class="d-flex align-items-center">
-											<input type="range" class="form-range me-2" name="ringTransparency" id="ringTransparency" min="0" max="100">
-											<input class="form-control form-control-sm me-1" type="number" min="0" max="100" style="width: 60px;">
+											<input type="range" class="form-range me-2" name="customRing" id="customRing" min="0" max="5000" step="25" x-model="$store.data.customRing" @change="onChangeCustomRing">
+											<input class="form-control form-control-sm me-1" type="number" min="0" style="width: 70px;" x-model="$store.data.customRing" @change.debounce.100ms="onChangeCustomRing">
 											<span>tiles</span>
 										</div>
 									</div>
@@ -259,15 +281,15 @@
 						<section class="bordered-box">
 							<div class="d-flex align-items-center justify-content-between">
 								<div class="d-flex flex-fill">
-									<input type="checkbox" class="btn-check" id="showArcs" autocomplete="off">
-									<label class="btn btn-outline-primary" for="showArcs">Show Biome Arcs</label><br>
+									<input type="checkbox" class="btn-check" id="showArcs" autocomplete="off" x-model="$store.data.showArcs" @change="onChangeShowArcs">
+									<label class="btn btn-outline-primary" for="showArcs">Show Biomes</label><br>
 								</div>
 	
 								<div>
 									<div class="input-group">
 										<span class="input-group-text">Manual Rotation</span>
 										<div class="input-group-text">
-											<input x-model="$store.data.manualArcRotation" class="form-check-input mt-0" type="checkbox" id="manualArcRotation">
+											<input class="form-check-input mt-0" type="checkbox" id="manualArcRotation" x-model="$store.data.manualArcRotation" @change="onChangeManualArcRotation">
 										</div>
 									</div>
 								</div>
@@ -278,16 +300,16 @@
 									<div class="my-2">
 										<span>Inner Biomes</span>
 										<div class="d-flex align-items-center">
-											<input type="range" class="form-range me-2" name="innerArcSlider" id="innerArcSlider" min="0" max="359" x-model="$store.data.innerSlider">
-											<input @change.debounce.100ms="onChangeInnerArcSlider();" class="form-control form-control-sm me-1" type="number" min="0" max="359" x-model="$store.data.innerSlider" style="width: 60px;">
+											<input type="range" class="form-range me-2" name="innerArcSlider" id="innerArcSlider" min="0" max="359" x-model="$store.data.innerSlider" @change="onChangeInnerArc">
+											<input @change.debounce.100ms="onChangeInnerArc" class="form-control form-control-sm me-1" type="number" min="0" max="359" x-model="$store.data.innerSlider" style="width: 60px;">
 											<span>deg</span>
 										</div>
 									</div>
 									<div>
 										<span>Outer Biomes</span>
 										<div class="d-flex align-items-center">
-											<input type="range" class="form-range me-2" name="outerArcSlider" id="outerArcSlider" min="0" max="359" x-model="$store.data.outerSlider">
-											<input @change.debounce.100ms="onChangeOuterArcSlider();" class="form-control form-control-sm me-1" type="number" min="0" max="359" x-model="$store.data.outerSlider" style="width: 60px;">
+											<input type="range" class="form-range me-2" name="outerArcSlider" id="outerArcSlider" min="0" max="359" x-model="$store.data.outerSlider" @change="onChangeOuterArc">
+											<input @change.debounce.100ms="onChangeOuterArc" class="form-control form-control-sm me-1" type="number" min="0" max="359" x-model="$store.data.outerSlider" style="width: 60px;">
 											<span>deg</span>
 										</div>
 									</div>
@@ -296,8 +318,32 @@
 							<div class="mt-2">
 								<span>Biome Transparency</span>
 								<div class="d-flex align-items-center">
-									<input type="range" class="form-range me-2" name="ringTransparency" id="ringTransparency" min="0" max="100">
-									<input class="form-control form-control-sm me-1" type="number" min="0" max="100" style="width: 60px;">
+									<input type="range" class="form-range me-2" name="biomeTransparency" id="biomeTransparency" min="0" max="100" x-model="$store.data.biomeTransparency" @change="onChangeBiomeTransparency">
+									<input class="form-control form-control-sm me-1" type="number" min="0" max="100" style="width: 60px;" x-model="$store.data.biomeTransparency" @change="onChangeBiomeTransparency">
+									<span>%</span>
+								</div>
+							</div>
+						</section>
+
+						<!-- Grid Section -->
+						<section class="bordered-box">
+
+							<div class="d-inline-flex">
+								<input type="checkbox" class="btn-check" id="showChunkGrid" autocomplete="off" x-model="$store.data.showChunkGrid" @change="onChangeShowChunkGrid">
+								<label class="btn btn-outline-primary me-2" for="showChunkGrid">Show Chunk Grid</label>
+
+								<input type="checkbox" class="btn-check" id="showMobGrid" autocomplete="off" x-model="$store.data.showMobGrid" @change="onChangeShowMobGrid">
+								<label class="btn btn-outline-primary" for="showMobGrid">Show Mob Grid</label>
+							</div>
+							<div class="d-inline-flex mt-2">
+								<input type="checkbox" class="btn-check" id="showMazeHoles" autocomplete="off" x-model="$store.data.showMazeHoles" @change="onChangeShowMazeHoles">
+								<label class="btn btn-outline-primary" for="showMazeHoles">Show Maze Holes</label>
+							</div>
+							<div class="mt-2">
+								<span>Grid Transparency</span>
+								<div class="d-flex align-items-center">
+									<input type="range" class="form-range me-2" name="gridTransparency" id="gridTransparency" min="0" max="100" x-model="$store.data.gridTransparency" @change="onChangeGridTransparency">
+									<input class="form-control form-control-sm me-1" type="number" min="0" max="100" style="width: 60px;" x-model="$store.data.gridTransparency" @change="onChangeGridTransparency">
 									<span>%</span>
 								</div>
 							</div>
@@ -306,19 +352,11 @@
 				</div>
 				
 				<div id="old-menu-design-2" class="d-none">
-					<hr />
-
-					<div>
-						<span>Ring Transparency</span>
-						<input type="range" name="" min="0" max="100" id="ringSlider" class="w-100">
-					</div>
-	
 					<div id="tilefilter" >
 						<span>Tile Transparency</span>
 						<input type="range" name="" min="0" max="255" id="tileSlider" class="w-100">
-						<a href="#" onclick="clearAllHighlights();">Clear All Highlights</a>
+						<a href="#" onclick="clearAllHighlights">Clear All Highlights</a>
 					</div>
-	
 				</div>
 				
 			</div>
@@ -359,39 +397,6 @@
 			</div>
 		</div>
 	</div>
-<!--
-	<div class="offcanvas offcanvas-end text-bg-dark" data-bs-backdrop="false" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasLabel">
-		<div class="offcanvas-header">
-			<div>
-		  		<h5 class="offcanvas-title" id="offcanvasLabel">Legend</h5>
-			</div>
-		  	<button type="button" class="btn-close" data-bs-dismiss="offcanvasRight" aria-label="Close"></button>
-		</div>
-		<div class="offcanvas-body">
-			<div class="d-flex flex-column">
-				<div class="ms-3 d-flex flex-column">
-					<span class="omoroth-legend">&nbsp;Omoroth</span>
-					<span class="morpha-legend">&nbsp;Morpha</span>
-					<span class="bowcity-legend">&nbsp;Bow Cities</span>
-					<span class="bowvault-legend">&nbsp;Bow Vault</span>
-					<br/>
-					<span class="ivy-legend">&nbsp;Ivy</span>
-					<span class="mold-legend">&nbsp;Main Mold Dungeon</span>
-					<span class="azeos-legend">&nbsp;Azeos</span>
-					<span class="malugaz-legend">&nbsp;Malugaz</span>
-					<span class="hive-mother-legend">&nbsp;Hive Mother</span>
-					<span class="ghorm-legend">&nbsp;Ghorm</span>
-					<span class="glurch-legend">&nbsp;Glurch</span><br/>
-					<span style="padding-right: 20px">Maze Gaps: </span>
-					<span class="large-maze-legend">&nbsp;Large</span>
-					<span class="medium-maze-legend">&nbsp;Medium</span>
-					<span class="small-maze-legend">&nbsp;Small</span>
-				</div>
-			</div>
-		</div>
-	</div>
--->
-	  
 
 	<div id="navdiv" class="nav_controls_container">
 		<button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvas" aria-controls="offcanvas">
