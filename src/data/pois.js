@@ -50,7 +50,7 @@ const bosses = new Category("Bosses", [
 // TODO: Neatening up every available feature
 
 const optionalBosses = new Category("Optional Bosses", [
-	new CircleItem("Malugaz", "Malugaz the Corrupted", "Ruins", [350], "#143eac", "#FFFFFF", true, "#", "bosses/malugaz.png"),
+	new CircleItem("Malugaz", "Malugaz the Corrupted", "Ruins", [350], "#1f4ec9", "#FFFFFF", true, "#", "bosses/malugaz.png"),
 	new CircleItem("Ivy", "Ivy the Poisonous Mass", "Wilderness", [900], "#FF00FF", "#FFFFFF", true, "#", "bosses/ivy.png"),
 	new CircleItem("Morpha", "Morpha the Aquatic Mass", "Sunken Sea", [1400], "#1898F4", "#FFFFFF", true, "#", "bosses/morpha.png"),
 ]);

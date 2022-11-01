@@ -18,9 +18,14 @@ a {
 }
 
 .bordered-box {
-	border: 1px solid rgba(0,0,0,0.2);
+	border: 1px solid rgba(0,0,0,0.1);
 	border-radius: 8px;
 	padding: 8px;
+	background-color: #f7f7f7;
+}
+
+body.dark-mode .bordered-box  {
+	background-color: #2d3339;
 }
 
 .bordered-box:not(:last-child) {
