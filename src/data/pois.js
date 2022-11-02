@@ -38,6 +38,20 @@ class Category {
 	}
 }
 
+// TODO: Neatening up every available feature
+// - TODO: Add tile highlighting
+// TODO: Limit Circles to Biome (if biome visible, or if manual biome angle is enabled)
+// TODO: Fill FAQ
+// TODO: Fix Credits
+// TODO: Readd Legend with tile highlighting
+// TODO: Toggle all should be more dynamic. Add counter to category. Add 1 when sub button is pressed. Subtract when disabled. and if greater 0 show Toggle off.
+// TODO: Recolour bow part rings (main color of item icons or dark greeny / grey like the sea dungeons)
+// TODO: Add (?) Symbol where tooltips are present
+// TODO: Move "Show Maze Holes" in with the biome stuff
+// TODO: Tooltip for Chunk Grid Button: "64x64 grid used by dynamic world generation to spawn set-piece scenes and fill in procedurally generated terrain as players explore within range for the first time."
+// TODO: Tooltip for Mob Grid.
+// - TODO: Add expandable below "(?) More Info on Mob Grids", once mob grid is enabled
+// - TODO: Display text: "16x16 grid of cells used by the mob spawning algorithm. Each cell receives one spawn event every 15 to 22 minutes, staggered in time from other cells. Each spawn surface tile gives a chance to spawn a mob. See this guide: https://steamcommunity.com/sharedfiles/filedetails/?id=2846860078"
 
 const bosses = new Category("Bosses", [
 	new CircleItem("Glurch", "Glurch the Abominous Mass", "Dirt Biome", [65], "#D95917", "#FFFFFF", true, "#", "bosses/glurch.webp"),
@@ -47,7 +61,6 @@ const bosses = new Category("Bosses", [
 	new CircleItem("Omoroth", "Omoroth the Sea Titan", "Sunken Sea", [1100], "#9E3F9B", "#FFFFFF", true, "#", "bosses/omoroth.png"),
 ]);
 
-// TODO: Neatening up every available feature
 
 const optionalBosses = new Category("Optional Bosses", [
 	new CircleItem("Malugaz", "Malugaz the Corrupted", "Ruins", [350], "#1f4ec9", "#FFFFFF", true, "#", "bosses/malugaz.png"),
@@ -55,7 +68,7 @@ const optionalBosses = new Category("Optional Bosses", [
 	new CircleItem("Morpha", "Morpha the Aquatic Mass", "Sunken Sea", [1400], "#1898F4", "#FFFFFF", true, "#", "bosses/morpha.png"),
 ]);
 
-const pois = new Category("Other POIs", [
+const pois = new Category("Points of Interest", [
 	new CircleItem("Mold Dungeon", "Mold Dungeon", "", [750], "#6CBBE0", "#FFFFFF", true, "#", "items/poisonous_sickle.png"),
 	new CircleItem("The Vault", "The Vault", "", [1000], "#e4ad2a", "#FFFFFF", true, "#", "items/glyph_parchment.png"),
 	new CircleItem("Broken Core 1", "Broken Core 1", "", [1250], "#e4ad2a", "#FFFFFF", true, "#", "items/channeling_gemstone.png"),

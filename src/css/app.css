@@ -21,7 +21,20 @@ a {
 	border: 1px solid rgba(0,0,0,0.1);
 	border-radius: 8px;
 	padding: 8px;
-	background-color: #f7f7f7;
+	background-color: #f1f1f1;
+}
+
+.credits .socials {
+	display: flex;
+	align-items: center;
+}
+
+.credits .socials a:not(:last-child)::after {
+	content: ', '
+}
+
+.credits .socials a:not(:last-child) {
+	margin-right: 4px;
 }
 
 body.dark-mode .bordered-box  {

@@ -12,6 +12,8 @@ document.addEventListener('alpine:init', function () {
 		isExampleMap: false,
 		canWatchFile,
 
+		tutorialShown,
+
 		arcSlidersPrefilled: false,
 
 		showArcs: false,

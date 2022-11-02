@@ -43,7 +43,7 @@
 		</div>
 		<div class="offcanvas-body">
 			<h6 class="text-secondary" style="margin-bottom: 4px;">Rewrite by Ceddini and ZeroGravitas</h6>
-			<h6 class="text-secondary" style="font-size: 10pt;">Originally by Mz, nineforty and Craigins</h6>
+			<h6 class="text-secondary" style="font-size: 10pt;">Originally by Craigins, Mz and nineforty</h6>
 
 			
 			<div class="form-check form-switch">
@@ -59,13 +59,16 @@
 					<svg style="width:24px;height:24px" class="me-2" viewBox="0 0 24 24">
 						<path fill="currentColor" d="M10,15L15.19,12L10,9V15M21.56,7.17C21.69,7.64 21.78,8.27 21.84,9.07C21.91,9.87 21.94,10.56 21.94,11.16L22,12C22,14.19 21.84,15.8 21.56,16.83C21.31,17.73 20.73,18.31 19.83,18.56C19.36,18.69 18.5,18.78 17.18,18.84C15.88,18.91 14.69,18.94 13.59,18.94L12,19C7.81,19 5.2,18.84 4.17,18.56C3.27,18.31 2.69,17.73 2.44,16.83C2.31,16.36 2.22,15.73 2.16,14.93C2.09,14.13 2.06,13.44 2.06,12.84L2,12C2,9.81 2.16,8.2 2.44,7.17C2.69,6.27 3.27,5.69 4.17,5.44C4.64,5.31 5.5,5.22 6.82,5.16C8.12,5.09 9.31,5.06 10.41,5.06L12,5C16.19,5 18.8,5.16 19.83,5.44C20.73,5.69 21.31,6.27 21.56,7.17Z" />
 					</svg>
-					<span>
-						How to use the tool<br>
-						<small style="font-size: 12pt;">Video by Dakon the Mad</small>
-					</span>
-					<svg style="width:14px;height:14px" class="ms-1" viewBox="0 0 24 24">
-						<path fill="currentColor" d="M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z" />
-					</svg>
+					<div>
+						<span class="d-flex align-items-center">
+							How to use the Map Tool
+							<svg style="width:16px;height:16px" class="ms-1" viewBox="0 0 24 24">
+								<path fill="currentColor" d="M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z" />
+							</svg>
+						</span>
+						<small style="font-size: 10pt;">Video by Dakon the Mad</small>
+					</div>
+					
 				</h5>
 			</a>
 
@@ -153,13 +156,6 @@
 							</button>
 						</div>
 
-						<button x-show="$store.data.mapLoaded" href="#" class="btn btn-outline-primary mt-2" style="display: none;" onclick="downloadMap(document.getElementById('mapcanvas'));">
-							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor;">
-								<path d="M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z" />
-							</svg>
-							Download Map
-						</button>
-
 						<!-- HOW TO FIND MAP-->
 						<div class="mt-2" x-data="{visible: false}">
 							<a href="#" @click="visible = !visible">
@@ -189,6 +185,22 @@
 								</ol>
 							</div>
 						</div>
+
+						<button 
+							x-show="$store.data.mapLoaded" 
+							href="#" 
+							class="btn btn-outline-primary mt-2" 
+							style="display: none;" 
+							onclick="downloadMap(document.getElementById('mapcanvas'));"
+							data-bs-toggle="tooltip"
+							data-bs-placement="right"
+							data-bs-title="Save a PNG image of the currently displayed map, including all overlays"
+						>
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor;">
+								<path d="M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z" />
+							</svg>
+							Download Map Image
+						</button>
 					</section>
 
 					<div x-show="!$store.data.firstTimeLoaded" class="bordered-box">
@@ -198,7 +210,7 @@
 
 						<!-- POIs Section -->
 						<section class="bordered-box">
-							<h4>Points of Interest</h4>
+							<h4>Pre-Spawned Locations</h4>
 							<template x-for="category in $store.categories" :key="category.name">
 								<div class="bordered-box-section" x-data="{visible: false}">
 									<div class="d-flex align-items-center mb-1">
@@ -351,6 +363,80 @@
 							</div>
 						</section>
 					</div>
+
+					<div class="bordered-box" x-data="{visible: false}">
+						<div class="d-inline-flex align-items-center" x-on:click="visible = !visible" style="cursor: pointer;">
+							<svg x-show="visible" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor; display:none;"><path d="M7.41,15.41L12,10.83L16.59,15.41L18,14L12,8L6,14L7.41,15.41Z" /></svg>
+							<svg x-show="!visible" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor;"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" /></svg>
+
+							<span class="fs-5">FAQ</span>
+						</div>
+
+						<div x-show="visible" x-transition style="display: none;" class="p-1">
+							FAQ will be present right here.
+						</div>
+					</div>
+
+					<div class="bordered-box" x-data="{visible: false}">
+						<div class="d-inline-flex align-items-center" x-on:click="visible = !visible" style="cursor: pointer;">
+							<svg x-show="visible" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor; display:none;"><path d="M7.41,15.41L12,10.83L16.59,15.41L18,14L12,8L6,14L7.41,15.41Z" /></svg>
+							<svg x-show="!visible" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor;"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" /></svg>
+
+							<span class="fs-5">Credits</span>
+						</div>
+
+						<div x-show="visible" x-transition style="display: none;" class="credits p-1">
+							<div class="contributor">
+								<div class="d-flex align-items-center justify-content-between">
+									<strong>Ceddini</strong>
+									<div class="flex-fill border-bottom border-secondary mx-2"></div>
+									<div class="socials">
+										<a href="https://github.com/Ceddini" target="_blank">GitHub</a>
+									</div>
+								</div>
+								<p>Redesign, code rework</p>
+							</div>
+							<div class="contributor">
+								<div class="d-flex align-items-center justify-content-between">
+									<strong>ZeroGravitas</strong>
+									<div class="flex-fill border-bottom border-secondary mx-2"></div>
+									<div class="socials">
+										<a href="https://www.youtube.com/c/ZeroGravitas" target="_blank">YouTube</a>
+										<a href="https://steamcommunity.com/profiles/76561197971318812/myworkshopfiles/?section=guides&appid=1621690" target="_blank">Guides</a>
+									</div>
+								</div>
+								<p>Redesign, usability improvement</p>
+							</div>
+							<div class="contributor">
+								<div class="d-flex align-items-center justify-content-between">
+									<strong>Craigins</strong>
+									<div class="flex-fill border-bottom border-secondary mx-2"></div>
+									<div class="socials">
+										<a href="https://github.com/craigins" target="_blank">GitHub</a>
+									</div>
+								</div>
+								<p>Initial codebase</p>
+							</div>
+							<div class="contributor">
+								<div class="d-flex align-items-center justify-content-between">
+									<strong>Mz</strong>
+									<div class="flex-fill border-bottom border-secondary mx-2"></div>
+									<div class="socials">
+										<a href="https://github.com/MzHub" target="_blank">GitHub</a>
+									</div>
+								</div>
+								<p>Mapfile loading</p>
+							</div>
+							<div class="contributor">
+								<div class="d-flex align-items-center justify-content-between">
+									<strong>Honorable mentions</strong>
+									<div class="flex-fill border-bottom border-secondary mx-2"></div>
+									<div class="socials"></div>
+								</div>
+								<p>nineforty</p>
+							</div>
+						</div>
+					</div>
 				</div>
 				
 				<div id="old-menu-design-2" class="d-none">
@@ -365,7 +451,7 @@
 		</div>
 	</div>
 
-	<div id="legendAccordion" class="accordion">
+	<div id="legendAccordion" class="accordion d-none">
 		<div class="accordion-item text-bg-dark">
 			<h2 class="accordion-header" id="headingOne">
 			<button class="accordion-button text-bg-dark" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
@@ -420,6 +506,7 @@
 		</button>
   	</div>
 	-->
+  	<script src="js/savehandler.js"></script>
   	<script src="js/page.js"></script>
   	<script src="js/menubuilder.js"></script>
   	<script src="js/mazehunter.js"></script>

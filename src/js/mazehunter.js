@@ -190,7 +190,7 @@ function findHole(myImageData, width) {
 
 	for (let rad = stoneArc.startTicks; rad < end; ++rad) {
 		let angle = (rad % arcticks) * deltaRadians;
-		for (let radius = SEARCH_RADII.min; radius < 471; radius++) {
+		for (let radius = SEARCH_RADII.min; radius < 451; radius++) {
 			x = parseInt(radius * Math.sin(angle));
 			y = parseInt(radius * Math.cos(angle));
 			if (x != prevX || y != prevY) {
