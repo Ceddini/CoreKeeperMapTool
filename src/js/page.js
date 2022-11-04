@@ -6,6 +6,9 @@ document.addEventListener('alpine:init', function () {
 
 	const canWatchFile = typeof window.showOpenFilePicker !== "undefined";
 
+	Alpine.store('directoryList', []);
+	Alpine.store('faq', faq);
+
 	Alpine.store('data', {
 		mapLoaded: false,
 		firstTimeLoaded: false,
@@ -13,6 +16,8 @@ document.addEventListener('alpine:init', function () {
 		canWatchFile,
 
 		tutorialShown,
+		mapPickerShown: false, // TODO: RESET TO TRUE TO ENABLE
+		directoryHandle: null,
 
 		arcSlidersPrefilled: false,
 

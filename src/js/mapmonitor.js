@@ -17,7 +17,7 @@ const MapMonitor = {
 	isPanning: false,
 	lastModified: undefined,
 	refreshMap: async function () {
-		let file = await fileHandle.getFile();
+		let file = await this.fileHandle.getFile();
 		if (file.lastModified != MapMonitor.lastModified) {
 			MapMonitor.lastModified = file.lastModified;
 			let contents = await file.arrayBuffer();
@@ -43,6 +43,19 @@ const MapMonitor = {
 	}
 }
 
+
+function loadMapFileWithHandle(fileHandle) {
+	const uploadButton = document.getElementById("uploadbutton");
+
+
+	MapMonitor.fileHandle = fileHandle;
+	uploadButton.value = fileHandle.name;
+	MapMonitor.startMonitoring();
+
+	Alpine.store('data').mapPickerShown = false;
+}
+
+// Method for loading map
 async function registerMapFile() {
 	Alpine.store('data').isExampleMap = false;
 	Alpine.store('data').mapLoaded = false;
@@ -54,9 +67,7 @@ async function registerMapFile() {
 	if (typeof window.showOpenFilePicker !== "undefined") {
 		[fileHandle] = await window.showOpenFilePicker(pickerOptions);
 
-		MapMonitor.fileHandle = fileHandle;
-		uploadButton.value = fileHandle.name;
-		MapMonitor.startMonitoring();
+		loadMapFileWithHandle(fileHandle);
 	} else {
 		const mapupload = document.getElementById("mapupload");
 		mapupload.click();

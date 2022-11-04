@@ -364,7 +364,7 @@
 						</section>
 					</div>
 
-					<div class="bordered-box" x-data="{visible: false}">
+					<div class="bordered-box" style="margin-top: 12px;" x-data="{visible: false}">
 						<div class="d-inline-flex align-items-center" x-on:click="visible = !visible" style="cursor: pointer;">
 							<svg x-show="visible" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor; display:none;"><path d="M7.41,15.41L12,10.83L16.59,15.41L18,14L12,8L6,14L7.41,15.41Z" /></svg>
 							<svg x-show="!visible" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor;"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" /></svg>
@@ -373,7 +373,17 @@
 						</div>
 
 						<div x-show="visible" x-transition style="display: none;" class="p-1">
-							FAQ will be present right here.
+							<template x-for="question in $store.faq">
+								<div class="question px-1" x-data="{q:false}">
+									<h6 style="cursor: pointer;" @click="q = !q">
+										<svg x-show="q" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" style="fill: currentColor;"><path d="M7.41,15.41L12,10.83L16.59,15.41L18,14L12,8L6,14L7.41,15.41Z" /></svg>
+										<svg x-show="!q" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" style="fill: currentColor;"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" /></svg>
+										
+										<span x-text="question.question"></span>
+									</h6>
+									<p x-show="q" x-transition x-text="question.answer"></p>
+								</div>
+							</template>
 						</div>
 					</div>
 
@@ -405,7 +415,7 @@
 										<a href="https://steamcommunity.com/profiles/76561197971318812/myworkshopfiles/?section=guides&appid=1621690" target="_blank">Guides</a>
 									</div>
 								</div>
-								<p>Redesign, usability improvement</p>
+								<p>Redesign, usability improvements</p>
 							</div>
 							<div class="contributor">
 								<div class="d-flex align-items-center justify-content-between">
@@ -492,6 +502,41 @@
 		</button>
     </div>
 
+	<div id="directoryLoader" style="z-index: 10; display:none;" class="position-absolute top-50 start-50 translate-middle"
+		x-show="$store.data.mapPickerShown && $store.data.canWatchFile"
+	>
+		<div class="card text-bg-dark">
+			<div class="card-body d-relative">
+				<div class="position-absolute" style="top: 16px; right: 16px;">
+					<button type="button" class="btn-close" @click="$store.data.mapPickerShown = false" aria-label="Close"></button>
+				</div>
+
+				<h5 class="card-title me-5">Choose a map file</h5>
+				<template x-if="$store.data.directoryHandle">
+					<div>
+						<template x-for="fileHandle in $store.directoryList">
+							<div x-data="{file: null, handle: fileHandle}" x-init="file = await fileHandle.getFile()">
+								<template x-if="file == null">
+									<p>Loading File...</p>
+								</template>
+								<template x-if="file">
+									<p x-text="file.name" @click="loadMapFileWithHandle(handle)"></p>
+								</template>
+							</div>	
+						</template>
+
+						<script>loadDirectoryList();</script>
+					</div>
+				</template>
+				<div x-show="$store.data.directoryHandle === null">
+					<strong>Oh oh!</strong><br>
+					Looks like you didn't choose the map folder yet. <br>
+					<button class="btn btn-primary mt-2" onclick="openDirectoryHandle();">Choose it now</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
   	<div class="canvas-container">
     	<canvas id="mapcanvas" width="1200px" height="800px" style="image-rendering: pixelated;" onclick="//toclick">
   	</div>
@@ -506,6 +551,7 @@
 		</button>
   	</div>
 	-->
+  	<script src="js/faq.js"></script>
   	<script src="js/savehandler.js"></script>
   	<script src="js/page.js"></script>
   	<script src="js/menubuilder.js"></script>
