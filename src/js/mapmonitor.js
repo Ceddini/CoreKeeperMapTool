@@ -26,6 +26,7 @@ const MapMonitor = {
 			console.log(file.lastModified);
 		}
 	},
+
 	loadFile: function (dataarr, callback) {
 		let dataAsUint8Array = pako.inflate(dataarr);
 		let dataAsJsonString = new TextDecoder().decode(dataAsUint8Array);
@@ -34,12 +35,12 @@ const MapMonitor = {
 	},
 	startMonitoring: function () {
 		setInterval(() => {
-			let shouldrefresh = document.getElementById("shouldrefresh").value;
+			let shouldrefresh = document.getElementById("shouldrefresh").checked;
 			if (shouldrefresh && !MapMonitor.isPanning) {
 				MapMonitor.refreshMap();
 			}
 		}, 10000);
-		MapMonitor.refreshMap();
+		this.refreshMap();
 	}
 }
 

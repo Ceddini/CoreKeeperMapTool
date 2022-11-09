@@ -1,5 +1,9 @@
-const tutorialShown = localStorage.getItem("tutorialShown");
+let tutorialShown = false;
 
+let temp = localStorage.getItem("tutorialShown").toLowerCase();
+
+if (temp === "true" || temp === "false")
+	tutorialShown = JSON.parse(temp);
 
 
 async function openDirectoryHandle() {
@@ -20,6 +24,18 @@ async function loadDirectoryList() {
 	}
 
 	Alpine.store('directoryList', fileHandles);
+}
+
+function showTutorial() {
+	introJs().setOptions({
+		steps: [
+			{
+				title: "Load map file",
+				intro: "Click here to the select the map file.",
+				element: document.getElementById("uploadbutton")
+			}
+		]
+	}).start();
 }
 
 function dismissTutorial() {

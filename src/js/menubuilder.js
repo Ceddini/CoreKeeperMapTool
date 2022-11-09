@@ -53,12 +53,31 @@ function clearAllHighlights() {
 	redrawMap();
 }
 
-function isBoulder(elem) {
+function isBoulder(tile) {
+	return tile.name.toLowerCase().includes("boulder");
+}
+
+function _isBoulder(elem) {
 	let parentMenu = elem.parentElement.parentElement.parentElement;
 	return parentMenu.getAttribute("ID") == "boulder-menu";
 }
 
 function buildHighlightSelection(search) {
+	for (let tile of Alpine.store('tilecolormap').visible) {
+		search.count++;
+		filterObj = isBoulder(tile) ? search.boulders : search;
+
+		if (!filterObj[tile.r]) {
+			((filterObj[tile.r] = {})[tile.g] = {})[tile.b] = true;
+		} else if (!filterObj[tile.r][tile.g]) {
+			(filterObj[tile.r][tile.g] = {})[tile.b] = true;
+		} else {
+			filterObj[tile.r][tile.g][tile.b] = true;
+		}
+	}
+}
+
+function _buildHighlightSelection(search) {
 	let filterChecks = document.querySelectorAll('input[type="checkbox"][data-block-id]');
 	var selected = [].filter.call(filterChecks, function (el) {
 		return el.checked
@@ -147,7 +166,6 @@ function buildTileMenu() {
 	  mainmenu.appendChild(buildDropdownMenuItem(tiletype[0].toUpperCase() + tiletype.substring(1), bytiletype[tiletype]));
 	}*/
 }
-buildTileMenu();
 
 $('.dropdown-menu a').click(function (e) {
 	e.stopPropagation();

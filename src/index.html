@@ -70,6 +70,8 @@
 					</div>
 					
 				</h5>
+
+				<h5><a target="_blank" href="https://github.com/Ceddini/CoreKeeperMapTool/discussions">Feedback / Requests</a></h5>
 			</a>
 
 			<hr>
@@ -121,7 +123,7 @@
 						<input id="mapupload" type="file" class="form-control d-none" />
 
 						<div class="input-group">
-							<input id="uploadbutton" type="button" onclick="registerMapFile();" class="btn btn-primary btn-sm" value="Select File"/> 
+							<input id="uploadbutton" type="button" onclick="registerMapFile();" class="btn btn-primary btn-sm" value="Select File" /> 
 							<span 
 								:class="($store.data.canWatchFile) ? 'input-group-text' : 'input-group-text text-secondary'"
 								:data-bs-toggle="($store.data.canWatchFile) ? '' : 'tooltip'" 
@@ -157,8 +159,8 @@
 						</div>
 
 						<!-- HOW TO FIND MAP-->
-						<div class="mt-2" x-data="{visible: false}">
-							<a href="#" @click="visible = !visible">
+						<div class="mt-2" x-data="{visible: false}" x-show="$store.data.firstTimeLoaded === false">
+							<a href="#" @click="openTutorial"><!-- Change to "visible = !visibile" to reenable old list -->
 								<h6 class="d-flex align-items-center">
 									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" style="fill: currentColor;" class="me-1"><path d="M11,18H13V16H11V18M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,6A4,4 0 0,0 8,10H10A2,2 0 0,1 12,8A2,2 0 0,1 14,10C14,12 11,11.75 11,15H13C13,12.75 16,12.5 16,10A4,4 0 0,0 12,6Z" /></svg> 
 									<span>How to find your map file</span>
@@ -169,11 +171,11 @@
 									<li>
 										<div class="d-flex align-items-center justify-content-between mb-1">
 											Open the folder:
-											<button class="btn btn-primary btn-sm" onclick="navigator.clipboard.writeText('%appdata%\\..\\LocalLow\\Pugstorm\\Core Keeper\\Steam\\')">
+											<button class="btn btn-primary btn-sm" onclick="navigator.clipboard.writeText('%appdata%\\..\\LocalLow\\Pugstorm\\Core Keeper\\Steam\\'); this.querySelector('span').innerHTML = 'Copied!'">
 												<svg style="width:18px;height:18px" viewBox="0 0 24 24">
 													<path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z" />
 												</svg>
-												Copy Path
+												<span>Copy Path</span>
 											</button>
 										</div>
 										<pre style="overflow: auto; font-size: .875em; color: var(--bs-code-color);">%appdata%\..\LocalLow\Pugstorm\Core Keeper\Steam\</pre>
@@ -362,9 +364,45 @@
 								</div>
 							</div>
 						</section>
+
+						<section class="bordered-box">
+							<h4>Tile Highlighting</h4>
+							<div class="mb-2">
+								<span>Tile Transparency</span>
+								<div class="d-flex align-items-center">
+									<input type="range" class="form-range me-2" name="tileTransparency" id="tileTransparency" min="0" max="100" x-model="$store.data.tileTransparency" @change="onChangeTileTransparency">
+									<input class="form-control form-control-sm me-1" type="number" min="0" max="100" style="width: 60px;" x-model="$store.data.tileTransparency" @change="onChangeTileTransparency">
+									<span>%</span>
+								</div>
+							</div>
+							<template x-for="category in $store.tilecolormap.list" :key="category.set">
+								<div class="bordered-box-section" x-data="{visible: false}">
+									<div class="d-flex align-items-center mb-1">
+										<div class="d-inline-flex align-items-center" x-on:click="visible = !visible" style="cursor: pointer;">
+											<svg x-show="visible" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor;"><path d="M7.41,15.41L12,10.83L16.59,15.41L18,14L12,8L6,14L7.41,15.41Z" /></svg>
+											<svg x-show="!visible" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor;"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" /></svg>
+
+											<span class="fs-5" x-text="category.set"></span>
+										</div>
+										<div class="flex-fill border-bottom border-secondary mx-2"></div>
+										<span x-on:click="toggleCategoryTiles(category.tiles)" class="fs-6 text-secondary" style="cursor: pointer;">Toggle all</span>
+									</div>
+									<div x-show="visible" x-transition style="display: none;" class="px-1">
+										<template x-for="tile in category.tiles" :key="tile.name">
+											<button type="button" :disabled="tile.disabled"
+											:class="'btn btn-sm me-2 mb-2 d-inline-flex align-items-center'" 
+											:style="tile.visible ? `background-color: rgb(${tile.r}, ${tile.g}, ${tile.b}); color: inherit;` : `border-color: rgb(${tile.r}, ${tile.g}, ${tile.b}); color: inherit;`"
+											x-on:click="toggleTile(tile)">
+												<span x-text="tile.name"></span>
+											</button>
+										</template>
+									</div>
+								</div>
+							</template>
+						</section>
 					</div>
 
-					<div class="bordered-box" style="margin-top: 12px;" x-data="{visible: false}">
+					<div class="bordered-box" style="margin-top: 12px;" x-data="{visible: true}">
 						<div class="d-inline-flex align-items-center" x-on:click="visible = !visible" style="cursor: pointer;">
 							<svg x-show="visible" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor; display:none;"><path d="M7.41,15.41L12,10.83L16.59,15.41L18,14L12,8L6,14L7.41,15.41Z" /></svg>
 							<svg x-show="!visible" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor;"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" /></svg>
@@ -374,14 +412,17 @@
 
 						<div x-show="visible" x-transition style="display: none;" class="p-1">
 							<template x-for="question in $store.faq">
-								<div class="question px-1" x-data="{q:false}">
+								<div class="question px-1" x-data="{q: (question.preopened) ? true : false}">
 									<h6 style="cursor: pointer;" @click="q = !q">
 										<svg x-show="q" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" style="fill: currentColor;"><path d="M7.41,15.41L12,10.83L16.59,15.41L18,14L12,8L6,14L7.41,15.41Z" /></svg>
 										<svg x-show="!q" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" style="fill: currentColor;"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" /></svg>
 										
-										<span x-text="question.question"></span>
+										<span x-html="question.question"></span>
+										<template x-if="question.spoilers === true">
+											<span class="badge bg-danger">Spoilers</span>
+										</template>
 									</h6>
-									<p x-show="q" x-transition x-text="question.answer"></p>
+									<p x-show="q" x-transition x-html="question.answer"></p>
 								</div>
 							</template>
 						</div>
@@ -536,13 +577,139 @@
 			</div>
 		</div>
 	</div>
+<!--
+	<div id="tutorialHolder" x-show="$store.data.tutorialShown === false" style="display: none;">
+		<div class="d-flex h-100 w-100 align-items-center justify-content-around">
+			<div class="card text-bg-dark" @click.outside="dismissTutorial">
+				<div class="card-body d-relative">
+					<div class="position-absolute" style="top: 16px; right: 16px;">
+						<button type="button" class="btn-close" @click="dismissTutorial" aria-label="Close"></button>
+					</div>
+
+					<h5 class="card-title me-5">How To: Select Map File</h5>
+
+					<div id="tutorialCarousel" class="carousel slide pt-2" data-bs-config="{'interval':false}" style="width: 400px; height: 380px;">
+						<div class="carousel-indicators">
+							<button type="button" data-bs-target="#tutorialCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+							<button type="button" data-bs-target="#tutorialCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+							<button type="button" data-bs-target="#tutorialCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+							<button type="button" data-bs-target="#tutorialCarousel" data-bs-slide-to="3" aria-label="Slide 4"></button>
+							<button type="button" data-bs-target="#tutorialCarousel" data-bs-slide-to="4" aria-label="Slide 5"></button>
+							<button type="button" data-bs-target="#tutorialCarousel" data-bs-slide-to="5" aria-label="Slide 6"></button>
+						</div>
+						<div class="carousel-inner">
+							<div class="carousel-item active">
+								<img src="img/tutorial/step_1.png" class="d-block w-100" width="400" height="380" alt="Select map file">
+								<div class="carousel-caption d-none d-md-block">
+									<p>Click "Select File"</p>
+								</div>
+							</div>
+							<div class="carousel-item">
+								<img src="img/tutorial/step_2.png" class="d-block w-100" width="400" height="380" alt="Open pugstorm path">
+								<div class="carousel-caption d-none d-md-block">
+									<span>Open the following path in file explorer:</span><br>
+									<p class="mt-2">
+										<button class="btn btn-primary btn-sm" onclick="navigator.clipboard.writeText('%appdata%\\..\\LocalLow\\Pugstorm\\Core Keeper\\Steam\\'); this.querySelector('span').innerHTML = 'Copied!'">
+											<svg style="width:18px;height:18px" viewBox="0 0 24 24">
+												<path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z" />
+											</svg>
+											<span>Copy Path</span>
+										</button>
+									</p>
+								</div>
+							</div>
+							<div class="carousel-item">
+								<img src="img/tutorial/step_3.png" class="d-block w-100" width="400" height="380" alt="Select steam id">
+								<div class="carousel-caption d-none d-md-block">
+									<span>Select your steam id.</span><br>
+									<p>There is normally only one.</p>
+								</div>
+							</div>
+							<div class="carousel-item">
+								<img src="img/tutorial/step_4.png" class="d-block w-100" width="400" height="380" alt="Select maps folder">
+								<div class="carousel-caption d-none d-md-block">
+									<p>Select the maps folder</p>
+								</div>
+							</div>
+							<div class="carousel-item">
+								<img src="img/tutorial/step_5.png" class="d-block w-100" width="400" height="380" alt="Select map file">
+								<div class="carousel-caption d-none d-md-block">
+									<span>Select the player.</span>
+									<p>First player ingame is number 0</p>
+								</div>
+							</div>
+							<div class="carousel-item">
+								<img src="img/tutorial/step_6.png" class="d-block w-100" width="400" height="380" alt="Select map file">
+								<div class="carousel-caption d-none d-md-block">
+									<p>Select the map you wish to display</p>
+								</div>
+							</div>
+						</div>
+						<button class="carousel-control-prev" type="button" data-bs-target="#tutorialCarousel" data-bs-slide="prev">
+							<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+							<span class="visually-hidden">Previous</span>
+						</button>
+						<button class="carousel-control-next" type="button" data-bs-target="#tutorialCarousel" data-bs-slide="next">
+							<span class="carousel-control-next-icon" aria-hidden="true"></span>
+							<span class="visually-hidden">Next</span>
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+-->
+
+	<template x-if="$store.data.firstTimeLoaded === false && $store.data.tutorialShown === false">
+		<div class="text-bg-dark h-100" id="findMapGuide" style="overflow: auto; word-wrap: normal; word-break: normal;">
+			<h4 class="p-2" style="position:sticky; top:0;">
+				<div class="d-flex align-items-center">
+					<button type="button" class="btn-close" @click="dismissTutorial" aria-label="Close"></button>
+					<span class="ms-1">How to find your map file</span>
+				</div>
+			</h4>
+			<div style="max-width: 432px;">
+				<h5>1. Click "Select File" Button</h5>
+				<img src="img/tutorial/step_1.png" class="d-block" width="400" height="200" alt="Select map file">
+				<p>Click the blue "Select File" button on the left-hand side.</p>
+
+				<h5>2. Open the Pugstorm Path</h5>
+				<img src="img/tutorial/step_2.png" class="d-block" width="400" height="200" alt="Open pugstorm path">
+				<p>Open your File Explorer (or press WIN+R).<br> Use the navigation bar to enter the following path:</p>
+				<pre style="overflow: auto; font-size: .875em; color: var(--bs-code-color);">%appdata%\..\LocalLow\Pugstorm\Core Keeper\Steam\</pre>
+				<p>
+					<button class="btn btn-primary btn-sm" onclick="navigator.clipboard.writeText('%appdata%\\..\\LocalLow\\Pugstorm\\Core Keeper\\Steam\\'); this.querySelector('span').innerHTML = 'Copied!'">
+						<svg style="width:18px;height:18px" viewBox="0 0 24 24">
+							<path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z" />
+						</svg>
+						<span>Copy Path</span>
+					</button>
+				</p>
+
+				<h5>3. Select <code>steam_id</code> Folder</h5>
+				<img src="img/tutorial/step_3.png" class="d-block" width="400" height="200" alt="Select steam id">
+				<span>Select the folder with your steam id. If you see more than one folder, please check <a href="https://www.steamidfinder.com/" target="_blank">online</a> on how to find your steam id.</span>
+
+				<h5>4. Select <code>maps</code> Folder</h5>
+				<img src="img/tutorial/step_4.png" class="d-block" width="400" height="200" alt="Select maps folder">
+				<p>Select the <code>maps</code> folder</p>
+
+				<h5>5. Select Player Folder</h5>
+				<img src="img/tutorial/step_5.png" class="d-block" width="400" height="200" alt="Select player folder">
+				<p>Choose the folder with your character id. This should be in the same order as in-game.</p>
+
+				<h5>6. Select the Map File</h5>
+				<img src="img/tutorial/step_6.png" class="d-block" width="400" height="200" alt="Select map file">
+				<p>Select the map file. There is no easy way to figure out which map is the correct one. It also includes maps of servers you visited.</p>
+			</div>
+		</div>
+	</template>
+
+	
 
   	<div class="canvas-container">
     	<canvas id="mapcanvas" width="1200px" height="800px" style="image-rendering: pixelated;" onclick="//toclick">
   	</div>
-
-	<a target="_blank" href="https://github.com/Ceddini/CoreKeeperMapTool/discussions" id="feedback">Feedback / Requests</a>
-
 
 	<!--
 	<div class="legend-container">

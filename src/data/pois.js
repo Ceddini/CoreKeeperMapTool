@@ -93,9 +93,38 @@ function toggleCircle(circle) {
 	circle.disabled = false;
 }
 
+function toggleTile(tile) {
+	tile.visible = !tile.visible;
+
+	if (tile.visible)
+		Alpine.store('tilecolormap').visible.push(tile);
+	else
+		Alpine.store('tilecolormap').visible = Alpine.store('tilecolormap').visible.filter((e) => e.name != tile.name);
+
+	tile.disabled = true;
+	redrawMap();
+	tile.disabled = false;
+}
+
 function toggleCategoryCircles(circles) {
 	const firstItemVisibility = circles[0].visible;
 	circles.forEach(circle => { circle.visible = !firstItemVisibility; circle.disabled = true; });
 	redrawMap();
 	circles.forEach(circle => { circle.disabled = false; });
+}
+
+function toggleCategoryTiles(tiles) {
+	const firstItemVisibility = tiles[0].visible;
+
+	tiles.forEach(tile => { tile.visible = !firstItemVisibility; tile.disabled = true; });
+
+	for (tile of tiles) {
+		if (tile.visible)
+			Alpine.store('tilecolormap').visible.push(tile);
+		else
+			Alpine.store('tilecolormap').visible = Alpine.store('tilecolormap').visible.filter((e) => e.name != tile.name);
+	}
+
+	redrawMap();
+	tiles.forEach(tile => { tile.disabled = false; });
 }

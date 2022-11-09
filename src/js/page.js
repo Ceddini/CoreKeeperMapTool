@@ -9,13 +9,15 @@ document.addEventListener('alpine:init', function () {
 	Alpine.store('directoryList', []);
 	Alpine.store('faq', faq);
 
+	Alpine.store('tilecolormap', { list: tileColors, visible: [] });
+
 	Alpine.store('data', {
 		mapLoaded: false,
 		firstTimeLoaded: false,
 		isExampleMap: false,
 		canWatchFile,
 
-		tutorialShown,
+		tutorialShown: tutorialShown,
 		mapPickerShown: false, // TODO: RESET TO TRUE TO ENABLE
 		directoryHandle: null,
 
@@ -34,6 +36,7 @@ document.addEventListener('alpine:init', function () {
 		ringTransparency: 50,
 		biomeTransparency: 50,
 		gridTransparency: 30,
+		tileTransparency: 30,
 		customRing: 25,
 	});
 });
@@ -129,6 +132,9 @@ function onChangeBiomeTransparency(event) {
 function onChangeGridTransparency(event) {
 	redrawMap();
 }
+function onChangeTileTransparency(event) {
+	redrawMap();
+}
 
 function onChangeShowCustomRing(event) {
 	redrawDebounce(event);
@@ -191,6 +197,7 @@ function onChangeManualArcRotation(event) {
 
 function toggleDarkMode() {
 	const offcanvas = document.getElementById("offcanvas");
+	const findMapGuide = document.getElementById("findMapGuide");
 
 	const legendAccordion = document.getElementById("legendAccordion");
 	const legendItems = document.querySelector("#legendAccordion .accordion-item");
@@ -203,6 +210,7 @@ function toggleDarkMode() {
 
 	if (offcanvas.classList.contains("text-bg-dark")) {
 		offcanvas.classList.remove("text-bg-dark");
+		findMapGuide.classList.remove("text-bg-dark");
 		legendItems.classList.remove("text-bg-dark");
 		legendButton.classList.remove("text-bg-dark");
 		body.classList.remove("dark-mode");
@@ -210,6 +218,7 @@ function toggleDarkMode() {
 		favicon.href = "img/favicon_light.png";
 	} else {
 		offcanvas.classList.add("text-bg-dark");
+		findMapGuide.classList.add("text-bg-dark");
 		legendItems.classList.add("text-bg-dark");
 		legendButton.classList.add("text-bg-dark");
 		body.classList.add("dark-mode");
