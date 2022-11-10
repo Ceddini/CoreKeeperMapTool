@@ -59,6 +59,7 @@ const bosses = new Category("Bosses", [
 	new CircleItem("Hive Mother", "The Hive Mother", "Hive Biome", [330], "#FCA694", "#FFFFFF", true, "#", "bosses/hive_mother.png"),
 	new CircleItem("Azeos", "Azeos the Sky Titan", "Wilderness", [600], "#d2b835", "#FFFFFF", true, "#", "bosses/azeos.png"),
 	new CircleItem("Omoroth", "Omoroth the Sea Titan", "Sunken Sea", [1100], "#9E3F9B", "#FFFFFF", true, "#", "bosses/omoroth.png"),
+	new CircleItem("Ra-Akar", "Ra-Akar the Sand Titan", "Desert of Beginnings", [1000], "#1d9124", "#FFFFFF", true, "#", "bosses/Ra-Akar_the_Sand_Titan.png"),
 ]);
 
 
@@ -66,6 +67,7 @@ const optionalBosses = new Category("Optional Bosses", [
 	new CircleItem("Malugaz", "Malugaz the Corrupted", "Ruins", [350], "#1f4ec9", "#FFFFFF", true, "#", "bosses/malugaz.png"),
 	new CircleItem("Ivy", "Ivy the Poisonous Mass", "Wilderness", [900], "#FF00FF", "#FFFFFF", true, "#", "bosses/ivy.png"),
 	new CircleItem("Morpha", "Morpha the Aquatic Mass", "Sunken Sea", [1400], "#1898F4", "#FFFFFF", true, "#", "bosses/morpha.png"),
+	new CircleItem("Igneous", "Igneous the Molten Mass", "Desert of Beginnings", [1400], "#484454", "#FFFFFF", true, "#", "bosses/Igneous_the_Molten_Mass.png"),
 ]);
 
 const pois = new Category("Points of Interest", [
@@ -74,6 +76,11 @@ const pois = new Category("Points of Interest", [
 	new CircleItem("Broken Core 1", "Broken Core 1", "", [1250], "#e4ad2a", "#FFFFFF", true, "#", "items/channeling_gemstone.png"),
 	new CircleItem("Broken Core 2", "Broken Core 2", "", [1550], "#e4ad2a", "#FFFFFF", true, "#", "items/fractured_limbs.png"),
 	new CircleItem("Broken Core 3", "Broken Core 3", "", [1750], "#e4ad2a", "#FFFFFF", true, "#", "items/energy_string.png"),
+	new CircleItem("Prince Dungeon", "Prince Dungeon", "", [1100], "#239029", "#FFFFFF", true, "#", "items/Ra-Akar_Automaton.png"),
+	new CircleItem("Queen Dungeon", "Queen Dungeon", "", [1300], "#a555a4", "#FFFFFF", true, "#", "items/Azeos_Feather_Fan.png"),
+	new CircleItem("King Dungeon", "King Dungeon", "", [1500], "#19bdc6", "#000000", true, "#", "items/Omoroth_Compass.png"),
+	new CircleItem("Ancient Forge", "Ancient Forge", "", [1600], "#91210b", "#FFFFFF", true, "#", "items/Soul_Seeker.png"),
+	new CircleItem("Crystal Meteor", "Crystal Meteor", "", [1200], "#94f7dd", "#000000", true, "#", "items/Crystal_Meteor_Shard.png"),
 ]);;
 
 const categories = [

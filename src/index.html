@@ -236,11 +236,13 @@
 											data-bs-html="true"
 											data-bs-placement="right"
 											x-on:click="toggleCircle(circle)">
-												<div x-show="circle.image" 
+												<template x-if="circle.image">
+													<div
 													class="circle-image" 
 													:style="(circle.visible) 
 														? `background-image: url('img/${circle.image}'); margin-right: 8px; border-color: ${circle.color};` 
 														: `background-image: url('img/${circle.image}'); margin-right: 8px; border-color: ${circle.color};`"></div>
+												</template>
 												<!-- <img x-show="circle.image" :src="`img/${circle.image}`" :alt="`Image of ${circle.name}`" width="32"> -->
 												<span x-text="circle.name"></span>
 											</button>
@@ -393,7 +395,7 @@
 											:class="'btn btn-sm me-2 mb-2 d-inline-flex align-items-center'" 
 											:style="tile.visible ? `background-color: rgb(${tile.r}, ${tile.g}, ${tile.b}); color: inherit;` : `border-color: rgb(${tile.r}, ${tile.g}, ${tile.b}); color: inherit;`"
 											x-on:click="toggleTile(tile)">
-												<span x-text="tile.name"></span>
+												<span x-text="tile.name" :style="tile.visible ? `color: ${tile.textColor}` : ``"></span>
 											</button>
 										</template>
 									</div>

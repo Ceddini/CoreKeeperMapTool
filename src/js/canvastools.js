@@ -409,7 +409,7 @@ function testBoulder(width, myImageData, r, g, b, x, y, x1, y1) {
 		highlightPixel(width, myImageData, x1, y);
 		highlightPixel(width, myImageData, x, y);
 	} else if (myImageData[i + 3] != 255) {
-		let alpha = TileSliderInfo.transparency();
+		let alpha = Alpine.store('data').tileTransparency / 100 * 255;
 		myImageData[i + 3] = alpha;
 	}
 }
