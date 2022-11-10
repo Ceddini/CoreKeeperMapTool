@@ -1,12 +1,58 @@
+const updatemap = () => { drawMap(tilelist) };
+
+let tilelist = [];
+
+document.addEventListener('alpine:init', function () {
+
+	const canWatchFile = typeof window.showOpenFilePicker !== "undefined";
+
+	Alpine.store('directoryList', []);
+	Alpine.store('faq', faq);
+
+	Alpine.store('tilecolormap', { list: tileColors, visible: [] });
+
+	Alpine.store('data', {
+		mapLoaded: false,
+		firstTimeLoaded: false,
+		isExampleMap: false,
+		canWatchFile,
+
+		tutorialShown: tutorialShown,
+		mapPickerShown: false, // TODO: RESET TO TRUE TO ENABLE
+		directoryHandle: null,
+
+		arcSlidersPrefilled: false,
+
+		showArcs: false,
+		showChunkGrid: false,
+		showMobGrid: false,
+		showCustomRing: false,
+		showMazeHoles: false,
+		manualArcRotation: false,
+		cropRingsToBiome: false,
+
+		innerSlider: 0,
+		outerSlider: 0,
+		ringTransparency: 50,
+		biomeTransparency: 50,
+		gridTransparency: 30,
+		tileTransparency: 30,
+		customRing: 25,
+	});
+});
+
 window.addEventListener('DOMContentLoaded', () => {
-	const tilelist = [];
 	const fileupload = document.getElementById("mapupload");
 	const mapCanvas = document.getElementById("mapcanvas");
-	const updatemap = () => { drawMap(tilelist) };
-	fileupload.addEventListener('change', function handleFile(event) {
+	const uploadButton = document.getElementById("uploadbutton");
+	fileupload?.addEventListener('change', function handleFile(event) {
+		Alpine.store('data').isExampleMap = false;
+		Alpine.store('data').mapLoaded = false;
+		uploadButton.value = fileupload.files[0].name;
+		resetMap();
 		loadMapFile(fileupload, tilelist, updatemap);
 	});
-	panzoomele = Panzoom(mapCanvas, {
+	panZoomElem = Panzoom(mapCanvas, {
 		maxScale: MAX_ZOOM,
 		canvas: true,
 	});
@@ -31,120 +77,152 @@ window.addEventListener('DOMContentLoaded', () => {
 		mnu.onclick = mnuclick;
 	}
 
-	const slider = document.querySelector(".transparency-knob");
-	slider.onmousedown = sliderDown;
-	slider.onmouseup = sliderUp;
-	slider.onmousemove = sliderDrag;
-	SliderInfo.element = slider;
 	setFilterTop();
-
 
 }, false);
 
-function setFilterTop() {
+function loadExample() {
+	Alpine.store('data').isExampleMap = true;
+	Alpine.store('data').mapLoaded = false;
+	resetMap();
+	loadStandardFile(tilelist, updatemap);
+}
 
+function resetMap() {
+	tilelist = [];
+	HIGHEST_STONE = 0;
+	HIGHEST_WILDERNESS = 0;
+	document.getElementById('showArcs').checked = false;
+}
+
+function setFilterTop() {
 	let filterdiv = document.getElementById("tilefilter");
 	let navdiv = document.getElementById("navdiv").getBoundingClientRect();
 	filterdiv.style.top = navdiv.bottom;
 }
 
-const SliderInfo = {
-	element: undefined,
-	minx: 0,
-	maxx: 174,
-	down: false,
-	x: 20, y: 0,
-	transparency: function () { return parseInt((SliderInfo.x / 174) * 255); }
-}
+function redrawDebounce(event) {
+	event.target.setAttribute("disabled", "true");
 
-function sliderUp(event) {
-	SliderInfo.down = false;
-	let tempX = event.pageX;
-	let tempY = event.pageY;
-	if (tempX < 10) { tempX = 10; }
-	if (tempY < 0) { tempY = 0; }
 	redrawMap();
-	//console.log(tempX, tempY, SliderInfo.x, SliderInfo.transparency());
+
+	setTimeout(() => {
+		event.target.removeAttribute("disabled");
+	}, 10);
 }
 
-function sliderDown(event) {
-	SliderInfo.down = true;
-}
-function sliderDrag(event) {
-	if (SliderInfo.down) {
-		let tempX = event.pageX;
-		if (tempX < 32) { tempX = 32; }
-		if (tempX > 206) { tempX = 206; }
-		SliderInfo.x = tempX - 20 - 12;
-		SliderInfo.element.style.left = `${SliderInfo.x}px`;
-	}
-}
+// ON CHANGE EVENTS
 
-function toggleBosses() {
-	//class="active"
-	let ele = document.getElementById("bosscircle");
-	if (ele.classList.contains("active")) {
-		ele.classList.remove("active");
-	} else {
-		ele.classList.add("active");
-	}
-	redrawMap();
-}
-function toggleSea() {
-	//class="active"
-	let ele = document.getElementById("seacircle");
-	if (ele.classList.contains("active")) {
-		ele.classList.remove("active");
-	} else {
-		ele.classList.add("active");
-	}
+function onChangeInnerArc(event) {
 	redrawMap();
 }
 
-
-function toggleChunkGrid() {
-	//class="active"
-	let ele = document.getElementById("chunkgrid");
-	if (ele.classList.contains("active")) {
-		ele.classList.remove("active");
-	} else {
-		ele.classList.add("active");
-	}
+function onChangeOuterArc(event) {
 	redrawMap();
 }
 
-
-function toggleMobGrid() {
-	//class="active"
-	let ele = document.getElementById("mobgrid");
-	if (ele.classList.contains("active")) {
-		ele.classList.remove("active");
-	} else {
-		ele.classList.add("active");
-	}
+function onChangeRingTransparency(event) {
 	redrawMap();
 }
 
-function toggleDirections() {
-	let ele = document.getElementById("directions");
-	if (ele.style.display == "none") {
-		ele.style.display = "block"
-		document.querySelector(".highlight-container").style.top = "260px";
-	} else {
-		ele.style.display = "none";
-		document.querySelector(".highlight-container").style.top = "150px";
+function onChangeBiomeTransparency(event) {
+	redrawMap();
+}
+
+function onChangeGridTransparency(event) {
+	redrawMap();
+}
+function onChangeTileTransparency(event) {
+	redrawMap();
+}
+
+function onChangeShowCustomRing(event) {
+	redrawDebounce(event);
+}
+
+function onChangeCustomRing(event) {
+	redrawMap();
+}
+
+function onChangeShowChunkGrid(event) {
+	redrawDebounce(event);
+}
+
+function onChangeShowMobGrid(event) {
+	redrawDebounce(event);
+}
+
+function onChangeShowMazeHoles(event) {
+	redrawDebounce(event);
+}
+
+function onChangeShowArcs(event) {
+	const checked = event.target.checked;
+	event.target.setAttribute("disabled", "true");
+
+	if (checked) {
+		const canvas = document.getElementById("mapcanvas");
+		const myImage = _global_ctx.getImageData(0, 0, canvas.width, canvas.height);
+		findStone(myImage.data, canvas.width);
+		findWilderness(myImage.data, canvas.width);
 	}
-	setFilterTop();
+
+	redrawMap();
+
+	setTimeout(() => {
+		event.target.removeAttribute("disabled");
+	}, 10);
+}
+
+function onChangeManualArcRotation(event) {
+	const checked = event.target.checked;
+	event.target.setAttribute("disabled", "true");
+
+	if (checked && Alpine.store('data').arcSlidersPrefilled === false) {
+		Alpine.store('data').innerSlider = Math.round(stoneArc.start * 180 / Math.PI);
+		Alpine.store('data').outerSlider = Math.round(wildernessArc.start * 180 / Math.PI);
+
+		if (Alpine.store('data').innerSlider !== 0 && Alpine.store('data').outerSlider !== 0)
+			Alpine.store('data').arcSlidersPrefilled = true;
+	}
+
+	setTimeout(() => {
+		redrawMap();
+	}, 10)
+
+	setTimeout(() => {
+		event.target.removeAttribute("disabled");
+	}, 10);
 }
 
 function toggleDarkMode() {
-	let ele = document.body;
-	let toggleele = document.getElementById("darkmodeui");
-	if (ele.style.backgroundColor == "white") {
-		ele.style.backgroundColor = "black";
-		toggleele.style.boxShadow = "#0088cc -15px 0px";
+	const offcanvas = document.getElementById("offcanvas");
+	const findMapGuide = document.getElementById("findMapGuide");
+
+	const legendAccordion = document.getElementById("legendAccordion");
+	const legendItems = document.querySelector("#legendAccordion .accordion-item");
+	const legendButton = document.querySelector("#legendAccordion button");
+
+	const logo = document.getElementById("logo");
+	const favicon = document.getElementById("favicon");
+
+	const body = document.getElementById("body");
+
+	if (offcanvas.classList.contains("text-bg-dark")) {
+		offcanvas.classList.remove("text-bg-dark");
+		findMapGuide.classList.remove("text-bg-dark");
+		legendItems.classList.remove("text-bg-dark");
+		legendButton.classList.remove("text-bg-dark");
+		body.classList.remove("dark-mode");
+		logo.src = "img/logo_light.png";
+		favicon.href = "img/favicon_light.png";
 	} else {
-		ele.style.backgroundColor = "white";
-		toggleele.style.boxShadow = "rgb(220,220,220) -15px 0px";
+		offcanvas.classList.add("text-bg-dark");
+		findMapGuide.classList.add("text-bg-dark");
+		legendItems.classList.add("text-bg-dark");
+		legendButton.classList.add("text-bg-dark");
+		body.classList.add("dark-mode");
+		logo.src = "img/logo_dark.png";
+		favicon.href = "img/favicon_dark.png";
 	}
 }

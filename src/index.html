@@ -1,117 +1,738 @@
-<html>
+<html lang="en">
 
 <head>
-  <meta charset="utf8" />
-  <title>Map Tool</title>
-  <link href="css/vendor/bootstrap.css" rel="stylesheet">
-  <link href="css/vendor/bootstrap-responsive.css" rel="stylesheet">
-  <link href="css/app.css" rel="stylesheet">
-  <script src="https://code.jquery.com/jquery-1.12.4.min.js"
-    integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
-  <script src="js/vendor/jqueryBrowser.js"></script>
-  <script src="https://unpkg.com/@panzoom/panzoom@4.4.4/dist/panzoom.min.js"></script>
-  <script src="js/pako-inflate-2.0.4.min.js"></script>
-  <script src="data/tilecolormap.js"></script>
-  <script src="js/maploader.js"></script>
-  <script src="js/canvastools.js"></script>
-  <script src="https://kit.fontawesome.com/75173a9880.js" crossorigin="anonymous"></script>
-  <script src="js/mapmonitor.js"></script>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<title>CK Map Tool</title>
+
+	<link href="css/vendor/bootstrap.min.css" rel="stylesheet">
+	<link href="css/vendor/bootstrap-grid.min.css" rel="stylesheet">
+	<link href="css/vendor/bootstrap-utilities.min.css" rel="stylesheet">
+	<link href="css/app.css" rel="stylesheet">
+
+	<link id="favicon" rel="icon" href="img/favicon_dark.png" type="image/png"  sizes="32x32">
+	
+	<script src="https://code.jquery.com/jquery-1.12.4.min.js"
+		integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+	<script src="js/vendor/jqueryBrowser.js"></script>
+	<script src="https://unpkg.com/@panzoom/panzoom@4.5.1/dist/panzoom.min.js"></script>
+	<script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+	<script src="js/pako-inflate-2.0.4.min.js"></script>
+	<script src="data/pois.js"></script>
+	<script src="data/tilecolormap.js"></script>
+	<script src="js/maploader.js"></script>
+	<script src="js/canvastools.js"></script>
+	<script src="js/mapmonitor.js"></script>
 </head>
 
-<body style="background-color: black">
-  <div id="navdiv" class="nav_controls_container">
-    <div>
-      <p>Core Keeper Map Tool -- Created by Mz, nineforty, Craigins and Ceddini <a href="img/fullmap_cropped.png" target="_blank">Example Map</a></p>
-    </div>
-    <div>
-      <div>
-        <a href="#" onclick="toggleDirections()"><h2><i class="fas fa-question-circle"></i> Click for Directions</h2></a>
-        <div id="directions" style="display: none">
-          <ol>
-            <li>Open the folder: c:\users\%USERNAME%\AppData\LocalLow\Pugstorm\Core Keeper\Steam\</li>
-            <li>Open your steam id folder</li>
-            <li>Open the maps folder</li>
-            <li>Open your character # folder</li>
-            <li>Select one of the #.mapparts.gzip files to display</li>
-            <li>Still confused?  <a href="https://www.youtube.com/watch?v=7YZCPm6i50E" target="_blank">Watch this video by Dakon The Mad</a></li>
-          </ol>
-        </div>
-      </div>
-      <div>
-        <input id="mapupload" type="file" />
-        <input type="checkbox" id="shouldrefresh" checked/>
-        <input type="button" onclick="registerMapFile();" value="Monitor Map"/> 
-        <div class="toggle-container" onclick="toggleDarkMode();"><label id="darkmodeui" class="toggle-switch">Dark Mode</label></div>
-      </div>
-    </div>
-    <div>
-      <ul class="nav nav-pills movement-nav">
-        <!--<li><a href="#" onclick="changeZoom(1);"><i class="fas fa-search-plus"></i></a></li>
-        <li><input style="margin-top: 8px;width: 30px;" type="text" id="zoomval" value="1.0" /></li>
-        <li><a href="#" onclick="changeZoom(-1);"><i class="fas fa-search-minus"></i></a></li>
-        <li><a href="#" onclick="panImage(-10,0);"><i class="fas fa-arrow-left"></i></a></li>
-        <li><a href="#" onclick="panImage(10,0);"><i class="fas fa-arrow-right"></i></a></li>
-        <li><a href="#" onclick="panImage(0,-10);"><i class="fas fa-arrow-up"></i></a></li>
-        <li><a href="#" onclick="panImage(0,10);"><i class="fas fa-arrow-down"></i></a></li-->
-        <li id="bosscircle"><a href="#" onclick="toggleBosses();">Show Bosses</a></li>
-        <li id="mazeholes"><a href="#" onclick="findMazes();">Find Mazes Gaps</a></li>
-        <li id="chunkgrid"><a href="#" onclick="toggleChunkGrid();">Chunk Grid</a></li>
-        <li id="mobgrid"><a href="#" onclick="toggleMobGrid();">Mob Grid</a></li>
-        <li><a href="#" onclick="downloadMap(document.getElementById('mapcanvas'));"><i class="fas fa-download"></i>
-            Download Map</a></li>
-      </ul>
-      <ul class="nav nav-pills movement-nav">
-        <li id="seacircle"><a href="#" onclick="toggleSea();">Sea POIs</a></li>
-        <li>
-          User Defined Radius: <input type="text"  id="userradius" value="" onKeyPress="userDefinedChanged();">
-        </li>
-      </ul>
-    </div>
-  </div>
-  <div id="tilefilter" class="highlight-container">
-    <span>Transparency</span>
-    <div class="transparency-slider"><div class="transparency-knob"></div></div>
-    <label class="collapsable-menu" onclick="clearAllHighlights();">Clear</label>
-  </div>
-  <div class="canvas-container">
-    <canvas id="mapcanvas" width="1200px" height="800px" style="image-rendering: pixelated;" onclick="//toclick">
-  </div>
-  <div class="legend-container">
-    <span class="omoroth-legend">&nbsp;Omoroth</span>
-    <span class="morpha-legend">&nbsp;Morpha</span>
-    <span class="bowcity-legend">&nbsp;Bow Cities</span>
-    <span class="bowvault-legend">&nbsp;Bow Vault</span>
-    <br/>
-    <span class="ivy-legend">&nbsp;Ivy</span>
-    <span class="mold-legend">&nbsp;Main Mold Dungeon</span>
-    <span class="azeos-legend">&nbsp;Azeos</span>
-    <span class="malugaz-legend">&nbsp;Malugaz</span>
-    <span class="hive-mother-legend">&nbsp;Hive Mother</span>
-    <span class="ghorm-legend">&nbsp;Ghorm</span>
-    <span class="glurch-legend">&nbsp;Glurch</span><br/>
-    <span style="padding-right: 20px">Maze Gaps: </span>
-    <span class="large-maze-legend">&nbsp;Large</span>
-    <span class="medium-maze-legend">&nbsp;Medium</span>
-    <span class="small-maze-legend">&nbsp;Small</span>
-    <br/>
-    <span><a target="_blank" href="https://github.com/Ceddini/CoreKeeperMapTool/discussions">Feedback / Requests</a></span>
-  </div>
+<body style="background-color: black" x-data="" id="body" class="dark-mode">
 
+	<div class="offcanvas offcanvas-start text-bg-dark show" data-bs-backdrop="false" tabindex="-1" id="offcanvas" aria-labelledby="offcanvasLabel">
+		<div class="offcanvas-header">
+			<div>
+				<img src="img/logo_dark.png" id="logo" alt="Core Keeper Map Tool Logo" class="w-100">
+				<!--
+		  		<h5 class="offcanvas-title" id="offcanvasLabel">Core Keeper Map Tool</h5>
+			  	<h6 class="text-secondary" style="margin-bottom: 4px;">Rewrite by Ceddini and ZeroGravitas</h6>
+			  	<h6 class="text-secondary" style="font-size: 10pt;">Originally by Mz, nineforty and Craigins</h6>
+				-->
+			</div>
+		  	<button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+		</div>
+		<div class="offcanvas-body">
+			<h6 class="text-secondary" style="margin-bottom: 4px;">Rewrite by Ceddini and ZeroGravitas</h6>
+			<h6 class="text-secondary" style="font-size: 10pt;">Originally by Craigins, Mz and nineforty</h6>
 
-  	<div style="position: absolute; top: 8px; right: 8px; background-color: #FF97A0; padding: 16px;">
-		There's a redesign / rewrite happening.<br>
-		Check it out over <a href="https://maptool-dev.ceschmitt.de/" target="_blank">here</a>
+			
+			<div class="form-check form-switch">
+				<input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" onclick="toggleDarkMode();" checked>
+				<label class="form-check-label" for="flexSwitchCheckChecked">Dark Mode</label>
+			</div>
+
+			<hr>
+
+			<!-- HOW TO USE TOOL -->
+			<a href="https://www.youtube.com/watch?v=7YZCPm6i50E" target="_blank">
+				<h5 class="d-flex align-items-center">
+					<svg style="width:24px;height:24px" class="me-2" viewBox="0 0 24 24">
+						<path fill="currentColor" d="M10,15L15.19,12L10,9V15M21.56,7.17C21.69,7.64 21.78,8.27 21.84,9.07C21.91,9.87 21.94,10.56 21.94,11.16L22,12C22,14.19 21.84,15.8 21.56,16.83C21.31,17.73 20.73,18.31 19.83,18.56C19.36,18.69 18.5,18.78 17.18,18.84C15.88,18.91 14.69,18.94 13.59,18.94L12,19C7.81,19 5.2,18.84 4.17,18.56C3.27,18.31 2.69,17.73 2.44,16.83C2.31,16.36 2.22,15.73 2.16,14.93C2.09,14.13 2.06,13.44 2.06,12.84L2,12C2,9.81 2.16,8.2 2.44,7.17C2.69,6.27 3.27,5.69 4.17,5.44C4.64,5.31 5.5,5.22 6.82,5.16C8.12,5.09 9.31,5.06 10.41,5.06L12,5C16.19,5 18.8,5.16 19.83,5.44C20.73,5.69 21.31,6.27 21.56,7.17Z" />
+					</svg>
+					<div>
+						<span class="d-flex align-items-center">
+							How to use the Map Tool
+							<svg style="width:16px;height:16px" class="ms-1" viewBox="0 0 24 24">
+								<path fill="currentColor" d="M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z" />
+							</svg>
+						</span>
+						<small style="font-size: 10pt;">Video by Dakon the Mad</small>
+					</div>
+					
+				</h5>
+
+				<h5><a target="_blank" href="https://github.com/Ceddini/CoreKeeperMapTool/discussions">Feedback / Requests</a></h5>
+			</a>
+
+			<hr>
+
+			<div class="d-flex flex-column">
+				<!-- <div id="old-menu" class="d-flex d-column d-none"> -->
+				<div id="old-menu" class="d-none">
+					<div class="mb-2">
+						<input id="_mapupload" type="file" class="form-control" />
+					</div>
+					<div class="d-flex mb-2 align-items-baseline">
+						<input class="form-check-input" type="checkbox" id="_shouldrefresh" checked>
+						<input type="button" onclick="registerMapFile();" class="btn btn-primary ms-2" value="Monitor Map"/> 
+					</div>
+					
+					<hr />
+	
+					<ul class="nav nav-pills movement-nav bordered-box">
+						<li id="bosscircle" class="nav-item d-none"><a href="#" class="nav-link" onclick="toggleBosses();">Show Bosses</a></li>
+						<li id="arcs" class="nav-item"><a href="#" class="nav-link" onclick="toggleArcs();">Draw Arcs</a></li>
+						<li id="mazeholes" class="nav-item"><a href="#" class="nav-link" onclick="toggleMazes();">Find Mazes Gaps</a></li>
+						<li id="chunkgrid" class="nav-item"><a href="#" class="nav-link" onclick="toggleChunkGrid();">Chunk Grid</a></li>
+						<li id="mobgrid" class="nav-item"><a href="#" class="nav-link" onclick="toggleMobGrid();">Mob Grid</a></li>
+						<li id="seacircle" class="nav-item"><a href="#" class="nav-link" onclick="toggleSea();">Sea POIs</a></li>
+			
+						<li class="nav-item">
+							<a href="#" class="nav-link" onclick="downloadMap(document.getElementById('mapcanvas'));">
+								<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor;">
+									<path d="M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z" />
+								</svg>
+								Download Map
+							</a>
+						</li>
+						<li>
+							User Defined Radius: <input type="text"  id="userradius" onKeyPress="userDefinedChanged();">
+						  </li>
+					</ul>
+	
+					<hr>
+				</div>
+
+				<div id="new-menu-design">
+					<!-- File Loading Section -->
+					<section class="bordered-box">
+						<div class="d-flex justify-content-between align-items-center mb-1">
+							<h4>Load Map</h4>
+							<a href="#" onclick="loadExample()">Example Map (by Craigins)</a>
+						</div>
+						<input id="mapupload" type="file" class="form-control d-none" />
+
+						<div class="input-group">
+							<input id="uploadbutton" type="button" onclick="registerMapFile();" class="btn btn-primary btn-sm" value="Select File" /> 
+							<span 
+								:class="($store.data.canWatchFile) ? 'input-group-text' : 'input-group-text text-secondary'"
+								:data-bs-toggle="($store.data.canWatchFile) ? '' : 'tooltip'" 
+								data-bs-title="Not available in this browser"
+								data-bs-custom-class="custom-tooltip"
+								data-bs-html="true"
+								data-bs-placement="right"
+							>
+								<input x-show="$store.data.canWatchFile" id="shouldrefresh" class="form-check-input me-2 mt-0" type="checkbox" value="" aria-label="Should refresh" 
+									:disabled="!$store.data.canWatchFile"
+									:data-bs-toggle="($store.data.canWatchFile) ? '' : 'tooltip'" 
+									data-bs-title="Not available in this browser"
+									data-bs-custom-class="custom-tooltip"
+									data-bs-html="true"
+									data-bs-placement="right"
+								>
+								<span x-show="!$store.data.canWatchFile" class="text-danger me-1" style="display:none;">
+									<svg style="width:24px;height:24px" viewBox="0 0 24 24">
+										<path fill="currentColor" d="M11,15H13V17H11V15M11,7H13V13H11V7M12,2C6.47,2 2,6.5 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20Z" />
+									</svg>
+								</span>
+								Auto Refresh
+							</span>
+							<button 
+								type="button" 
+								class="btn btn-primary" 
+								:disabled="$store.data.mapLoaded === false || $store.data.isExampleMap === true || $store.data.canWatchFile === false" 
+								onclick="MapMonitor.refreshMap()">
+								<svg style="width:24px;height:24px" viewBox="0 0 24 24">
+									<path fill="currentColor" d="M2 12C2 16.97 6.03 21 11 21C13.39 21 15.68 20.06 17.4 18.4L15.9 16.9C14.63 18.25 12.86 19 11 19C4.76 19 1.64 11.46 6.05 7.05C10.46 2.64 18 5.77 18 12H15L19 16H19.1L23 12H20C20 7.03 15.97 3 11 3C6.03 3 2 7.03 2 12Z" />
+								</svg>
+							</button>
+						</div>
+
+						<!-- HOW TO FIND MAP-->
+						<div class="mt-2" x-data="{visible: false}" x-show="$store.data.firstTimeLoaded === false">
+							<a href="#" @click="openTutorial"><!-- Change to "visible = !visibile" to reenable old list -->
+								<h6 class="d-flex align-items-center">
+									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" style="fill: currentColor;" class="me-1"><path d="M11,18H13V16H11V18M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,6A4,4 0 0,0 8,10H10A2,2 0 0,1 12,8A2,2 0 0,1 14,10C14,12 11,11.75 11,15H13C13,12.75 16,12.5 16,10A4,4 0 0,0 12,6Z" /></svg> 
+									<span>How to find your map file</span>
+								</h6>
+							</a>
+							<div id="directions" x-show="visible" class="bordered-box" style="display: none" x-transition>
+								<ol>
+									<li>
+										<div class="d-flex align-items-center justify-content-between mb-1">
+											Open the folder:
+											<button class="btn btn-primary btn-sm" onclick="navigator.clipboard.writeText('%appdata%\\..\\LocalLow\\Pugstorm\\Core Keeper\\Steam\\'); this.querySelector('span').innerHTML = 'Copied!'">
+												<svg style="width:18px;height:18px" viewBox="0 0 24 24">
+													<path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z" />
+												</svg>
+												<span>Copy Path</span>
+											</button>
+										</div>
+										<pre style="overflow: auto; font-size: .875em; color: var(--bs-code-color);">%appdata%\..\LocalLow\Pugstorm\Core Keeper\Steam\</pre>
+									</li>
+									<li>Open your <code>steam_id</code> folder</li>
+									<li>Open the <code>maps</code> folder</li>
+									<li>Open your <code>character_id</code> folder</li>
+									<li>Select one of the <code>#.mapparts.gzip</code> files to display</li>
+								</ol>
+							</div>
+						</div>
+
+						<button 
+							x-show="$store.data.mapLoaded" 
+							href="#" 
+							class="btn btn-outline-primary mt-2" 
+							style="display: none;" 
+							onclick="downloadMap(document.getElementById('mapcanvas'));"
+							data-bs-toggle="tooltip"
+							data-bs-placement="right"
+							data-bs-title="Save a PNG image of the currently displayed map, including all overlays"
+						>
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor;">
+								<path d="M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z" />
+							</svg>
+							Download Map Image
+						</button>
+					</section>
+
+					<div x-show="!$store.data.firstTimeLoaded" class="bordered-box">
+						Load map to show settings
+					</div>
+					<div x-show="$store.data.firstTimeLoaded" x-transition.scale.origin.top style="display: none;">
+
+						<!-- POIs Section -->
+						<section class="bordered-box">
+							<h4>Pre-Spawned Locations</h4>
+							<template x-for="category in $store.categories" :key="category.name">
+								<div class="bordered-box-section" x-data="{visible: false}">
+									<div class="d-flex align-items-center mb-1">
+										<div class="d-inline-flex align-items-center" x-on:click="visible = !visible" style="cursor: pointer;">
+											<svg x-show="visible" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor;"><path d="M7.41,15.41L12,10.83L16.59,15.41L18,14L12,8L6,14L7.41,15.41Z" /></svg>
+											<svg x-show="!visible" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor;"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" /></svg>
+
+											<span class="fs-5" x-text="category.name"></span>
+										</div>
+										<div class="flex-fill border-bottom border-secondary mx-2"></div>
+										<span x-on:click="toggleCategoryCircles(category.items)" class="fs-6 text-secondary" style="cursor: pointer;">Toggle all</span>
+									</div>
+									<div x-show="visible" x-transition style="display: none;" class="px-1">
+										<template x-for="circle in category.items" :key="circle.name">
+											<button type="button" :disabled="circle.disabled" 
+											:class="'btn btn-sm me-2 mb-2 d-inline-flex align-items-center'" 
+											:style="circle.visible ? `background-color: ${circle.color}; color: ${circle.textColor}` : `border-color: ${circle.color}; color: ${circle.color}`"
+											:data-bs-toggle="(circle.tooltip) ? 'tooltip' : ''" 
+											:data-bs-title="circle.getTooltipContent()"
+											data-bs-custom-class="custom-tooltip"
+											data-bs-html="true"
+											data-bs-placement="right"
+											x-on:click="toggleCircle(circle)">
+												<template x-if="circle.image">
+													<div
+													class="circle-image" 
+													:style="(circle.visible) 
+														? `background-image: url('img/${circle.image}'); margin-right: 8px; border-color: ${circle.color};` 
+														: `background-image: url('img/${circle.image}'); margin-right: 8px; border-color: ${circle.color};`"></div>
+												</template>
+												<!-- <img x-show="circle.image" :src="`img/${circle.image}`" :alt="`Image of ${circle.name}`" width="32"> -->
+												<span x-text="circle.name"></span>
+											</button>
+										</template>
+									</div>
+								</div>
+							</template>
+
+							<div class="bordered-box-section" x-data="{visible: false}">
+								<div class="d-flex align-items-center mb-1">
+									<div class="d-inline-flex align-items-center" x-on:click="visible = !visible" style="cursor: pointer;">
+										<svg x-show="visible" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor;"><path d="M7.41,15.41L12,10.83L16.59,15.41L18,14L12,8L6,14L7.41,15.41Z" /></svg>
+										<svg x-show="!visible" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor;"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" /></svg>
+
+										<span class="fs-5">Advanced Settings</span>
+									</div>
+									<div class="flex-fill border-bottom border-secondary mx-2"></div>
+								</div>
+								<div x-show="visible" x-transition style="display: none;" class="px-1">
+									<div>
+										<span>Ring Transparency</span>
+										<div class="d-flex align-items-center">
+											<input type="range" class="form-range me-2" name="ringTransparency" id="ringTransparency" min="0" max="100" x-model="$store.data.ringTransparency" @change="onChangeRingTransparency">
+											<input class="form-control form-control-sm me-1" type="number" min="0" max="100" style="width: 60px;" x-model="$store.data.ringTransparency" @change.debounce.100ms="onChangeRingTransparency">
+											<span>%</span>
+										</div>
+									</div>
+									<div class="mb-2">
+										<div class="form-check">
+											<input class="form-check-input" type="checkbox" value="" id="cropByBiome">
+											<label class="form-check-label" for="cropByBiome">
+											  Crop Rings to Biome
+											</label>
+										</div>
+									</div>
+									<div>
+										<div class="form-check">
+											<input class="form-check-input" type="checkbox" value="" id="showCustomRing" x-model="$store.data.showCustomRing" @change="onChangeShowCustomRing">
+											<label class="form-check-label" for="showCustomRing">
+											Custom Ring
+											</label>
+										</div>
+										<div class="d-flex align-items-center">
+											<input type="range" class="form-range me-2" name="customRing" id="customRing" min="0" max="5000" step="25" x-model="$store.data.customRing" @change="onChangeCustomRing">
+											<input class="form-control form-control-sm me-1" type="number" min="0" style="width: 70px;" x-model="$store.data.customRing" @change.debounce.100ms="onChangeCustomRing">
+											<span>tiles</span>
+										</div>
+									</div>
+								</div>
+							</div>
+						</section>
+
+						<!-- Biome Section -->
+						<section class="bordered-box">
+							<div class="d-flex align-items-center justify-content-between">
+								<div class="d-flex flex-fill">
+									<input type="checkbox" class="btn-check" id="showArcs" autocomplete="off" x-model="$store.data.showArcs" @change="onChangeShowArcs">
+									<label class="btn btn-outline-primary" for="showArcs">Show Biomes</label><br>
+								</div>
+	
+								<div>
+									<div class="input-group">
+										<span class="input-group-text">Manual Rotation</span>
+										<div class="input-group-text">
+											<input class="form-check-input mt-0" type="checkbox" id="manualArcRotation" x-model="$store.data.manualArcRotation" @change="onChangeManualArcRotation">
+										</div>
+									</div>
+								</div>
+							</div>
+							
+							<div x-show="$store.data.manualArcRotation" style="display: none;" x-transition>
+								<div class="d-flex flex-column">
+									<div class="my-2">
+										<span>Inner Biomes</span>
+										<div class="d-flex align-items-center">
+											<input type="range" class="form-range me-2" name="innerArcSlider" id="innerArcSlider" min="0" max="359" x-model="$store.data.innerSlider" @change="onChangeInnerArc">
+											<input @change.debounce.100ms="onChangeInnerArc" class="form-control form-control-sm me-1" type="number" min="0" max="359" x-model="$store.data.innerSlider" style="width: 60px;">
+											<span>deg</span>
+										</div>
+									</div>
+									<div>
+										<span>Outer Biomes</span>
+										<div class="d-flex align-items-center">
+											<input type="range" class="form-range me-2" name="outerArcSlider" id="outerArcSlider" min="0" max="359" x-model="$store.data.outerSlider" @change="onChangeOuterArc">
+											<input @change.debounce.100ms="onChangeOuterArc" class="form-control form-control-sm me-1" type="number" min="0" max="359" x-model="$store.data.outerSlider" style="width: 60px;">
+											<span>deg</span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="mt-2">
+								<span>Biome Transparency</span>
+								<div class="d-flex align-items-center">
+									<input type="range" class="form-range me-2" name="biomeTransparency" id="biomeTransparency" min="0" max="100" x-model="$store.data.biomeTransparency" @change="onChangeBiomeTransparency">
+									<input class="form-control form-control-sm me-1" type="number" min="0" max="100" style="width: 60px;" x-model="$store.data.biomeTransparency" @change="onChangeBiomeTransparency">
+									<span>%</span>
+								</div>
+							</div>
+						</section>
+
+						<!-- Grid Section -->
+						<section class="bordered-box">
+
+							<div class="d-inline-flex">
+								<input type="checkbox" class="btn-check" id="showChunkGrid" autocomplete="off" x-model="$store.data.showChunkGrid" @change="onChangeShowChunkGrid">
+								<label class="btn btn-outline-primary me-2" for="showChunkGrid">Show Chunk Grid</label>
+
+								<input type="checkbox" class="btn-check" id="showMobGrid" autocomplete="off" x-model="$store.data.showMobGrid" @change="onChangeShowMobGrid">
+								<label class="btn btn-outline-primary" for="showMobGrid">Show Mob Grid</label>
+							</div>
+							<div class="d-inline-flex mt-2">
+								<input type="checkbox" class="btn-check" id="showMazeHoles" autocomplete="off" x-model="$store.data.showMazeHoles" @change="onChangeShowMazeHoles">
+								<label class="btn btn-outline-primary" for="showMazeHoles">Show Maze Holes</label>
+							</div>
+							<div class="mt-2">
+								<span>Grid Transparency</span>
+								<div class="d-flex align-items-center">
+									<input type="range" class="form-range me-2" name="gridTransparency" id="gridTransparency" min="0" max="100" x-model="$store.data.gridTransparency" @change="onChangeGridTransparency">
+									<input class="form-control form-control-sm me-1" type="number" min="0" max="100" style="width: 60px;" x-model="$store.data.gridTransparency" @change="onChangeGridTransparency">
+									<span>%</span>
+								</div>
+							</div>
+						</section>
+
+						<section class="bordered-box">
+							<h4>Tile Highlighting</h4>
+							<div class="mb-2">
+								<span>Tile Transparency</span>
+								<div class="d-flex align-items-center">
+									<input type="range" class="form-range me-2" name="tileTransparency" id="tileTransparency" min="0" max="100" x-model="$store.data.tileTransparency" @change="onChangeTileTransparency">
+									<input class="form-control form-control-sm me-1" type="number" min="0" max="100" style="width: 60px;" x-model="$store.data.tileTransparency" @change="onChangeTileTransparency">
+									<span>%</span>
+								</div>
+							</div>
+							<template x-for="category in $store.tilecolormap.list" :key="category.set">
+								<div class="bordered-box-section" x-data="{visible: false}">
+									<div class="d-flex align-items-center mb-1">
+										<div class="d-inline-flex align-items-center" x-on:click="visible = !visible" style="cursor: pointer;">
+											<svg x-show="visible" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor;"><path d="M7.41,15.41L12,10.83L16.59,15.41L18,14L12,8L6,14L7.41,15.41Z" /></svg>
+											<svg x-show="!visible" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor;"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" /></svg>
+
+											<span class="fs-5" x-text="category.set"></span>
+										</div>
+										<div class="flex-fill border-bottom border-secondary mx-2"></div>
+										<span x-on:click="toggleCategoryTiles(category.tiles)" class="fs-6 text-secondary" style="cursor: pointer;">Toggle all</span>
+									</div>
+									<div x-show="visible" x-transition style="display: none;" class="px-1">
+										<template x-for="tile in category.tiles" :key="tile.name">
+											<button type="button" :disabled="tile.disabled"
+											:class="'btn btn-sm me-2 mb-2 d-inline-flex align-items-center'" 
+											:style="tile.visible ? `background-color: rgb(${tile.r}, ${tile.g}, ${tile.b}); color: inherit;` : `border-color: rgb(${tile.r}, ${tile.g}, ${tile.b}); color: inherit;`"
+											x-on:click="toggleTile(tile)">
+												<span x-text="tile.name" :style="tile.visible ? `color: ${tile.textColor}` : ``"></span>
+											</button>
+										</template>
+									</div>
+								</div>
+							</template>
+						</section>
+					</div>
+
+					<div class="bordered-box" style="margin-top: 12px;" x-data="{visible: true}">
+						<div class="d-inline-flex align-items-center" x-on:click="visible = !visible" style="cursor: pointer;">
+							<svg x-show="visible" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor; display:none;"><path d="M7.41,15.41L12,10.83L16.59,15.41L18,14L12,8L6,14L7.41,15.41Z" /></svg>
+							<svg x-show="!visible" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor;"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" /></svg>
+
+							<span class="fs-5">FAQ</span>
+						</div>
+
+						<div x-show="visible" x-transition style="display: none;" class="p-1">
+							<template x-for="question in $store.faq">
+								<div class="question px-1" x-data="{q: (question.preopened) ? true : false}">
+									<h6 style="cursor: pointer;" @click="q = !q">
+										<svg x-show="q" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" style="fill: currentColor;"><path d="M7.41,15.41L12,10.83L16.59,15.41L18,14L12,8L6,14L7.41,15.41Z" /></svg>
+										<svg x-show="!q" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" style="fill: currentColor;"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" /></svg>
+										
+										<span x-html="question.question"></span>
+										<template x-if="question.spoilers === true">
+											<span class="badge bg-danger">Spoilers</span>
+										</template>
+									</h6>
+									<p x-show="q" x-transition x-html="question.answer"></p>
+								</div>
+							</template>
+						</div>
+					</div>
+
+					<div class="bordered-box" x-data="{visible: false}">
+						<div class="d-inline-flex align-items-center" x-on:click="visible = !visible" style="cursor: pointer;">
+							<svg x-show="visible" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor; display:none;"><path d="M7.41,15.41L12,10.83L16.59,15.41L18,14L12,8L6,14L7.41,15.41Z" /></svg>
+							<svg x-show="!visible" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor;"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" /></svg>
+
+							<span class="fs-5">Credits</span>
+						</div>
+
+						<div x-show="visible" x-transition style="display: none;" class="credits p-1">
+							<div class="contributor">
+								<div class="d-flex align-items-center justify-content-between">
+									<strong>Ceddini</strong>
+									<div class="flex-fill border-bottom border-secondary mx-2"></div>
+									<div class="socials">
+										<a href="https://github.com/Ceddini" target="_blank">GitHub</a>
+									</div>
+								</div>
+								<p>Redesign, code rework</p>
+							</div>
+							<div class="contributor">
+								<div class="d-flex align-items-center justify-content-between">
+									<strong>ZeroGravitas</strong>
+									<div class="flex-fill border-bottom border-secondary mx-2"></div>
+									<div class="socials">
+										<a href="https://www.youtube.com/c/ZeroGravitas" target="_blank">YouTube</a>
+										<a href="https://steamcommunity.com/profiles/76561197971318812/myworkshopfiles/?section=guides&appid=1621690" target="_blank">Guides</a>
+									</div>
+								</div>
+								<p>Redesign, usability improvements</p>
+							</div>
+							<div class="contributor">
+								<div class="d-flex align-items-center justify-content-between">
+									<strong>Craigins</strong>
+									<div class="flex-fill border-bottom border-secondary mx-2"></div>
+									<div class="socials">
+										<a href="https://github.com/craigins" target="_blank">GitHub</a>
+									</div>
+								</div>
+								<p>Initial codebase</p>
+							</div>
+							<div class="contributor">
+								<div class="d-flex align-items-center justify-content-between">
+									<strong>Mz</strong>
+									<div class="flex-fill border-bottom border-secondary mx-2"></div>
+									<div class="socials">
+										<a href="https://github.com/MzHub" target="_blank">GitHub</a>
+									</div>
+								</div>
+								<p>Mapfile loading</p>
+							</div>
+							<div class="contributor">
+								<div class="d-flex align-items-center justify-content-between">
+									<strong>Honorable mentions</strong>
+									<div class="flex-fill border-bottom border-secondary mx-2"></div>
+									<div class="socials"></div>
+								</div>
+								<p>nineforty</p>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<div id="old-menu-design-2" class="d-none">
+					<div id="tilefilter" >
+						<span>Tile Transparency</span>
+						<input type="range" name="" min="0" max="255" id="tileSlider" class="w-100">
+						<a href="#" onclick="clearAllHighlights">Clear All Highlights</a>
+					</div>
+				</div>
+				
+			</div>
+		</div>
 	</div>
 
+	<div id="legendAccordion" class="accordion d-none">
+		<div class="accordion-item text-bg-dark">
+			<h2 class="accordion-header" id="headingOne">
+			<button class="accordion-button text-bg-dark" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+				Legend&nbsp;
+			</button>
+			</h2>
+			<div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+			<div class="accordion-body d-flex flex-column">
+				<div id="bosses-legend" class="d-flex flex-column mb-3 d-none">
+					<span class="glurch-legend">&nbsp;Glurch</span>
+					<span class="ghorm-legend">&nbsp;Ghorm</span>
+					<span class="hive-mother-legend">&nbsp;Hive Mother</span>
+					<span class="malugaz-legend">&nbsp;Malugaz</span>
+					<span class="azeos-legend">&nbsp;Azeos</span>
+					<span class="ivy-legend">&nbsp;Ivy</span>
+					<span class="omoroth-legend">&nbsp;Omoroth</span>
+					<span class="morpha-legend">&nbsp;Morpha</span>
+				</div>
+				<div id="mazes-legend" class="d-flex flex-column mb-3 d-none">
+					<span style="padding-right: 20px">Maze Gaps: </span>
+					<span class="small-maze-legend">&nbsp;Small</span>
+					<span class="medium-maze-legend">&nbsp;Medium</span>
+					<span class="large-maze-legend">&nbsp;Large</span>
+				</div>
+				<div id="dungeon-legend" class="d-flex flex-column">
+					<span class="mold-legend">&nbsp;Main Mold Dungeon</span>
+					<span class="bowcity-legend">&nbsp;Bow Cities</span>
+					<span class="bowvault-legend">&nbsp;Bow Vault</span>
+				</div>
+			</div>
+			</div>
+		</div>
+	</div>
 
-  <script src="js/page.js"></script>
-  <script src="js/menubuilder.js"></script>
-  <script src="js/mazehunter.js"></script>
-  <script src="js/vendor/bootstrap.js"></script>
+	<div id="navdiv" class="nav_controls_container">
+		<button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvas" aria-controls="offcanvas">
+			Show Settings
+		</button>
+    </div>
 
-  <script>
+	<div id="directoryLoader" style="z-index: 10; display:none;" class="position-absolute top-50 start-50 translate-middle"
+		x-show="$store.data.mapPickerShown && $store.data.canWatchFile"
+	>
+		<div class="card text-bg-dark">
+			<div class="card-body d-relative">
+				<div class="position-absolute" style="top: 16px; right: 16px;">
+					<button type="button" class="btn-close" @click="$store.data.mapPickerShown = false" aria-label="Close"></button>
+				</div>
 
-  </script>
+				<h5 class="card-title me-5">Choose a map file</h5>
+				<template x-if="$store.data.directoryHandle">
+					<div>
+						<template x-for="fileHandle in $store.directoryList">
+							<div x-data="{file: null, handle: fileHandle}" x-init="file = await fileHandle.getFile()">
+								<template x-if="file == null">
+									<p>Loading File...</p>
+								</template>
+								<template x-if="file">
+									<p x-text="file.name" @click="loadMapFileWithHandle(handle)"></p>
+								</template>
+							</div>	
+						</template>
+
+						<script>loadDirectoryList();</script>
+					</div>
+				</template>
+				<div x-show="$store.data.directoryHandle === null">
+					<strong>Oh oh!</strong><br>
+					Looks like you didn't choose the map folder yet. <br>
+					<button class="btn btn-primary mt-2" onclick="openDirectoryHandle();">Choose it now</button>
+				</div>
+			</div>
+		</div>
+	</div>
+<!--
+	<div id="tutorialHolder" x-show="$store.data.tutorialShown === false" style="display: none;">
+		<div class="d-flex h-100 w-100 align-items-center justify-content-around">
+			<div class="card text-bg-dark" @click.outside="dismissTutorial">
+				<div class="card-body d-relative">
+					<div class="position-absolute" style="top: 16px; right: 16px;">
+						<button type="button" class="btn-close" @click="dismissTutorial" aria-label="Close"></button>
+					</div>
+
+					<h5 class="card-title me-5">How To: Select Map File</h5>
+
+					<div id="tutorialCarousel" class="carousel slide pt-2" data-bs-config="{'interval':false}" style="width: 400px; height: 380px;">
+						<div class="carousel-indicators">
+							<button type="button" data-bs-target="#tutorialCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+							<button type="button" data-bs-target="#tutorialCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+							<button type="button" data-bs-target="#tutorialCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+							<button type="button" data-bs-target="#tutorialCarousel" data-bs-slide-to="3" aria-label="Slide 4"></button>
+							<button type="button" data-bs-target="#tutorialCarousel" data-bs-slide-to="4" aria-label="Slide 5"></button>
+							<button type="button" data-bs-target="#tutorialCarousel" data-bs-slide-to="5" aria-label="Slide 6"></button>
+						</div>
+						<div class="carousel-inner">
+							<div class="carousel-item active">
+								<img src="img/tutorial/step_1.png" class="d-block w-100" width="400" height="380" alt="Select map file">
+								<div class="carousel-caption d-none d-md-block">
+									<p>Click "Select File"</p>
+								</div>
+							</div>
+							<div class="carousel-item">
+								<img src="img/tutorial/step_2.png" class="d-block w-100" width="400" height="380" alt="Open pugstorm path">
+								<div class="carousel-caption d-none d-md-block">
+									<span>Open the following path in file explorer:</span><br>
+									<p class="mt-2">
+										<button class="btn btn-primary btn-sm" onclick="navigator.clipboard.writeText('%appdata%\\..\\LocalLow\\Pugstorm\\Core Keeper\\Steam\\'); this.querySelector('span').innerHTML = 'Copied!'">
+											<svg style="width:18px;height:18px" viewBox="0 0 24 24">
+												<path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z" />
+											</svg>
+											<span>Copy Path</span>
+										</button>
+									</p>
+								</div>
+							</div>
+							<div class="carousel-item">
+								<img src="img/tutorial/step_3.png" class="d-block w-100" width="400" height="380" alt="Select steam id">
+								<div class="carousel-caption d-none d-md-block">
+									<span>Select your steam id.</span><br>
+									<p>There is normally only one.</p>
+								</div>
+							</div>
+							<div class="carousel-item">
+								<img src="img/tutorial/step_4.png" class="d-block w-100" width="400" height="380" alt="Select maps folder">
+								<div class="carousel-caption d-none d-md-block">
+									<p>Select the maps folder</p>
+								</div>
+							</div>
+							<div class="carousel-item">
+								<img src="img/tutorial/step_5.png" class="d-block w-100" width="400" height="380" alt="Select map file">
+								<div class="carousel-caption d-none d-md-block">
+									<span>Select the player.</span>
+									<p>First player ingame is number 0</p>
+								</div>
+							</div>
+							<div class="carousel-item">
+								<img src="img/tutorial/step_6.png" class="d-block w-100" width="400" height="380" alt="Select map file">
+								<div class="carousel-caption d-none d-md-block">
+									<p>Select the map you wish to display</p>
+								</div>
+							</div>
+						</div>
+						<button class="carousel-control-prev" type="button" data-bs-target="#tutorialCarousel" data-bs-slide="prev">
+							<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+							<span class="visually-hidden">Previous</span>
+						</button>
+						<button class="carousel-control-next" type="button" data-bs-target="#tutorialCarousel" data-bs-slide="next">
+							<span class="carousel-control-next-icon" aria-hidden="true"></span>
+							<span class="visually-hidden">Next</span>
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+-->
+
+	<template x-if="$store.data.firstTimeLoaded === false && $store.data.tutorialShown === false">
+		<div class="text-bg-dark h-100" id="findMapGuide" style="overflow: auto; word-wrap: normal; word-break: normal;">
+			<h4 class="p-2" style="position:sticky; top:0;">
+				<div class="d-flex align-items-center">
+					<button type="button" class="btn-close" @click="dismissTutorial" aria-label="Close"></button>
+					<span class="ms-1">How to find your map file</span>
+				</div>
+			</h4>
+			<div style="max-width: 432px;">
+				<h5>1. Click "Select File" Button</h5>
+				<img src="img/tutorial/step_1.png" class="d-block" width="400" height="200" alt="Select map file">
+				<p>Click the blue "Select File" button on the left-hand side.</p>
+
+				<h5>2. Open the Pugstorm Path</h5>
+				<img src="img/tutorial/step_2.png" class="d-block" width="400" height="200" alt="Open pugstorm path">
+				<p>Open your File Explorer (or press WIN+R).<br> Use the navigation bar to enter the following path:</p>
+				<pre style="overflow: auto; font-size: .875em; color: var(--bs-code-color);">%appdata%\..\LocalLow\Pugstorm\Core Keeper\Steam\</pre>
+				<p>
+					<button class="btn btn-primary btn-sm" onclick="navigator.clipboard.writeText('%appdata%\\..\\LocalLow\\Pugstorm\\Core Keeper\\Steam\\'); this.querySelector('span').innerHTML = 'Copied!'">
+						<svg style="width:18px;height:18px" viewBox="0 0 24 24">
+							<path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z" />
+						</svg>
+						<span>Copy Path</span>
+					</button>
+				</p>
+
+				<h5>3. Select <code>steam_id</code> Folder</h5>
+				<img src="img/tutorial/step_3.png" class="d-block" width="400" height="200" alt="Select steam id">
+				<span>Select the folder with your steam id. If you see more than one folder, please check <a href="https://www.steamidfinder.com/" target="_blank">online</a> on how to find your steam id.</span>
+
+				<h5>4. Select <code>maps</code> Folder</h5>
+				<img src="img/tutorial/step_4.png" class="d-block" width="400" height="200" alt="Select maps folder">
+				<p>Select the <code>maps</code> folder</p>
+
+				<h5>5. Select Player Folder</h5>
+				<img src="img/tutorial/step_5.png" class="d-block" width="400" height="200" alt="Select player folder">
+				<p>Choose the folder with your character id. This should be in the same order as in-game.</p>
+
+				<h5>6. Select the Map File</h5>
+				<img src="img/tutorial/step_6.png" class="d-block" width="400" height="200" alt="Select map file">
+				<p>Select the map file. There is no easy way to figure out which map is the correct one. It also includes maps of servers you visited.</p>
+			</div>
+		</div>
+	</template>
+
+	
+
+  	<div class="canvas-container">
+    	<canvas id="mapcanvas" width="1200px" height="800px" style="image-rendering: pixelated;" onclick="//toclick">
+  	</div>
+
+	<!--
+	<div class="legend-container">
+		<button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvas">
+			Show Legend
+		</button>
+  	</div>
+	-->
+  	<script src="js/faq.js"></script>
+  	<script src="js/savehandler.js"></script>
+  	<script src="js/page.js"></script>
+  	<script src="js/menubuilder.js"></script>
+  	<script src="js/mazehunter.js"></script>
+  	<script src="js/vendor/bootstrap.bundle.min.js"></script>
+	<script>
+		// const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+		// const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+		new bootstrap.Tooltip("body", {
+			selector: "[data-bs-toggle='tooltip']",
+			trigger: "hover"
+		});
+	</script>
 </body>
-
 </html>
