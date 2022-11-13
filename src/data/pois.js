@@ -76,6 +76,7 @@ const pois = new Category("Points of Interest", [
 	new CircleItem("Broken Core 1", "Broken Core 1", "", [1250], "#e4ad2a", "#FFFFFF", true, "#", "items/channeling_gemstone.png"),
 	new CircleItem("Broken Core 2", "Broken Core 2", "", [1550], "#e4ad2a", "#FFFFFF", true, "#", "items/fractured_limbs.png"),
 	new CircleItem("Broken Core 3", "Broken Core 3", "", [1750], "#e4ad2a", "#FFFFFF", true, "#", "items/energy_string.png"),
+	new CircleItem("Titan Temple", "Titan Temple", "", [900], "#f2df3a", "#000000", true, "#", "items/Godsent_King_Mask.png"),
 	new CircleItem("Prince Dungeon", "Prince Dungeon", "", [1100], "#239029", "#FFFFFF", true, "#", "items/Ra-Akar_Automaton.png"),
 	new CircleItem("Queen Dungeon", "Queen Dungeon", "", [1300], "#a555a4", "#FFFFFF", true, "#", "items/Azeos_Feather_Fan.png"),
 	new CircleItem("King Dungeon", "King Dungeon", "", [1500], "#19bdc6", "#000000", true, "#", "items/Omoroth_Compass.png"),

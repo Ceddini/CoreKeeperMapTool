@@ -1,6 +1,6 @@
 let tutorialShown = false;
 
-let temp = localStorage.getItem("tutorialShown").toLowerCase();
+let temp = localStorage.getItem("tutorialShown")?.toLowerCase();
 
 if (temp === "true" || temp === "false")
 	tutorialShown = JSON.parse(temp);

@@ -42,7 +42,7 @@ function loadMapFile(fileInput, gridarr, callback) {
 }
 
 async function loadStandardFile(gridarr, callback) {
-	const response = await fetch("https://maptool-dev.ceschmitt.de/data/preview_map/5.mapparts.gzip")
+	const response = await fetch("https://maptool.ceschmitt.de/data/preview_map/5.mapparts.gzip")
 		.then((response) => response.blob())
 		.then((blob) => {
 			loadSingleFile(0, [blob], gridarr, callback);

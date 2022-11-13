@@ -59,7 +59,7 @@ let tileColors = [
 	{
 		"set": TileType.Boulders,
 		"tiles": [
-			new Tile("Copper Boulder", 327, 96, 87),
+			new Tile("Copper Boulder", 237, 96, 87),
 			new Tile("Tin Boulder", 142, 122, 118),
 			new Tile("Gold Boulder", 242, 204, 61),
 			new Tile("Iron Boulder", 130, 155, 203),
@@ -72,7 +72,7 @@ let tileColors = [
 		"set": TileType.Ores,
 		"tiles": [
 			new Tile("Ancient Gemstone Ore", 0, 147, 255),
-			new Tile("Copper Ore", 327, 96, 87),
+			new Tile("Copper Ore", 237, 96, 87),
 			new Tile("Tin Ore", 142, 122, 118),
 			new Tile("Gold Ore", 242, 204, 61),
 			new Tile("Iron Ore", 130, 155, 203),
