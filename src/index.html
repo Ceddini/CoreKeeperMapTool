@@ -54,7 +54,7 @@
 			<hr>
 
 			<!-- HOW TO USE TOOL -->
-			<a href="https://www.youtube.com/watch?v=7YZCPm6i50E" target="_blank">
+			<a href="https://www.youtube.com/watch?v=ZeM61AjhiS4" target="_blank">
 				<h5 class="d-flex align-items-center">
 					<svg style="width:24px;height:24px" class="me-2" viewBox="0 0 24 24">
 						<path fill="currentColor" d="M10,15L15.19,12L10,9V15M21.56,7.17C21.69,7.64 21.78,8.27 21.84,9.07C21.91,9.87 21.94,10.56 21.94,11.16L22,12C22,14.19 21.84,15.8 21.56,16.83C21.31,17.73 20.73,18.31 19.83,18.56C19.36,18.69 18.5,18.78 17.18,18.84C15.88,18.91 14.69,18.94 13.59,18.94L12,19C7.81,19 5.2,18.84 4.17,18.56C3.27,18.31 2.69,17.73 2.44,16.83C2.31,16.36 2.22,15.73 2.16,14.93C2.09,14.13 2.06,13.44 2.06,12.84L2,12C2,9.81 2.16,8.2 2.44,7.17C2.69,6.27 3.27,5.69 4.17,5.44C4.64,5.31 5.5,5.22 6.82,5.16C8.12,5.09 9.31,5.06 10.41,5.06L12,5C16.19,5 18.8,5.16 19.83,5.44C20.73,5.69 21.31,6.27 21.56,7.17Z" />
@@ -118,7 +118,7 @@
 					<section class="bordered-box">
 						<div class="d-flex justify-content-between align-items-center mb-1">
 							<h4>Load Map</h4>
-							<a href="#" onclick="loadExample()">Example Map (by Craigins)</a>
+							<a href="#" onclick="loadExample()" style="font-size: 12pt; text-align:right;">Load Example Map<br><small>(by Craigins)</small></a>
 						</div>
 						<input id="mapupload" type="file" class="form-control d-none" />
 
@@ -188,21 +188,26 @@
 							</div>
 						</div>
 
-						<button 
-							x-show="$store.data.mapLoaded" 
-							href="#" 
-							class="btn btn-outline-primary mt-2" 
-							style="display: none;" 
-							onclick="downloadMap(document.getElementById('mapcanvas'));"
-							data-bs-toggle="tooltip"
-							data-bs-placement="right"
-							data-bs-title="Save a PNG image of the currently displayed map, including all overlays"
-						>
-							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor;">
-								<path d="M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z" />
-							</svg>
-							Download Map Image
-						</button>
+						<h6 class="mt-2"><a href="https://maptool.ceschmitt.de/img/corekeeper_map.png" target="_blank">Show Full Map (Spoilers)</a></h6>
+
+						<div x-show="$store.data.mapLoaded" style="display: none;" class="mt-2">
+							<button class="btn btn-outline-secondary" onclick="recenterMap()">
+								Recenter map
+							</button>
+							<button 
+								class="btn btn-outline-primary mt-2" 
+								onclick="downloadMap(document.getElementById('mapcanvas'));"
+								data-bs-toggle="tooltip"
+								data-bs-placement="right"
+								data-bs-title="Save a PNG image of the currently displayed map, including all overlays"
+							>
+								<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor;">
+									<path d="M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z" />
+								</svg>
+								Download Map Image
+							</button>
+						</div>
+						
 					</section>
 
 					<div x-show="!$store.data.firstTimeLoaded" class="bordered-box">
@@ -355,7 +360,13 @@
 							</div>
 							<div class="d-inline-flex mt-2">
 								<input type="checkbox" class="btn-check" id="showMazeHoles" autocomplete="off" x-model="$store.data.showMazeHoles" @change="onChangeShowMazeHoles">
-								<label class="btn btn-outline-primary" for="showMazeHoles">Show Maze Holes</label>
+								<label class="btn btn-outline-primary" for="showMazeHoles"
+								data-bs-toggle="tooltip"
+								data-bs-placement="right"
+								data-bs-html="true"
+								data-bs-title="<strong>Light green:</strong> Big, Medium, Small<br><strong>Light Blue:</strong> Medium, Small<br><strong>Pink:</strong> Small"
+								data-bs-custom-class="custom-tooltip"
+								>Show Maze Holes</label>
 							</div>
 							<div class="mt-2">
 								<span>Grid Transparency</span>

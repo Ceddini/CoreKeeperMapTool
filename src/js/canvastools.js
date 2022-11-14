@@ -379,6 +379,11 @@ function highlightSelected() {
 	_global_ctx.putImageData(myImage, 0, 0);
 }
 
+function recenterMap() {
+	panZoomElem.zoom(1, { animate: true });
+	panToCore();
+}
+
 function testPixel(width, myImageData, r, g, b, x, y) {
 	let i = (y * width + x) * 4;
 	let r1 = myImageData[i], g1 = myImageData[i + 1], b1 = myImageData[i + 2];
