@@ -36,7 +36,7 @@ document.addEventListener('alpine:init', function () {
 		ringTransparency: 50,
 		biomeTransparency: 50,
 		gridTransparency: 30,
-		tileTransparency: 30,
+		tileTransparency: 15,
 		customRing: 25,
 	});
 });
