@@ -27,7 +27,7 @@
 	<script src="js/mapmonitor.js"></script>
 </head>
 
-<body style="background-color: black" x-data="" id="body" class="dark-mode">
+<body :style="`background-color: ${backgroundDark ? 'black' : 'white'};`" x-data="{backgroundDark:true}" id="body" class="dark-mode">
 
 	<div class="offcanvas offcanvas-start text-bg-dark show" data-bs-backdrop="false" tabindex="-1" id="offcanvas" aria-labelledby="offcanvasLabel">
 		<div class="offcanvas-header">
@@ -49,6 +49,11 @@
 			<div class="form-check form-switch">
 				<input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" onclick="toggleDarkMode();" checked>
 				<label class="form-check-label" for="flexSwitchCheckChecked">Dark Mode</label>
+			</div>
+
+			<div class="form-check form-switch">
+				<input class="form-check-input" x-model="backgroundDark" type="checkbox" role="switch" id="backgroundDarkModeChecked" checked>
+				<label class="form-check-label" for="backgroundDarkModeChecked">Background Dark Mode</label>
 			</div>
 
 			<hr>
