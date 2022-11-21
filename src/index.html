@@ -297,7 +297,7 @@
 									</div>
 									<div class="mb-2">
 										<div class="form-check">
-											<input class="form-check-input" type="checkbox" value="" id="cropByBiome">
+											<input class="form-check-input" type="checkbox" value="" id="cropByBiome" x-model="$store.data.cropRingsToBiome" @change="onChangeCropRingsToBiome">
 											<label class="form-check-label" for="cropByBiome">
 											  Crop Rings to Biome
 											</label>

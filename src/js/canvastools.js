@@ -9,6 +9,21 @@ let coreLoc = { x: 0, y: 0 };
 let pixelMap = {};
 let panZoomElem;
 
+const STONE_ARC_START_OFFSET = Math.PI / 2;
+const STONE_ARC_END_OFFSET = Math.PI / 2;
+
+const CLAY_ARC_START_OFFSET = -Math.PI / 2;
+const CLAY_ARC_END_OFFSET = -Math.PI / 2;
+
+const DESERT_ARC_START_OFFSET = Math.PI / 2 + (2.25 * Math.PI / 180) + ((2 * Math.PI) / 3);
+const DESERT_ARC_END_OFFSET = Math.PI / 2 - (2.25 * Math.PI / 180) + ((2 * Math.PI) / 3);
+
+const WILDERNESS_ARC_START_OFFSET = Math.PI / 2 + (2.25 * Math.PI / 180) + ((2 * Math.PI) / 3) * 2;
+const WILDERNESS_ARC_END_OFFSET = Math.PI / 2 - (2.25 * Math.PI / 180) + ((2 * Math.PI) / 3) * 2;
+
+const SUNKENSEA_ARC_START_OFFSET = Math.PI / 2 + (2.25 * Math.PI / 180);
+const SUNKENSEA_ARC_END_OFFSET = Math.PI / 2 - (2.25 * Math.PI / 180);
+
 function panImage(dx, dy) {
 	cameraOffset.x += dx;
 	cameraOffset.y += dy;
@@ -139,19 +154,22 @@ function loop(val, min, max) {
 function decorateMap(width, height) {
 	highlightSelected();
 
-	const showArcsCheckbox = document.getElementById("showArcs");
+	const showArcs = document.getElementById("showArcs")?.checked;
+	const cropRingsToBiome = Alpine.store('data').cropRingsToBiome;
+	const manualArcRotation = Alpine.store('data').manualArcRotation;
 
-	if (showArcsCheckbox.checked) {
-		const manualArcRotation = Alpine.store('data').manualArcRotation;
+	const shouldDrawInnerArcs = HIGHEST_STONE > 10000 || manualArcRotation;
+	const shouldDrawOuterArcs = HIGHEST_WILDERNESS > 10000 || manualArcRotation;
 
-		if (HIGHEST_STONE > 10000 || manualArcRotation) {
+	if (showArcs) {
+		if (shouldDrawInnerArcs) {
 			const start = (manualArcRotation) ? document.getElementById('innerArcSlider').value * Math.PI / 180 : stoneArc.start;
 			const end = (manualArcRotation) ? loop(document.getElementById('innerArcSlider').value - 180, 0, 359) * Math.PI / 180 : stoneArc.end;
 
 			drawArcs(_global_ctx, start, end);
 		}
 
-		if (HIGHEST_WILDERNESS > 10000 || manualArcRotation) {
+		if (shouldDrawOuterArcs) {
 			const start = (manualArcRotation) ? document.getElementById('outerArcSlider').value * Math.PI / 180 : wildernessArc.start;
 			const end = (manualArcRotation) ? loop(document.getElementById('outerArcSlider').value - 120, 0, 359) * Math.PI / 180 : wildernessArc.end;
 
@@ -168,7 +186,63 @@ function decorateMap(width, height) {
 			category.items.forEach(circle => {
 				if (circle.visible)
 					circle.radii.forEach(radius => {
-						drawCircle(_global_ctx, radius, circle.color);
+						if (cropRingsToBiome && showArcs) {
+							let hasBeenCropped = false;
+
+							circle.locations.forEach(location => {
+								console.log(circle.name);
+								console.log(location.ring);
+								if (location.ring) {
+									if (shouldDrawInnerArcs && (location.ring === RINGS.CLAY || location.ring === RINGS.STONE)) {
+										console.log("CROPPING TO BIOME");
+										console.log(circle);
+										const start = (manualArcRotation) ? document.getElementById('innerArcSlider').value * Math.PI / 180 : stoneArc.start;
+										const end = (manualArcRotation) ? loop(document.getElementById('innerArcSlider').value - 180, 0, 359) * Math.PI / 180 : stoneArc.end;
+
+										let startOffset = endOffset = 0;
+										switch (location.ring) {
+											case RINGS.CLAY:
+												startOffset = CLAY_ARC_START_OFFSET;
+												endOffset = CLAY_ARC_END_OFFSET;
+												break;
+											case RINGS.STONE:
+												startOffset = STONE_ARC_START_OFFSET;
+												endOffset = STONE_ARC_END_OFFSET;
+												break;
+										}
+
+										drawAnnulus(_global_ctx, radius, start - (2.5 * Math.PI / 180) - startOffset, end + (2.5 * Math.PI / 180) - endOffset, circle.color);
+										hasBeenCropped = true;
+									} else if (shouldDrawOuterArcs) {
+										const start = (manualArcRotation) ? document.getElementById('outerArcSlider').value * Math.PI / 180 : wildernessArc.start;
+										const end = (manualArcRotation) ? loop(document.getElementById('outerArcSlider').value - 120, 0, 359) * Math.PI / 180 : wildernessArc.end;
+
+										let startOffset = endOffset = 0;
+										switch (location.ring) {
+											case RINGS.SUNKENSEA:
+												startOffset = SUNKENSEA_ARC_START_OFFSET;
+												endOffset = SUNKENSEA_ARC_END_OFFSET;
+												break;
+											case RINGS.WILDERNESS:
+												startOffset = WILDERNESS_ARC_START_OFFSET;
+												endOffset = WILDERNESS_ARC_END_OFFSET;
+												break;
+											case RINGS.DESERT:
+												startOffset = DESERT_ARC_START_OFFSET;
+												endOffset = DESERT_ARC_END_OFFSET;
+												break;
+										}
+										drawAnnulus(_global_ctx, radius, start - startOffset, end - endOffset, circle.color);
+										hasBeenCropped = true;
+									}
+								}
+							});
+
+							if (hasBeenCropped === false)
+								drawCircle(_global_ctx, radius, circle.color);
+						} else {
+							drawCircle(_global_ctx, radius, circle.color);
+						}
 					});
 			});
 		});
@@ -255,6 +329,13 @@ function drawCircle(ctx, radius, color = "#FFFFFF") {
 	ctx.globalAlpha = 1.0;
 }
 
+function drawAnnulus(ctx, radius, start, end, color = "#FFFFFF") {
+	ctx.globalAlpha = Alpine.store('data').ringTransparency / 100;
+	ctx.fillStyle = color;
+	annulus(coreLoc.x, coreLoc.y, radius - 10, radius + 10, start, end, true);
+	ctx.globalAlpha = 1.0;
+}
+
 function annulus(centerX, centerY,
 	innerRadius, outerRadius,
 	startAngle, endAngle,
@@ -280,18 +361,10 @@ function drawArcs(ctx, start, end) {
 
 	//ARC starts 0 at 3 oclock
 	_global_ctx.fillStyle = "#C2C2C2";
-	annulus(coreLoc.x, coreLoc.y, 150, SEARCH_RADII.max - 50, start - Math.PI / 2, end - Math.PI / 2);
-
-	// _global_ctx.beginPath();
-	// _global_ctx.arc(coreLoc.x, coreLoc.y, SEARCH_RADII.max - 50, start - Math.PI / 2, end - Math.PI / 2);
-	// _global_ctx.fill();
+	annulus(coreLoc.x, coreLoc.y, 150, SEARCH_RADII.max - 50, start - STONE_ARC_START_OFFSET, end - STONE_ARC_END_OFFSET);
 
 	_global_ctx.fillStyle = "#A66829";
-	annulus(coreLoc.x, coreLoc.y, 150, SEARCH_RADII.max - 50, start + Math.PI / 2, end + Math.PI / 2);
-
-	// _global_ctx.beginPath();
-	// _global_ctx.arc(coreLoc.x, coreLoc.y, SEARCH_RADII.max - 50, start + Math.PI / 2, end + Math.PI / 2);
-	// _global_ctx.fill();
+	annulus(coreLoc.x, coreLoc.y, 150, SEARCH_RADII.max - 50, start - CLAY_ARC_START_OFFSET, end - CLAY_ARC_END_OFFSET);
 
 	ctx.globalAlpha = 1.0;
 }

@@ -1,11 +1,30 @@
+const RINGS = {
+	DESERT: "Desert",
+	WILDERNESS: "Wilderness",
+	SUNKENSEA: "Sunken Sea",
+	STONE: "Stone",
+	CLAY: "Clay"
+};
+
+const BIOMES = {
+	DESERT: { name: "Desert of Beginnings", ring: RINGS.DESERT },
+	WILDERNESS: { name: "The Wilderness", ring: RINGS.WILDERNESS },
+	SUNKENSEA: { name: "Sunken Sea", ring: RINGS.SUNKENSEA },
+	STONE: { name: "Stone", ring: RINGS.STONE },
+	CLAY: { name: "Clay", ring: RINGS.STONE },
+	DIRT: { name: "The Underground" },
+	HIVE: { name: "Larva Hive", ring: RINGS.CLAY },
+	RUINS: { name: "Ruins", ring: RINGS.STONE }
+};
+
 class CircleItem {
 	visible = false;
 	disabled = false;
 
-	constructor(name, longName, location, radii, color, textColor, tooltip, wikiUrl, image) {
+	constructor(name, longName, locations, radii, color, textColor, tooltip, wikiUrl, image) {
 		this.name = name;
 		this.longName = longName;
-		this.location = location;
+		this.locations = locations;
 		this.radii = radii;
 		this.color = color;
 		this.textColor = textColor;
@@ -21,8 +40,8 @@ class CircleItem {
 	getTooltipContent() {
 		let tooltip = `<strong>${this.longName}</strong>`;
 
-		if (this.location && this.location != "")
-			tooltip += `<br>Location: ${this.location}`;
+		if (this.locations && this.locations)
+			tooltip += `<br>Location(s): ${this.locations.map(l => l.name).join(", ")}`;
 
 		if (this.radii)
 			tooltip += `<br>Distance(s) from Core: ${this.radii.join(", ")}`;
@@ -54,20 +73,20 @@ class Category {
 // - TODO: Display text: "16x16 grid of cells used by the mob spawning algorithm. Each cell receives one spawn event every 15 to 22 minutes, staggered in time from other cells. Each spawn surface tile gives a chance to spawn a mob. See this guide: https://steamcommunity.com/sharedfiles/filedetails/?id=2846860078"
 
 const bosses = new Category("Bosses", [
-	new CircleItem("Glurch", "Glurch the Abominous Mass", "Dirt Biome", [65], "#D95917", "#FFFFFF", true, "#", "bosses/glurch.webp"),
-	new CircleItem("Ghorm", "Ghorm the Devourer", "Dirt & Clay Biome", [220], "#7F5F30", "#FFFFFF", true, "#", "bosses/ghorm.png"),
-	new CircleItem("Hive Mother", "The Hive Mother", "Hive Biome", [330], "#FCA694", "#FFFFFF", true, "#", "bosses/hive_mother.png"),
-	new CircleItem("Azeos", "Azeos the Sky Titan", "Wilderness", [600], "#d2b835", "#FFFFFF", true, "#", "bosses/azeos.png"),
-	new CircleItem("Omoroth", "Omoroth the Sea Titan", "Sunken Sea", [1100], "#9E3F9B", "#FFFFFF", true, "#", "bosses/omoroth.png"),
-	new CircleItem("Ra-Akar", "Ra-Akar the Sand Titan", "Desert of Beginnings", [1000], "#1d9124", "#FFFFFF", true, "#", "bosses/Ra-Akar_the_Sand_Titan.png"),
+	new CircleItem("Glurch", "Glurch the Abominous Mass", [BIOMES.DIRT], [65], "#D95917", "#FFFFFF", true, "#", "bosses/glurch.webp"),
+	new CircleItem("Ghorm", "Ghorm the Devourer", [BIOMES.DIRT, BIOMES.CLAY], [220], "#7F5F30", "#FFFFFF", true, "#", "bosses/ghorm.png"),
+	new CircleItem("Hive Mother", "The Hive Mother", [BIOMES.HIVE], [330], "#FCA694", "#FFFFFF", true, "#", "bosses/hive_mother.png"),
+	new CircleItem("Azeos", "Azeos the Sky Titan", [BIOMES.WILDERNESS], [600], "#d2b835", "#FFFFFF", true, "#", "bosses/azeos.png"),
+	new CircleItem("Omoroth", "Omoroth the Sea Titan", [BIOMES.SUNKENSEA], [1100], "#9E3F9B", "#FFFFFF", true, "#", "bosses/omoroth.png"),
+	new CircleItem("Ra-Akar", "Ra-Akar the Sand Titan", [BIOMES.DESERT], [1000], "#1d9124", "#FFFFFF", true, "#", "bosses/Ra-Akar_the_Sand_Titan.png"),
 ]);
 
 
 const optionalBosses = new Category("Optional Bosses", [
-	new CircleItem("Malugaz", "Malugaz the Corrupted", "Ruins", [350], "#1f4ec9", "#FFFFFF", true, "#", "bosses/malugaz.png"),
-	new CircleItem("Ivy", "Ivy the Poisonous Mass", "Wilderness", [900], "#FF00FF", "#FFFFFF", true, "#", "bosses/ivy.png"),
-	new CircleItem("Morpha", "Morpha the Aquatic Mass", "Sunken Sea", [1400], "#1898F4", "#FFFFFF", true, "#", "bosses/morpha.png"),
-	new CircleItem("Igneous", "Igneous the Molten Mass", "Desert of Beginnings", [1400], "#484454", "#FFFFFF", true, "#", "bosses/Igneous_the_Molten_Mass.png"),
+	new CircleItem("Malugaz", "Malugaz the Corrupted", [BIOMES.RUINS], [350], "#1f4ec9", "#FFFFFF", true, "#", "bosses/malugaz.png"),
+	new CircleItem("Ivy", "Ivy the Poisonous Mass", [BIOMES.WILDERNESS], [900], "#FF00FF", "#FFFFFF", true, "#", "bosses/ivy.png"),
+	new CircleItem("Morpha", "Morpha the Aquatic Mass", [BIOMES.SUNKENSEA], [1400], "#1898F4", "#FFFFFF", true, "#", "bosses/morpha.png"),
+	new CircleItem("Igneous", "Igneous the Molten Mass", [BIOMES.DESERT], [1400], "#484454", "#FFFFFF", true, "#", "bosses/Igneous_the_Molten_Mass.png"),
 ]);
 
 const pois = new Category("Points of Interest", [

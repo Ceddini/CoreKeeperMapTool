@@ -136,6 +136,10 @@ function onChangeTileTransparency(event) {
 	redrawMap();
 }
 
+function onChangeCropRingsToBiome(event) {
+	redrawDebounce(event);
+}
+
 function onChangeShowCustomRing(event) {
 	redrawDebounce(event);
 }
