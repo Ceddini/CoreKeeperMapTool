@@ -210,7 +210,7 @@ function toggleDarkMode() {
 
 	if (offcanvas.classList.contains("text-bg-dark")) {
 		offcanvas.classList.remove("text-bg-dark");
-		findMapGuide.classList.remove("text-bg-dark");
+		findMapGuide?.classList.remove("text-bg-dark");
 		legendItems.classList.remove("text-bg-dark");
 		legendButton.classList.remove("text-bg-dark");
 		body.classList.remove("dark-mode");
@@ -218,7 +218,7 @@ function toggleDarkMode() {
 		favicon.href = "img/favicon_light.png";
 	} else {
 		offcanvas.classList.add("text-bg-dark");
-		findMapGuide.classList.add("text-bg-dark");
+		findMapGuide?.classList.add("text-bg-dark");
 		legendItems.classList.add("text-bg-dark");
 		legendButton.classList.add("text-bg-dark");
 		body.classList.add("dark-mode");
