@@ -1,10 +1,10 @@
-let tutorialShown = false;
+function loadSetting(name) {
+	let temp = localStorage.getItem(name)?.toLowerCase();
 
-let temp = localStorage.getItem("tutorialShown")?.toLowerCase();
-
-if (temp === "true" || temp === "false")
-	tutorialShown = JSON.parse(temp);
-
+	if (temp === "true" || temp === "false")
+		return JSON.parse(temp);
+	else return false;
+}
 
 async function openDirectoryHandle() {
 	const dirHandle = await window.showDirectoryPicker();

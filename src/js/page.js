@@ -11,13 +11,20 @@ document.addEventListener('alpine:init', function () {
 
 	Alpine.store('tilecolormap', { list: tileColors, visible: [] });
 
+
 	Alpine.store('data', {
 		mapLoaded: false,
 		firstTimeLoaded: false,
+		faqOpen: true,
 		isExampleMap: false,
 		canWatchFile,
 
-		tutorialShown: tutorialShown,
+		// Loaded from savehandler.js
+		tutorialShown: loadSetting("tutorialShown"),
+		acceptedAdTracking: loadSetting("acceptedAdTracking"),
+		acceptedAnalytics: loadSetting("acceptedAnalytics"),
+		savedCookies: loadSetting("savedCookies"),
+
 		mapPickerShown: false, // TODO: RESET TO TRUE TO ENABLE
 		directoryHandle: null,
 
@@ -30,6 +37,9 @@ document.addEventListener('alpine:init', function () {
 		showMazeHoles: false,
 		manualArcRotation: false,
 		cropRingsToBiome: false,
+
+		showCustomHighlightColor: false,
+		customHighlightColor: "#FF0000",
 
 		innerSlider: 0,
 		outerSlider: 0,
@@ -140,6 +150,10 @@ function onChangeCropRingsToBiome(event) {
 	redrawDebounce(event);
 }
 
+function onChangeShowCustomHighlightColor(event) {
+	redrawDebounce(event);
+}
+
 function onChangeShowCustomRing(event) {
 	redrawDebounce(event);
 }
@@ -197,6 +211,24 @@ function onChangeManualArcRotation(event) {
 	setTimeout(() => {
 		event.target.removeAttribute("disabled");
 	}, 10);
+}
+
+function openColorPicker() {
+	const eyeDropper = new EyeDropper();
+	const abortController = new AbortController();
+
+	eyeDropper.open({ signal: abortController.signal }).then((result) => {
+		const temp = result.sRGBHex.split("(")[1].split(")")[0].split(", ");
+
+		const hex = "#" + temp.map(function (x) {
+			x = parseInt(x).toString(16);
+			return (x.length == 1) ? "0" + x : x;
+		}).join("");
+
+		Alpine.store('data').customHighlightColor = hex;
+	}).catch((e) => {
+		console.log(e);
+	});
 }
 
 function toggleDarkMode() {

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+	<script src="/js/pako-inflate-2.0.4.min.js"></script>
+</head>
+<body>
+	<canvas id="mapcanvas" style="position: absolute; inset: 0px; z-index: -1;"></canvas>
+	<button onclick="loadExample()">Test</button>
+
+
+	<script>
+		const canvas = document.getElementById("mapcanvas");
+		const context = canvas.getContext("2d");
+		let previousCoreRelativeOffset = undefined;
+		let coreLoc = { x: 0, y: 0 };
+
+		function drawMap(tiles) {
+			const TILE_SIZE = 256;
+			let minx = Number.POSITIVE_INFINITY;
+			let miny = Number.POSITIVE_INFINITY;
+			let maxx = Number.NEGATIVE_INFINITY;
+			let maxy = Number.NEGATIVE_INFINITY;
+			for (let i = 0; i < tiles.length; i++) {
+				let key = tiles[i].key;
+				if (minx > key.x) minx = key.x;
+				if (miny > key.y) miny = key.y;
+				if (maxx < key.x) maxx = key.x;
+				if (maxy < key.y) maxy = key.y;
+			}
+			coreLoc.x = -minx * TILE_SIZE;
+			coreLoc.y = (maxy + 1) * TILE_SIZE;
+			const canvas = document.getElementById("mapcanvas");
+			// canvas.width = (maxx - minx + 1) * TILE_SIZE;
+			// canvas.height = (maxy - miny + 1) * TILE_SIZE;
+			// const ctx = canvas.getContext('2d', { willReadFrequently: true });
+			// setContext(_global_ctx, canvas.width, canvas.height);
+    		
+			cameraOffset.x = 0;
+			cameraOffset.y = 3072;
+
+			context.translate( -window.innerWidth / 2 + cameraOffset.x, -window.innerHeight / 2 + cameraOffset.y )
+			context.clearRect(0,0, window.innerWidth, window.innerHeight)
+			
+			// Draw the image
+			for (let i = 0; i < tiles.length; i++) {
+				if (tiles[i].image) {
+					let px = (tiles[i].key.x - minx) * TILE_SIZE;
+					let py = (maxy - tiles[i].key.y) * TILE_SIZE;
+
+					console.log(`${px}, ${py}`);
+					context.drawImage(tiles[i].image, px, py);
+				}
+			}
+			let _image_cache = new Image();
+			_image_cache.src = canvas.toDataURL();
+
+			if (previousCoreRelativeOffset) {
+				panToPreviousCoreRelativeOffset();
+			}
+			else {
+				// panToCore();
+			}
+
+			// decorateMap(canvas.width, canvas.height);
+		}
+
+		const updatemap = () => { drawMap(tilelist) };
+
+		let tilelist = [];
+
+		function loadExample() {
+			console.log("Loading Map");
+			loadStandardFile(tilelist, updatemap);
+		}
+
+		context.canvas.width  = window.innerWidth;
+		context.canvas.height = window.innerHeight;
+		addEventListener("resize", (event) => {
+			context.canvas.width  = window.innerWidth;
+			context.canvas.height = window.innerHeight;
+		});
+	</script>
+  	<script src="https://maptool-dev.ceschmitt.de/map/js/utils.js"></script>
+  	<script src="https://maptool-dev.ceschmitt.de/js/mapmonitor.js"></script>
+  	<script src="https://maptool-dev.ceschmitt.de/js/maploader.js"></script>
+</body>
+</html>

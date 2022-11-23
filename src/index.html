@@ -1,6 +1,23 @@
 <html lang="en">
 
 <head>
+	<!-- Google tag (gtag.js) -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-W8K9L2Y21K"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('consent', 'default', {
+			'ad_storage': 'denied',
+			'analytics_storage': 'denied'
+		});
+
+		gtag('js', new Date());
+
+		gtag('config', 'G-W8K9L2Y21K', {
+			'cookie_domain': 'maptool-dev.ceschmitt.de'
+		});
+	</script>
+
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -22,6 +39,7 @@
 	<script src="js/pako-inflate-2.0.4.min.js"></script>
 	<script src="data/pois.js"></script>
 	<script src="data/tilecolormap.js"></script>
+	<script src="js/cookies.js"></script>
 	<script src="js/maploader.js"></script>
 	<script src="js/canvastools.js"></script>
 	<script src="js/mapmonitor.js"></script>
@@ -42,97 +60,135 @@
 		  	<button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
 		</div>
 		<div class="offcanvas-body">
-			<h6 class="text-secondary" style="margin-bottom: 4px;">Rewrite by Ceddini and ZeroGravitas</h6>
-			<h6 class="text-secondary" style="font-size: 10pt;">Originally by Craigins, Mz and nineforty</h6>
-
-			
-			<div class="form-check form-switch">
-				<input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" onclick="toggleDarkMode();" checked>
-				<label class="form-check-label" for="flexSwitchCheckChecked">Dark Mode</label>
-			</div>
-
-			<div class="form-check form-switch">
-				<input class="form-check-input" x-model="backgroundDark" type="checkbox" role="switch" id="backgroundDarkModeChecked" checked>
-				<label class="form-check-label" for="backgroundDarkModeChecked">Background Dark Mode</label>
-			</div>
-
-			<hr>
-
-			<!-- HOW TO USE TOOL -->
-			<a href="https://www.youtube.com/watch?v=ZeM61AjhiS4" target="_blank">
-				<button class="btn btn-outline-primary w-100 text-start d-flex align-items-center">
-					<svg style="width:24px;height:24px" class="me-2" viewBox="0 0 24 24">
-						<path fill="currentColor" d="M10,15L15.19,12L10,9V15M21.56,7.17C21.69,7.64 21.78,8.27 21.84,9.07C21.91,9.87 21.94,10.56 21.94,11.16L22,12C22,14.19 21.84,15.8 21.56,16.83C21.31,17.73 20.73,18.31 19.83,18.56C19.36,18.69 18.5,18.78 17.18,18.84C15.88,18.91 14.69,18.94 13.59,18.94L12,19C7.81,19 5.2,18.84 4.17,18.56C3.27,18.31 2.69,17.73 2.44,16.83C2.31,16.36 2.22,15.73 2.16,14.93C2.09,14.13 2.06,13.44 2.06,12.84L2,12C2,9.81 2.16,8.2 2.44,7.17C2.69,6.27 3.27,5.69 4.17,5.44C4.64,5.31 5.5,5.22 6.82,5.16C8.12,5.09 9.31,5.06 10.41,5.06L12,5C16.19,5 18.8,5.16 19.83,5.44C20.73,5.69 21.31,6.27 21.56,7.17Z" />
-					</svg>
-					<div>
-						<span class="d-flex align-items-center">
-							How to use the Map Tool
-							<svg style="width:16px;height:16px" class="ms-1" viewBox="0 0 24 24">
-								<path fill="currentColor" d="M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z" />
-							</svg>
-						</span>
-						<small style="font-size: 10pt;">Video by Dakon the Mad</small>
-					</div>
-				</button>
-			</a>
-
-			<a target="_blank" href="https://github.com/Ceddini/CoreKeeperMapTool/discussions">
-				<button class="btn btn-outline-primary w-100 text-start mt-2 d-flex align-items-center">
-					<svg style="width:24px;height:24px" class="me-2" viewBox="0 0 24 24">
-						<path fill="currentColor" d="M9 22C8.4 22 8 21.6 8 21V18H4C2.9 18 2 17.1 2 16V4C2 2.9 2.9 2 4 2H20C21.1 2 22 2.9 22 4V16C22 17.1 21.1 18 20 18H13.9L10.2 21.7C10 21.9 9.8 22 9.5 22H9M10 16V19.1L13.1 16H20V4H4V16H10M16.3 6L14.9 9H17V13H13V8.8L14.3 6H16.3M10.3 6L8.9 9H11V13H7V8.8L8.3 6H10.3Z" />
-					</svg>
-					<span>Feedback / Requests</span>
-				</button>
-			</a>
-
-			<a target="_blank" href="https://linktr.ee/ceddini">
-				<button class="btn btn-outline-primary w-100 text-start mt-2">
-					<svg style="width:24px;height:24px" class="me-2" viewBox="0 0 24 24">
-						<path fill="currentColor" d="M22,12V20A2,2 0 0,1 20,22H4A2,2 0 0,1 2,20V12A1,1 0 0,1 1,11V8A2,2 0 0,1 3,6H6.17C6.06,5.69 6,5.35 6,5A3,3 0 0,1 9,2C10,2 10.88,2.5 11.43,3.24V3.23L12,4L12.57,3.23V3.24C13.12,2.5 14,2 15,2A3,3 0 0,1 18,5C18,5.35 17.94,5.69 17.83,6H21A2,2 0 0,1 23,8V11A1,1 0 0,1 22,12M4,20H11V12H4V20M20,20V12H13V20H20M9,4A1,1 0 0,0 8,5A1,1 0 0,0 9,6A1,1 0 0,0 10,5A1,1 0 0,0 9,4M15,4A1,1 0 0,0 14,5A1,1 0 0,0 15,6A1,1 0 0,0 16,5A1,1 0 0,0 15,4M3,8V10H11V8H3M13,8V10H21V8H13Z" />
-					</svg>
-					<span>Support Me</span>
-				</button>
-			</a>
-
-			<hr>
-
-			<div class="d-flex flex-column">
-				<!-- <div id="old-menu" class="d-flex d-column d-none"> -->
-				<div id="old-menu" class="d-none">
-					<div class="mb-2">
-						<input id="_mapupload" type="file" class="form-control" />
-					</div>
-					<div class="d-flex mb-2 align-items-baseline">
-						<input class="form-check-input" type="checkbox" id="_shouldrefresh" checked>
-						<input type="button" onclick="registerMapFile();" class="btn btn-primary ms-2" value="Monitor Map"/> 
-					</div>
-					
-					<hr />
+			<div class="d-flex">
+				<span class="me-2">Dark Mode: </span>
+				<div class="form-check form-switch me-2">
+					<label class="form-check-label" for="flexSwitchCheckChecked">UI</label>
+					<input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" onclick="toggleDarkMode();" checked>
+				</div>
 	
-					<ul class="nav nav-pills movement-nav bordered-box">
-						<li id="bosscircle" class="nav-item d-none"><a href="#" class="nav-link" onclick="toggleBosses();">Show Bosses</a></li>
-						<li id="arcs" class="nav-item"><a href="#" class="nav-link" onclick="toggleArcs();">Draw Arcs</a></li>
-						<li id="mazeholes" class="nav-item"><a href="#" class="nav-link" onclick="toggleMazes();">Find Mazes Gaps</a></li>
-						<li id="chunkgrid" class="nav-item"><a href="#" class="nav-link" onclick="toggleChunkGrid();">Chunk Grid</a></li>
-						<li id="mobgrid" class="nav-item"><a href="#" class="nav-link" onclick="toggleMobGrid();">Mob Grid</a></li>
-						<li id="seacircle" class="nav-item"><a href="#" class="nav-link" onclick="toggleSea();">Sea POIs</a></li>
+				<div class="form-check form-switch">
+					<input class="form-check-input" x-model="backgroundDark" type="checkbox" role="switch" id="backgroundDarkModeChecked" checked>
+					<label class="form-check-label" for="backgroundDarkModeChecked">Background</label>
+				</div>
+			</div>
 			
-						<li class="nav-item">
-							<a href="#" class="nav-link" onclick="downloadMap(document.getElementById('mapcanvas'));">
-								<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor;">
-									<path d="M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z" />
-								</svg>
-								Download Map
-							</a>
-						</li>
-						<li>
-							User Defined Radius: <input type="text"  id="userradius" onKeyPress="userDefinedChanged();">
-						  </li>
-					</ul>
-	
-					<hr>
+			<section class="bordered-box mt-2" x-data="{visible: true}">
+				<div class="d-flex align-items-center justify-content-between">
+					<div class="d-inline-flex align-items-center" x-on:click="visible = !visible" style="cursor: pointer;">
+						<svg x-show="visible" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor;"><path d="M7.41,15.41L12,10.83L16.59,15.41L18,14L12,8L6,14L7.41,15.41Z" /></svg>
+						<svg x-show="!visible" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor; display: none;"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" /></svg>
+						<span class="fs-5">About</span>
+					</div>
 				</div>
 
+				<template x-if="$store.data.savedCookies === false">
+					<span class="text-danger">
+						Please choose cookie settings to collapse this section.
+					</span>
+				</template>
+				
+				
+				<div x-show="visible || $store.data.savedCookies === false" class="mt-2" x-transition="">
+					<!-- HOW TO USE TOOL -->
+					<a href="https://www.youtube.com/watch?v=ZeM61AjhiS4" target="_blank">
+						<button class="btn btn-outline-primary w-100 text-start d-flex align-items-center">
+							<svg style="width:24px;height:24px" class="me-2" viewBox="0 0 24 24">
+								<path fill="currentColor" d="M10,15L15.19,12L10,9V15M21.56,7.17C21.69,7.64 21.78,8.27 21.84,9.07C21.91,9.87 21.94,10.56 21.94,11.16L22,12C22,14.19 21.84,15.8 21.56,16.83C21.31,17.73 20.73,18.31 19.83,18.56C19.36,18.69 18.5,18.78 17.18,18.84C15.88,18.91 14.69,18.94 13.59,18.94L12,19C7.81,19 5.2,18.84 4.17,18.56C3.27,18.31 2.69,17.73 2.44,16.83C2.31,16.36 2.22,15.73 2.16,14.93C2.09,14.13 2.06,13.44 2.06,12.84L2,12C2,9.81 2.16,8.2 2.44,7.17C2.69,6.27 3.27,5.69 4.17,5.44C4.64,5.31 5.5,5.22 6.82,5.16C8.12,5.09 9.31,5.06 10.41,5.06L12,5C16.19,5 18.8,5.16 19.83,5.44C20.73,5.69 21.31,6.27 21.56,7.17Z" />
+							</svg>
+							<div>
+								<span class="d-flex align-items-center">
+									How to use the Map Tool
+									<svg style="width:16px;height:16px" class="ms-1" viewBox="0 0 24 24">
+										<path fill="currentColor" d="M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z" />
+									</svg>
+								</span>
+								<small style="font-size: 10pt;">Video by Dakon the Mad</small>
+							</div>
+						</button>
+					</a>
+
+					<a target="_blank" href="https://github.com/Ceddini/CoreKeeperMapTool/discussions">
+						<button class="btn btn-outline-primary w-100 text-start mt-2 d-flex align-items-center">
+							<svg style="width:24px;height:24px" class="me-2" viewBox="0 0 24 24">
+								<path fill="currentColor" d="M9 22C8.4 22 8 21.6 8 21V18H4C2.9 18 2 17.1 2 16V4C2 2.9 2.9 2 4 2H20C21.1 2 22 2.9 22 4V16C22 17.1 21.1 18 20 18H13.9L10.2 21.7C10 21.9 9.8 22 9.5 22H9M10 16V19.1L13.1 16H20V4H4V16H10M16.3 6L14.9 9H17V13H13V8.8L14.3 6H16.3M10.3 6L8.9 9H11V13H7V8.8L8.3 6H10.3Z" />
+							</svg>
+							<span>Feedback / Requests</span>
+						</button>
+					</a>
+
+					<a target="_blank" href="https://maptool-dev.ceschmitt.de">
+						<button class="btn btn-outline-primary w-100 text-start mt-2">
+							<svg style="width:24px;height:24px" class="me-2" viewBox="0 0 24 24">
+								<path fill="currentColor" d="M8,3A2,2 0 0,0 6,5V9A2,2 0 0,1 4,11H3V13H4A2,2 0 0,1 6,15V19A2,2 0 0,0 8,21H10V19H8V14A2,2 0 0,0 6,12A2,2 0 0,0 8,10V5H10V3M16,3A2,2 0 0,1 18,5V9A2,2 0 0,0 20,11H21V13H20A2,2 0 0,0 18,15V19A2,2 0 0,1 16,21H14V19H16V14A2,2 0 0,1 18,12A2,2 0 0,1 16,10V5H14V3H16Z" />
+							</svg>
+							<span>Development Version</span>
+						</button>
+					</a>
+
+					<a target="_blank" href="https://linktr.ee/ceddini">
+						<button class="btn btn-outline-primary w-100 text-start mt-2">
+							<svg style="width:24px;height:24px" class="me-2" viewBox="0 0 24 24">
+								<path fill="currentColor" d="M22,12V20A2,2 0 0,1 20,22H4A2,2 0 0,1 2,20V12A1,1 0 0,1 1,11V8A2,2 0 0,1 3,6H6.17C6.06,5.69 6,5.35 6,5A3,3 0 0,1 9,2C10,2 10.88,2.5 11.43,3.24V3.23L12,4L12.57,3.23V3.24C13.12,2.5 14,2 15,2A3,3 0 0,1 18,5C18,5.35 17.94,5.69 17.83,6H21A2,2 0 0,1 23,8V11A1,1 0 0,1 22,12M4,20H11V12H4V20M20,20V12H13V20H20M9,4A1,1 0 0,0 8,5A1,1 0 0,0 9,6A1,1 0 0,0 10,5A1,1 0 0,0 9,4M15,4A1,1 0 0,0 14,5A1,1 0 0,0 15,6A1,1 0 0,0 16,5A1,1 0 0,0 15,4M3,8V10H11V8H3M13,8V10H21V8H13Z" />
+							</svg>
+							<span>Support Hosting & Dev Costs</span>
+						</button>
+					</a>
+
+					<hr class="mt-3 mb-2" />
+
+					<div x-data="{cookiesVisible: $store.data.savedCookies === false}">
+						<div class="d-flex align-items-center justify-content-between">
+							<div class="d-inline-flex align-items-center" x-on:click="cookiesVisible = !cookiesVisible" style="cursor: pointer;">
+								<svg x-show="cookiesVisible" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" style="fill: currentColor;"><path d="M7.41,15.41L12,10.83L16.59,15.41L18,14L12,8L6,14L7.41,15.41Z" /></svg>
+								<svg x-show="!cookiesVisible" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" style="fill: currentColor; display: none;"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" /></svg>
+								<span class="fs-6">Manage Cookies</span>
+							</div>
+						</div>
+						<div x-show="cookiesVisible || $store.data.savedCookies === false" class="px-1" style="display: none;">
+							<div class="form-check">
+								<input class="form-check-input" type="checkbox" value="" id="acceptedAnalytics" x-model="$store.data.acceptedAnalytics">
+								<label class="form-check-label d-flex align-items-center" for="acceptedAnalytics">
+									<div class="me-1"
+										data-bs-toggle="tooltip" 
+										data-bs-title="If I can use your activity here to improve the page.<br />More info in the FAQ"
+										data-bs-custom-class="custom-tooltip"
+										data-bs-html="true"
+										data-bs-placement="right"
+										style="width: 18px; height: 18px;"
+									>
+									  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" style="fill: currentColor;" class="me-1"><path d="M11,18H13V16H11V18M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,6A4,4 0 0,0 8,10H10A2,2 0 0,1 12,8A2,2 0 0,1 14,10C14,12 11,11.75 11,15H13C13,12.75 16,12.5 16,10A4,4 0 0,0 12,6Z" /></svg> 
+									</div>
+								  	Enable Analytics
+								</label>
+							</div>
+							<div class="form-check">
+								<input class="form-check-input" type="checkbox" value="" id="acceptedAdTracking" x-model="$store.data.acceptedAdTracking">
+								<label class="form-check-label d-flex align-items-center" for="acceptedAdTracking">
+									<div class="me-1"
+										data-bs-toggle="tooltip" 
+										data-bs-title="If ads should be customized based on your activity here.<br />More info in the FAQ"
+										data-bs-custom-class="custom-tooltip"
+										data-bs-html="true"
+										data-bs-placement="right"
+										style="width: 18px; height: 18px;"
+									>
+									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" style="fill: currentColor;" class="me-1"><path d="M11,18H13V16H11V18M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,6A4,4 0 0,0 8,10H10A2,2 0 0,1 12,8A2,2 0 0,1 14,10C14,12 11,11.75 11,15H13C13,12.75 16,12.5 16,10A4,4 0 0,0 12,6Z" /></svg> 
+									</div>
+									Enable Ad Tracking
+								</label>
+							</div>
+							
+							<div class="d-flex align-items-center">
+								<button class="btn btn-secondary me-1" x-on:click="saveCookieSelection">Save</button>
+								<button class="btn btn-primary" x-on:click="allowAllCookies">Allow all</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<div class="d-flex flex-column">
 				<div id="new-menu-design">
 					<!-- File Loading Section -->
 					<section class="bordered-box">
@@ -210,12 +266,9 @@
 
 						<h6 class="mt-2"><a href="https://maptool.ceschmitt.de/img/corekeeper_map.png" target="_blank">Open Full Map Image (Spoilers)</a></h6>
 
-						<div x-show="$store.data.mapLoaded" style="display: none;" class="mt-2">
-							<button class="btn btn-outline-secondary" onclick="recenterMap()">
-								Center Map
-							</button><br>
+						<div x-show="$store.data.mapLoaded" style="display: none;" class="mt-2 d-flex align-items-center">
 							<button 
-								class="btn btn-outline-primary mt-2" 
+								class="btn btn-outline-primary me-1" 
 								onclick="downloadMap(document.getElementById('mapcanvas'));"
 								data-bs-toggle="tooltip"
 								data-bs-placement="right"
@@ -225,6 +278,9 @@
 									<path d="M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z" />
 								</svg>
 								Download Map Image
+							</button>
+							<button class="btn btn-primary" onclick="recenterMap()">
+								Center Map
 							</button>
 						</div>
 						
@@ -432,18 +488,46 @@
 									</div>
 								</div>
 							</template>
+							<div class="bordered-box-section" x-data="{visible: false}">
+								<div class="d-flex align-items-center mb-1">
+									<div class="d-inline-flex align-items-center" x-on:click="visible = !visible" style="cursor: pointer;">
+										<svg x-show="visible" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor;"><path d="M7.41,15.41L12,10.83L16.59,15.41L18,14L12,8L6,14L7.41,15.41Z" /></svg>
+										<svg x-show="!visible" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor;"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" /></svg>
+
+										<span class="fs-5">Advanced Settings</span>
+									</div>
+									<div class="flex-fill border-bottom border-secondary mx-2"></div>
+								</div>
+								<div x-show="visible" x-transition style="display: none;" class="px-1">
+									<div class="form-check">
+										<input class="form-check-input" type="checkbox" value="" id="showCustomHighlightColor" x-model="$store.data.showCustomHighlightColor" @change="onChangeShowCustomHighlightColor">
+										<label class="form-check-label" for="showCustomHighlightColor">
+										Custom Highlight Color
+										</label>
+									</div>
+									<div class="d-flex align-items-center">
+										<button class="btn btn-primary me-2" :disabled="window.EyeDropper === undefined" x-on:click="openColorPicker">
+											Pick Color
+										</button>
+										<div>
+											<input type="color" name="customHighlightColor" class="form-control form-control-color" style="padding: 0.2em;" x-model="$store.data.customHighlightColor" id="customHighlightColor" />
+										</div>
+									</div>
+									<span x-show="window.EyeDropper === undefined" class="text-danger">Color Picker not supported in this browser.</span>
+								</div>
+							</div>
 						</section>
 					</div>
 
-					<div class="bordered-box" style="margin-top: 12px;" x-data="{visible: true}">
-						<div class="d-inline-flex align-items-center" x-on:click="visible = !visible" style="cursor: pointer;">
-							<svg x-show="visible" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor; display:none;"><path d="M7.41,15.41L12,10.83L16.59,15.41L18,14L12,8L6,14L7.41,15.41Z" /></svg>
-							<svg x-show="!visible" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor;"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" /></svg>
+					<div class="bordered-box" style="margin-top: 12px;">
+						<div class="d-inline-flex align-items-center" x-on:click="$store.data.faqOpen = !$store.data.faqOpen" style="cursor: pointer;">
+							<svg x-show="$store.data.faqOpen" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor; display:none;"><path d="M7.41,15.41L12,10.83L16.59,15.41L18,14L12,8L6,14L7.41,15.41Z" /></svg>
+							<svg x-show="!$store.data.faqOpen" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor;"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" /></svg>
 
 							<span class="fs-5">FAQ</span>
 						</div>
 
-						<div x-show="visible" x-transition style="display: none;" class="p-1">
+						<div x-show="$store.data.faqOpen" x-transition style="display: none;" class="p-1">
 							<template x-for="question in $store.faq">
 								<div class="question px-1" x-data="{q: (question.preopened) ? true : false}">
 									<h6 style="cursor: pointer;" @click="q = !q">
@@ -741,8 +825,9 @@
 	
 
   	<div class="canvas-container">
-    	<canvas id="mapcanvas" width="1200px" height="800px" style="image-rendering: pixelated;" onclick="//toclick">
-  	</div>
+		<canvas id="mapcanvas" width="1200px" height="800px" style="image-rendering: pixelated;" onclick="//toclick"></canvas>
+	</div>
+	<canvas id="overlaycanvas"></canvas>
 
 	<!--
 	<div class="legend-container">
@@ -752,6 +837,7 @@
   	</div>
 	-->
   	<script src="js/faq.js"></script>
+  	<script src="js/overlay.js"></script>
   	<script src="js/savehandler.js"></script>
   	<script src="js/page.js"></script>
   	<script src="js/menubuilder.js"></script>

@@ -46,7 +46,8 @@ function getCoreOffset() {
 
 function panToCore() {
 	const { x, y } = getCoreOffset();
-	panZoomElem.pan(x, y);
+	xOffset = (document.getElementById("offcanvas").classList.contains("show")) ? 200 : 0;
+	panZoomElem.pan(x + xOffset, y);
 }
 
 function panToPreviousCoreRelativeOffset() {
@@ -144,6 +145,9 @@ function redrawMap() {
 	const canvas = document.getElementById("mapcanvas");
 	setContext(_global_ctx, canvas.width, canvas.height);
 	_global_ctx.drawImage(_image_cache, 0, 0);
+	rectList = [];
+	annulusList = [];
+	circleList = [];
 	decorateMap(canvas.width, canvas.height);
 }
 
@@ -178,7 +182,7 @@ function decorateMap(width, height) {
 	}
 
 	if (Alpine.store('data').showCustomRing) {
-		drawCircle(_global_ctx, Alpine.store('data').customRing);
+		drawOverlayCircle(parseInt(Alpine.store('data').customRing));
 	}
 
 	if (Alpine.store('data').mapLoaded) {
@@ -186,7 +190,7 @@ function decorateMap(width, height) {
 			category.items.forEach(circle => {
 				if (circle.visible)
 					circle.radii.forEach(radius => {
-						if (cropRingsToBiome && showArcs) {
+						if (cropRingsToBiome) {
 							let hasBeenCropped = false;
 
 							circle.locations.forEach(location => {
@@ -211,7 +215,7 @@ function decorateMap(width, height) {
 												break;
 										}
 
-										drawAnnulus(_global_ctx, radius, start - (2.5 * Math.PI / 180) - startOffset, end + (2.5 * Math.PI / 180) - endOffset, circle.color);
+										drawOverlayAnnulus(_global_ctx, radius, start - (2.5 * Math.PI / 180) - startOffset, end + (2.5 * Math.PI / 180) - endOffset, circle.color);
 										hasBeenCropped = true;
 									} else if (shouldDrawOuterArcs) {
 										const start = (manualArcRotation) ? document.getElementById('outerArcSlider').value * Math.PI / 180 : wildernessArc.start;
@@ -232,16 +236,16 @@ function decorateMap(width, height) {
 												endOffset = DESERT_ARC_END_OFFSET;
 												break;
 										}
-										drawAnnulus(_global_ctx, radius, start - startOffset, end - endOffset, circle.color);
+										drawOverlayAnnulus(_global_ctx, radius, start - startOffset, end - endOffset, circle.color);
 										hasBeenCropped = true;
 									}
 								}
 							});
 
 							if (hasBeenCropped === false)
-								drawCircle(_global_ctx, radius, circle.color);
+								drawOverlayCircle(radius, circle.color);
 						} else {
-							drawCircle(_global_ctx, radius, circle.color);
+							drawOverlayCircle(radius, circle.color);
 						}
 					});
 			});
@@ -332,11 +336,11 @@ function drawCircle(ctx, radius, color = "#FFFFFF") {
 function drawAnnulus(ctx, radius, start, end, color = "#FFFFFF") {
 	ctx.globalAlpha = Alpine.store('data').ringTransparency / 100;
 	ctx.fillStyle = color;
-	annulus(coreLoc.x, coreLoc.y, radius - 10, radius + 10, start, end, true);
+	annulus(ctx, coreLoc.x, coreLoc.y, radius - 10, radius + 10, start, end, true);
 	ctx.globalAlpha = 1.0;
 }
 
-function annulus(centerX, centerY,
+function annulus(ctx, centerX, centerY,
 	innerRadius, outerRadius,
 	startAngle, endAngle,
 	anticlockwise) {
@@ -345,12 +349,12 @@ function annulus(centerX, centerY,
 	var startOfOuterArcX = outerRadius * Math.cos(th2) + centerX;
 	var startOfOuterArcY = outerRadius * Math.sin(th2) + centerY;
 
-	_global_ctx.beginPath();
-	_global_ctx.arc(centerX, centerY, innerRadius, th1, th2, anticlockwise);
-	_global_ctx.lineTo(startOfOuterArcX, startOfOuterArcY);
-	_global_ctx.arc(centerX, centerY, outerRadius, th2, th1, !anticlockwise);
-	_global_ctx.fill();
-	_global_ctx.closePath();
+	ctx.beginPath();
+	ctx.arc(centerX, centerY, innerRadius, th1, th2, anticlockwise);
+	ctx.lineTo(startOfOuterArcX, startOfOuterArcY);
+	ctx.arc(centerX, centerY, outerRadius, th2, th1, !anticlockwise);
+	ctx.fill();
+	ctx.closePath();
 }
 
 function drawArcs(ctx, start, end) {
@@ -429,8 +433,16 @@ function drawMap(tiles) {
 		panToCore();
 	}
 
+	if (Alpine.store("data").mapLoaded === false) {
+		panZoomElem.zoom(1, { animate: true });
+		panToCore();
+	}
+
 	Alpine.store('data').mapLoaded = true;
+	drawOverlay();
+	Alpine.store("data").faqOpen = false;
 	Alpine.store('data').firstTimeLoaded = true;
+
 	decorateMap(canvas.width, canvas.height);
 }
 
@@ -446,7 +458,7 @@ function highlightSelected() {
 		highlightColors(myImage, searchobj);
 	}
 
-	if (Alpine.store('data').showMazeHoles) {
+	if (Alpine.store('data').showMazeHoles || Alpine.store("data").cropRingsToBiome) {
 		findStone(myImage.data, canvas.width);
 	}
 	_global_ctx.putImageData(myImage, 0, 0);
