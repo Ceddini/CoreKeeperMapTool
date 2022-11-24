@@ -385,6 +385,15 @@
 												<span>%</span>
 											</div>
 										</div>
+										<div>
+											<div class="form-check">
+												<input class="form-check-input" type="checkbox" value="" id="cropByBiome" x-model="$store.data.cropRingsToBiome" @change="onChangeCropRingsToBiome">
+												<label class="form-check-label" for="cropByBiome">
+												  Crop Rings to Biome<br />
+												  <small>If it doesn't work, enable "Manual Rotation"</small>
+												</label>
+											</div>
+										</div>
 									</div>
 								</div>
 	
@@ -405,15 +414,6 @@
 												<input type="range" class="form-range me-2" name="ringTransparency" id="ringTransparency" min="0" max="100" x-model="$store.data.ringTransparency" @change="onChangeRingTransparency">
 												<input class="form-control form-control-sm me-1" type="number" min="0" max="100" style="width: 60px;" x-model="$store.data.ringTransparency" @change.debounce.100ms="onChangeRingTransparency">
 												<span>%</span>
-											</div>
-										</div>
-										<div class="mb-2">
-											<div class="form-check">
-												<input class="form-check-input" type="checkbox" value="" id="cropByBiome" x-model="$store.data.cropRingsToBiome" @change="onChangeCropRingsToBiome">
-												<label class="form-check-label" for="cropByBiome">
-												  Crop Rings to Biome<br />
-												  <small>If it doesn't work, enable "Manual Rotation"</small>
-												</label>
 											</div>
 										</div>
 										<div>
