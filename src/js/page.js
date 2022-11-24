@@ -19,7 +19,6 @@ document.addEventListener('alpine:init', function () {
 		acceptedAnalytics: loadSetting("acceptedAnalytics"),
 		savedCookies: loadSetting("savedCookies"),
 
-
 		mapLoaded: false,
 		firstTimeLoaded: false,
 		faqOpen: true,
