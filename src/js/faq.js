@@ -14,11 +14,6 @@ const faq = [
 		answer: "It shows you potential spawn locations for the stone biome mazes. Light green areas can fit the large maze, light blue the medium maze and pink the small maze. Green and light blue can of course also fit the smaller mazes."
 	},
 	{
-		question: "What are the Sea POIs?",
-		spoilers: true,
-		answer: "The Sea POIs that the map tool shows are <em>\"The Vault\"</em> and <em>\"Broken Core 1-3\"</em>. These locations hold the required crafting items to create <em>Phantom Spark</em> (Legendary Bow)."
-	},
-	{
 		question: "Does my map get uploaded somewhere?",
 		answer: "No. The tool works completely client side. No personal information gets stored and I also do not have access to your save files."
 	},
