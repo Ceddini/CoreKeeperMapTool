@@ -461,6 +461,17 @@
 									>Mob Grid</label>
 								</div>
 
+								<div class="d-flex flex-column mt-2">
+									<a href="https://corekeeper.wikizet.com/en/World_Generation" target="_blank">
+										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" style="fill: currentColor;"><path d="M11,18H13V16H11V18M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,6A4,4 0 0,0 8,10H10A2,2 0 0,1 12,8A2,2 0 0,1 14,10C14,12 11,11.75 11,15H13C13,12.75 16,12.5 16,10A4,4 0 0,0 12,6Z" /></svg> 
+										Infos on World Generation
+									</a>
+									<a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2846860078" target="_blank" rel="noopener noreferrer">
+										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" style="fill: currentColor;"><path d="M11,18H13V16H11V18M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,6A4,4 0 0,0 8,10H10A2,2 0 0,1 12,8A2,2 0 0,1 14,10C14,12 11,11.75 11,15H13C13,12.75 16,12.5 16,10A4,4 0 0,0 12,6Z" /></svg> 
+										Infos on Mob Spawning
+									</a>
+								</div>
+
 								<div class="bordered-box-section mt-2" x-data="{mazeHolesVisible: true}">
 									<div class="d-flex align-items-center mb-1">
 										<div class="d-inline-flex align-items-center" x-on:click="mazeHolesVisible = !mazeHolesVisible" style="cursor: pointer;">
@@ -473,38 +484,45 @@
 										<span x-on:click="toggleAllMazeHoles" class="fs-6 text-secondary" style="cursor: pointer;">Toggle all</span>
 									</div>
 									<div x-show="mazeHolesVisible" x-transition style="display: none;" class="px-1">
-										<div class="d-inline-flex mt-2">
-											<input type="checkbox" class="btn-check" id="showSmallMazeHoles" autocomplete="off" x-model="$store.data.showSmallMazeHoles" @change="onChangeShowMazeHoles">
-											<label class="btn btn-outline-primary" :style="$store.data.showSmallMazeHoles ? `background-color: rgb(255,0,255); color: white;` : `border-color: rgb(255,0,255); color: rgb(255,0,255);`" for="showSmallMazeHoles"
-												data-bs-toggle="tooltip" 
-												data-bs-title="Contains:<br />- Tin Sword"
-												data-bs-custom-class="custom-tooltip"
-												data-bs-html="true"
-												data-bs-placement="right"
-											>Small</label>
+										<div class="mb-2">
+											<div class="d-inline-flex mt-2">
+												<input type="checkbox" class="btn-check" id="showSmallMazeHoles" autocomplete="off" x-model="$store.data.showSmallMazeHoles" @change="onChangeShowMazeHoles">
+												<label class="btn btn-outline-primary" :style="$store.data.showSmallMazeHoles ? `background-color: rgb(255,0,255); color: white;` : `border-color: rgb(255,0,255); color: rgb(255,0,255);`" for="showSmallMazeHoles"
+													data-bs-toggle="tooltip" 
+													data-bs-title="Contains:<br />- Tin Sword"
+													data-bs-custom-class="custom-tooltip"
+													data-bs-html="true"
+													data-bs-placement="right"
+												>Small</label>
+											</div>
+			
+											<div class="d-inline-flex mt-2">
+												<input type="checkbox" class="btn-check" id="showMediumMazeHoles" autocomplete="off" x-model="$store.data.showMediumMazeHoles" @change="onChangeShowMazeHoles">
+												<label class="btn btn-outline-primary" :style="$store.data.showMediumMazeHoles ? `background-color: rgb(0,255,255); color: #2d3339;` : `border-color: rgb(0,255,255); color: rgb(0,255,255);`" for="showMediumMazeHoles"
+													data-bs-toggle="tooltip" 
+													data-bs-title="Contains:<br />- <strong>Clear Gemstone</strong><br />- Ocarina"
+													data-bs-custom-class="custom-tooltip"
+													data-bs-html="true"
+													data-bs-placement="right"
+												>Medium</label>
+											</div>
+			
+											<div class="d-inline-flex mt-2">
+												<input type="checkbox" class="btn-check" id="showLargeMazeHoles" autocomplete="off" x-model="$store.data.showLargeMazeHoles" @change="onChangeShowMazeHoles">
+												<label class="btn btn-outline-primary" :style="$store.data.showLargeMazeHoles ? `background-color: rgb(0,255,0); color: #2d3339;` : `border-color: rgb(0,255,0); color: rgb(0,255,0);`" for="showLargeMazeHoles"
+													data-bs-toggle="tooltip" 
+													data-bs-title='Contains:<br />- <strong>Broken Handle</strong><br />- <strong>Oracle Card "Aura"</strong><br />- Caveling Figurine<br />- Gold Crystal Necklace<br />- Chipped Plate x2<br />- Precious Urn x5'
+													data-bs-custom-class="custom-tooltip"
+													data-bs-html="true"
+													data-bs-placement="right"
+												>Large</label>
+											</div>
 										</div>
-		
-										<div class="d-inline-flex mt-2">
-											<input type="checkbox" class="btn-check" id="showMediumMazeHoles" autocomplete="off" x-model="$store.data.showMediumMazeHoles" @change="onChangeShowMazeHoles">
-											<label class="btn btn-outline-primary" :style="$store.data.showMediumMazeHoles ? `background-color: rgb(0,255,255); color: #2d3339;` : `border-color: rgb(0,255,255); color: rgb(0,255,255);`" for="showMediumMazeHoles"
-												data-bs-toggle="tooltip" 
-												data-bs-title="Contains:<br />- <strong>Clear Gemstone</strong><br />- Ocarina"
-												data-bs-custom-class="custom-tooltip"
-												data-bs-html="true"
-												data-bs-placement="right"
-											>Medium</label>
-										</div>
-		
-										<div class="d-inline-flex mt-2">
-											<input type="checkbox" class="btn-check" id="showLargeMazeHoles" autocomplete="off" x-model="$store.data.showLargeMazeHoles" @change="onChangeShowMazeHoles">
-											<label class="btn btn-outline-primary" :style="$store.data.showLargeMazeHoles ? `background-color: rgb(0,255,0); color: #2d3339;` : `border-color: rgb(0,255,0); color: rgb(0,255,0);`" for="showLargeMazeHoles"
-												data-bs-toggle="tooltip" 
-												data-bs-title='Contains:<br />- <strong>Broken Handle</strong><br />- <strong>Oracle Card "Aura"</strong><br />- Caveling Figurine<br />- Gold Crystal Necklace<br />- Chipped Plate x2<br />- Precious Urn x5'
-												data-bs-custom-class="custom-tooltip"
-												data-bs-html="true"
-												data-bs-placement="right"
-											>Large</label>
-										</div>
+
+										<a href="https://corekeeper.wikizet.com/en/How_to_Get_the_Rune_Song_Legendary_Sword" target="_blank">
+											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" style="fill: currentColor;"><path d="M11,18H13V16H11V18M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,6A4,4 0 0,0 8,10H10A2,2 0 0,1 12,8A2,2 0 0,1 14,10C14,12 11,11.75 11,15H13C13,12.75 16,12.5 16,10A4,4 0 0,0 12,6Z" /></svg> 
+											How to find Rune Song
+										</a>
 									</div>
 								</div>
 
