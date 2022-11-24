@@ -36,7 +36,9 @@ document.addEventListener('alpine:init', function () {
 		showChunkGrid: false,
 		showMobGrid: false,
 		showCustomRing: false,
-		showMazeHoles: false,
+		showSmallMazeHoles: false,
+		showMediumMazeHoles: false,
+		showLargeMazeHoles: false,
 		manualArcRotation: false,
 		cropRingsToBiome: true,
 

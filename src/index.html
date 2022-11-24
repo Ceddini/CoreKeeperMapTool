@@ -185,9 +185,9 @@
 				<div id="new-menu-design">
 					<!-- File Loading Section -->
 					<section class="bordered-box">
-						<div class="d-flex justify-content-between align-items-center mb-1">
+						<div class="d-flex justify-content-between align-items-start mb-1">
 							<h4>Load Map</h4>
-							<a href="#" onclick="loadExample()" style="font-size: 12pt; text-align:right;">Load Example Map<br><small>(by Craigins)</small></a>
+							<a href="#" onclick="loadExample()" style="font-size: 12pt; text-align:right;">Load Example Map</a>
 						</div>
 						<input id="mapupload" type="file" class="form-control d-none" />
 
@@ -283,145 +283,151 @@
 						Load map to show settings
 					</div>
 					<div x-show="$store.data.firstTimeLoaded" x-transition.scale.origin.top style="display: none;">
-
 						<!-- POIs Section -->
-						<section class="bordered-box">
-							<h4>Pre-Spawned Locations</h4>
-							<template x-for="category in $store.categories" :key="category.name">
+						<section class="bordered-box" x-data="{visible: true}">
+							<div class="d-inline-flex align-items-center" x-on:click="visible = !visible" style="cursor: pointer;">
+								<svg x-show="visible" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor; display:none;"><path d="M7.41,15.41L12,10.83L16.59,15.41L18,14L12,8L6,14L7.41,15.41Z" /></svg>
+								<svg x-show="!visible" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor;"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" /></svg>
+
+								<span class="fs-4">Pre-Spawned Locations</span>
+							</div>
+							<div class="pe-1 mt-2" x-show="visible" x-transition>
+								<template x-for="category in $store.categories" :key="category.name">
+									<div class="bordered-box-section" x-data="{visible: false}">
+										<div class="d-flex align-items-center mb-1">
+											<div class="d-inline-flex align-items-center" x-on:click="visible = !visible" style="cursor: pointer;">
+												<svg x-show="visible" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor;"><path d="M7.41,15.41L12,10.83L16.59,15.41L18,14L12,8L6,14L7.41,15.41Z" /></svg>
+												<svg x-show="!visible" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor;"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" /></svg>
+	
+												<span class="fs-5" x-text="category.name"></span>
+											</div>
+											<div class="flex-fill border-bottom border-secondary mx-2"></div>
+											<span x-on:click="toggleCategoryCircles(category.items)" class="fs-6 text-secondary" style="cursor: pointer;">Toggle all</span>
+										</div>
+										<div x-show="visible" x-transition style="display: none;">
+											<template x-for="circle in category.items" :key="circle.name">
+												<button type="button" :disabled="circle.disabled" 
+												class="btn btn-sm me-2 mb-2 d-inline-flex align-items-center" 
+												:style="circle.visible ? `background-color: ${circle.color}; color: ${circle.textColor}` : `border-color: ${circle.color}; color: ${circle.color}`"
+												:data-bs-toggle="(circle.tooltip) ? 'tooltip' : ''" 
+												:data-bs-title="circle.getTooltipContent()"
+												data-bs-custom-class="custom-tooltip"
+												data-bs-html="true"
+												data-bs-placement="right"
+												x-on:click="toggleCircle(circle)">
+													<template x-if="circle.image">
+														<div
+														class="circle-image" 
+														:style="(circle.visible) 
+															? `background-image: url('img/${circle.image}'); margin-right: 8px; border-color: ${circle.color};` 
+															: `background-image: url('img/${circle.image}'); margin-right: 8px; border-color: ${circle.color};`"></div>
+													</template>
+													<!-- <img x-show="circle.image" :src="`img/${circle.image}`" :alt="`Image of ${circle.name}`" width="32"> -->
+													<span x-text="circle.name"></span>
+												</button>
+											</template>
+										</div>
+									</div>
+								</template>
+	
+								<div class="bordered-box-section" x-data="{visible: true}">
+									<div class="d-flex align-items-center mb-1">
+										<div class="d-inline-flex align-items-center" x-on:click="visible = !visible" style="cursor: pointer;">
+											<svg x-show="visible" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor;"><path d="M7.41,15.41L12,10.83L16.59,15.41L18,14L12,8L6,14L7.41,15.41Z" /></svg>
+											<svg x-show="!visible" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor;"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" /></svg>
+	
+											<span class="fs-5">Biomes</span>
+										</div>
+										<div class="flex-fill border-bottom border-secondary mx-2"></div>
+									</div>
+									<div x-show="visible" x-transition style="display: none;" class="px-1">
+										<div class="d-flex align-items-center justify-content-between">
+											<div class="d-flex flex-fill">
+												<input type="checkbox" class="btn-check" id="showArcs" autocomplete="off" x-model="$store.data.showArcs" @change="onChangeShowArcs">
+												<label class="btn btn-outline-primary" for="showArcs">Show Biomes</label><br>
+											</div>
+				
+											<div>
+												<div class="input-group">
+													<span class="input-group-text">Manual Rotation</span>
+													<div class="input-group-text">
+														<input class="form-check-input mt-0" type="checkbox" id="manualArcRotation" x-model="$store.data.manualArcRotation" @change="onChangeManualArcRotation">
+													</div>
+												</div>
+											</div>
+										</div>
+										
+										<div x-show="$store.data.manualArcRotation" style="display: none;" x-transition>
+											<div class="d-flex flex-column">
+												<div class="my-2">
+													<span>Inner Biomes</span>
+													<div class="d-flex align-items-center">
+														<input type="range" class="form-range me-2" name="innerArcSlider" id="innerArcSlider" min="0" max="359" x-model="$store.data.innerSlider" @change="onChangeInnerArc">
+														<input @change.debounce.100ms="onChangeInnerArc" class="form-control form-control-sm me-1" type="number" min="0" max="359" x-model="$store.data.innerSlider" style="width: 60px;">
+														<span>deg</span>
+													</div>
+												</div>
+												<div>
+													<span>Outer Biomes</span>
+													<div class="d-flex align-items-center">
+														<input type="range" class="form-range me-2" name="outerArcSlider" id="outerArcSlider" min="0" max="359" x-model="$store.data.outerSlider" @change="onChangeOuterArc">
+														<input @change.debounce.100ms="onChangeOuterArc" class="form-control form-control-sm me-1" type="number" min="0" max="359" x-model="$store.data.outerSlider" style="width: 60px;">
+														<span>deg</span>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="mt-2">
+											<span>Biome Transparency</span>
+											<div class="d-flex align-items-center">
+												<input type="range" class="form-range me-2" name="biomeTransparency" id="biomeTransparency" min="0" max="100" x-model="$store.data.biomeTransparency" @change="onChangeBiomeTransparency">
+												<input class="form-control form-control-sm me-1" type="number" min="0" max="100" style="width: 60px;" x-model="$store.data.biomeTransparency" @change="onChangeBiomeTransparency">
+												<span>%</span>
+											</div>
+										</div>
+									</div>
+								</div>
+	
 								<div class="bordered-box-section" x-data="{visible: false}">
 									<div class="d-flex align-items-center mb-1">
 										<div class="d-inline-flex align-items-center" x-on:click="visible = !visible" style="cursor: pointer;">
 											<svg x-show="visible" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor;"><path d="M7.41,15.41L12,10.83L16.59,15.41L18,14L12,8L6,14L7.41,15.41Z" /></svg>
 											<svg x-show="!visible" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor;"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" /></svg>
-
-											<span class="fs-5" x-text="category.name"></span>
+	
+											<span class="fs-5">Advanced Settings</span>
 										</div>
 										<div class="flex-fill border-bottom border-secondary mx-2"></div>
-										<span x-on:click="toggleCategoryCircles(category.items)" class="fs-6 text-secondary" style="cursor: pointer;">Toggle all</span>
 									</div>
 									<div x-show="visible" x-transition style="display: none;" class="px-1">
-										<template x-for="circle in category.items" :key="circle.name">
-											<button type="button" :disabled="circle.disabled" 
-											:class="'btn btn-sm me-2 mb-2 d-inline-flex align-items-center'" 
-											:style="circle.visible ? `background-color: ${circle.color}; color: ${circle.textColor}` : `border-color: ${circle.color}; color: ${circle.color}`"
-											:data-bs-toggle="(circle.tooltip) ? 'tooltip' : ''" 
-											:data-bs-title="circle.getTooltipContent()"
-											data-bs-custom-class="custom-tooltip"
-											data-bs-html="true"
-											data-bs-placement="right"
-											x-on:click="toggleCircle(circle)">
-												<template x-if="circle.image">
-													<div
-													class="circle-image" 
-													:style="(circle.visible) 
-														? `background-image: url('img/${circle.image}'); margin-right: 8px; border-color: ${circle.color};` 
-														: `background-image: url('img/${circle.image}'); margin-right: 8px; border-color: ${circle.color};`"></div>
-												</template>
-												<!-- <img x-show="circle.image" :src="`img/${circle.image}`" :alt="`Image of ${circle.name}`" width="32"> -->
-												<span x-text="circle.name"></span>
-											</button>
-										</template>
-									</div>
-								</div>
-							</template>
-
-							<div class="bordered-box-section" x-data="{visible: true}">
-								<div class="d-flex align-items-center mb-1">
-									<div class="d-inline-flex align-items-center" x-on:click="visible = !visible" style="cursor: pointer;">
-										<svg x-show="visible" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor;"><path d="M7.41,15.41L12,10.83L16.59,15.41L18,14L12,8L6,14L7.41,15.41Z" /></svg>
-										<svg x-show="!visible" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor;"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" /></svg>
-
-										<span class="fs-5">Biomes</span>
-									</div>
-									<div class="flex-fill border-bottom border-secondary mx-2"></div>
-								</div>
-								<div x-show="visible" x-transition style="display: none;" class="px-1">
-									<div class="d-flex align-items-center justify-content-between">
-										<div class="d-flex flex-fill">
-											<input type="checkbox" class="btn-check" id="showArcs" autocomplete="off" x-model="$store.data.showArcs" @change="onChangeShowArcs">
-											<label class="btn btn-outline-primary" for="showArcs">Show Biomes</label><br>
-										</div>
-			
 										<div>
-											<div class="input-group">
-												<span class="input-group-text">Manual Rotation</span>
-												<div class="input-group-text">
-													<input class="form-check-input mt-0" type="checkbox" id="manualArcRotation" x-model="$store.data.manualArcRotation" @change="onChangeManualArcRotation">
-												</div>
+											<span>Ring Transparency</span>
+											<div class="d-flex align-items-center">
+												<input type="range" class="form-range me-2" name="ringTransparency" id="ringTransparency" min="0" max="100" x-model="$store.data.ringTransparency" @change="onChangeRingTransparency">
+												<input class="form-control form-control-sm me-1" type="number" min="0" max="100" style="width: 60px;" x-model="$store.data.ringTransparency" @change.debounce.100ms="onChangeRingTransparency">
+												<span>%</span>
 											</div>
 										</div>
-									</div>
-									
-									<div x-show="$store.data.manualArcRotation" style="display: none;" x-transition>
-										<div class="d-flex flex-column">
-											<div class="my-2">
-												<span>Inner Biomes</span>
-												<div class="d-flex align-items-center">
-													<input type="range" class="form-range me-2" name="innerArcSlider" id="innerArcSlider" min="0" max="359" x-model="$store.data.innerSlider" @change="onChangeInnerArc">
-													<input @change.debounce.100ms="onChangeInnerArc" class="form-control form-control-sm me-1" type="number" min="0" max="359" x-model="$store.data.innerSlider" style="width: 60px;">
-													<span>deg</span>
-												</div>
-											</div>
-											<div>
-												<span>Outer Biomes</span>
-												<div class="d-flex align-items-center">
-													<input type="range" class="form-range me-2" name="outerArcSlider" id="outerArcSlider" min="0" max="359" x-model="$store.data.outerSlider" @change="onChangeOuterArc">
-													<input @change.debounce.100ms="onChangeOuterArc" class="form-control form-control-sm me-1" type="number" min="0" max="359" x-model="$store.data.outerSlider" style="width: 60px;">
-													<span>deg</span>
-												</div>
+										<div class="mb-2">
+											<div class="form-check">
+												<input class="form-check-input" type="checkbox" value="" id="cropByBiome" x-model="$store.data.cropRingsToBiome" @change="onChangeCropRingsToBiome">
+												<label class="form-check-label" for="cropByBiome">
+												  Crop Rings to Biome<br />
+												  <small>If it doesn't work, enable "Manual Rotation"</small>
+												</label>
 											</div>
 										</div>
-									</div>
-									<div class="mt-2">
-										<span>Biome Transparency</span>
-										<div class="d-flex align-items-center">
-											<input type="range" class="form-range me-2" name="biomeTransparency" id="biomeTransparency" min="0" max="100" x-model="$store.data.biomeTransparency" @change="onChangeBiomeTransparency">
-											<input class="form-control form-control-sm me-1" type="number" min="0" max="100" style="width: 60px;" x-model="$store.data.biomeTransparency" @change="onChangeBiomeTransparency">
-											<span>%</span>
-										</div>
-									</div>
-								</div>
-							</div>
-
-							<div class="bordered-box-section" x-data="{visible: false}">
-								<div class="d-flex align-items-center mb-1">
-									<div class="d-inline-flex align-items-center" x-on:click="visible = !visible" style="cursor: pointer;">
-										<svg x-show="visible" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor;"><path d="M7.41,15.41L12,10.83L16.59,15.41L18,14L12,8L6,14L7.41,15.41Z" /></svg>
-										<svg x-show="!visible" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor;"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" /></svg>
-
-										<span class="fs-5">Advanced Settings</span>
-									</div>
-									<div class="flex-fill border-bottom border-secondary mx-2"></div>
-								</div>
-								<div x-show="visible" x-transition style="display: none;" class="px-1">
-									<div>
-										<span>Ring Transparency</span>
-										<div class="d-flex align-items-center">
-											<input type="range" class="form-range me-2" name="ringTransparency" id="ringTransparency" min="0" max="100" x-model="$store.data.ringTransparency" @change="onChangeRingTransparency">
-											<input class="form-control form-control-sm me-1" type="number" min="0" max="100" style="width: 60px;" x-model="$store.data.ringTransparency" @change.debounce.100ms="onChangeRingTransparency">
-											<span>%</span>
-										</div>
-									</div>
-									<div class="mb-2">
-										<div class="form-check">
-											<input class="form-check-input" type="checkbox" value="" id="cropByBiome" x-model="$store.data.cropRingsToBiome" @change="onChangeCropRingsToBiome">
-											<label class="form-check-label" for="cropByBiome">
-											  Crop Rings to Biome<br />
-											  <small>If it doesn't work, enable "Manual Rotation"</small>
-											</label>
-										</div>
-									</div>
-									<div>
-										<div class="form-check">
-											<input class="form-check-input" type="checkbox" value="" id="showCustomRing" x-model="$store.data.showCustomRing" @change="onChangeShowCustomRing">
-											<label class="form-check-label" for="showCustomRing">
-											Custom Ring
-											</label>
-										</div>
-										<div class="d-flex align-items-center">
-											<input type="range" class="form-range me-2" name="customRing" id="customRing" min="0" max="5000" step="25" x-model="$store.data.customRing" @change="onChangeCustomRing">
-											<input class="form-control form-control-sm me-1" type="number" min="0" style="width: 70px;" x-model="$store.data.customRing" @change.debounce.100ms="onChangeCustomRing">
-											<span>tiles</span>
+										<div>
+											<div class="form-check">
+												<input class="form-check-input" type="checkbox" value="" id="showCustomRing" x-model="$store.data.showCustomRing" @change="onChangeShowCustomRing">
+												<label class="form-check-label" for="showCustomRing">
+												Custom Ring
+												</label>
+											</div>
+											<div class="d-flex align-items-center">
+												<input type="range" class="form-range me-2" name="customRing" id="customRing" min="0" max="5000" step="25" x-model="$store.data.customRing" @change="onChangeCustomRing">
+												<input class="form-control form-control-sm me-1" type="number" min="0" style="width: 70px;" x-model="$store.data.customRing" @change.debounce.100ms="onChangeCustomRing">
+												<span>tiles</span>
+											</div>
 										</div>
 									</div>
 								</div>
@@ -429,95 +435,159 @@
 						</section>
 
 						<!-- Grid Section -->
-						<section class="bordered-box">
+						<section class="bordered-box" x-data="{visible: true}">
+							<div class="d-inline-flex align-items-center" x-on:click="visible = !visible" style="cursor: pointer;">
+								<svg x-show="visible" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor; display:none;"><path d="M7.41,15.41L12,10.83L16.59,15.41L18,14L12,8L6,14L7.41,15.41Z" /></svg>
+								<svg x-show="!visible" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor;"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" /></svg>
 
-							<div class="d-inline-flex">
-								<input type="checkbox" class="btn-check" id="showChunkGrid" autocomplete="off" x-model="$store.data.showChunkGrid" @change="onChangeShowChunkGrid">
-								<label class="btn btn-outline-primary me-2" for="showChunkGrid">Show Chunk Grid</label>
+								<span class="fs-4">Dynamic Features</span>
+							</div>
+							<div class="px-1 mt-2" x-show="visible" x-transition>
+								<div class="d-inline-flex">
+									<input type="checkbox" class="btn-check" id="showChunkGrid" autocomplete="off" x-model="$store.data.showChunkGrid" @change="onChangeShowChunkGrid">
+									<label class="btn btn-outline-primary me-2" for="showChunkGrid"
+										data-bs-toggle="tooltip" 
+										data-bs-title="64x64 grid into which dynamically spawned scenes and dungeons are placed during the player's exploration of the world"
+										data-bs-custom-class="custom-tooltip"
+										data-bs-placement="right"
+									>Chunk Grid</label>
+	
+									<input type="checkbox" class="btn-check" id="showMobGrid" autocomplete="off" x-model="$store.data.showMobGrid" @change="onChangeShowMobGrid">
+									<label class="btn btn-outline-primary" for="showMobGrid"
+										data-bs-toggle="tooltip" 
+										data-bs-title="16x16 grid of cells used by the mob spawning algorithm - each one within 208 tiles of a player gets one spawn event every ~20 minutes, for each mob type with enough spawn surface tiles available"
+										data-bs-custom-class="custom-tooltip"
+										data-bs-placement="right"
+									>Mob Grid</label>
+								</div>
 
-								<input type="checkbox" class="btn-check" id="showMobGrid" autocomplete="off" x-model="$store.data.showMobGrid" @change="onChangeShowMobGrid">
-								<label class="btn btn-outline-primary" for="showMobGrid">Show Mob Grid</label>
-							</div>
-							<div class="d-inline-flex mt-2">
-								<input type="checkbox" class="btn-check" id="showMazeHoles" autocomplete="off" x-model="$store.data.showMazeHoles" @change="onChangeShowMazeHoles">
-								<label class="btn btn-outline-primary" for="showMazeHoles"
-								data-bs-toggle="tooltip"
-								data-bs-placement="right"
-								data-bs-html="true"
-								data-bs-title="<strong>Light green:</strong> Big, Medium, Small<br><strong>Light Blue:</strong> Medium, Small<br><strong>Pink:</strong> Small"
-								data-bs-custom-class="custom-tooltip"
-								>Show Maze Holes</label>
-							</div>
-							<div class="mt-2">
-								<span>Grid Transparency</span>
-								<div class="d-flex align-items-center">
-									<input type="range" class="form-range me-2" name="gridTransparency" id="gridTransparency" min="0" max="100" x-model="$store.data.gridTransparency" @change="onChangeGridTransparency">
-									<input class="form-control form-control-sm me-1" type="number" min="0" max="100" style="width: 60px;" x-model="$store.data.gridTransparency" @change="onChangeGridTransparency">
-									<span>%</span>
+								<div class="bordered-box-section mt-2" x-data="{mazeHolesVisible: true}">
+									<div class="d-flex align-items-center mb-1">
+										<div class="d-inline-flex align-items-center" x-on:click="mazeHolesVisible = !mazeHolesVisible" style="cursor: pointer;">
+											<svg x-show="mazeHolesVisible" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor;"><path d="M7.41,15.41L12,10.83L16.59,15.41L18,14L12,8L6,14L7.41,15.41Z" /></svg>
+											<svg x-show="!mazeHolesVisible" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor;"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" /></svg>
+	
+											<span class="fs-5">Maze Holes</span>
+										</div>
+										<div class="flex-fill border-bottom border-secondary mx-2"></div>
+										<span x-on:click="toggleAllMazeHoles" class="fs-6 text-secondary" style="cursor: pointer;">Toggle all</span>
+									</div>
+									<div x-show="mazeHolesVisible" x-transition style="display: none;" class="px-1">
+										<div class="d-inline-flex mt-2">
+											<input type="checkbox" class="btn-check" id="showSmallMazeHoles" autocomplete="off" x-model="$store.data.showSmallMazeHoles" @change="onChangeShowMazeHoles">
+											<label class="btn btn-outline-primary" :style="$store.data.showSmallMazeHoles ? `background-color: rgb(255,0,255); color: white;` : `border-color: rgb(255,0,255); color: rgb(255,0,255);`" for="showSmallMazeHoles"
+												data-bs-toggle="tooltip" 
+												data-bs-title="Contains:<br />- Tin Sword"
+												data-bs-custom-class="custom-tooltip"
+												data-bs-html="true"
+												data-bs-placement="right"
+											>Small</label>
+										</div>
+		
+										<div class="d-inline-flex mt-2">
+											<input type="checkbox" class="btn-check" id="showMediumMazeHoles" autocomplete="off" x-model="$store.data.showMediumMazeHoles" @change="onChangeShowMazeHoles">
+											<label class="btn btn-outline-primary" :style="$store.data.showMediumMazeHoles ? `background-color: rgb(0,255,255); color: #2d3339;` : `border-color: rgb(0,255,255); color: rgb(0,255,255);`" for="showMediumMazeHoles"
+												data-bs-toggle="tooltip" 
+												data-bs-title="Contains:<br />- <strong>Clear Gemstone</strong><br />- Ocarina"
+												data-bs-custom-class="custom-tooltip"
+												data-bs-html="true"
+												data-bs-placement="right"
+											>Medium</label>
+										</div>
+		
+										<div class="d-inline-flex mt-2">
+											<input type="checkbox" class="btn-check" id="showLargeMazeHoles" autocomplete="off" x-model="$store.data.showLargeMazeHoles" @change="onChangeShowMazeHoles">
+											<label class="btn btn-outline-primary" :style="$store.data.showLargeMazeHoles ? `background-color: rgb(0,255,0); color: #2d3339;` : `border-color: rgb(0,255,0); color: rgb(0,255,0);`" for="showLargeMazeHoles"
+												data-bs-toggle="tooltip" 
+												data-bs-title='Contains:<br />- <strong>Broken Handle</strong><br />- <strong>Oracle Card "Aura"</strong><br />- Caveling Figurine<br />- Gold Crystal Necklace<br />- Chipped Plate x2<br />- Precious Urn x5'
+												data-bs-custom-class="custom-tooltip"
+												data-bs-html="true"
+												data-bs-placement="right"
+											>Large</label>
+										</div>
+									</div>
+								</div>
+
+								
+
+								<div class="mt-2">
+									<span>Grid Transparency</span>
+									<div class="d-flex align-items-center">
+										<input type="range" class="form-range me-2" name="gridTransparency" id="gridTransparency" min="0" max="100" x-model="$store.data.gridTransparency" @change="onChangeGridTransparency">
+										<input class="form-control form-control-sm me-1" type="number" min="0" max="100" style="width: 60px;" x-model="$store.data.gridTransparency" @change="onChangeGridTransparency">
+										<span>%</span>
+									</div>
 								</div>
 							</div>
 						</section>
 
-						<section class="bordered-box">
-							<h4>Tile Highlighting</h4>
-							<div class="mb-2">
-								<span>Tile Transparency</span>
-								<div class="d-flex align-items-center">
-									<input type="range" class="form-range me-2" name="tileTransparency" id="tileTransparency" min="0" max="100" x-model="$store.data.tileTransparency" @change="onChangeTileTransparency">
-									<input class="form-control form-control-sm me-1" type="number" min="0" max="100" style="width: 60px;" x-model="$store.data.tileTransparency" @change="onChangeTileTransparency">
-									<span>%</span>
-								</div>
+						<section class="bordered-box" x-data="{visible: true}">
+							<div class="d-inline-flex align-items-center" x-on:click="visible = !visible" style="cursor: pointer;">
+								<svg x-show="visible" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor; display:none;"><path d="M7.41,15.41L12,10.83L16.59,15.41L18,14L12,8L6,14L7.41,15.41Z" /></svg>
+								<svg x-show="!visible" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor;"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" /></svg>
+
+								<span class="fs-4">Tile Highlighting</span>
 							</div>
-							<template x-for="category in $store.tilecolormap.list" :key="category.set">
+							<div class="px-1 mt-2" x-show="visible" x-transition>
+								<div class="mb-2">
+									<span>Tile Transparency</span>
+									<div class="d-flex align-items-center">
+										<input type="range" class="form-range me-2" name="tileTransparency" id="tileTransparency" min="0" max="100" x-model="$store.data.tileTransparency" @change="onChangeTileTransparency">
+										<input class="form-control form-control-sm me-1" type="number" min="0" max="100" style="width: 60px;" x-model="$store.data.tileTransparency" @change="onChangeTileTransparency">
+										<span>%</span>
+									</div>
+								</div>
+								<template x-for="category in $store.tilecolormap.list" :key="category.set">
+									<div class="bordered-box-section" x-data="{visible: false}">
+										<div class="d-flex align-items-center mb-1">
+											<div class="d-inline-flex align-items-center" x-on:click="visible = !visible" style="cursor: pointer;">
+												<svg x-show="visible" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor;"><path d="M7.41,15.41L12,10.83L16.59,15.41L18,14L12,8L6,14L7.41,15.41Z" /></svg>
+												<svg x-show="!visible" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor;"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" /></svg>
+	
+												<span class="fs-5" x-text="category.set"></span>
+											</div>
+											<div class="flex-fill border-bottom border-secondary mx-2"></div>
+											<span x-on:click="toggleCategoryTiles(category.tiles)" class="fs-6 text-secondary" style="cursor: pointer;">Toggle all</span>
+										</div>
+										<div x-show="visible" x-transition style="display: none;" class="px-1">
+											<template x-for="tile in category.tiles" :key="tile.name">
+												<button type="button" :disabled="tile.disabled"
+												:class="'btn btn-sm me-2 mb-2 d-inline-flex align-items-center'" 
+												:style="tile.visible ? `background-color: rgb(${tile.r}, ${tile.g}, ${tile.b}); color: inherit;` : `border-color: rgb(${tile.r}, ${tile.g}, ${tile.b}); color: inherit;`"
+												x-on:click="toggleTile(tile)">
+													<span x-text="tile.name" :style="tile.visible ? `color: ${tile.textColor}` : ``"></span>
+												</button>
+											</template>
+										</div>
+									</div>
+								</template>
 								<div class="bordered-box-section" x-data="{visible: false}">
 									<div class="d-flex align-items-center mb-1">
 										<div class="d-inline-flex align-items-center" x-on:click="visible = !visible" style="cursor: pointer;">
 											<svg x-show="visible" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor;"><path d="M7.41,15.41L12,10.83L16.59,15.41L18,14L12,8L6,14L7.41,15.41Z" /></svg>
 											<svg x-show="!visible" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor;"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" /></svg>
-
-											<span class="fs-5" x-text="category.set"></span>
+	
+											<span class="fs-5">Advanced Settings</span>
 										</div>
 										<div class="flex-fill border-bottom border-secondary mx-2"></div>
-										<span x-on:click="toggleCategoryTiles(category.tiles)" class="fs-6 text-secondary" style="cursor: pointer;">Toggle all</span>
 									</div>
 									<div x-show="visible" x-transition style="display: none;" class="px-1">
-										<template x-for="tile in category.tiles" :key="tile.name">
-											<button type="button" :disabled="tile.disabled"
-											:class="'btn btn-sm me-2 mb-2 d-inline-flex align-items-center'" 
-											:style="tile.visible ? `background-color: rgb(${tile.r}, ${tile.g}, ${tile.b}); color: inherit;` : `border-color: rgb(${tile.r}, ${tile.g}, ${tile.b}); color: inherit;`"
-											x-on:click="toggleTile(tile)">
-												<span x-text="tile.name" :style="tile.visible ? `color: ${tile.textColor}` : ``"></span>
-											</button>
-										</template>
-									</div>
-								</div>
-							</template>
-							<div class="bordered-box-section" x-data="{visible: false}">
-								<div class="d-flex align-items-center mb-1">
-									<div class="d-inline-flex align-items-center" x-on:click="visible = !visible" style="cursor: pointer;">
-										<svg x-show="visible" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor;"><path d="M7.41,15.41L12,10.83L16.59,15.41L18,14L12,8L6,14L7.41,15.41Z" /></svg>
-										<svg x-show="!visible" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor;"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" /></svg>
-
-										<span class="fs-5">Advanced Settings</span>
-									</div>
-									<div class="flex-fill border-bottom border-secondary mx-2"></div>
-								</div>
-								<div x-show="visible" x-transition style="display: none;" class="px-1">
-									<div class="form-check">
-										<input class="form-check-input" type="checkbox" value="" id="showCustomHighlightColor" x-model="$store.data.showCustomHighlightColor" @change="onChangeShowCustomHighlightColor">
-										<label class="form-check-label" for="showCustomHighlightColor">
-										Custom Highlight Color
-										</label>
-									</div>
-									<div class="d-flex align-items-center">
-										<button class="btn btn-primary me-2" :disabled="window.EyeDropper === undefined" x-on:click="openColorPicker">
-											Pick Color
-										</button>
-										<div>
-											<input type="color" name="customHighlightColor" class="form-control form-control-color" style="padding: 0.2em;" x-model="$store.data.customHighlightColor" id="customHighlightColor" />
+										<div class="form-check">
+											<input class="form-check-input" type="checkbox" value="" id="showCustomHighlightColor" x-model="$store.data.showCustomHighlightColor" @change="onChangeShowCustomHighlightColor">
+											<label class="form-check-label" for="showCustomHighlightColor">
+											Custom Highlight Color
+											</label>
 										</div>
+										<div class="d-flex align-items-center">
+											<button class="btn btn-primary me-2" :disabled="window.EyeDropper === undefined" x-on:click="openColorPicker">
+												Pick Color
+											</button>
+											<div>
+												<input type="color" name="customHighlightColor" class="form-control form-control-color" style="padding: 0.2em;" x-model="$store.data.customHighlightColor" id="customHighlightColor" />
+											</div>
+										</div>
+										<span x-show="window.EyeDropper === undefined" class="text-danger">Color Picker not supported in this browser.</span>
 									</div>
-									<span x-show="window.EyeDropper === undefined" class="text-danger">Color Picker not supported in this browser.</span>
 								</div>
 							</div>
 						</section>
@@ -587,7 +657,7 @@
 										<a href="https://github.com/craigins" target="_blank">GitHub</a>
 									</div>
 								</div>
-								<p>Initial codebase</p>
+								<p>Initial codebase, Example Map</p>
 							</div>
 							<div class="contributor">
 								<div class="d-flex align-items-center justify-content-between">

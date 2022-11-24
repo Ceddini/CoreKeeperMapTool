@@ -139,7 +139,9 @@ function findStone(myImageData, width) {
 	stoneArc.start = maxStone.index * deltaRadians;
 	stoneArc.endTicks = maxClay.index;
 	stoneArc.end = maxClay.index * deltaRadians;
-	findHole(myImageData, width);
+
+	if (Alpine.store("data").showSmallMazeHoles || Alpine.store("data").showMediumMazeHoles || Alpine.store("data").showLargeMazeHoles)
+		findHole(myImageData, width);
 }
 
 function findWilderness(myImageData, width) {
@@ -208,7 +210,18 @@ function findHole(myImageData, width) {
 					if (hole._fits > 0) {
 						let holeColor = MAZE_HIGLIGHT[hole._fits];
 						delete hole._fits;
-						colorHole(myImageData, width, hole, holeColor);
+
+						if (Alpine.store("data").showSmallMazeHoles && holeColor === MAZE_HIGLIGHT[1]) {
+							colorHole(myImageData, width, hole, holeColor);
+						}
+
+						if (Alpine.store("data").showMediumMazeHoles && holeColor === MAZE_HIGLIGHT[2]) {
+							colorHole(myImageData, width, hole, holeColor);
+						}
+
+						if (Alpine.store("data").showLargeMazeHoles && holeColor === MAZE_HIGLIGHT[3]) {
+							colorHole(myImageData, width, hole, holeColor);
+						}
 					}
 				}
 			}
@@ -392,3 +405,16 @@ function buildStoneFilter() {
 	}
 }
 buildStoneFilter();
+
+function toggleAllMazeHoles(event) {
+	if (Alpine.store("data").showSmallMazeHoles && Alpine.store("data").showMediumMazeHoles && Alpine.store("data").showLargeMazeHoles) {
+		Alpine.store("data").showSmallMazeHoles = false;
+		Alpine.store("data").showMediumMazeHoles = false;
+		Alpine.store("data").showLargeMazeHoles = false;
+	} else {
+		Alpine.store("data").showSmallMazeHoles = true;
+		Alpine.store("data").showMediumMazeHoles = true;
+		Alpine.store("data").showLargeMazeHoles = true;
+	}
+	redrawDebounce(event);
+}
