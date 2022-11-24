@@ -11,7 +11,7 @@ const BIOMES = {
 	WILDERNESS: { name: "The Wilderness", ring: RINGS.WILDERNESS },
 	SUNKENSEA: { name: "Sunken Sea", ring: RINGS.SUNKENSEA },
 	STONE: { name: "Stone", ring: RINGS.STONE },
-	CLAY: { name: "Clay", ring: RINGS.STONE },
+	CLAY: { name: "Clay", ring: RINGS.CLAY },
 	DIRT: { name: "The Underground" },
 	HIVE: { name: "Larva Hive", ring: RINGS.CLAY },
 	RUINS: { name: "Ruins", ring: RINGS.STONE }
@@ -74,7 +74,7 @@ class Category {
 
 const bosses = new Category("Bosses", [
 	new CircleItem("Glurch", "Glurch the Abominous Mass", [BIOMES.DIRT], [65], "#D95917", "#FFFFFF", true, "#", "bosses/glurch.webp"),
-	new CircleItem("Ghorm", "Ghorm the Devourer", [BIOMES.DIRT, BIOMES.CLAY], [220], "#7F5F30", "#FFFFFF", true, "#", "bosses/ghorm.png"),
+	new CircleItem("Ghorm", "Ghorm the Devourer", [BIOMES.STONE, BIOMES.CLAY], [250], "#7F5F30", "#FFFFFF", true, "#", "bosses/ghorm.png"),
 	new CircleItem("Hive Mother", "The Hive Mother", [BIOMES.HIVE], [330], "#FCA694", "#FFFFFF", true, "#", "bosses/hive_mother.png"),
 	new CircleItem("Azeos", "Azeos the Sky Titan", [BIOMES.WILDERNESS], [600], "#d2b835", "#FFFFFF", true, "#", "bosses/azeos.png"),
 	new CircleItem("Omoroth", "Omoroth the Sea Titan", [BIOMES.SUNKENSEA], [1100], "#9E3F9B", "#FFFFFF", true, "#", "bosses/omoroth.png"),

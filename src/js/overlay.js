@@ -19,8 +19,12 @@ function drawOverlayRect(x, y, w, h, color) {
 	rectList.push({ x, y, w, h, color });
 }
 
-function drawOverlayAnnulus(radius, start, end, color = "#FFFFFF") {
-	annulusList.push({ radius, start, end, color });
+function drawOverlayArcs(innerRadius, outerRadius, startAngle, endAngle, color = "#FFFFFF", anticlockwise = true) {
+	annulusList.push({ innerRadius, outerRadius, start: startAngle, end: endAngle, color, anticlockwise });
+}
+
+function drawOverlayAnnulus(radius, start, end, color = "#FFFFFF", anticlockwise = true) {
+	annulusList.push({ innerRadius: radius - 10, outerRadius: radius + 10, start, end, color, anticlockwise });
 }
 
 function drawOverlayCircle(radius, color = "#FFFFFF") {
@@ -32,10 +36,10 @@ function _drawOverlayRect(x, y, w, h, color) {
 	overlayCtx.fillRect(x * scale, y * scale, w * scale, h * scale);
 }
 
-function _drawOverlayAnnulus(radius, start, end, color = "#FFFFFF") {
+function _drawOverlayAnnulus(innerRadius, outerRadius, start, end, color = "#FFFFFF", anticlockwise = true) {
 	overlayCtx.globalAlpha = Alpine.store('data').ringTransparency / 100;
 	overlayCtx.fillStyle = color;
-	annulus(overlayCtx, 0, 0, (radius - 10) * scale, (radius + 10) * scale, start, end, true);
+	annulus(overlayCtx, 0, 0, innerRadius * scale, outerRadius * scale, start, end, anticlockwise);
 	overlayCtx.globalAlpha = 1.0;
 }
 
@@ -59,7 +63,7 @@ function drawOverlay() {
 
 	rectList.forEach(r => _drawOverlayRect(r.x, r.y, r.w, r.h, r.color));
 	circleList.forEach(c => _drawOverlayCircle(c.radius, c.color));
-	annulusList.forEach(a => _drawOverlayAnnulus(a.radius, a.start, a.end, a.color));
+	annulusList.forEach(a => _drawOverlayAnnulus(a.innerRadius, a.outerRadius, a.start, a.end, a.color, a.anticlockwise));
 
 	overlayCtx.translate(-window.innerWidth / 2 + offset.x * scale, - window.innerHeight / 2 + offset.y * scale)
 

@@ -194,12 +194,8 @@ function decorateMap(width, height) {
 							let hasBeenCropped = false;
 
 							circle.locations.forEach(location => {
-								console.log(circle.name);
-								console.log(location.ring);
 								if (location.ring) {
 									if (shouldDrawInnerArcs && (location.ring === RINGS.CLAY || location.ring === RINGS.STONE)) {
-										console.log("CROPPING TO BIOME");
-										console.log(circle);
 										const start = (manualArcRotation) ? document.getElementById('innerArcSlider').value * Math.PI / 180 : stoneArc.start;
 										const end = (manualArcRotation) ? loop(document.getElementById('innerArcSlider').value - 180, 0, 359) * Math.PI / 180 : stoneArc.end;
 
@@ -215,7 +211,7 @@ function decorateMap(width, height) {
 												break;
 										}
 
-										drawOverlayAnnulus(_global_ctx, radius, start - (2.5 * Math.PI / 180) - startOffset, end + (2.5 * Math.PI / 180) - endOffset, circle.color);
+										drawOverlayAnnulus(radius, start + (2.5 * Math.PI / 180) - startOffset, end - (2.5 * Math.PI / 180) - endOffset, circle.color, false);
 										hasBeenCropped = true;
 									} else if (shouldDrawOuterArcs) {
 										const start = (manualArcRotation) ? document.getElementById('outerArcSlider').value * Math.PI / 180 : wildernessArc.start;
@@ -236,7 +232,7 @@ function decorateMap(width, height) {
 												endOffset = DESERT_ARC_END_OFFSET;
 												break;
 										}
-										drawOverlayAnnulus(_global_ctx, radius, start - startOffset, end - endOffset, circle.color);
+										drawOverlayAnnulus(radius, start - startOffset, end - endOffset, circle.color, false);
 										hasBeenCropped = true;
 									}
 								}
@@ -358,39 +354,19 @@ function annulus(ctx, centerX, centerY,
 }
 
 function drawArcs(ctx, start, end) {
-	ctx.globalAlpha = Alpine.store('data').biomeTransparency / 100;
+	start = start - (2.5 * Math.PI / 180);
+	end = end + (2.5 * Math.PI / 180);
 
-	start = start + (2.5 * Math.PI / 180);
-	end = end - (2.5 * Math.PI / 180);
-
-	//ARC starts 0 at 3 oclock
-	_global_ctx.fillStyle = "#C2C2C2";
-	annulus(coreLoc.x, coreLoc.y, 150, SEARCH_RADII.max - 50, start - STONE_ARC_START_OFFSET, end - STONE_ARC_END_OFFSET);
-
-	_global_ctx.fillStyle = "#A66829";
-	annulus(coreLoc.x, coreLoc.y, 150, SEARCH_RADII.max - 50, start - CLAY_ARC_START_OFFSET, end - CLAY_ARC_END_OFFSET);
-
-	ctx.globalAlpha = 1.0;
+	drawOverlayArcs(150, SEARCH_RADII.max - 50, start - STONE_ARC_START_OFFSET, end - STONE_ARC_END_OFFSET, "#C2C2C2");
+	drawOverlayArcs(150, SEARCH_RADII.max - 50, start - CLAY_ARC_START_OFFSET, end - CLAY_ARC_END_OFFSET, "#A66829");
 }
 
 function drawOuterArcs(ctx, start, end) {
-	ctx.globalAlpha = Alpine.store('data').biomeTransparency / 100;
+	drawOverlayArcs(OUTER_SEARCH_RADII.min + 20, OUTER_SEARCH_RADII.max + 700, start - Math.PI / 2 - (2.25 * Math.PI / 180), end - Math.PI / 2 + (2.25 * Math.PI / 180), "#3B7EDB")
 
-	_global_ctx.fillStyle = "#3B7EDB";
-	annulus(coreLoc.x, coreLoc.y, OUTER_SEARCH_RADII.min + 20, OUTER_SEARCH_RADII.max + 700, start - Math.PI / 2 - (2.25 * Math.PI / 180), end - Math.PI / 2 + (2.25 * Math.PI / 180), true);
+	drawOverlayArcs(OUTER_SEARCH_RADII.min + 20, OUTER_SEARCH_RADII.max + 700, start - Math.PI / 2 - (2.25 * Math.PI / 180) + ((2 * Math.PI) / 3), end - Math.PI / 2 + (2.25 * Math.PI / 180) + ((2 * Math.PI) / 3), "#2B941B");
 
-	_global_ctx.fillStyle = "#2B941B";
-	annulus(coreLoc.x, coreLoc.y, OUTER_SEARCH_RADII.min + 20, OUTER_SEARCH_RADII.max + 700, start - Math.PI / 2 - (2.25 * Math.PI / 180) + ((2 * Math.PI) / 3), end - Math.PI / 2 + (2.25 * Math.PI / 180) + ((2 * Math.PI) / 3), true);
-
-	_global_ctx.fillStyle = "#CFC35D";
-	annulus(coreLoc.x, coreLoc.y, OUTER_SEARCH_RADII.min + 20, OUTER_SEARCH_RADII.max + 700, start - Math.PI / 2 - (2.25 * Math.PI / 180) + ((2 * Math.PI) / 3) * 2, end - Math.PI / 2 + (2.25 * Math.PI / 180) + ((2 * Math.PI) / 3) * 2, true);
-
-	// _global_ctx.beginPath();
-	//_global_ctx.arc(coreLoc.x, coreLoc.y, OUTER_SEARCH_RADII.max, wildernessArc.start - Math.PI / 2, wildernessArc.end - Math.PI / 2, true);
-	//_global_ctx.lineTo()
-	//_global_ctx.arc(coreLoc.x, coreLoc.y, SEARCH_RADII.max, wildernessArc.start - Math.PI / 2, wildernessArc.end - Math.PI / 2, false);
-	// _global_ctx.fill();
-	ctx.globalAlpha = 1.0;
+	drawOverlayArcs(OUTER_SEARCH_RADII.min + 20, OUTER_SEARCH_RADII.max + 700, start - Math.PI / 2 - (2.25 * Math.PI / 180) + ((2 * Math.PI) / 3) * 2, end - Math.PI / 2 + (2.25 * Math.PI / 180) + ((2 * Math.PI) / 3) * 2, "#CFC35D");
 }
 
 function drawMap(tiles) {
@@ -446,7 +422,7 @@ function drawMap(tiles) {
 		Alpine.store("data").cookiesOpen = false;
 		drawOverlay();
 	}
-	Alpine.store('data').firstTimeLoaded = true;
+	Alpine.store("data").firstTimeLoaded = true;
 
 	decorateMap(canvas.width, canvas.height);
 }
@@ -463,8 +439,12 @@ function highlightSelected() {
 		highlightColors(myImage, searchobj);
 	}
 
-	if (Alpine.store('data').showMazeHoles || Alpine.store("data").cropRingsToBiome) {
+	if (Alpine.store("data").showMazeHoles || Alpine.store("data").cropRingsToBiome) {
 		findStone(myImage.data, canvas.width);
+
+		if (Alpine.store("data").cropRingsToBiome) {
+			findWilderness(myImage.data, canvas.width);
+		}
 	}
 	_global_ctx.putImageData(myImage, 0, 0);
 }

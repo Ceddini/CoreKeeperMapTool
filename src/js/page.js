@@ -39,7 +39,7 @@ document.addEventListener('alpine:init', function () {
 		showCustomRing: false,
 		showMazeHoles: false,
 		manualArcRotation: false,
-		cropRingsToBiome: false,
+		cropRingsToBiome: true,
 
 		showCustomHighlightColor: false,
 		customHighlightColor: "#FF0000",

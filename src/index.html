@@ -325,6 +325,64 @@
 								</div>
 							</template>
 
+							<div class="bordered-box-section" x-data="{visible: true}">
+								<div class="d-flex align-items-center mb-1">
+									<div class="d-inline-flex align-items-center" x-on:click="visible = !visible" style="cursor: pointer;">
+										<svg x-show="visible" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor;"><path d="M7.41,15.41L12,10.83L16.59,15.41L18,14L12,8L6,14L7.41,15.41Z" /></svg>
+										<svg x-show="!visible" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor;"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" /></svg>
+
+										<span class="fs-5">Biomes</span>
+									</div>
+									<div class="flex-fill border-bottom border-secondary mx-2"></div>
+								</div>
+								<div x-show="visible" x-transition style="display: none;" class="px-1">
+									<div class="d-flex align-items-center justify-content-between">
+										<div class="d-flex flex-fill">
+											<input type="checkbox" class="btn-check" id="showArcs" autocomplete="off" x-model="$store.data.showArcs" @change="onChangeShowArcs">
+											<label class="btn btn-outline-primary" for="showArcs">Show Biomes</label><br>
+										</div>
+			
+										<div>
+											<div class="input-group">
+												<span class="input-group-text">Manual Rotation</span>
+												<div class="input-group-text">
+													<input class="form-check-input mt-0" type="checkbox" id="manualArcRotation" x-model="$store.data.manualArcRotation" @change="onChangeManualArcRotation">
+												</div>
+											</div>
+										</div>
+									</div>
+									
+									<div x-show="$store.data.manualArcRotation" style="display: none;" x-transition>
+										<div class="d-flex flex-column">
+											<div class="my-2">
+												<span>Inner Biomes</span>
+												<div class="d-flex align-items-center">
+													<input type="range" class="form-range me-2" name="innerArcSlider" id="innerArcSlider" min="0" max="359" x-model="$store.data.innerSlider" @change="onChangeInnerArc">
+													<input @change.debounce.100ms="onChangeInnerArc" class="form-control form-control-sm me-1" type="number" min="0" max="359" x-model="$store.data.innerSlider" style="width: 60px;">
+													<span>deg</span>
+												</div>
+											</div>
+											<div>
+												<span>Outer Biomes</span>
+												<div class="d-flex align-items-center">
+													<input type="range" class="form-range me-2" name="outerArcSlider" id="outerArcSlider" min="0" max="359" x-model="$store.data.outerSlider" @change="onChangeOuterArc">
+													<input @change.debounce.100ms="onChangeOuterArc" class="form-control form-control-sm me-1" type="number" min="0" max="359" x-model="$store.data.outerSlider" style="width: 60px;">
+													<span>deg</span>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="mt-2">
+										<span>Biome Transparency</span>
+										<div class="d-flex align-items-center">
+											<input type="range" class="form-range me-2" name="biomeTransparency" id="biomeTransparency" min="0" max="100" x-model="$store.data.biomeTransparency" @change="onChangeBiomeTransparency">
+											<input class="form-control form-control-sm me-1" type="number" min="0" max="100" style="width: 60px;" x-model="$store.data.biomeTransparency" @change="onChangeBiomeTransparency">
+											<span>%</span>
+										</div>
+									</div>
+								</div>
+							</div>
+
 							<div class="bordered-box-section" x-data="{visible: false}">
 								<div class="d-flex align-items-center mb-1">
 									<div class="d-inline-flex align-items-center" x-on:click="visible = !visible" style="cursor: pointer;">
@@ -348,7 +406,8 @@
 										<div class="form-check">
 											<input class="form-check-input" type="checkbox" value="" id="cropByBiome" x-model="$store.data.cropRingsToBiome" @change="onChangeCropRingsToBiome">
 											<label class="form-check-label" for="cropByBiome">
-											  Crop Rings to Biome
+											  Crop Rings to Biome<br />
+											  <small>If it doesn't work, enable "Manual Rotation"</small>
 											</label>
 										</div>
 									</div>
@@ -365,54 +424,6 @@
 											<span>tiles</span>
 										</div>
 									</div>
-								</div>
-							</div>
-						</section>
-
-						<!-- Biome Section -->
-						<section class="bordered-box">
-							<div class="d-flex align-items-center justify-content-between">
-								<div class="d-flex flex-fill">
-									<input type="checkbox" class="btn-check" id="showArcs" autocomplete="off" x-model="$store.data.showArcs" @change="onChangeShowArcs">
-									<label class="btn btn-outline-primary" for="showArcs">Show Biomes</label><br>
-								</div>
-	
-								<div>
-									<div class="input-group">
-										<span class="input-group-text">Manual Rotation</span>
-										<div class="input-group-text">
-											<input class="form-check-input mt-0" type="checkbox" id="manualArcRotation" x-model="$store.data.manualArcRotation" @change="onChangeManualArcRotation">
-										</div>
-									</div>
-								</div>
-							</div>
-							
-							<div x-show="$store.data.manualArcRotation" style="display: none;" x-transition>
-								<div class="d-flex flex-column">
-									<div class="my-2">
-										<span>Inner Biomes</span>
-										<div class="d-flex align-items-center">
-											<input type="range" class="form-range me-2" name="innerArcSlider" id="innerArcSlider" min="0" max="359" x-model="$store.data.innerSlider" @change="onChangeInnerArc">
-											<input @change.debounce.100ms="onChangeInnerArc" class="form-control form-control-sm me-1" type="number" min="0" max="359" x-model="$store.data.innerSlider" style="width: 60px;">
-											<span>deg</span>
-										</div>
-									</div>
-									<div>
-										<span>Outer Biomes</span>
-										<div class="d-flex align-items-center">
-											<input type="range" class="form-range me-2" name="outerArcSlider" id="outerArcSlider" min="0" max="359" x-model="$store.data.outerSlider" @change="onChangeOuterArc">
-											<input @change.debounce.100ms="onChangeOuterArc" class="form-control form-control-sm me-1" type="number" min="0" max="359" x-model="$store.data.outerSlider" style="width: 60px;">
-											<span>deg</span>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="mt-2">
-								<span>Biome Transparency</span>
-								<div class="d-flex align-items-center">
-									<input type="range" class="form-range me-2" name="biomeTransparency" id="biomeTransparency" min="0" max="100" x-model="$store.data.biomeTransparency" @change="onChangeBiomeTransparency">
-									<input class="form-control form-control-sm me-1" type="number" min="0" max="100" style="width: 60px;" x-model="$store.data.biomeTransparency" @change="onChangeBiomeTransparency">
-									<span>%</span>
 								</div>
 							</div>
 						</section>
