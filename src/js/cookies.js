@@ -24,7 +24,7 @@ function saveGoogleAnalyticsCookie() {
 		});
 
 	}
-	localStorage.setItem("acceptedAnalytics", true);
+	localStorage.setItem("acceptedAnalytics", accepted);
 }
 
 function saveAdTrackingCookie() {
@@ -38,5 +38,5 @@ function saveAdTrackingCookie() {
 			'ads_storage': 'denied'
 		});
 	}
-	localStorage.setItem("acceptedAdTracking", true);
+	localStorage.setItem("acceptedAdTracking", accepted);
 }
