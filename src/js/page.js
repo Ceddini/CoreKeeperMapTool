@@ -13,17 +13,20 @@ document.addEventListener('alpine:init', function () {
 
 
 	Alpine.store('data', {
-		mapLoaded: false,
-		firstTimeLoaded: false,
-		faqOpen: true,
-		isExampleMap: false,
-		canWatchFile,
-
 		// Loaded from savehandler.js
 		tutorialShown: loadSetting("tutorialShown"),
 		acceptedAdTracking: loadSetting("acceptedAdTracking"),
 		acceptedAnalytics: loadSetting("acceptedAnalytics"),
 		savedCookies: loadSetting("savedCookies"),
+
+
+		mapLoaded: false,
+		firstTimeLoaded: false,
+		faqOpen: true,
+		aboutOpen: true,
+		cookiesOpen: !loadSetting("savedCookies"),
+		isExampleMap: false,
+		canWatchFile,
 
 		mapPickerShown: false, // TODO: RESET TO TRUE TO ENABLE
 		directoryHandle: null,

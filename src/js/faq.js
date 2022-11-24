@@ -2,7 +2,7 @@ const faq = [
 	{
 		question: "Privacy - Is my data uploaded?",
 		preopened: true,
-		answer: "<strong>No.</strong> The Map Tool workes entirely client-side, in your browser tab. No files are uploaded. The website sees only your basic ip address and stores no identifying information. I do however use Google Analytics to figure out which browsers / devices and in what languages people are using. You need to allow this though.<br>For a slightly more technical answer, check <em>\"What information do you have access to?\"</em>"
+		answer: "<strong>No.</strong> The Map Tool workes entirely client-side, in your browser tab. No files are uploaded. The website only sees your basic ip address and stores no identifying information. If you allowed Google Analytics, I get anonymous information on what country people are from and the types of their devices / browsers. You need to allow this though.<br>For a slightly more technical answer, check <em>\"What information do you have access to?\"</em> in the FAQ"
 	},
 	{
 		question: "Where is the Clear Gemstone / Chipped Blade?",
@@ -24,7 +24,7 @@ const faq = [
 	},
 	{
 		question: "What information do you have access to?",
-		answer: "The only data I have access to is the nginx log and (if you allowed it) Google Analytics. This contains your basic ip address and the user-agent.<br>The user-agent contains information about what type of browser you use. Google Analytics gives me access to basic interactions with the site, device information and general location. Location is only used to figure out from which countries most people come from."
+		answer: "The only data I have access to is the nginx log and (if you allowed it) Google Analytics. Nginx logs only contain your basic ip address and the user-agent.<br>The user-agent contains information about what type of browser you use.<br>Google Analytics gives me access to basic interactions with the site, device information and general location. Location is only used to figure out from which countries most people come from. This can be useful to know, If I ever add localization."
 	},
 ]
 

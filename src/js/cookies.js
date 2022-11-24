@@ -1,11 +1,12 @@
-function allowAllCookies() {
-	Alpine.store("data").acceptedAdTracking = true;
+function allowAnalytics() {
+	Alpine.store("data").acceptedAdTracking = false;
 	Alpine.store("data").acceptedAnalytics = true;
 	saveCookieSelection();
 }
 
 function saveCookieSelection() {
 	Alpine.store("data").savedCookies = true;
+	Alpine.store("data").cookiesOpen = false;
 	saveGoogleAnalyticsCookie();
 	saveAdTrackingCookie();
 	localStorage.setItem("savedCookies", true);

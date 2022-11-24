@@ -439,8 +439,13 @@ function drawMap(tiles) {
 	}
 
 	Alpine.store('data').mapLoaded = true;
-	drawOverlay();
-	Alpine.store("data").faqOpen = false;
+	if (Alpine.store("data").firstTimeLoaded === false) {
+		console.log("Loading first time stuff :)")
+		Alpine.store("data").faqOpen = false;
+		Alpine.store("data").aboutOpen = false;
+		Alpine.store("data").cookiesOpen = false;
+		drawOverlay();
+	}
 	Alpine.store('data').firstTimeLoaded = true;
 
 	decorateMap(canvas.width, canvas.height);
