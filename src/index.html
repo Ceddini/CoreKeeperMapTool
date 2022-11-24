@@ -442,8 +442,18 @@
 
 								<span class="fs-4">Dynamic Features</span>
 							</div>
-							<div class="px-1 mt-2" x-show="visible" x-transition>
-								<div class="d-inline-flex">
+							<div class="px-1" x-show="visible" x-transition>
+								<div>
+									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" style="fill: currentColor;"><path d="M11,18H13V16H11V18M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,6A4,4 0 0,0 8,10H10A2,2 0 0,1 12,8A2,2 0 0,1 14,10C14,12 11,11.75 11,15H13C13,12.75 16,12.5 16,10A4,4 0 0,0 12,6Z" /></svg> 
+									<a href="https://corekeeper.wikizet.com/en/World_Generation" target="_blank">
+										World Generation
+									</a>, 
+									<a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2846860078" target="_blank" rel="noopener noreferrer">
+										Mob Spawning
+									</a>
+								</div>
+
+								<div class="d-inline-flex mt-2">
 									<input type="checkbox" class="btn-check" id="showChunkGrid" autocomplete="off" x-model="$store.data.showChunkGrid" @change="onChangeShowChunkGrid">
 									<label class="btn btn-outline-primary me-2" for="showChunkGrid"
 										data-bs-toggle="tooltip" 
@@ -461,15 +471,13 @@
 									>Mob Grid</label>
 								</div>
 
-								<div class="d-flex flex-column mt-2">
-									<a href="https://corekeeper.wikizet.com/en/World_Generation" target="_blank">
-										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" style="fill: currentColor;"><path d="M11,18H13V16H11V18M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,6A4,4 0 0,0 8,10H10A2,2 0 0,1 12,8A2,2 0 0,1 14,10C14,12 11,11.75 11,15H13C13,12.75 16,12.5 16,10A4,4 0 0,0 12,6Z" /></svg> 
-										Infos on World Generation
-									</a>
-									<a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2846860078" target="_blank" rel="noopener noreferrer">
-										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" style="fill: currentColor;"><path d="M11,18H13V16H11V18M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,6A4,4 0 0,0 8,10H10A2,2 0 0,1 12,8A2,2 0 0,1 14,10C14,12 11,11.75 11,15H13C13,12.75 16,12.5 16,10A4,4 0 0,0 12,6Z" /></svg> 
-										Infos on Mob Spawning
-									</a>
+								<div class="mt-2">
+									<span>Grid Transparency</span>
+									<div class="d-flex align-items-center">
+										<input type="range" class="form-range me-2" name="gridTransparency" id="gridTransparency" min="0" max="100" x-model="$store.data.gridTransparency" @change="onChangeGridTransparency">
+										<input class="form-control form-control-sm me-1" type="number" min="0" max="100" style="width: 60px;" x-model="$store.data.gridTransparency" @change="onChangeGridTransparency">
+										<span>%</span>
+									</div>
 								</div>
 
 								<div class="bordered-box-section mt-2" x-data="{mazeHolesVisible: true}">
@@ -523,17 +531,6 @@
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" style="fill: currentColor;"><path d="M11,18H13V16H11V18M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,6A4,4 0 0,0 8,10H10A2,2 0 0,1 12,8A2,2 0 0,1 14,10C14,12 11,11.75 11,15H13C13,12.75 16,12.5 16,10A4,4 0 0,0 12,6Z" /></svg> 
 											How to find Rune Song
 										</a>
-									</div>
-								</div>
-
-								
-
-								<div class="mt-2">
-									<span>Grid Transparency</span>
-									<div class="d-flex align-items-center">
-										<input type="range" class="form-range me-2" name="gridTransparency" id="gridTransparency" min="0" max="100" x-model="$store.data.gridTransparency" @change="onChangeGridTransparency">
-										<input class="form-control form-control-sm me-1" type="number" min="0" max="100" style="width: 60px;" x-model="$store.data.gridTransparency" @change="onChangeGridTransparency">
-										<span>%</span>
 									</div>
 								</div>
 							</div>
