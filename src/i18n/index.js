@@ -3,22 +3,16 @@ const supportedLngs = {
 	de: { nativeName: "Deutsch" },
 }
 
-const rerender = (t) => {
-	console.log("Rerendering...");
-	$('body').localize();
-	document.title = t('page_title');
-};
-
-
 $(function () {
 	i18next.use(i18nextBrowserLanguageDetector).use(i18nextChainedBackend).init({
-		debug: true,
+		debug: false,
 		fallbackLng: ["en", "de"],
 		detection: {
 			order: ['localStorage', 'navigator'],
 			caches: ['localStorage'],
 		},
-		ns: ["translation", "faq"],
+		ns: ["translation", "faq", "poi"],
+		load: "languageOnly",
 		backend: {
 			backends: [
 				//i18nextLocalStorageBackend,
@@ -50,15 +44,26 @@ $(function () {
 			const chosenLng = e.target.value;
 			i18next.changeLanguage(chosenLng, () => {
 				console.log(chosenLng);
-				rerender(t);
+				location.reload();
 			});
 		});
 
-		rerender(t);
 		curtain.classList.add("hidden");
 		setTimeout(() => {
 			curtain.remove();
 		}, 350);
+
+		$('body').localize();
+		document.title = t('page_title');
+		document.querySelectorAll("[data-poi-tooltip]").forEach((elem) => {
+			const s = t('poi:description', {
+				...JSON.parse(elem.dataset.poiTooltip),
+				interpolation: {
+					skipOnVariables: false
+				}
+			});
+			elem.dataset.bsTitle = s;
+		});
 	});
 });
 

@@ -26,5 +26,7 @@
 	"load_map.how_to_find_map": "How to find your map file",
 	"load_map.download_image_description": "Save a PNG image of the currently displayed map, including all overlays",
 	"load_map.download_image": "Download Map Image",
-	"load_map.center_map": "Center Map"
+	"load_map.center_map": "Center Map",
+	"load_map_to_show_settings": "Load Map to show Settings",
+	"pre-spawned_locations": "Pre-Spawned Locations"
 }

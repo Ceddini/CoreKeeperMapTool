@@ -7,14 +7,14 @@ const RINGS = {
 };
 
 const BIOMES = {
-	DESERT: { name: "Desert of Beginnings", ring: RINGS.DESERT },
-	WILDERNESS: { name: "The Wilderness", ring: RINGS.WILDERNESS },
-	SUNKENSEA: { name: "Sunken Sea", ring: RINGS.SUNKENSEA },
-	STONE: { name: "Stone", ring: RINGS.STONE },
-	CLAY: { name: "Clay", ring: RINGS.CLAY },
-	DIRT: { name: "The Underground" },
-	HIVE: { name: "Larva Hive", ring: RINGS.CLAY },
-	RUINS: { name: "Ruins", ring: RINGS.STONE }
+	DESERT: { name: "desert_of_beginnings", ring: RINGS.DESERT },
+	WILDERNESS: { name: "the_wilderness", ring: RINGS.WILDERNESS },
+	SUNKENSEA: { name: "sunken_sea", ring: RINGS.SUNKENSEA },
+	STONE: { name: "stone", ring: RINGS.STONE },
+	CLAY: { name: "clay", ring: RINGS.CLAY },
+	DIRT: { name: "the_underground" },
+	HIVE: { name: "larva_hive", ring: RINGS.CLAY },
+	RUINS: { name: "ruins", ring: RINGS.STONE }
 };
 
 class CircleItem {
@@ -48,6 +48,19 @@ class CircleItem {
 
 		return tooltip;
 	}
+
+	getTooltipContentAsJsonString() {
+		let obj = { name: this.longName };
+
+		if (this.locations)
+			obj["locations"] = this.locations.map(l => `$t(poi:location.${l.name})`).join(", ");
+
+		if (this.radii)
+			obj["radii"] = this.radii.join(", ");
+
+
+		return JSON.stringify(obj);
+	}
 }
 
 class Category {
@@ -72,35 +85,35 @@ class Category {
 // - TODO: Add expandable below "(?) More Info on Mob Grids", once mob grid is enabled
 // - TODO: Display text: "16x16 grid of cells used by the mob spawning algorithm. Each cell receives one spawn event every 15 to 22 minutes, staggered in time from other cells. Each spawn surface tile gives a chance to spawn a mob. See this guide: https://steamcommunity.com/sharedfiles/filedetails/?id=2846860078"
 
-const bosses = new Category("Bosses", [
-	new CircleItem("Glurch", "Glurch the Abominous Mass", [BIOMES.DIRT], [65], "#D95917", "#FFFFFF", true, "#", "bosses/glurch.webp"),
-	new CircleItem("Ghorm", "Ghorm the Devourer", [BIOMES.STONE, BIOMES.CLAY], [250], "#7F5F30", "#FFFFFF", true, "#", "bosses/ghorm.png"),
-	new CircleItem("Hive Mother", "The Hive Mother", [BIOMES.HIVE], [330], "#FCA694", "#FFFFFF", true, "#", "bosses/hive_mother.png"),
-	new CircleItem("Azeos", "Azeos the Sky Titan", [BIOMES.WILDERNESS], [600], "#d2b835", "#FFFFFF", true, "#", "bosses/azeos.png"),
-	new CircleItem("Omoroth", "Omoroth the Sea Titan", [BIOMES.SUNKENSEA], [1100], "#9E3F9B", "#FFFFFF", true, "#", "bosses/omoroth.png"),
-	new CircleItem("Ra-Akar", "Ra-Akar the Sand Titan", [BIOMES.DESERT], [1000], "#1d9124", "#FFFFFF", true, "#", "bosses/Ra-Akar_the_Sand_Titan.png"),
+const bosses = new Category("bosses", [
+	new CircleItem("glurch", "Glurch the Abominous Mass", [BIOMES.DIRT], [65], "#D95917", "#FFFFFF", true, "#", "bosses/glurch.webp"),
+	new CircleItem("ghorm", "Ghorm the Devourer", [BIOMES.STONE, BIOMES.CLAY], [250], "#7F5F30", "#FFFFFF", true, "#", "bosses/ghorm.png"),
+	new CircleItem("hive_mother", "The Hive Mother", [BIOMES.HIVE], [330], "#FCA694", "#FFFFFF", true, "#", "bosses/hive_mother.png"),
+	new CircleItem("azeos", "Azeos the Sky Titan", [BIOMES.WILDERNESS], [600], "#d2b835", "#FFFFFF", true, "#", "bosses/azeos.png"),
+	new CircleItem("omoroth", "Omoroth the Sea Titan", [BIOMES.SUNKENSEA], [1100], "#9E3F9B", "#FFFFFF", true, "#", "bosses/omoroth.png"),
+	new CircleItem("ra-akar", "Ra-Akar the Sand Titan", [BIOMES.DESERT], [1000], "#1d9124", "#FFFFFF", true, "#", "bosses/Ra-Akar_the_Sand_Titan.png"),
 ]);
 
 
-const optionalBosses = new Category("Optional Bosses", [
-	new CircleItem("Malugaz", "Malugaz the Corrupted", [BIOMES.RUINS], [350], "#1f4ec9", "#FFFFFF", true, "#", "bosses/malugaz.png"),
-	new CircleItem("Ivy", "Ivy the Poisonous Mass", [BIOMES.WILDERNESS], [900], "#FF00FF", "#FFFFFF", true, "#", "bosses/ivy.png"),
-	new CircleItem("Morpha", "Morpha the Aquatic Mass", [BIOMES.SUNKENSEA], [1400], "#1898F4", "#FFFFFF", true, "#", "bosses/morpha.png"),
-	new CircleItem("Igneous", "Igneous the Molten Mass", [BIOMES.DESERT], [1400], "#484454", "#FFFFFF", true, "#", "bosses/Igneous_the_Molten_Mass.png"),
+const optionalBosses = new Category("optional_bosses", [
+	new CircleItem("malugaz", "Malugaz the Corrupted", [BIOMES.RUINS], [350], "#1f4ec9", "#FFFFFF", true, "#", "bosses/malugaz.png"),
+	new CircleItem("ivy", "Ivy the Poisonous Mass", [BIOMES.WILDERNESS], [900], "#FF00FF", "#FFFFFF", true, "#", "bosses/ivy.png"),
+	new CircleItem("morpha", "Morpha the Aquatic Mass", [BIOMES.SUNKENSEA], [1400], "#1898F4", "#FFFFFF", true, "#", "bosses/morpha.png"),
+	new CircleItem("igneous", "Igneous the Molten Mass", [BIOMES.DESERT], [1400], "#484454", "#FFFFFF", true, "#", "bosses/Igneous_the_Molten_Mass.png"),
 ]);
 
-const pois = new Category("Points of Interest", [
-	new CircleItem("Mold Dungeon", "Mold Dungeon", "", [750], "#6CBBE0", "#FFFFFF", true, "#", "items/poisonous_sickle.png"),
-	new CircleItem("The Vault", "The Vault", "", [1000], "#e4ad2a", "#FFFFFF", true, "#", "items/glyph_parchment.png"),
-	new CircleItem("Broken Core 1", "Broken Core 1", "", [1250], "#e4ad2a", "#FFFFFF", true, "#", "items/channeling_gemstone.png"),
-	new CircleItem("Broken Core 2", "Broken Core 2", "", [1550], "#e4ad2a", "#FFFFFF", true, "#", "items/fractured_limbs.png"),
-	new CircleItem("Broken Core 3", "Broken Core 3", "", [1750], "#e4ad2a", "#FFFFFF", true, "#", "items/energy_string.png"),
-	new CircleItem("Titan Temple", "Titan Temple", "", [900], "#f2df3a", "#000000", true, "#", "items/Godsent_King_Mask.png"),
-	new CircleItem("Prince Dungeon", "Prince Dungeon", "", [1100], "#239029", "#FFFFFF", true, "#", "items/Ra-Akar_Automaton.png"),
-	new CircleItem("Queen Dungeon", "Queen Dungeon", "", [1300], "#a555a4", "#FFFFFF", true, "#", "items/Azeos_Feather_Fan.png"),
-	new CircleItem("King Dungeon", "King Dungeon", "", [1500], "#19bdc6", "#000000", true, "#", "items/Omoroth_Compass.png"),
-	new CircleItem("Ancient Forge", "Ancient Forge", "", [1600], "#91210b", "#FFFFFF", true, "#", "items/Soul_Seeker.png"),
-	new CircleItem("Crystal Meteor", "Crystal Meteor", "", [1200], "#94f7dd", "#000000", true, "#", "items/Crystal_Meteor_Shard.png"),
+const pois = new Category("points_of_interest", [
+	new CircleItem("mold_dungeon", "Mold Dungeon", [BIOMES.WILDERNESS], [750], "#6CBBE0", "#FFFFFF", true, "#", "items/poisonous_sickle.png"),
+	new CircleItem("the_vault", "The Vault", [BIOMES.SUNKENSEA], [1000], "#e4ad2a", "#FFFFFF", true, "#", "items/glyph_parchment.png"),
+	new CircleItem("broken_core_1", "Broken Core 1", [BIOMES.SUNKENSEA], [1250], "#e4ad2a", "#FFFFFF", true, "#", "items/channeling_gemstone.png"),
+	new CircleItem("broken_core_2", "Broken Core 2", [BIOMES.SUNKENSEA], [1550], "#e4ad2a", "#FFFFFF", true, "#", "items/fractured_limbs.png"),
+	new CircleItem("broken_core_3", "Broken Core 3", [BIOMES.SUNKENSEA], [1750], "#e4ad2a", "#FFFFFF", true, "#", "items/energy_string.png"),
+	new CircleItem("titan_temple", "Titan Temple", [BIOMES.DESERT], [900], "#f2df3a", "#000000", true, "#", "items/Godsent_King_Mask.png"),
+	new CircleItem("prince_dungeon", "Prince Dungeon", [BIOMES.DESERT], [1100], "#239029", "#FFFFFF", true, "#", "items/Ra-Akar_Automaton.png"),
+	new CircleItem("queen_dungeon", "Queen Dungeon", [BIOMES.DESERT], [1300], "#a555a4", "#FFFFFF", true, "#", "items/Azeos_Feather_Fan.png"),
+	new CircleItem("king_dungeon", "King Dungeon", [BIOMES.DESERT], [1500], "#19bdc6", "#000000", true, "#", "items/Omoroth_Compass.png"),
+	new CircleItem("ancient_forge", "Ancient Forge", [BIOMES.DESERT], [1600], "#91210b", "#FFFFFF", true, "#", "items/Soul_Seeker.png"),
+	new CircleItem("crystal_meteor", "Crystal Meteor", [BIOMES.DESERT], [1200], "#94f7dd", "#000000", true, "#", "items/Crystal_Meteor_Shard.png"),
 ]);;
 
 const categories = [

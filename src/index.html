@@ -272,9 +272,7 @@
 						
 					</section>
 
-					<div x-show="!$store.data.firstTimeLoaded" class="bordered-box">
-						Load map to show settings
-					</div>
+					<div x-show="!$store.data.firstTimeLoaded" class="bordered-box" data-i18n="load_map_to_show_settings">load_map_to_show_settings</div>
 					<div x-show="$store.data.firstTimeLoaded" x-transition.scale.origin.top style="display: none;">
 						<!-- POIs Section -->
 						<section class="bordered-box" x-data="{visible: true}">
@@ -282,7 +280,7 @@
 								<svg x-show="visible" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor; display:none;"><path d="M7.41,15.41L12,10.83L16.59,15.41L18,14L12,8L6,14L7.41,15.41Z" /></svg>
 								<svg x-show="!visible" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor;"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" /></svg>
 
-								<span class="fs-4">Pre-Spawned Locations</span>
+								<span class="fs-4" data-i18n="pre-spawned_locations">pre-spawned_locations</span>
 							</div>
 							<div class="pe-1 mt-2" x-show="visible" x-transition>
 								<template x-for="category in $store.categories" :key="category.name">
@@ -292,7 +290,7 @@
 												<svg x-show="visible" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor;"><path d="M7.41,15.41L12,10.83L16.59,15.41L18,14L12,8L6,14L7.41,15.41Z" /></svg>
 												<svg x-show="!visible" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor;"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" /></svg>
 	
-												<span class="fs-5" x-text="category.name"></span>
+												<span class="fs-5" :data-i18n="'poi:category.' + category.name" x-text="'poi:category.' + category.name"></span>
 											</div>
 											<div class="flex-fill border-bottom border-secondary mx-2"></div>
 											<span x-on:click="toggleCategoryCircles(category.items)" class="fs-6 text-secondary" style="cursor: pointer;">Toggle all</span>
@@ -303,20 +301,25 @@
 												class="btn btn-sm me-2 mb-2 d-inline-flex align-items-center" 
 												:style="circle.visible ? `background-color: ${circle.color}; color: ${circle.textColor}` : `border-color: ${circle.color}; color: ${circle.color}`"
 												:data-bs-toggle="(circle.tooltip) ? 'tooltip' : ''" 
-												:data-bs-title="circle.getTooltipContent()"
+												data-bs-title="poi:description"
+												
+												data-i18ns="[data-bs-title]poi:description"
+												:data-i18ns-options="circle.getTooltipContentAsJsonString()"
+
+												:data-poi-tooltip="circle.getTooltipContentAsJsonString()"
+
 												data-bs-custom-class="custom-tooltip"
 												data-bs-html="true"
 												data-bs-placement="right"
 												x-on:click="toggleCircle(circle)">
-													<template x-if="circle.image">
 														<div
+														x-show="circle.image"
 														class="circle-image" 
 														:style="(circle.visible) 
 															? `background-image: url('img/${circle.image}'); margin-right: 8px; border-color: ${circle.color};` 
 															: `background-image: url('img/${circle.image}'); margin-right: 8px; border-color: ${circle.color};`"></div>
-													</template>
 													<!-- <img x-show="circle.image" :src="`img/${circle.image}`" :alt="`Image of ${circle.name}`" width="32"> -->
-													<span x-text="circle.name"></span>
+													<span :data-i18n="'poi:' + category.name + '.' + circle.name + '.name'" x-text="circle.name"></span>
 												</button>
 											</template>
 										</div>
