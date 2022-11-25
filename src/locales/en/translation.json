@@ -1,0 +1,15 @@
+{
+	"map_tool": "Map Tool",
+	"dark_mode": "Dark Mode",
+	"ui": "UI",
+	"background": "Background",
+	"cookies": "Cookies",
+	"cookies.choose_cookie_to_collapse": "Please choose cookie settings to collapse this section.",
+	"cookies.enable_analytics": "Enable Analytics",
+	"cookies.enable_analytics.description": "Whether or not I can use your activity here to improve the page.",
+	"cookies.enable_ad_tracking": "Enable Ad Tracking",
+	"cookies.enable_ad_tracking.description": "If ads should be customized based on your activity here. Sadly included in analytics.",
+	"privacy_policy": "Privacy Policy",
+	"save": "Save",
+	"allow_analytics": "Allow Analytics"
+}

@@ -1,25 +1,25 @@
 const faq = [
 	{
-		question: "Privacy - Is my data uploaded?",
+		question: "faq:privacy.question",
 		preopened: true,
-		answer: "<strong>No.</strong> The Map Tool workes entirely client-side, in your browser tab. No files are uploaded. The website only sees your basic ip address and stores no identifying information. If you allowed Google Analytics, I get anonymous information on what country people are from and the types of their devices / browsers. You need to allow this though.<br>For a slightly more technical answer, check <em>\"What information do you have access to?\"</em> in the FAQ"
+		answer: "[html]faq:privacy.answer"
 	},
 	{
-		question: "Where is the Clear Gemstone / Chipped Blade?",
+		question: "faq:clear_gemstone.question",
 		spoilers: true,
-		answer: "The <strong>Chipped Blade</strong> can be found inside of a temple in the Wilderness.<br> The <strong>Clear Gemstone</strong> is inside the <em>medium maze</em> in either the stone biome or the Wilderness. You can use the option \"Show Maze Holes\" to display where mazes could theoretically spawn (in the stone biome). See <em>\"What does 'Show Maze Holes' mean?\"</em> for more info."
+		answer: "[html]faq:clear_gemstone.answer"
 	},
 	{
-		question: "What does \"Show Maze Holes\" mean?",
-		answer: "It shows you potential spawn locations for the stone biome mazes. Light green areas can fit the large maze, light blue the medium maze and pink the small maze. Green and light blue can of course also fit the smaller mazes."
+		question: "faq:show_maze_holes.question",
+		answer: "[html]faq:show_maze_holes.answer"
 	},
 	{
-		question: "Does my map get uploaded somewhere?",
-		answer: "No. The tool works completely client side. No personal information gets stored and I also do not have access to your save files."
+		question: "faq:uploaded.question",
+		answer: "[html]faq:uploaded.answer"
 	},
 	{
-		question: "What information do you have access to?",
-		answer: "The only data I have access to is the nginx log and (if you allowed it) Google Analytics. Nginx logs only contain your basic ip address and the user-agent.<br>The user-agent contains information about what type of browser you use.<br>Google Analytics gives me access to basic interactions with the site, device information and general location. Location is only used to figure out from which countries most people come from. This can be useful to know, If I ever add localization."
+		question: "faq:information_access.question",
+		answer: "[html]faq:information_access.answer"
 	},
 ]
 

@@ -30,9 +30,17 @@
 	<link href="css/app.css" rel="stylesheet">
 
 	<link id="favicon" rel="icon" href="img/favicon_dark.png" type="image/png"  sizes="32x32">
-	
+
 	<script src="https://code.jquery.com/jquery-1.12.4.min.js"
 		integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+	<script src="https://unpkg.com/i18next@22.0.6/dist/umd/i18next.min.js"></script>
+	<script src="i18n/jquery-i18next.min.js"></script>
+	<script src="i18n/i18nextBrowserLanguageDetector.min.js"></script>
+	<script src="i18n/i18nextChainedBackend.min.js"></script>
+	<script src="i18n/i18nextLocalStorageBackend.min.js"></script>
+	<script src="i18n/i18nextHttpBackend.min.js"></script>
+	<script src="i18n/index.js"></script>
+	
 	<script src="js/vendor/jqueryBrowser.js"></script>
 	<script src="https://unpkg.com/@panzoom/panzoom@4.5.1/dist/panzoom.min.js"></script>
 	<script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -46,30 +54,33 @@
 </head>
 
 <body :style="`background-color: ${backgroundDark ? 'black' : 'white'};`" x-data="{backgroundDark:true}" id="body" class="dark-mode">
-
+	<div id="curtain">
+		<h1>Loading...</h1>
+	</div>
+	
 	<div class="offcanvas offcanvas-start text-bg-dark show" data-bs-backdrop="false" tabindex="-1" id="offcanvas" aria-labelledby="offcanvasLabel">
 		<div class="offcanvas-header">
 			<div>
 				<img src="img/logo_dark.png" id="logo" alt="Core Keeper Map Tool Logo" class="w-100">
 				<!--
-		  		<h5 class="offcanvas-title" id="offcanvasLabel">Core Keeper Map Tool</h5>
-			  	<h6 class="text-secondary" style="margin-bottom: 4px;">Rewrite by Ceddini and ZeroGravitas</h6>
-			  	<h6 class="text-secondary" style="font-size: 10pt;">Originally by Mz, nineforty and Craigins</h6>
+					<h5 class="offcanvas-title" id="offcanvasLabel">Core Keeper Map Tool</h5>
+					<h6 class="text-secondary" style="margin-bottom: 4px;">Rewrite by Ceddini and ZeroGravitas</h6>
+					<h6 class="text-secondary" style="font-size: 10pt;">Originally by Mz, nineforty and Craigins</h6>
 				-->
 			</div>
-		  	<button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+				<button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
 		</div>
 		<div class="offcanvas-body">
 			<div class="d-flex">
-				<span class="me-2">Dark Mode: </span>
+				<span class="me-2" data-i18n>dark_mode</span>
 				<div class="form-check form-switch me-2">
-					<label class="form-check-label" for="flexSwitchCheckChecked">UI</label>
+					<label class="form-check-label" for="flexSwitchCheckChecked" data-i18n>ui</label>
 					<input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" onclick="toggleDarkMode();" checked>
 				</div>
 	
 				<div class="form-check form-switch">
 					<input class="form-check-input" x-model="backgroundDark" type="checkbox" role="switch" id="backgroundDarkModeChecked" checked>
-					<label class="form-check-label" for="backgroundDarkModeChecked">Background</label>
+					<label class="form-check-label" for="backgroundDarkModeChecked" data-i18n>background</label>
 				</div>
 			</div>
 
@@ -78,12 +89,12 @@
 					<div class="d-inline-flex align-items-center" x-on:click="$store.data.cookiesOpen = ($store.data.savedCookies) ? !$store.data.cookiesOpen : $store.data.cookiesOpen" style="cursor: pointer;">
 						<svg x-show="$store.data.cookiesOpen" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor;"><path d="M7.41,15.41L12,10.83L16.59,15.41L18,14L12,8L6,14L7.41,15.41Z" /></svg>
 						<svg x-show="!$store.data.cookiesOpen" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor; display: none;"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" /></svg>
-						<span class="fs-5">Cookies</span>
+						<span class="fs-5" data-i18n>cookies</span>
 					</div>
 				</div>
 				<template x-if="$store.data.savedCookies === false">
-					<span class="text-danger">
-						Please choose cookie settings to collapse this section.
+					<span class="text-danger" data-i18n>
+						cookies.choose_cookie_to_collapse
 					</span>
 				</template>
 
@@ -91,15 +102,15 @@
 					<div class="form-check">
 						<input class="form-check-input" type="checkbox" value="" id="acceptedAnalytics" x-model="$store.data.acceptedAnalytics">
 						<label class="form-check-label" for="acceptedAnalytics">
-							Enable Analytics<br />
-							<small>Whether or not I can use your activity here to improve the page.</small>
+							<span data-i18n>cookies.enable_analytics</span><br />
+							<small data-i18n>cookies.enable_analytics.description</small>
 						</label>
 					</div>
 					<div class="form-check">
 						<input class="form-check-input" type="checkbox" value="" id="acceptedAdTracking" x-model="$store.data.acceptedAdTracking">
 						<label class="form-check-label" for="acceptedAdTracking">
-							Enable Ad Tracking<br />
-							<small>If ads should be customized based on your activity here.<br/>Sadly included in analytics.</small>
+							<span data-i18n>cookies.enable_ad_tracking</span><br />
+							<small data-i18n>cookies.enable_ad_tracking.description</small>
 						</label>
 					</div>
 
@@ -108,16 +119,16 @@
 							<svg x-show="q" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" style="fill: currentColor;"><path d="M7.41,15.41L12,10.83L16.59,15.41L18,14L12,8L6,14L7.41,15.41Z" /></svg>
 							<svg x-show="!q" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" style="fill: currentColor;"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" /></svg>
 							
-							<span x-html="question.question"></span>
+							<span x-html="question.question" data-i18n></span>
 						</h6>
-						<p x-show="q" x-transition x-html="question.answer"></p>
+						<p x-show="q" x-transition x-html="question.answer" data-i18n></p>
 					</div>
 					
 					<div class="d-flex align-items-center justify-content-between">
-						<a href="https://maptool.ceschmitt.de/privacy-policy.html" target="_blank" rel="noopener noreferrer">Privacy Policy</a>
+						<a href="https://maptool.ceschmitt.de/privacy-policy.html" target="_blank" rel="noopener noreferrer" data-i18n>privacy_policy</a>
 						<div class="d-flex align-items-center mt-2">
-							<button class="btn btn-secondary me-1" x-on:click="saveCookieSelection">Save</button>
-							<button class="btn btn-primary" x-on:click="allowAnalytics">Allow Analytics</button>
+							<button class="btn btn-secondary me-1" x-on:click="saveCookieSelection" data-i18n>save</button>
+							<button class="btn btn-primary" x-on:click="allowAnalytics" data-i18n>allow_analytics</button>
 						</div>
 					</div>
 				</div>
@@ -391,8 +402,8 @@
 											<div class="form-check">
 												<input class="form-check-input" type="checkbox" value="" id="cropByBiome" x-model="$store.data.cropRingsToBiome" @change="onChangeCropRingsToBiome">
 												<label class="form-check-label" for="cropByBiome">
-												  Crop Rings to Biome<br />
-												  <small>If it doesn't work, enable "Manual Rotation"</small>
+													Crop Rings to Biome<br />
+													<small>If it doesn't work, enable "Manual Rotation"</small>
 												</label>
 											</div>
 										</div>
@@ -625,12 +636,12 @@
 										<svg x-show="q" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" style="fill: currentColor;"><path d="M7.41,15.41L12,10.83L16.59,15.41L18,14L12,8L6,14L7.41,15.41Z" /></svg>
 										<svg x-show="!q" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" style="fill: currentColor;"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" /></svg>
 										
-										<span x-html="question.question"></span>
+										<span x-html="question.question" data-i18n></span>
 										<template x-if="question.spoilers === true">
 											<span class="badge bg-danger">Spoilers</span>
 										</template>
 									</h6>
-									<p x-show="q" x-transition x-html="question.answer"></p>
+									<p x-show="q" x-transition x-html="question.answer" data-i18n></p>
 								</div>
 							</template>
 						</div>
@@ -705,7 +716,7 @@
 		<button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvas" aria-controls="offcanvas">
 			Show Settings
 		</button>
-    </div>
+	</div>
 
 	<template x-if="$store.data.firstTimeLoaded === false && $store.data.tutorialShown === false">
 		<div class="text-bg-dark h-100" id="findMapGuide" style="overflow: auto; word-wrap: normal; word-break: normal;">
@@ -754,10 +765,11 @@
 
 	
 
-  	<div class="canvas-container">
+		<div class="canvas-container">
 		<canvas id="mapcanvas" width="1200px" height="800px" style="image-rendering: pixelated;" onclick="//toclick"></canvas>
 	</div>
 	<canvas id="overlaycanvas"></canvas>
+	
 
 	<!--
 	<div class="legend-container">
@@ -766,6 +778,7 @@
 		</button>
   	</div>
 	-->
+
   	<script src="js/faq.js"></script>
   	<script src="js/overlay.js"></script>
   	<script src="js/savehandler.js"></script>
