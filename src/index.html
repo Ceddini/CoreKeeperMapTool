@@ -68,19 +68,20 @@
 					<h6 class="text-secondary" style="font-size: 10pt;">Originally by Mz, nineforty and Craigins</h6>
 				-->
 			</div>
-				<button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+			<button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
 		</div>
 		<div class="offcanvas-body">
+			<select name="languageSwitcher" id="languageSwitcher" class="form-select mb-2"></select>
 			<div class="d-flex">
-				<span class="me-2" data-i18n>dark_mode</span>
+				<span class="me-2" data-i18n="dark_mode">dark_mode</span>
 				<div class="form-check form-switch me-2">
-					<label class="form-check-label" for="flexSwitchCheckChecked" data-i18n>ui</label>
+					<label class="form-check-label" for="flexSwitchCheckChecked" data-i18n="ui">ui</label>
 					<input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" onclick="toggleDarkMode();" checked>
 				</div>
 	
 				<div class="form-check form-switch">
 					<input class="form-check-input" x-model="backgroundDark" type="checkbox" role="switch" id="backgroundDarkModeChecked" checked>
-					<label class="form-check-label" for="backgroundDarkModeChecked" data-i18n>background</label>
+					<label class="form-check-label" for="backgroundDarkModeChecked" data-i18n="background">background</label>
 				</div>
 			</div>
 
@@ -89,26 +90,26 @@
 					<div class="d-inline-flex align-items-center" x-on:click="$store.data.cookiesOpen = ($store.data.savedCookies) ? !$store.data.cookiesOpen : $store.data.cookiesOpen" style="cursor: pointer;">
 						<svg x-show="$store.data.cookiesOpen" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor;"><path d="M7.41,15.41L12,10.83L16.59,15.41L18,14L12,8L6,14L7.41,15.41Z" /></svg>
 						<svg x-show="!$store.data.cookiesOpen" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor; display: none;"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" /></svg>
-						<span class="fs-5" data-i18n>cookies</span>
+						<span class="fs-5" data-i18n="cookies">cookies</span>
 					</div>
 				</div>
 				<template x-if="$store.data.savedCookies === false">
-					<span class="text-danger" data-i18n>cookies.choose_cookie_to_collapse</span>
+					<span class="text-danger" data-i18n="cookies.choose_cookie_to_collapse">cookies.choose_cookie_to_collapse</span>
 				</template>
 
 				<div x-show="$store.data.cookiesOpen" class="mt-2 px-1" x-transition="">
 					<div class="form-check">
 						<input class="form-check-input" type="checkbox" value="" id="acceptedAnalytics" x-model="$store.data.acceptedAnalytics">
 						<label class="form-check-label" for="acceptedAnalytics">
-							<span data-i18n>cookies.enable_analytics</span><br />
-							<small data-i18n>cookies.enable_analytics.description</small>
+							<span data-i18n="cookies.enable_analytics">cookies.enable_analytics</span><br />
+							<small data-i18n="cookies.enable_analytics.description">cookies.enable_analytics.description</small>
 						</label>
 					</div>
 					<div class="form-check">
 						<input class="form-check-input" type="checkbox" value="" id="acceptedAdTracking" x-model="$store.data.acceptedAdTracking">
 						<label class="form-check-label" for="acceptedAdTracking">
-							<span data-i18n>cookies.enable_ad_tracking</span><br />
-							<small data-i18n>cookies.enable_ad_tracking.description</small>
+							<span data-i18n="cookies.enable_ad_tracking">cookies.enable_ad_tracking</span><br />
+							<small data-i18n="cookies.enable_ad_tracking.description">cookies.enable_ad_tracking.description</small>
 						</label>
 					</div>
 
@@ -117,16 +118,16 @@
 							<svg x-show="q" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" style="fill: currentColor;"><path d="M7.41,15.41L12,10.83L16.59,15.41L18,14L12,8L6,14L7.41,15.41Z" /></svg>
 							<svg x-show="!q" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" style="fill: currentColor;"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" /></svg>
 							
-							<span x-html="question.question" data-i18n></span>
+							<span x-html="question.question" :data-i18n="question.question"></span>
 						</h6>
-						<p x-show="q" x-transition x-html="question.answer" data-i18n></p>
+						<p x-show="q" x-transition x-html="question.answer" :data-i18n="question.answer"></p>
 					</div>
 					
 					<div class="d-flex align-items-center justify-content-between">
-						<a href="https://maptool.ceschmitt.de/privacy-policy.html" target="_blank" rel="noopener noreferrer" data-i18n>privacy_policy</a>
+						<a href="https://maptool.ceschmitt.de/privacy-policy.html" target="_blank" rel="noopener noreferrer" data-i18n="privacy_policy">privacy_policy</a>
 						<div class="d-flex align-items-center mt-2">
-							<button class="btn btn-secondary me-1" x-on:click="saveCookieSelection" data-i18n>save</button>
-							<button class="btn btn-primary" x-on:click="allowAnalytics" data-i18n>allow_analytics</button>
+							<button class="btn btn-secondary me-1" x-on:click="saveCookieSelection" data-i18n="save">save</button>
+							<button class="btn btn-primary" x-on:click="allowAnalytics" data-i18n="allow_analytics">allow_analytics</button>
 						</div>
 					</div>
 				</div>
@@ -634,12 +635,12 @@
 										<svg x-show="q" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" style="fill: currentColor;"><path d="M7.41,15.41L12,10.83L16.59,15.41L18,14L12,8L6,14L7.41,15.41Z" /></svg>
 										<svg x-show="!q" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" style="fill: currentColor;"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" /></svg>
 										
-										<span x-html="question.question" data-i18n></span>
+										<span x-html="question.question" :data-i18n="question.question"></span>
 										<template x-if="question.spoilers === true">
 											<span class="badge bg-danger">Spoilers</span>
 										</template>
 									</h6>
-									<p x-show="q" x-transition x-html="question.answer" data-i18n></p>
+									<p x-show="q" x-transition x-html="question.answer" :data-i18n="question.answer"></p>
 								</div>
 							</template>
 						</div>
