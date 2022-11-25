@@ -76,23 +76,6 @@ window.addEventListener('DOMContentLoaded', () => {
 	mapCanvas.addEventListener('panzoomend', storeCoreRelativeOffset);
 	mapCanvas.addEventListener('panzoomend', () => { MapMonitor.isPanning = false; });
 	mapCanvas.addEventListener('panzoomstart', () => { MapMonitor.isPanning = true; });
-
-	const menuheaders = document.querySelectorAll(".collapsable-menu");
-	const mnuclick = function (event) {
-		let menu_ul = document.getElementById(this.getAttribute("label-for"));
-		const cssObj = window.getComputedStyle(menu_ul, null);
-
-		let menu_visible = cssObj.getPropertyValue("display");
-		//let menu_visible = menu_ul.style.display;
-		menu_ul.style.display = (menu_visible == "none") ? "block" : "none";
-	};
-	for (let mnu of menuheaders) {
-		if (mnu.innerHTML.trim() == "Clear") continue;
-		mnu.onclick = mnuclick;
-	}
-
-	setFilterTop();
-
 }, false);
 
 function loadExample() {
@@ -107,12 +90,6 @@ function resetMap() {
 	HIGHEST_STONE = 0;
 	HIGHEST_WILDERNESS = 0;
 	document.getElementById('showArcs').checked = false;
-}
-
-function setFilterTop() {
-	let filterdiv = document.getElementById("tilefilter");
-	let navdiv = document.getElementById("navdiv").getBoundingClientRect();
-	filterdiv.style.top = navdiv.bottom;
 }
 
 function redrawDebounce(event) {

@@ -50,8 +50,17 @@ async function loadStandardFile(gridarr, callback) {
 }
 
 function downloadMap(canvas) {
-	var link = document.createElement('a');
+	const { x, y } = getCoreOffset();
+
+	shouldDrawOnOverlay = false;
+	redrawMap();
+
+	const link = document.createElement('a');
 	link.download = 'corekeeper_map.png';
 	link.href = canvas.toDataURL()
 	link.click();
+	link.remove();
+
+	shouldDrawOnOverlay = true;
+	redrawMap();
 }

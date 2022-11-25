@@ -9,6 +9,9 @@ let coreLoc = { x: 0, y: 0 };
 let pixelMap = {};
 let panZoomElem;
 
+let shouldDrawOnOverlay = true;
+
+
 const STONE_ARC_START_OFFSET = Math.PI / 2;
 const STONE_ARC_END_OFFSET = Math.PI / 2;
 
@@ -170,19 +173,22 @@ function decorateMap(width, height) {
 			const start = (manualArcRotation) ? document.getElementById('innerArcSlider').value * Math.PI / 180 : stoneArc.start;
 			const end = (manualArcRotation) ? loop(document.getElementById('innerArcSlider').value - 180, 0, 359) * Math.PI / 180 : stoneArc.end;
 
-			drawArcs(_global_ctx, start, end);
+			drawArcs(start, end);
 		}
 
 		if (shouldDrawOuterArcs) {
 			const start = (manualArcRotation) ? document.getElementById('outerArcSlider').value * Math.PI / 180 : wildernessArc.start;
 			const end = (manualArcRotation) ? loop(document.getElementById('outerArcSlider').value - 120, 0, 359) * Math.PI / 180 : wildernessArc.end;
 
-			drawOuterArcs(_global_ctx, start, end);
+			drawOuterArcs(start, end);
 		}
 	}
 
 	if (Alpine.store('data').showCustomRing) {
-		drawOverlayCircle(parseInt(Alpine.store('data').customRing));
+		if (shouldDrawOnOverlay)
+			drawOverlayCircle(parseInt(Alpine.store('data').customRing));
+		else
+			drawCircle(parseInt(Alpine.store('data').customRing))
 	}
 
 	if (Alpine.store('data').mapLoaded) {
@@ -239,9 +245,15 @@ function decorateMap(width, height) {
 							});
 
 							if (hasBeenCropped === false)
-								drawOverlayCircle(radius, circle.color);
+								if (shouldDrawOnOverlay)
+									drawOverlayCircle(radius, circle.color);
+								else
+									drawCircle(radius, circle.color);
 						} else {
-							drawOverlayCircle(radius, circle.color);
+							if (shouldDrawOnOverlay)
+								drawOverlayCircle(radius, circle.color);
+							else
+								drawCircle(radius, circle.color);
 						}
 					});
 			});
@@ -319,14 +331,14 @@ function userDefinedChanged() {
 	}
 }
 
-function drawCircle(ctx, radius, color = "#FFFFFF") {
-	ctx.globalAlpha = Alpine.store('data').ringTransparency / 100;
-	ctx.lineWidth = 20;
-	ctx.strokeStyle = color;
-	ctx.beginPath();
-	ctx.arc(coreLoc.x, coreLoc.y, radius, 0, 2 * Math.PI);
-	ctx.stroke();
-	ctx.globalAlpha = 1.0;
+function drawCircle(radius, color = "#FFFFFF") {
+	_global_ctx.globalAlpha = Alpine.store('data').ringTransparency / 100;
+	_global_ctx.lineWidth = 20;
+	_global_ctx.strokeStyle = color;
+	_global_ctx.beginPath();
+	_global_ctx.arc(coreLoc.x, coreLoc.y, radius, 0, 2 * Math.PI);
+	_global_ctx.stroke();
+	_global_ctx.globalAlpha = 1.0;
 }
 
 function drawAnnulus(ctx, radius, start, end, color = "#FFFFFF") {
@@ -353,20 +365,36 @@ function annulus(ctx, centerX, centerY,
 	ctx.closePath();
 }
 
-function drawArcs(ctx, start, end) {
+function drawArcs(start, end) {
 	start = start - (2.5 * Math.PI / 180);
 	end = end + (2.5 * Math.PI / 180);
 
-	drawOverlayArcs(150, SEARCH_RADII.max - 50, start - STONE_ARC_START_OFFSET, end - STONE_ARC_END_OFFSET, "#C2C2C2");
-	drawOverlayArcs(150, SEARCH_RADII.max - 50, start - CLAY_ARC_START_OFFSET, end - CLAY_ARC_END_OFFSET, "#A66829");
+	if (shouldDrawOnOverlay) {
+		drawOverlayArcs(150, SEARCH_RADII.max - 50, start - STONE_ARC_START_OFFSET, end - STONE_ARC_END_OFFSET, "#C2C2C2");
+		drawOverlayArcs(150, SEARCH_RADII.max - 50, start - CLAY_ARC_START_OFFSET, end - CLAY_ARC_END_OFFSET, "#A66829");
+	} else {
+		drawArc(150, SEARCH_RADII.max - 50, start - STONE_ARC_START_OFFSET, end - STONE_ARC_END_OFFSET, "#C2C2C2");
+		drawArc(150, SEARCH_RADII.max - 50, start - CLAY_ARC_START_OFFSET, end - CLAY_ARC_END_OFFSET, "#A66829");
+	}
 }
 
-function drawOuterArcs(ctx, start, end) {
-	drawOverlayArcs(OUTER_SEARCH_RADII.min + 20, OUTER_SEARCH_RADII.max + 700, start - Math.PI / 2 - (2.25 * Math.PI / 180), end - Math.PI / 2 + (2.25 * Math.PI / 180), "#3B7EDB")
+function drawOuterArcs(start, end) {
+	if (shouldDrawOnOverlay) {
+		drawOverlayArcs(OUTER_SEARCH_RADII.min + 20, OUTER_SEARCH_RADII.max + 700, start - Math.PI / 2 - (2.25 * Math.PI / 180), end - Math.PI / 2 + (2.25 * Math.PI / 180), "#3B7EDB")
+		drawOverlayArcs(OUTER_SEARCH_RADII.min + 20, OUTER_SEARCH_RADII.max + 700, start - Math.PI / 2 - (2.25 * Math.PI / 180) + ((2 * Math.PI) / 3), end - Math.PI / 2 + (2.25 * Math.PI / 180) + ((2 * Math.PI) / 3), "#2B941B");
+		drawOverlayArcs(OUTER_SEARCH_RADII.min + 20, OUTER_SEARCH_RADII.max + 700, start - Math.PI / 2 - (2.25 * Math.PI / 180) + ((2 * Math.PI) / 3) * 2, end - Math.PI / 2 + (2.25 * Math.PI / 180) + ((2 * Math.PI) / 3) * 2, "#CFC35D");
+	} else {
+		drawArc(OUTER_SEARCH_RADII.min + 20, OUTER_SEARCH_RADII.max + 700, start - Math.PI / 2 - (2.25 * Math.PI / 180), end - Math.PI / 2 + (2.25 * Math.PI / 180), "#3B7EDB")
+		drawArc(OUTER_SEARCH_RADII.min + 20, OUTER_SEARCH_RADII.max + 700, start - Math.PI / 2 - (2.25 * Math.PI / 180) + ((2 * Math.PI) / 3), end - Math.PI / 2 + (2.25 * Math.PI / 180) + ((2 * Math.PI) / 3), "#2B941B");
+		drawArc(OUTER_SEARCH_RADII.min + 20, OUTER_SEARCH_RADII.max + 700, start - Math.PI / 2 - (2.25 * Math.PI / 180) + ((2 * Math.PI) / 3) * 2, end - Math.PI / 2 + (2.25 * Math.PI / 180) + ((2 * Math.PI) / 3) * 2, "#CFC35D");
+	}
+}
 
-	drawOverlayArcs(OUTER_SEARCH_RADII.min + 20, OUTER_SEARCH_RADII.max + 700, start - Math.PI / 2 - (2.25 * Math.PI / 180) + ((2 * Math.PI) / 3), end - Math.PI / 2 + (2.25 * Math.PI / 180) + ((2 * Math.PI) / 3), "#2B941B");
-
-	drawOverlayArcs(OUTER_SEARCH_RADII.min + 20, OUTER_SEARCH_RADII.max + 700, start - Math.PI / 2 - (2.25 * Math.PI / 180) + ((2 * Math.PI) / 3) * 2, end - Math.PI / 2 + (2.25 * Math.PI / 180) + ((2 * Math.PI) / 3) * 2, "#CFC35D");
+function drawArc(innerRadius, outerRadius, start, end, color = "#FFFFFF", anticlockwise = true) {
+	_global_ctx.globalAlpha = Alpine.store('data').ringTransparency / 100;
+	_global_ctx.fillStyle = color;
+	annulus(_global_ctx, coreLoc.x, coreLoc.y, innerRadius * scale, outerRadius * scale, start, end, anticlockwise);
+	_global_ctx.globalAlpha = 1.0;
 }
 
 function drawMap(tiles) {
@@ -416,7 +444,6 @@ function drawMap(tiles) {
 
 	Alpine.store('data').mapLoaded = true;
 	if (Alpine.store("data").firstTimeLoaded === false) {
-		console.log("Loading first time stuff :)")
 		Alpine.store("data").faqOpen = false;
 		Alpine.store("data").aboutOpen = false;
 		Alpine.store("data").cookiesOpen = false;

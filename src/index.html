@@ -259,22 +259,24 @@
 
 						<h6 class="mt-2"><a href="https://maptool.ceschmitt.de/img/corekeeper_map.png" target="_blank" rel="noopener noreferrer">Open Full Map Image (Spoilers)</a></h6>
 
-						<div x-show="$store.data.mapLoaded" style="display: none;" class="mt-2 d-flex align-items-center">
-							<button 
-								class="btn btn-outline-primary me-1" 
-								onclick="downloadMap(document.getElementById('mapcanvas'));"
-								data-bs-toggle="tooltip"
-								data-bs-placement="right"
-								data-bs-title="Save a PNG image of the currently displayed map, including all overlays"
-							>
-								<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor;">
-									<path d="M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z" />
-								</svg>
-								Download Map Image
-							</button>
-							<button class="btn btn-primary" onclick="recenterMap()">
-								Center Map
-							</button>
+						<div x-show="$store.data.mapLoaded" style="display: none;" class="mt-2">
+							<div class="d-flex align-items-center">
+								<button 
+									class="btn btn-outline-primary me-1" 
+									onclick="downloadMap(document.getElementById('mapcanvas'));"
+									data-bs-toggle="tooltip"
+									data-bs-placement="right"
+									data-bs-title="Save a PNG image of the currently displayed map, including all overlays"
+								>
+									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor;">
+										<path d="M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z" />
+									</svg>
+									Download Map Image
+								</button>
+								<button class="btn btn-primary" onclick="recenterMap()">
+									Center Map
+								</button>
+							</div>
 						</div>
 						
 					</section>
@@ -695,50 +697,6 @@
 						</div>
 					</div>
 				</div>
-				
-				<div id="old-menu-design-2" class="d-none">
-					<div id="tilefilter" >
-						<span>Tile Transparency</span>
-						<input type="range" name="" min="0" max="255" id="tileSlider" class="w-100">
-						<a href="#" onclick="clearAllHighlights">Clear All Highlights</a>
-					</div>
-				</div>
-				
-			</div>
-		</div>
-	</div>
-
-	<div id="legendAccordion" class="accordion d-none">
-		<div class="accordion-item text-bg-dark">
-			<h2 class="accordion-header" id="headingOne">
-			<button class="accordion-button text-bg-dark" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-				Legend&nbsp;
-			</button>
-			</h2>
-			<div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-			<div class="accordion-body d-flex flex-column">
-				<div id="bosses-legend" class="d-flex flex-column mb-3 d-none">
-					<span class="glurch-legend">&nbsp;Glurch</span>
-					<span class="ghorm-legend">&nbsp;Ghorm</span>
-					<span class="hive-mother-legend">&nbsp;Hive Mother</span>
-					<span class="malugaz-legend">&nbsp;Malugaz</span>
-					<span class="azeos-legend">&nbsp;Azeos</span>
-					<span class="ivy-legend">&nbsp;Ivy</span>
-					<span class="omoroth-legend">&nbsp;Omoroth</span>
-					<span class="morpha-legend">&nbsp;Morpha</span>
-				</div>
-				<div id="mazes-legend" class="d-flex flex-column mb-3 d-none">
-					<span style="padding-right: 20px">Maze Gaps: </span>
-					<span class="small-maze-legend">&nbsp;Small</span>
-					<span class="medium-maze-legend">&nbsp;Medium</span>
-					<span class="large-maze-legend">&nbsp;Large</span>
-				</div>
-				<div id="dungeon-legend" class="d-flex flex-column">
-					<span class="mold-legend">&nbsp;Main Mold Dungeon</span>
-					<span class="bowcity-legend">&nbsp;Bow Cities</span>
-					<span class="bowvault-legend">&nbsp;Bow Vault</span>
-				</div>
-			</div>
 			</div>
 		</div>
 	</div>
@@ -748,123 +706,6 @@
 			Show Settings
 		</button>
     </div>
-
-	<div id="directoryLoader" style="z-index: 10; display:none;" class="position-absolute top-50 start-50 translate-middle"
-		x-show="$store.data.mapPickerShown && $store.data.canWatchFile"
-	>
-		<div class="card text-bg-dark">
-			<div class="card-body d-relative">
-				<div class="position-absolute" style="top: 16px; right: 16px;">
-					<button type="button" class="btn-close" @click="$store.data.mapPickerShown = false" aria-label="Close"></button>
-				</div>
-
-				<h5 class="card-title me-5">Choose a map file</h5>
-				<template x-if="$store.data.directoryHandle">
-					<div>
-						<template x-for="fileHandle in $store.directoryList">
-							<div x-data="{file: null, handle: fileHandle}" x-init="file = await fileHandle.getFile()">
-								<template x-if="file == null">
-									<p>Loading File...</p>
-								</template>
-								<template x-if="file">
-									<p x-text="file.name" @click="loadMapFileWithHandle(handle)"></p>
-								</template>
-							</div>	
-						</template>
-
-						<script>loadDirectoryList();</script>
-					</div>
-				</template>
-				<div x-show="$store.data.directoryHandle === null">
-					<strong>Oh oh!</strong><br>
-					Looks like you didn't choose the map folder yet. <br>
-					<button class="btn btn-primary mt-2" onclick="openDirectoryHandle();">Choose it now</button>
-				</div>
-			</div>
-		</div>
-	</div>
-<!--
-	<div id="tutorialHolder" x-show="$store.data.tutorialShown === false" style="display: none;">
-		<div class="d-flex h-100 w-100 align-items-center justify-content-around">
-			<div class="card text-bg-dark" @click.outside="dismissTutorial">
-				<div class="card-body d-relative">
-					<div class="position-absolute" style="top: 16px; right: 16px;">
-						<button type="button" class="btn-close" @click="dismissTutorial" aria-label="Close"></button>
-					</div>
-
-					<h5 class="card-title me-5">How To: Select Map File</h5>
-
-					<div id="tutorialCarousel" class="carousel slide pt-2" data-bs-config="{'interval':false}" style="width: 400px; height: 380px;">
-						<div class="carousel-indicators">
-							<button type="button" data-bs-target="#tutorialCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-							<button type="button" data-bs-target="#tutorialCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
-							<button type="button" data-bs-target="#tutorialCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
-							<button type="button" data-bs-target="#tutorialCarousel" data-bs-slide-to="3" aria-label="Slide 4"></button>
-							<button type="button" data-bs-target="#tutorialCarousel" data-bs-slide-to="4" aria-label="Slide 5"></button>
-							<button type="button" data-bs-target="#tutorialCarousel" data-bs-slide-to="5" aria-label="Slide 6"></button>
-						</div>
-						<div class="carousel-inner">
-							<div class="carousel-item active">
-								<img src="img/tutorial/step_1.png" class="d-block w-100" width="400" height="380" alt="Select map file">
-								<div class="carousel-caption d-none d-md-block">
-									<p>Click "Select File"</p>
-								</div>
-							</div>
-							<div class="carousel-item">
-								<img src="img/tutorial/step_2.png" class="d-block w-100" width="400" height="380" alt="Open pugstorm path">
-								<div class="carousel-caption d-none d-md-block">
-									<span>Open the following path in file explorer:</span><br>
-									<p class="mt-2">
-										<button class="btn btn-primary btn-sm" onclick="navigator.clipboard.writeText('%appdata%\\..\\LocalLow\\Pugstorm\\Core Keeper\\Steam\\'); this.querySelector('span').innerHTML = 'Copied!'">
-											<svg style="width:18px;height:18px" viewBox="0 0 24 24">
-												<path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z" />
-											</svg>
-											<span>Copy Path</span>
-										</button>
-									</p>
-								</div>
-							</div>
-							<div class="carousel-item">
-								<img src="img/tutorial/step_3.png" class="d-block w-100" width="400" height="380" alt="Select steam id">
-								<div class="carousel-caption d-none d-md-block">
-									<span>Select your steam id.</span><br>
-									<p>There is normally only one.</p>
-								</div>
-							</div>
-							<div class="carousel-item">
-								<img src="img/tutorial/step_4.png" class="d-block w-100" width="400" height="380" alt="Select maps folder">
-								<div class="carousel-caption d-none d-md-block">
-									<p>Select the maps folder</p>
-								</div>
-							</div>
-							<div class="carousel-item">
-								<img src="img/tutorial/step_5.png" class="d-block w-100" width="400" height="380" alt="Select map file">
-								<div class="carousel-caption d-none d-md-block">
-									<span>Select the player.</span>
-									<p>First player ingame is number 0</p>
-								</div>
-							</div>
-							<div class="carousel-item">
-								<img src="img/tutorial/step_6.png" class="d-block w-100" width="400" height="380" alt="Select map file">
-								<div class="carousel-caption d-none d-md-block">
-									<p>Select the map you wish to display</p>
-								</div>
-							</div>
-						</div>
-						<button class="carousel-control-prev" type="button" data-bs-target="#tutorialCarousel" data-bs-slide="prev">
-							<span class="carousel-control-prev-icon" aria-hidden="true"></span>
-							<span class="visually-hidden">Previous</span>
-						</button>
-						<button class="carousel-control-next" type="button" data-bs-target="#tutorialCarousel" data-bs-slide="next">
-							<span class="carousel-control-next-icon" aria-hidden="true"></span>
-							<span class="visually-hidden">Next</span>
-						</button>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
--->
 
 	<template x-if="$store.data.firstTimeLoaded === false && $store.data.tutorialShown === false">
 		<div class="text-bg-dark h-100" id="findMapGuide" style="overflow: auto; word-wrap: normal; word-break: normal;">
