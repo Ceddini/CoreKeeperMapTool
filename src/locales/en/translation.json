@@ -11,5 +11,20 @@
 	"cookies.enable_ad_tracking.description": "If ads should be customized based on your activity here. Sadly included in analytics.",
 	"privacy_policy": "Privacy Policy",
 	"save": "Save",
-	"allow_analytics": "Allow Analytics"
+	"allow_analytics": "Allow Analytics",
+	"about": "About",
+	"about.video_tutorial": "How to use the Map Tool",
+	"about.video_tutorial_credits": "Video by Dakon the Mad",
+	"about.feedback_requests": "Feedback / Requests",
+	"about.development_version": "Development Version",
+	"about.support_me": "Support Hosting & Dev Costs",
+	"load_map": "Load Map",
+	"load_map.example": "Load Example Map",
+	"load_map.select_file": "Select File",
+	"load_map.monitor_not_available": "Not available in this browser",
+	"load_map.auto_refresh": "Auto Refresh",
+	"load_map.how_to_find_map": "How to find your map file",
+	"load_map.download_image_description": "Save a PNG image of the currently displayed map, including all overlays",
+	"load_map.download_image": "Download Map Image",
+	"load_map.center_map": "Center Map"
 }
