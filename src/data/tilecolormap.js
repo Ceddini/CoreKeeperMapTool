@@ -39,7 +39,7 @@ let tileColors = [
 		"set": TileType.SpawnTiles,
 		"tiles": [
 			new Tile("Ground Slime", 217, 98, 23),
-			new Tile("Fungal Soil", 183, 83, 61),
+			new Tile("Fungal Soil", 183, 83, 60),
 			new Tile("Stone Moss", 207, 241, 255),
 			new Tile("Ground Slippery Slime", 46, 46, 255),
 			new Tile("Chrysalis", 252, 166, 148),
