@@ -144,19 +144,15 @@ function decorateMap(width, height) {
 	if (showArcsCheckbox.checked) {
 		const manualArcRotation = Alpine.store('data').manualArcRotation;
 
-		if (HIGHEST_STONE > 10000 || manualArcRotation) {
-			const start = (manualArcRotation) ? document.getElementById('innerArcSlider').value * Math.PI / 180 : stoneArc.start;
-			const end = (manualArcRotation) ? loop(document.getElementById('innerArcSlider').value - 180, 0, 359) * Math.PI / 180 : stoneArc.end;
+		const innerStart = (manualArcRotation) ? document.getElementById('innerArcSlider').value * Math.PI / 180 : stoneArc.start;
+		const innerEnd = (manualArcRotation) ? loop(document.getElementById('innerArcSlider').value - 180, 0, 359) * Math.PI / 180 : stoneArc.end;
 
-			drawArcs(_global_ctx, start, end);
-		}
+		drawArcs(_global_ctx, innerStart, innerEnd);
 
-		if (HIGHEST_WILDERNESS > 10000 || manualArcRotation) {
-			const start = (manualArcRotation) ? document.getElementById('outerArcSlider').value * Math.PI / 180 : wildernessArc.start;
-			const end = (manualArcRotation) ? loop(document.getElementById('outerArcSlider').value - 120, 0, 359) * Math.PI / 180 : wildernessArc.end;
+		const outerStart = (manualArcRotation) ? document.getElementById('outerArcSlider').value * Math.PI / 180 : wildernessArc.start;
+		const outerEnd = (manualArcRotation) ? loop(document.getElementById('outerArcSlider').value - 120, 0, 359) * Math.PI / 180 : wildernessArc.end;
 
-			drawOuterArcs(_global_ctx, start, end);
-		}
+		drawOuterArcs(_global_ctx, outerStart, outerEnd);
 	}
 
 	if (Alpine.store('data').showCustomRing) {
