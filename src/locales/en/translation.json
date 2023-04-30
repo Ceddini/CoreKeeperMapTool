@@ -19,7 +19,7 @@
 	"about.development_version": "Development Version",
 	"about.support_me": "Support Hosting & Dev Costs",
 	"load_map": "Load Map",
-	"load_map.example": "Load Example Map",
+	"load_map.example": "Load Example Map (7MB)",
 	"load_map.select_file": "Select File",
 	"load_map.monitor_not_available": "Not available in this browser",
 	"load_map.auto_refresh": "Auto Refresh",

@@ -19,7 +19,7 @@
 	"about.development_version": "Entwicklungsversion",
 	"about.support_me": "Unterstütze Entwickler & Hosting",
 	"load_map": "Karte Laden",
-	"load_map.example": "Lade Beispiel Karte",
+	"load_map.example": "Lade Beispiel Karte (7MB)",
 	"load_map.select_file": "Datei wählen",
 	"load_map.monitor_not_available": "In diesem Browser nicht verfügbar",
 	"load_map.auto_refresh": "Auto. Aktualisieren",

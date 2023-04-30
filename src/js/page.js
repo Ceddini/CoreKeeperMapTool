@@ -11,6 +11,15 @@ document.addEventListener('alpine:init', function () {
 
 	Alpine.store('tilecolormap', { list: tileColors, visible: [] });
 
+	Alpine.store("pins", []);
+
+	Alpine.store('player', {
+		posX: 0,
+		posY: 0,
+		radius: 208,
+		color: "#000000"
+	})
+
 
 	Alpine.store('data', {
 		// Loaded from savehandler.js
@@ -31,6 +40,8 @@ document.addEventListener('alpine:init', function () {
 		directoryHandle: null,
 
 		arcSlidersPrefilled: false,
+
+		showPlayerRadius: false,
 
 		showArcs: false,
 		showChunkGrid: false,
@@ -70,9 +81,11 @@ window.addEventListener('DOMContentLoaded', () => {
 		maxScale: MAX_ZOOM,
 		canvas: true,
 	});
+	mousePosElem = document.getElementById("mouse-position");
 
 	mapCanvas.parentElement.addEventListener('wheel', zoomWithMouseWheel);
 	mapCanvas.addEventListener('mousemove', updateCoordinates);
+	mapCanvas.addEventListener('mousemove', updateMousePos);
 	mapCanvas.addEventListener('panzoomend', storeCoreRelativeOffset);
 	mapCanvas.addEventListener('panzoomend', () => { MapMonitor.isPanning = false; });
 	mapCanvas.addEventListener('panzoomstart', () => { MapMonitor.isPanning = true; });
@@ -139,8 +152,16 @@ function onChangeShowCustomRing(event) {
 	redrawDebounce(event);
 }
 
+function onChangeShowPlayerRadius(event) {
+
+}
+
 function onChangeCustomRing(event) {
 	redrawMap();
+}
+
+function onChangePlayerRadius(event) {
+
 }
 
 function onChangeShowChunkGrid(event) {

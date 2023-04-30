@@ -249,8 +249,6 @@
 							</a>
 						</div>
 
-						<!-- <h6 class="mt-2"><a href="https://maptool.ceschmitt.de/img/corekeeper_map.png" target="_blank" rel="noopener noreferrer">Open Full Map Image (Spoilers)</a></h6> -->
-
 						<div x-show="$store.data.mapLoaded" style="display: none;" class="mt-2">
 							<div class="d-flex align-items-center">
 								<button 
@@ -274,6 +272,19 @@
 
 					<div x-show="!$store.data.firstTimeLoaded" class="bordered-box" data-i18n="load_map_to_show_settings">load_map_to_show_settings</div>
 					<div x-show="$store.data.firstTimeLoaded" x-transition.scale.origin.top style="display: none;">
+
+						<template x-if="$store.pins.length > 0">
+							<section class="bordered-box">
+								<template x-for="(pin, i) in $store.pins">
+									<div>
+										<span x-text="`X: ${pin.x}, Y: ${pin.y}`"></span>
+										<button class="btn" :onclick="`removeOverlayPin(${i})`">remove me</button>
+									</div>
+								</template>
+							</section>
+						</template>
+
+
 						<!-- POIs Section -->
 						<section class="bordered-box" x-data="{visible: true}">
 							<div class="d-inline-flex align-items-center" x-on:click="visible = !visible" style="cursor: pointer;">
@@ -602,6 +613,68 @@
 								</div>
 							</div>
 						</section>
+
+						<section class="bordered-box" x-data="{visible: true}">
+							<div class="d-inline-flex align-items-center" x-on:click="visible = !visible" style="cursor: pointer;">
+								<svg x-show="visible" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor; display:none;"><path d="M7.41,15.41L12,10.83L16.59,15.41L18,14L12,8L6,14L7.41,15.41Z" /></svg>
+								<svg x-show="!visible" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor;"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" /></svg>
+
+								<span class="fs-4">Custom Things</span>
+							</div>
+							<div class="px-1 mt-2" x-show="visible" x-transition>
+								<!--
+								<div class="mb-2">
+									<span>Tile Transparency</span>
+									<div class="d-flex align-items-center">
+										<input type="range" class="form-range me-2" name="tileTransparency" id="tileTransparency" min="0" max="100" x-model="$store.data.tileTransparency" @change="onChangeTileTransparency">
+										<input class="form-control form-control-sm me-1" type="number" min="0" max="100" style="width: 60px;" x-model="$store.data.tileTransparency" @change="onChangeTileTransparency">
+										<span>%</span>
+									</div>
+								</div>
+								-->
+								<div class="bordered-box-section" x-data="{visible: false}">
+									<div class="d-flex align-items-center mb-1">
+										<div class="d-inline-flex align-items-center" x-on:click="visible = !visible" style="cursor: pointer;">
+											<svg x-show="visible" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor;"><path d="M7.41,15.41L12,10.83L16.59,15.41L18,14L12,8L6,14L7.41,15.41Z" /></svg>
+											<svg x-show="!visible" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor;"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" /></svg>
+	
+											<span class="fs-5">Player Pos</span>
+										</div>
+										<div class="flex-fill border-bottom border-secondary mx-2"></div>
+									</div>
+									<div x-show="visible" x-transition style="display: none;" class="px-1">
+										<div class="form-check">
+											<input class="form-check-input" type="checkbox" value="" id="showPlayerRadius" x-model="$store.data.showPlayerRadius" @change="onChangeShowPlayerRadius">
+											<label class="form-check-label" for="showPlayerRadius">
+											Show Player Marker
+											</label>
+										</div>
+										<div class="d-flex align-items-center justify-content-between">
+											<span>Pos X:</span>
+											<input class="form-control form-control-sm me-1" type="number" placeholder="Pos X" min="0" style="width: 70px;" x-model="$store.player.posX">
+										</div>
+										<div class="d-flex align-items-center justify-content-between">
+											<span>Pos Y:</span>
+											<input class="form-control form-control-sm me-1" type="number" placeholder="Pos Y" min="0" style="width: 70px;" x-model="$store.player.posY">
+										</div>
+
+										
+
+										<div class="d-flex align-items-center justify-content-between">
+											<span>Player Color</span>
+											<div>
+												<input type="color" name="playerColor" class="form-control form-control-color" style="padding: 0.2em;" x-model="$store.player.color" id="playerColor" />
+											</div>
+										</div>
+										<div class="d-flex align-items-center">
+											<input type="range" class="form-range me-2" name="playerRadius" id="playerRadius" min="0" max="5000" step="25" x-model="$store.player.radius" @change="onChangePlayerRadius">
+											<input class="form-control form-control-sm me-1" type="number" min="0" style="width: 70px;" x-model="$store.player.radius">
+											<span>tiles</span>
+										</div>
+									</div>
+								</div>
+							</div>
+						</section>
 					</div>
 
 					<div class="bordered-box" style="margin-top: 12px;">
@@ -628,6 +701,21 @@
 								</div>
 							</template>
 						</div>
+					</div>
+
+					<!-- AD -->
+					<div style="max-width: 350px; margin-bottom: 12px;">
+						<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2412416006246050" crossorigin="anonymous"></script>
+						<!-- Maptool Sidebar Ad -->
+						<ins class="adsbygoogle"
+							style="display:block"
+							data-ad-client="ca-pub-2412416006246050"
+							data-ad-slot="2165576877"
+							data-ad-format="auto"
+							data-full-width-responsive="true"></ins>
+						<script>
+							(adsbygoogle = window.adsbygoogle || []).push({});
+						</script>
 					</div>
 
 					<div class="bordered-box" x-data="{visible: false}">
@@ -710,6 +798,17 @@
 				</div>
 			</h4>
 			<div style="max-width: 432px;">
+				<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2412416006246050" crossorigin="anonymous"></script>
+				<ins class="adsbygoogle"
+					style="display:block"
+					data-ad-format="fluid"
+					data-ad-layout-key="-hl-7+2n-1d-69"
+					data-ad-client="ca-pub-2412416006246050"
+					data-ad-slot="4956898343"></ins>
+				<script>
+					(adsbygoogle = window.adsbygoogle || []).push({});
+				</script>
+
 				<h5>1. Click "Select File" Button</h5>
 				<img src="img/tutorial/step_1.png" class="d-block" width="400" height="200" alt="Select map file">
 				<p>Click the blue "Select File" button on the left-hand side.</p>
@@ -762,6 +861,10 @@
   	</div>
 	-->
 
+	<div id="mouse-position">
+
+	</div>
+
   	<script src="js/faq.js"></script>
   	<script src="js/overlay.js"></script>
   	<script src="js/savehandler.js"></script>
@@ -769,6 +872,7 @@
   	<script src="js/menubuilder.js"></script>
   	<script src="js/mazehunter.js"></script>
   	<script src="js/vendor/bootstrap.bundle.min.js"></script>
+	<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2412416006246050" crossorigin="anonymous"></script>
 	<script>
 		// const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
 		// const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
