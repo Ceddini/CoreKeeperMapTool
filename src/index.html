@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -14,8 +15,7 @@
 
 	<link id="favicon" rel="icon" href="img/favicon_dark.png" type="image/png"  sizes="32x32">
 	
-	<script src="https://code.jquery.com/jquery-1.12.4.min.js"
-		integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+	<script src="https://code.jquery.com/jquery-1.12.4.min.js" crossorigin="anonymous"></script>
 	<script src="js/vendor/jqueryBrowser.js"></script>
 	<script src="https://unpkg.com/@panzoom/panzoom@4.5.1/dist/panzoom.min.js"></script>
 	<script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -85,6 +85,15 @@
 				</button>
 			</a>
 
+			<a target="_blank" href="https://maptool-dev.ceschmitt.de" rel="noopener noreferrer">
+				<button class="btn btn-outline-primary w-100 text-start mt-2">
+					<svg style="width:24px;height:24px" class="me-2" viewBox="0 0 24 24">
+						<path fill="currentColor" d="M8,3A2,2 0 0,0 6,5V9A2,2 0 0,1 4,11H3V13H4A2,2 0 0,1 6,15V19A2,2 0 0,0 8,21H10V19H8V14A2,2 0 0,0 6,12A2,2 0 0,0 8,10V5H10V3M16,3A2,2 0 0,1 18,5V9A2,2 0 0,0 20,11H21V13H20A2,2 0 0,0 18,15V19A2,2 0 0,1 16,21H14V19H16V14A2,2 0 0,1 18,12A2,2 0 0,1 16,10V5H14V3H16Z" />
+					</svg>
+					<span>Development Version</span>
+				</button>
+			</a>
+
 			<a target="_blank" href="https://linktr.ee/ceddini">
 				<button class="btn btn-outline-primary w-100 text-start mt-2">
 					<svg style="width:24px;height:24px" class="me-2" viewBox="0 0 24 24">
@@ -138,7 +147,7 @@
 					<section class="bordered-box">
 						<div class="d-flex justify-content-between align-items-center mb-1">
 							<h4>Load Map</h4>
-							<a href="#" onclick="loadExample()" style="font-size: 12pt; text-align:right;">Load Example Map<br><small>(by Craigins)</small></a>
+							<a href="#" onclick="loadExample()" style="font-size: 12pt; text-align:right;">Load Example Map (7MB)<br><small>(by ZeroGravitas)</small></a>
 						</div>
 						<input id="mapupload" type="file" class="form-control d-none" />
 
@@ -207,8 +216,6 @@
 								</ol>
 							</div>
 						</div>
-
-						<h6 class="mt-2"><a href="https://maptool.ceschmitt.de/img/corekeeper_map.png" target="_blank">Open Full Map Image (Spoilers)</a></h6>
 
 						<div x-show="$store.data.mapLoaded" style="display: none;" class="mt-2">
 							<button class="btn btn-outline-secondary" onclick="recenterMap()">
@@ -461,6 +468,21 @@
 						</div>
 					</div>
 
+					<!-- AD -->
+					<div style="max-width: 350px; margin-bottom: 12px;">
+						<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2412416006246050" crossorigin="anonymous"></script>
+						<!-- Maptool Sidebar Ad -->
+						<ins class="adsbygoogle"
+							style="display:block"
+							data-ad-client="ca-pub-2412416006246050"
+							data-ad-slot="2165576877"
+							data-ad-format="auto"
+							data-full-width-responsive="true"></ins>
+						<script>
+							(adsbygoogle = window.adsbygoogle || []).push({});
+						</script>
+					</div>
+
 					<div class="bordered-box" x-data="{visible: false}">
 						<div class="d-inline-flex align-items-center" x-on:click="visible = !visible" style="cursor: pointer;">
 							<svg x-show="visible" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor; display:none;"><path d="M7.41,15.41L12,10.83L16.59,15.41L18,14L12,8L6,14L7.41,15.41Z" /></svg>
@@ -520,7 +542,7 @@
 								<p>nineforty</p>
 							</div>
 						</div>
-					</div>
+					</div>					
 				</div>
 				
 				<div id="old-menu-design-2" class="d-none">
@@ -702,6 +724,17 @@
 				</div>
 			</h4>
 			<div style="max-width: 432px;">
+				<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2412416006246050" crossorigin="anonymous"></script>
+				<ins class="adsbygoogle"
+					style="display:block"
+					data-ad-format="fluid"
+					data-ad-layout-key="-hl-7+2n-1d-69"
+					data-ad-client="ca-pub-2412416006246050"
+					data-ad-slot="4956898343"></ins>
+				<script>
+					(adsbygoogle = window.adsbygoogle || []).push({});
+				</script>
+
 				<h5>1. Click "Select File" Button</h5>
 				<img src="img/tutorial/step_1.png" class="d-block" width="400" height="200" alt="Select map file">
 				<p>Click the blue "Select File" button on the left-hand side.</p>
@@ -764,6 +797,16 @@
 			selector: "[data-bs-toggle='tooltip']",
 			trigger: "hover"
 		});
+	</script>
+	<script type="text/javascript"> var infolinks_pid = 3380072; var infolinks_wsid = 0; </script> <script type="text/javascript" src="//resources.infolinks.com/js/infolinks_main.js"></script>
+	<script src="/js/vendor/glowCookies.min.js"></script>
+	<script>
+			glowCookies.start('en', { 
+				style: 1,
+				position: "right",
+				analytics: 'G-W8K9L2Y21K', 
+				policyLink: 'https://maptool.ceschmitt.de/privacy-policy.html'
+			});
 	</script>
 </body>
 </html>
