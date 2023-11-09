@@ -39,7 +39,7 @@ const MapMonitor = {
 			if (shouldrefresh && !MapMonitor.isPanning) {
 				MapMonitor.refreshMap();
 			}
-		}, 10000);
+		}, 1000);
 		this.refreshMap();
 	}
 }

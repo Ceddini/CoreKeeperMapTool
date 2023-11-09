@@ -17,6 +17,7 @@ const TileType = {
 	SpawnTiles: "Spawn Tiles",
 	Liquids: "Liquids",
 	Boulders: "Boulders",
+	Crates: "Crates",
 	Ores: "Ores",
 	Objects: "Objects"
 };
@@ -32,19 +33,24 @@ class Tile {
 		this.b = b;
 		this.textColor = textBlack ? "#000000" : "#FFFFFF";
 	}
-}
+};
 
 let tileColors = [
 	{
 		"set": TileType.SpawnTiles,
 		"tiles": [
 			new Tile("Chrysalis", 252, 166, 148),
+			new Tile("Clay Moss", 126, 87, 78),
 			new Tile("Fungal Soil", 183, 83, 60),
 			new Tile("Ground Acid Slime", 193, 170, 33),
+			new Tile("Ground Magma Slime", 255, 84, 0),
 			new Tile("Ground Poison Slime", 184, 86, 165),
 			new Tile("Ground Slime", 217, 98, 23),
-			new Tile("Ground Slippery Slime", 46, 46, 255),
+			new Tile("Ground Slippery Slime", 47, 47, 255),
+			new Tile("Lush Moss", 163, 206, 74),
 			new Tile("Stone Moss", 207, 241, 255),
+			new Tile("Urban Moss", 42, 210, 62),
+			new Tile("Valley Moss", 249, 116, 67),
 		]
 	},
 	{
@@ -54,6 +60,7 @@ let tileColors = [
 			new Tile("Larva Hive Water", 117, 103, 48),
 			new Tile("Mold Water", 61, 85, 135),
 			new Tile("Sea Water", 52, 208, 255),
+			new Tile("Lava", 222, 53, 1),
 		]
 	},
 	{
@@ -87,18 +94,24 @@ let tileColors = [
 			new Tile("Black Wall", 62, 62, 62),
 			new Tile("Blue Wall", 28, 93, 216),
 			new Tile("Brown Wall", 124, 58, 28),
+			new Tile("Cyan Wall", 31, 193, 179),
 			new Tile("City Wall", 49, 77, 87),
 			new Tile("Clay Wall", 193, 100, 54),
 			new Tile("Dirt Wall", 97, 73, 39),
+			new Tile("Explosives Deposit", 192, 23, 26),
 			new Tile("Grass Wall", 22, 131, 27),
+			new Tile("Gray Wall", 131, 151, 159),
 			new Tile("Great Wall", 19, 94, 82),
 			new Tile("Green Wall", 64, 169, 16),
 			new Tile("Larva Hive Wall", 163, 97, 83),
 			new Tile("Lava Rock Wall", 56, 52, 71),
 			new Tile("Limestone Wall", 180, 147, 154),
+			new Tile("Maze Wall", 60, 79, 57),
 			new Tile("Meadow Wall", 224, 201, 97),
 			new Tile("Mold Wall", 89, 156, 186),
 			new Tile("Obsidian Wall", 22, 42, 39),
+			new Tile("Orange Wall", 226, 121, 41),
+			new Tile("Pink Wall", 246, 30, 120),
 			new Tile("Purple Wall", 109, 49, 137),
 			new Tile("Red Wall", 187, 10, 10),
 			new Tile("Sand Wall", 172, 143, 58),
@@ -106,6 +119,7 @@ let tileColors = [
 			new Tile("Scarlet Wall", 144, 38, 19),
 			new Tile("Stone Bricks Wall", 106, 108, 114),
 			new Tile("Stone Wall", 73, 103, 125),
+			new Tile("Temple Wall", 0, 108, 177),
 			new Tile("Turf Wall", 70, 103, 81),
 			new Tile("Unpainted Wall", 154, 165, 212),
 			new Tile("White Wall", 157, 180, 203),
@@ -118,6 +132,7 @@ let tileColors = [
 		"tiles": [
 			new Tile("Beach Sand Ground", 235, 192, 190),
 			new Tile("Clay Ground", 232, 139, 105),
+			new Tile("Dark Stone Ground", 123, 140, 172),
 			new Tile("Desert Sand Ground", 210, 154, 124),
 			new Tile("Dirt Ground", 127, 95, 48),
 			new Tile("Grass Ground", 61, 155, 65),
@@ -142,12 +157,18 @@ let tileColors = [
 			new Tile("Blue Floor", 43, 108, 228),
 			new Tile("Brown Floor", 151, 75, 40),
 			new Tile("Caveling Floor Tile", 130, 130, 130),
+			new Tile("Cyan Floor", 41, 226, 180),
 			new Tile("City Floor", 87, 128, 132),
+			new Tile("Gray Floor", 157, 175, 183),
 			new Tile("Green Floor", 85, 182, 39),
+			new Tile("Maze Floor", 83, 100, 96),
+			new Tile("Orange Floor", 237, 144, 73),
+			new Tile("Pink Floor", 250, 69, 144),
 			new Tile("Purple Floor", 139, 79, 167),
 			new Tile("Red Floor", 223, 0, 0),
 			new Tile("Scarlet Floor", 178, 53, 38),
 			new Tile("Stone Floor", 129, 132, 140),
+			new Tile("Temple Floor", 158, 138, 134),
 			new Tile("Unpainted Floor", 174, 189, 241),
 			new Tile("White Floor", 178, 206, 233),
 			new Tile("Wood Floor", 199, 148, 79),
@@ -158,7 +179,6 @@ let tileColors = [
 	{
 		"set": TileType.Objects,
 		"tiles": [
-			new Tile("Ancient Crate", 77, 168, 202),
 			new Tile("Ancient Wire (core)", 66, 93, 94),
 			new Tile("Conveyor Belt", 104, 127, 174),
 			new Tile("Coral Wood", 250, 89, 163),
@@ -174,8 +194,18 @@ let tileColors = [
 			new Tile("Stone Fence", 97, 91, 85),
 			new Tile("Wood Bridge", 140, 88, 38),
 			new Tile("Wood Fence", 112, 72, 33),
-			new Tile("Wooden Crate", 114, 60, 17),
 			new Tile("Woven Mat", 58, 139, 65),
+		]
+	},
+	{
+		"set": TileType.Crates,
+		"tiles": [
+			new Tile("Ancient / Metropolis Crate", 77, 168, 202),
+			new Tile("Charred Crate", 103, 127, 174),
+			new Tile("Driftwood Wooden Crate", 143, 123, 119),
+			new Tile("Overgrown Wooden Crate", 97, 72, 34),
+			new Tile("Temple Crate", 24, 133, 216),
+			new Tile("Wooden Crate", 114, 60, 17),
 		]
 	},
 	{
