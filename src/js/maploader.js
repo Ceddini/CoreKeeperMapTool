@@ -1,6 +1,7 @@
 //https://mzhub.github.io/ckmap/
 
 function loadParts(i, gridarr, mapParts, callback) {
+	console.log(mapParts)
 	if (i >= mapParts.keys.length) {
 		return callback(gridarr);
 	}
