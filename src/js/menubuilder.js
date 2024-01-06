@@ -63,18 +63,12 @@ function _isBoulder(elem) {
 }
 
 function buildHighlightSelection(search) {
-	for (let tile of Alpine.store('tilecolormap').visible) {
-		search.count++;
-		filterObj = isBoulder(tile) ? search.boulders : search;
-
-		if (!filterObj[tile.r]) {
-			((filterObj[tile.r] = {})[tile.g] = {})[tile.b] = true;
-		} else if (!filterObj[tile.r][tile.g]) {
-			(filterObj[tile.r][tile.g] = {})[tile.b] = true;
-		} else {
-			filterObj[tile.r][tile.g][tile.b] = true;
-		}
-	}
+	const tiles = Alpine.store('tilecolormap').visible;
+	if(tiles.length === 0) return null;
+	return {
+		normal: new TileFilter( tiles.filter(tile=>!isBoulder(tile)) ),
+		boulders: new TileFilter( tiles.filter(isBoulder) )
+	};
 }
 
 function _buildHighlightSelection(search) {

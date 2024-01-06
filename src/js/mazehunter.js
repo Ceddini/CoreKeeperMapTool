@@ -1,3 +1,6 @@
+// import { mazeFilters } from "./maxeFilters.js";
+// import { coreLoc } from "./canvastools.js";
+
 const SEARCH_RADII = { min: 140, min2: 19600, max: 500, max2: 250000 };
 const OUTER_SEARCH_RADII = { min: 500, max: 800 }
 const MAZE_HIGLIGHT = { 1: { r: 255, g: 0, b: 255 }, 2: { r: 0, g: 255, b: 255 }, 3: { r: 0, g: 255, b: 0 } };
