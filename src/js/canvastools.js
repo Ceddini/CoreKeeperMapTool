@@ -12,21 +12,16 @@ let coreLoc = { x: 0, y: 0 };
 let pixelMap = {};
 let panZoomElem;
 
-// return hex-code(to improve performance)
-function getColorInPosition(x, y)
+function getCanvasPixelData()
 {
-	if(!_image_pixelData) return 0x0;
-	const dataX = x + coreLoc.x;
-	const dataY = coreLoc.y - y;
-	const i = (dataY * _image_pixelData.width + x) * 4;
-	const arr = _image_pixelData.data;
-	return arr[i] << 16 + arr[i+1] << 8 + arr[i+2] << 0;
-}
-
-function isMatchFilterInPosition(x, y, filter)
-{
-	const hexCode = getColorInPosition(x, y);
-	return filter.isMatch(hexCode);
+	if(!_image_pixelData)
+	{
+		_image_pixelData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+		return _image_pixelData; 
+	}
+	const cloneData = new Uint8ClampedArray(_image_pixelData.data);
+	const clone = new ImageData(cloneData, _image_pixelData.width, _image_pixelData.height);
+	return clone;
 }
 
 function panImage(dx, dy) {
@@ -381,15 +376,14 @@ function drawMap(tiles) {
 }
 
 function highlightSelected() {
-	const mapCanvas = document.getElementById('mapcanvas');
-	const imageData = _global_ctx.getImageData(0, 0, mapCanvas.width, mapCanvas.height);
+	const imageData = getCanvasPixelData();
 
 	const filters = buildHighlightSelection();
 	if(filters) highlightColors(imageData, filters);
 
 	// todo: refactor findHole data
 	if (Alpine.store('data').showMazeHoles) {
-		findHole(imageData.data, mapCanvas.width);
+		findHole(imageData.data, imageData.width);
 	}
 	_global_ctx.putImageData(imageData, 0, 0);
 }
@@ -403,22 +397,17 @@ function highlightColors(imageData, {normal, boulders})
 {
 	const {data:pixelArray, width} = imageData;
 	const alpha = Alpine.store('data').tileTransparency / 100 * 255;
+	const length = pixelArray.length;
 
-	for (let i = 0; i < pixelArray.length; i += 4) {
+	for (let i = 0; i < length; i += 4) {
 		if (pixelArray[i + 3] === 0) continue;
 		const r = pixelArray[i], g = pixelArray[i+1], b = pixelArray[i+2];
-		const x = (i/4) % width;
-		const y = Math.floor((i/4) / width);
-
-		const isNormalFilterMatched = normal.isMatch(r,g,b);
-		const isBoulderFilterMatched = boulders.isMatch(r,g,b);
-		pixelArray[i + 3] = isNormalFilterMatched ? 255 : alpha;
-
-		if(isBoulderFilterMatched) highlightBoulders(imageData, x, y);
+		pixelArray[i + 3] = normal.isMatch(r,g,b) ? 255 : alpha;
+		if(boulders.isMatch(r,g,b)) highlightBoulders(imageData, i);
 	}
 }
 
-function checkBoulders(imageData, x, yf)
+function checkBoulders(imageData, x, y)
 {
 	const {data:pixelArray, width, height} = imageData;
 	function getHexCode(x, y)
@@ -433,9 +422,12 @@ function checkBoulders(imageData, x, yf)
 	return true;
 }
 
-function highlightBoulders(imageData, x, y)
+function highlightBoulders(imageData, i)
 {
 	const {data:pixelArray, width, height} = imageData;
+	const x = (i/4) % width;
+	const y = Math.floor((i/4) / width);
+
 	if(!checkBoulders(imageData, x, y)) return;
 	for(let dx=0; dx<2; dx++)
 	{

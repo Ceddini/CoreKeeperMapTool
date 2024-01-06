@@ -184,10 +184,9 @@ function onChangeShowArcs(event) {
 	event.target.setAttribute("disabled", "true");
 
 	if (checked) {
-		const canvas = document.getElementById("mapcanvas");
-		const myImage = _global_ctx.getImageData(0, 0, canvas.width, canvas.height);
-		findStone(myImage.data, canvas.width);
-		findWilderness(myImage.data, canvas.width);
+		const myImage = getCanvasPixelData();
+		findStone(myImage.data, myImage.width);
+		findWilderness(myImage.data, myImage.width);
 	}
 
 	redrawMap();
