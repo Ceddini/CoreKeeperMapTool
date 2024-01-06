@@ -11,6 +11,7 @@ const wildernessArc = { start: 0, end: 0 };
 const arcticks = 1440.0;
 const deltaRadians = (Math.PI * 2.0) / arcticks;
 
+let isStoneFound = false;
 let HIGHEST_STONE = 0;
 let HIGHEST_WILDERNESS = 0;
 
@@ -98,8 +99,7 @@ function findStone(myImageData, width) {
 	stoneArc.start = maxStone.index * deltaRadians;
 	stoneArc.endTicks = maxClay.index;
 	stoneArc.end = maxClay.index * deltaRadians;
-	
-	findHole(myImageData, width);
+	isStoneFound = true;
 }
 
 function findWilderness(myImageData, width) {
@@ -138,6 +138,8 @@ function findWilderness(myImageData, width) {
 
 
 function findHole(myImageData, width) {
+	if(!isStoneFound) findStone(myImageData, width);
+
 	let visited = {};
 	let prevX, prevY, x, y, i;
 	let b = 0;

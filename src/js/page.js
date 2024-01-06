@@ -115,6 +115,7 @@ function resetMap() {
 	tilelist = [];
 	HIGHEST_STONE = 0;
 	HIGHEST_WILDERNESS = 0;
+	isStoneFound = false;
 	document.getElementById('showArcs').checked = false;
 }
 

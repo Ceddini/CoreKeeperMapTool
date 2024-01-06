@@ -380,6 +380,7 @@ function drawMap(tiles) {
 
 	Alpine.store('data').mapLoaded = true;
 	Alpine.store('data').firstTimeLoaded = true;
+	highlightSelected();
 	decorateMap(canvas.width, canvas.height);
 }
 
