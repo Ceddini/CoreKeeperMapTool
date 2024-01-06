@@ -1,11 +1,9 @@
+// import { mazeFilters } from "./maxeFilters.js";
+// import { coreLoc } from "./canvastools.js";
+
 const SEARCH_RADII = { min: 140, min2: 19600, max: 500, max2: 250000 };
 const OUTER_SEARCH_RADII = { min: 500, max: 800 }
 const MAZE_HIGLIGHT = { 1: { r: 255, g: 0, b: 255 }, 2: { r: 0, g: 255, b: 255 }, 3: { r: 0, g: 255, b: 0 } };
-const STONE_FILTER = { count: 0 };
-const CLAY_FILTER = { count: 0 };
-
-const WILDERNESS_FILTER = { count: 0 };
-const SUNKENSEA_FILTER = { count: 0 };
 
 const stoneArc = { start: 0, end: 0 };
 const wildernessArc = { start: 0, end: 0 };
@@ -13,103 +11,65 @@ const wildernessArc = { start: 0, end: 0 };
 const arcticks = 1440.0;
 const deltaRadians = (Math.PI * 2.0) / arcticks;
 
+let isStoneFound = false;
 let HIGHEST_STONE = 0;
 let HIGHEST_WILDERNESS = 0;
 
-function averageAround(i, arr, width) {
-	let sval = i - width;
-	let eval = i + width;
-	let dsum = 0;
-	let dcount = 0;
-	for (let i = sval; i <= eval; i++) {
-		let idx = i % arr.length;
-		if (idx < 0) idx = arr.length + idx;
-		dsum += arr[idx];
-		dcount++;
+function countAngleTiles(angle, {minRadius, maxRadius, positiveFilter, negativeFilter,myImageData, width}) {
+	let prevX, prevY;
+	let delta = 0, count = 0;
+	for(let radius = minRadius; radius < maxRadius; radius++) {
+		let x = Math.floor(radius * Math.sin(angle));
+		let y = Math.floor(radius * Math.cos(angle));
+		if(x == prevX && y == prevY) continue;
+
+		[prevX, prevY] = [x, y];
+		x += coreLoc.x;
+        y = coreLoc.y - y;
+        i = (y * width + x) * 4;
+        let r = myImageData[i], g = myImageData[i + 1], b = myImageData[i + 2];
+
+		delta += +(positiveFilter.isMatch(r,g,b));
+		delta -= +(negativeFilter.isMatch(r,g,b));
+		count++;
 	}
-	return dsum / dcount;
+	if(count === 0) return 0;
+	return delta / count;
 }
 
 function countStoneClay(myImageData, width) {
-	let prevX, prevY, x, y, i;
 	let deltaStone = [];
+	const config = {
+		minRadius:SEARCH_RADII.min,
+		maxRadius:SEARCH_RADII.max,
+		positiveFilter:mazeFilters.STONE,
+		negativeFilter:mazeFilters.CLAY,myImageData, width
+	};
 	for (let rad = 0; rad < arcticks; rad++) {
 		let angle = rad * deltaRadians;
-		let numStone = 0, numClay = 0;
-		for (let radius = SEARCH_RADII.min; radius < SEARCH_RADII.max; radius++) {
-			x = parseInt(radius * Math.sin(angle));
-			y = parseInt(radius * Math.cos(angle));
-			if (x != prevX || y != prevY) {
-				prevX = x;
-				prevY = y;
-				x += coreLoc.x;
-				y = coreLoc.y - y;
-				i = (y * width + x) * 4;
-				let r = myImageData[i], g = myImageData[i + 1], b = myImageData[i + 2];
-				if (STONE_FILTER[r] && STONE_FILTER[r][g] && STONE_FILTER[r][g][b]) {
-					++numStone;
-				} else if (CLAY_FILTER[r] && CLAY_FILTER[r][g] && CLAY_FILTER[r][g][b]) {
-					++numClay;
-				}
-			}
-		}
-		deltaStone.push(numStone - numClay);
+		deltaStone.push( countAngleTiles(angle, config) );
 	}
 	return deltaStone;
 }
 
 function countWildernessSunkenSea(myImageData, width) {
-	let prevX, prevY, x, y, i;
 	let deltaWilderness = [];
+	const config = {
+		minRadius:OUTER_SEARCH_RADII.min,
+		maxRadius:OUTER_SEARCH_RADII.max,
+		positiveFilter:mazeFilters.WILDERNESS,
+		negativeFilter:mazeFilters.SEA,myImageData, width
+	};
 	for (let rad = 0; rad < arcticks; rad++) {
 		let angle = rad * deltaRadians;
-		let numWilderness = 0, numSunkenSea = 0;
-		for (let radius = OUTER_SEARCH_RADII.min; radius < OUTER_SEARCH_RADII.max; radius++) {
-			x = parseInt(radius * Math.sin(angle));
-			y = parseInt(radius * Math.cos(angle));
-			if (x != prevX || y != prevY) {
-				prevX = x;
-				prevY = y;
-				x += coreLoc.x;
-				y = coreLoc.y - y;
-				i = (y * width + x) * 4;
-				let r = myImageData[i], g = myImageData[i + 1], b = myImageData[i + 2];
-				if (WILDERNESS_FILTER[r] && WILDERNESS_FILTER[r][g] && WILDERNESS_FILTER[r][g][b]) {
-					++numWilderness;
-				} else if (SUNKENSEA_FILTER[r] && SUNKENSEA_FILTER[r][g] && SUNKENSEA_FILTER[r][g][b]) {
-					++numSunkenSea;
-				}
-			}
-		}
-		deltaWilderness.push(numWilderness - numSunkenSea);
+		deltaWilderness.push( countAngleTiles(angle, config) );
 	}
 	return deltaWilderness;
 }
 
-function recordBiomeChange(rad, deltastone) {
-	if (stoneArc.end === undefined && stoneArc.start === undefined) {
-		let test = averageAround(rad + arcticks / 4, deltastone, 18);
-		if (test < 0) {
-			stoneArc.end = rad * deltaRadians;
-			stoneArc.endTicks = rad;
-		} else {
-			stoneArc.start = rad * deltaRadians;
-			stoneArc.startTicks = rad;
-		}
-	} else if (stoneArc.end === undefined) {
-		stoneArc.end = rad * deltaRadians;
-		stoneArc.endTicks = rad;
-		return true;
-	} else {
-		stoneArc.start = rad * deltaRadians;
-		stoneArc.startTicks = rad;
-		return true;
-	}
-	return false;
-}
-
 function findStone(myImageData, width) {
 	let deltaStone = countStoneClay(myImageData, width);
+	
 	stoneArc.start = stoneArc.end = undefined;
 	//change to:
 	//  for every tick, sum the half arc, push it to a new array
@@ -139,7 +99,7 @@ function findStone(myImageData, width) {
 	stoneArc.start = maxStone.index * deltaRadians;
 	stoneArc.endTicks = maxClay.index;
 	stoneArc.end = maxClay.index * deltaRadians;
-	findHole(myImageData, width);
+	isStoneFound = true;
 }
 
 function findWilderness(myImageData, width) {
@@ -148,7 +108,7 @@ function findWilderness(myImageData, width) {
 	//change to:
 	//  for every tick, sum the half arc, push it to a new array
 	//  find the max value slot in the array, that is the start angle, add half of arcticks and that is the end angle
-	let countWidth = arcticks / 2;
+	let countWidth = arcticks / 3;
 	let maxWilderness = { index: -1, count: 0 }, maxSunkenSea = { index: -1, count: 0 };
 	let tally = 0;
 	for (let rad = 0; rad < arcticks; ++rad) {
@@ -178,6 +138,8 @@ function findWilderness(myImageData, width) {
 
 
 function findHole(myImageData, width) {
+	if(!isStoneFound) findStone(myImageData, width);
+
 	let visited = {};
 	let prevX, prevY, x, y, i;
 	let b = 0;
@@ -364,31 +326,3 @@ function isBigEnough(hole, x, y, maze) {
 	}
 	return true;
 }
-
-function buildStoneFilter() {
-	for (let tileType of tileColorMap) {
-		let filterObj = undefined;
-
-		if (tileType.tilesetname == "Stone") {
-			filterObj = STONE_FILTER;
-		} else if (tileType.tilesetname == "Clay") {
-			filterObj = CLAY_FILTER;
-		} else if (tileType.tilesetname == "Wilderness") {
-			filterObj = WILDERNESS_FILTER;
-		} else if (tileType.tilesetname == "SunkenSea") {
-			filterObj = SUNKENSEA_FILTER;
-		}
-
-		if (filterObj) {
-			filterObj.count++;
-			if (!filterObj[tileType.r]) {
-				((filterObj[tileType.r] = {})[tileType.g] = {})[tileType.b] = true;
-			} else if (!filterObj[tileType.r][tileType.g]) {
-				(filterObj[tileType.r][tileType.g] = {})[tileType.b] = true;
-			} else {
-				filterObj[tileType.r][tileType.g][tileType.b] = true;
-			}
-		}
-	}
-}
-buildStoneFilter();

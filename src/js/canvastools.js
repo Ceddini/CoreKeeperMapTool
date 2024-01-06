@@ -1,13 +1,29 @@
+// include { buildHighlightSelection } from "./menubuilder.js";
+
 let currentZoom = 1
 let MAX_ZOOM = 12;
 let MIN_ZOOM = 0.1;
 let _image_cache = undefined;
-let cameraOffset = { x: 0, y: 0 }
+let _image_pixelData = null;
+let _decorated_pixelData = null;
+let cameraOffset = { x: 0, y: 0 };
 let previousCoreRelativeOffset = undefined;
 let _global_ctx;
 let coreLoc = { x: 0, y: 0 };
 let pixelMap = {};
 let panZoomElem;
+
+function getCanvasPixelData()
+{
+	if(!_image_pixelData)
+	{
+		_image_pixelData = _global_ctx.getImageData(0, 0, canvas.width, canvas.height);
+		return _image_pixelData; 
+	}
+	const cloneData = new Uint8ClampedArray(_image_pixelData.data);
+	const clone = new ImageData(cloneData, _image_pixelData.width, _image_pixelData.height);
+	return clone;
+}
 
 function panImage(dx, dy) {
 	cameraOffset.x += dx;
@@ -106,10 +122,11 @@ function zoomWithMouseWheel(event) {
 
 
 	panZoomElem.zoomToPoint(targetScale, event, opts);
+	const mapCanvas = document.getElementById('mapcanvas');
 	if (panZoomElem.getScale() < 1.0) {
-		document.getElementById("mapcanvas").style.imageRendering = "auto";
+		mapCanvas.style.imageRendering = "auto";
 	} else {
-		document.getElementById("mapcanvas").style.imageRendering = "pixelated";
+		mapCanvas.style.imageRendering = "pixelated";
 	}
 	storeCoreRelativeOffset();
 }
@@ -126,10 +143,18 @@ function setContext(ctx, width, height) {
 }
 
 function redrawMap() {
-	const canvas = document.getElementById("mapcanvas");
-	setContext(_global_ctx, canvas.width, canvas.height);
+	const mapCanvas = document.getElementById('mapcanvas');
+	setContext(_global_ctx, mapCanvas.width, mapCanvas.height);
+	_global_ctx.putImageData(_decorated_pixelData, 0, 0);
+	decorateMap(mapCanvas.width, mapCanvas.height);
+}
+
+function redrawMapDirty() {
+	const mapCanvas = document.getElementById('mapcanvas');
+	setContext(_global_ctx, mapCanvas.width, mapCanvas.height);
 	_global_ctx.drawImage(_image_cache, 0, 0);
-	decorateMap(canvas.width, canvas.height);
+	highlightSelected();
+	decorateMap(mapCanvas.width, mapCanvas.height);
 }
 
 function loop(val, min, max) {
@@ -137,8 +162,6 @@ function loop(val, min, max) {
 }
 
 function decorateMap(width, height) {
-	highlightSelected();
-
 	const showArcsCheckbox = document.getElementById("showArcs");
 
 	if (showArcsCheckbox.checked) {
@@ -327,7 +350,7 @@ function drawMap(tiles) {
 	}
 	coreLoc.x = -minx * TILE_SIZE;
 	coreLoc.y = (maxy + 1) * TILE_SIZE;
-	const canvas = document.getElementById("mapcanvas");
+	const canvas = document.getElementById('mapcanvas');
 	canvas.width = (maxx - minx + 1) * TILE_SIZE;
 	canvas.height = (maxy - miny + 1) * TILE_SIZE;
 	// const ctx = canvas.getContext('2d', { willReadFrequently: true });
@@ -342,8 +365,11 @@ function drawMap(tiles) {
 			_global_ctx.drawImage(tiles[i].image, px, py);
 		}
 	}
+	// cache original image
 	_image_cache = new Image();
 	_image_cache.src = canvas.toDataURL();
+	_image_pixelData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+	_decorated_pixelData = _image_pixelData;
 
 	if (previousCoreRelativeOffset) {
 		panToPreviousCoreRelativeOffset();
@@ -354,25 +380,20 @@ function drawMap(tiles) {
 
 	Alpine.store('data').mapLoaded = true;
 	Alpine.store('data').firstTimeLoaded = true;
+	highlightSelected();
 	decorateMap(canvas.width, canvas.height);
 }
 
 function highlightSelected() {
-	let searchobj = { count: 0, boulders: {} };
+	_decorated_pixelData = getCanvasPixelData();
 
-	buildHighlightSelection(searchobj);
-
-	const canvas = document.getElementById("mapcanvas");
-	const myImage = _global_ctx.getImageData(0, 0, canvas.width, canvas.height);
-
-	if (searchobj.count > 0) {
-		highlightColors(myImage, searchobj);
-	}
+	const filters = buildHighlightSelection();
+	if(filters) highlightColors(_decorated_pixelData, filters);
 
 	if (Alpine.store('data').showMazeHoles) {
-		findStone(myImage.data, canvas.width);
+		findHole(_decorated_pixelData.data, _decorated_pixelData.width);
 	}
-	_global_ctx.putImageData(myImage, 0, 0);
+	_global_ctx.putImageData(_decorated_pixelData, 0, 0);
 }
 
 function recenterMap() {
@@ -380,112 +401,48 @@ function recenterMap() {
 	panToCore();
 }
 
-function testPixel(width, myImageData, r, g, b, x, y) {
-	let i = (y * width + x) * 4;
-	let r1 = myImageData[i], g1 = myImageData[i + 1], b1 = myImageData[i + 2];
+function highlightColors(imageData, {normal, boulders})
+{
+	const {data:pixelArray, width} = imageData;
+	const alpha = Alpine.store('data').tileTransparency / 100 * 255;
+	const length = pixelArray.length;
 
-	return (r == r1 && g == g1 && b == b1);
-}
-
-function highlightPixel(width, myImageData, x, y) {
-	let i = (y * width + x) * 4;
-	myImageData[i + 3] = 255;
-}
-
-function testBoulder(width, myImageData, r, g, b, x, y, x1, y1) {
-	let i = (y * width + x) * 4;
-	let count = 0;
-	if (testPixel(width, myImageData, r, g, b, x1, y1)) {
-		count++;
-	}
-	if (testPixel(width, myImageData, r, g, b, x, y1)) {
-		count++;
-	}
-	if (testPixel(width, myImageData, r, g, b, x1, y)) {
-		count++;
-	}
-	if (count == 3) {
-		highlightPixel(width, myImageData, x1, y1);
-		highlightPixel(width, myImageData, x, y1);
-		highlightPixel(width, myImageData, x1, y);
-		highlightPixel(width, myImageData, x, y);
-	} else if (myImageData[i + 3] != 255) {
-		let alpha = Alpine.store('data').tileTransparency / 100 * 255;
-		myImageData[i + 3] = alpha;
+	for (let i = 0; i < length; i += 4) {
+		if (pixelArray[i + 3] === 0) continue;
+		const r = pixelArray[i], g = pixelArray[i+1], b = pixelArray[i+2];
+		pixelArray[i + 3] = normal.isMatch(r,g,b) ? 255 : alpha;
+		if(boulders.isMatch(r,g,b)) highlightBoulders(imageData, i);
 	}
 }
 
-function highlightBoulder(myImage, r, g, b, x, y) {
-	const myImageData = myImage.data;
-	let count = 0;
-
-	count = 0;
-	/*if (x > 0 &&  y > 0) {
-	  testBoulder(myImage.width, myImageData, r, g, b, x, y, x - 1, y - 1);
+function checkBoulders(imageData, x, y)
+{
+	const {data:pixelArray, width, height} = imageData;
+	function getHexCode(x, y)
+	{
+		const i = (y*width + x)*4;
+		return pixelArray[i] << 16 + pixelArray[i+1] << 8 + pixelArray[i+2];
 	}
-	//test bottom left
-	if (x > 0 && y < myImage.height) {
-	  testBoulder(myImage.width, myImageData, r, g, b, x, y, x - 1, y + 1);
-	}*/
-	//test bottom right
-	if (x < myImage.width && y < myImage.height) {
-		testBoulder(myImage.width, myImageData, r, g, b, x, y, x + 1, y + 1);
-	}/*
-  if (x < myImage.width && y > 0) {
-    testBoulder(myImage.width, myImageData, r, g, b, x, y, x + 1, y - 1);
-  }*/
+
+	if(x-1 >= width || y-1 >= height) return false;
+	const baseHex = getHexCode(x, y);
+	if(getHexCode(x+1, y) !== baseHex || getHexCode(x, y+1) !== baseHex || getHexCode(x+1, y+1) !== baseHex) return false;
+	return true;
 }
 
-function highlightColors(myImage, search) {
-	const myImageData = myImage.data;
-	let alpha = Alpine.store('data').tileTransparency / 100 * 255;
+function highlightBoulders(imageData, i)
+{
+	const {data:pixelArray, width, height} = imageData;
+	const x = (i/4) % width;
+	const y = Math.floor((i/4) / width);
 
-	for (let i = 0; i < myImageData.length; i += 4) {
-		if (myImageData[i + 3] != 0) { //if not transparent
-			let r = myImageData[i], g = myImageData[i + 1], b = myImageData[i + 2];
-			if (search[r] && search[r][g] && search[r][g][b]) {
-				myImageData[i + 3] = 255;
-			} else {
-				myImageData[i + 3] = alpha;
-			}
-		}
-	}
-	for (let i = 0, p = 0; i < myImageData.length; i += 4, ++p) {
-		if (myImageData[i + 3] != 0) { //if not transparent
-
-			let x = parseInt(p % myImage.width);
-			let y = parseInt(p / myImage.width);
-			let r = myImageData[i], g = myImageData[i + 1], b = myImageData[i + 2];
-			if (search.boulders[r] && search.boulders[r][g] && search.boulders[r][g][b]) {
-				highlightBoulder(myImage, r, g, b, x, y);
-			}
-		}
-	}
-}
-
-function _highlightColors(myImage, search) {
-	const myImageData = myImage.data;
-	let alpha = Math.max(TileSliderInfo.transparency(), 1);
-
-	for (let i = 0; i < myImageData.length; i += 4) {
-		if (myImageData[i + 3] != 0) { //if not transparent
-			let r = myImageData[i], g = myImageData[i + 1], b = myImageData[i + 2];
-			if (search[r] && search[r][g] && search[r][g][b]) {
-				myImageData[i + 3] = 255;
-			} else {
-				myImageData[i + 3] = alpha;
-			}
-		}
-	}
-	for (let i = 0, p = 0; i < myImageData.length; i += 4, ++p) {
-		if (myImageData[i + 3] != 0) { //if not transparent
-
-			let x = parseInt(p % myImage.width);
-			let y = parseInt(p / myImage.width);
-			let r = myImageData[i], g = myImageData[i + 1], b = myImageData[i + 2];
-			if (search.boulders[r] && search.boulders[r][g] && search.boulders[r][g][b]) {
-				highlightBoulder(myImage, r, g, b, x, y);
-			}
+	if(!checkBoulders(imageData, x, y)) return;
+	for(let dx=0; dx<2; dx++)
+	{
+		for(let dy=0; dy<2; dy++)
+		{
+			let index = ((y+dy)*width + x+dx)*4 + 3;
+			pixelArray[index] = 255
 		}
 	}
 }
