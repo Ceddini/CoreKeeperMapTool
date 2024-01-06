@@ -404,7 +404,6 @@ function highlightColors(imageData, {normal, boulders})
 	const {data:pixelArray, width} = imageData;
 	const alpha = Alpine.store('data').tileTransparency / 100 * 255;
 
-	console.time("nye");
 	for (let i = 0; i < pixelArray.length; i += 4) {
 		if (pixelArray[i + 3] === 0) continue;
 		const r = pixelArray[i], g = pixelArray[i+1], b = pixelArray[i+2];
@@ -417,10 +416,9 @@ function highlightColors(imageData, {normal, boulders})
 
 		if(isBoulderFilterMatched) highlightBoulders(imageData, x, y);
 	}
-	console.timeEnd("nye");
 }
 
-function checkBoulders(imageData, x, y)
+function checkBoulders(imageData, x, yf)
 {
 	const {data:pixelArray, width, height} = imageData;
 	function getHexCode(x, y)
