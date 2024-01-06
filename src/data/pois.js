@@ -110,7 +110,7 @@ function toggleTile(tile) {
 		Alpine.store('tilecolormap').visible = Alpine.store('tilecolormap').visible.filter((e) => e.name != tile.name);
 
 	tile.disabled = true;
-	redrawMap();
+	redrawMapDirty();
 	tile.disabled = false;
 }
 
@@ -133,6 +133,6 @@ function toggleCategoryTiles(tiles) {
 			Alpine.store('tilecolormap').visible = Alpine.store('tilecolormap').visible.filter((e) => e.name != tile.name);
 	}
 
-	redrawMap();
+	redrawMapDirty();
 	tiles.forEach(tile => { tile.disabled = false; });
 }

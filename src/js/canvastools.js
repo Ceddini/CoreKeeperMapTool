@@ -5,6 +5,7 @@ let MAX_ZOOM = 12;
 let MIN_ZOOM = 0.1;
 let _image_cache = undefined;
 let _image_pixelData = null;
+let _decorated_pixelData = null;
 let cameraOffset = { x: 0, y: 0 };
 let previousCoreRelativeOffset = undefined;
 let _global_ctx;
@@ -16,7 +17,7 @@ function getCanvasPixelData()
 {
 	if(!_image_pixelData)
 	{
-		_image_pixelData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+		_image_pixelData = _global_ctx.getImageData(0, 0, canvas.width, canvas.height);
 		return _image_pixelData; 
 	}
 	const cloneData = new Uint8ClampedArray(_image_pixelData.data);
@@ -144,7 +145,15 @@ function setContext(ctx, width, height) {
 function redrawMap() {
 	const mapCanvas = document.getElementById('mapcanvas');
 	setContext(_global_ctx, mapCanvas.width, mapCanvas.height);
+	_global_ctx.putImageData(_decorated_pixelData, 0, 0);
+	decorateMap(mapCanvas.width, mapCanvas.height);
+}
+
+function redrawMapDirty() {
+	const mapCanvas = document.getElementById('mapcanvas');
+	setContext(_global_ctx, mapCanvas.width, mapCanvas.height);
 	_global_ctx.drawImage(_image_cache, 0, 0);
+	highlightSelected();
 	decorateMap(mapCanvas.width, mapCanvas.height);
 }
 
@@ -153,8 +162,6 @@ function loop(val, min, max) {
 }
 
 function decorateMap(width, height) {
-	highlightSelected();
-
 	const showArcsCheckbox = document.getElementById("showArcs");
 
 	if (showArcsCheckbox.checked) {
@@ -362,6 +369,7 @@ function drawMap(tiles) {
 	_image_cache = new Image();
 	_image_cache.src = canvas.toDataURL();
 	_image_pixelData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+	_decorated_pixelData = _image_pixelData;
 
 	if (previousCoreRelativeOffset) {
 		panToPreviousCoreRelativeOffset();
@@ -376,16 +384,15 @@ function drawMap(tiles) {
 }
 
 function highlightSelected() {
-	const imageData = getCanvasPixelData();
+	_decorated_pixelData = getCanvasPixelData();
 
 	const filters = buildHighlightSelection();
-	if(filters) highlightColors(imageData, filters);
+	if(filters) highlightColors(_decorated_pixelData, filters);
 
-	// todo: refactor findHole data
 	if (Alpine.store('data').showMazeHoles) {
-		findHole(imageData.data, imageData.width);
+		findHole(_decorated_pixelData.data, _decorated_pixelData.width);
 	}
-	_global_ctx.putImageData(imageData, 0, 0);
+	_global_ctx.putImageData(_decorated_pixelData, 0, 0);
 }
 
 function recenterMap() {

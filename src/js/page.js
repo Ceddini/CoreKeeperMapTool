@@ -156,7 +156,7 @@ function onChangeGridTransparency(event) {
 	redrawMap();
 }
 function onChangeTileTransparency(event) {
-	redrawMap();
+	redrawMapDirty();
 }
 
 function onChangeShowCustomRing(event) {
@@ -176,7 +176,11 @@ function onChangeShowMobGrid(event) {
 }
 
 function onChangeShowMazeHoles(event) {
-	redrawDebounce(event);
+	event.target.setAttribute("disabled", "true");
+	redrawMapDirty();
+	setTimeout(() => {
+		event.target.removeAttribute("disabled");
+	}, 10);
 }
 
 function onChangeShowArcs(event) {
