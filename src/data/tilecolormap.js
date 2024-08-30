@@ -38,13 +38,19 @@ let tileColors = [
 	{
 		"set": TileType.SpawnTiles,
 		"tiles": [
-			new Tile("Ground Slime", 217, 98, 23),
 			new Tile("Fungal Soil", 183, 83, 60),
-			new Tile("Stone Moss", 207, 241, 255),
-			new Tile("Ground Slippery Slime", 46, 46, 255),
 			new Tile("Chrysalis", 252, 166, 148),
-			new Tile("Ground Acid Slime", 193, 170, 33),
+			new Tile("Ground Slime", 217, 98, 23),
 			new Tile("Ground Poison Slime", 184, 86, 165),
+			/*new Tile("Ground Slippery Slime (legacy)", 47, 47, 255),*/
+			new Tile("Ground Slippery Slime", 51, 51, 238),
+			new Tile("Ground Magma Slime", 255, 84, 0),
+			new Tile("Stone Moss", 207, 241, 255),
+			new Tile("Clay Moss", 126, 87, 78),
+			new Tile("Lush Moss", 163, 206, 74),
+			new Tile("Urban Moss", 42, 169, 71),
+			new Tile("Valley Moss", 249, 116, 67),
+			new Tile("Crystal Crust", 15, 162, 184),
 		]
 	},
 	{
