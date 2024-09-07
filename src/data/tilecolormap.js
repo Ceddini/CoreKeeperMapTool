@@ -72,13 +72,15 @@ let tileColors = [
 			new Tile("Iron Boulder", 130, 155, 203),
 			new Tile("Scarlet Boulder", 206, 59, 59),
 			new Tile("Octarine Boulder", 139, 82, 238),
-			new Tile("Galaxite Boulder", 247, 240, 220),
+			new Tile("Galaxite Boulder", 215, 220, 251),
+			new Tile("Solarite Boulder", 226, 161, 44),
+			new Tile("Pandorium Boulder", 9, 175, 36),
 		]
 	},
 	{
 		"set": TileType.Ores,
 		"tiles": [
-			new Tile("Ancient Gemstone Ore", 0, 147, 255),
+			new Tile("Ancient Gemstone", 0, 147, 255),
 			new Tile("Copper Ore", 237, 96, 87),
 			new Tile("Tin Ore", 142, 122, 118),
 			new Tile("Gold Ore", 242, 204, 61),
@@ -86,6 +88,9 @@ let tileColors = [
 			new Tile("Scarlet Ore", 206, 59, 59),
 			new Tile("Octarine Ore", 139, 82, 238),
 			new Tile("Galaxite Ore", 247, 240, 220, true),
+			new Tile("Solarite Ore", 255, 190, 78),
+			new Tile("Pandorium Rock (Large)", 9, 175, 68),
+			new Tile("Pandorium Rock (Small)", 9, 175, 36),
 		]
 	},
 	{
