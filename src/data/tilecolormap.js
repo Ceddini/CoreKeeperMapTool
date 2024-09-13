@@ -183,21 +183,46 @@ let tileColors = [
 	{
 		"set": TileType.Floors,
 		"tiles": [
-			new Tile("Wood Floor", 199, 148, 79),
-			new Tile("Stone Floor", 129, 132, 140),
-			new Tile("Unpainted Floor", 174, 189, 241),
-			new Tile("Yellow Floor", 255, 232, 46),
-			new Tile("Green Floor", 85, 182, 39),
-			new Tile("Red Floor", 223, 0, 0),
-			new Tile("Purple Floor", 139, 79, 167),
-			new Tile("Blue Floor", 43, 108, 228),
-			new Tile("Brown Floor", 151, 75, 40),
-			new Tile("White Floor", 178, 206, 233),
-			new Tile("Black Floor", 76, 84, 85),
-			new Tile("Scarlet Floor", 178, 53, 38),
-			new Tile("Caveling Floor Tile", 130, 130, 130),
-			new Tile("City Floor", 87, 128, 132),
-
+			//Lit
+			new Tile("Lit",159, 159, 159),
+			//Basic
+			new Tile("Wood",199, 148, 79),
+			new Tile("Stone",129, 132, 140),
+			  //new Tile("Paintable", 174, 189, 241), //See "Unpainted"
+			new Tile("Scarlet", 178, 53, 38),
+			new Tile("Coral",213, 109, 183),
+			new Tile("Galaxite",197, 197, 197),
+			  //new Tile("Glass",0,0,0), //Not visible on Map
+			new Tile("Woven Straw",255, 243, 113),
+			new Tile("Gleam Wood",128, 242, 255),
+			new Tile("Grimy Stone",54, 89, 86),
+			new Tile("Eerie",133, 102, 156),
+			//Rug
+			new Tile("Rug",124, 71, 123),
+			new Tile("Woven Mat",58, 139, 65),
+			//Loose
+			  //new Tile("Loose",0,0,0), //Not visible on Map
+			  //new Tile("Rose Petal",0,0,0), //Not visible on Map
+			  //new Tile("Daisy",0,0,0), //Not visible on Map
+            //Paintable Floor
+			new Tile("Red", 223, 0, 0),
+			new Tile("Orange", 237, 144, 73),
+			new Tile("Peach", 255, 151, 124),
+			new Tile("Yellow", 255, 232, 46),
+			new Tile("Green", 85, 182, 39),
+			new Tile("Teal", 15, 158, 136),
+			new Tile("Cyan", 41, 226, 180),
+			new Tile("Blue", 43, 108, 228),
+			new Tile("Purple", 139, 79, 167),
+			new Tile("Pink", 250, 69, 144),
+			new Tile("Brown", 151, 75, 40),
+			new Tile("Black", 76, 84, 85),
+			new Tile("Grey", 157, 175, 183),
+			new Tile("White",178, 206, 233),
+			new Tile("Unpainted", 174, 189, 241),
+			//Furniture
+			new Tile("Caveling", 130, 130, 130),
+			new Tile("Alien",71, 104, 126),
 		]
 	},
 	{
