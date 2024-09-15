@@ -228,34 +228,59 @@ let tileColors = [
 	{
 		"set": TileType.Objects,
 		"tiles": [
-			new Tile("Root", 225, 163, 104),
-			new Tile("Wooden Crate", 114, 60, 17),
-			new Tile("Ancient Crate", 77, 168, 202),
-			new Tile("Electrical Wire", 89, 80, 73),
-			new Tile("Ancient Wire (core)", 66, 93, 94),
-			new Tile("Rail", 122, 122, 122),
+			//Transport
+			new Tile("Rail",122, 122, 122),
+			new Tile("Conveyor Belt",104, 127, 174),
+			//Wood
+			new Tile("Wood", 225, 163, 104),
+			new Tile("Coral Wood", 253, 106, 173),
+			new Tile("Gleam Wood", 173, 235, 253),
+			//Bridges
 			new Tile("Wood Bridge", 140, 88, 38),
-			new Tile("Wood Fence", 112, 72, 33),
-			new Tile("Rug", 124, 71, 123),
 			new Tile("Stone Bridge", 123, 116, 108),
-			new Tile("Stone Fence", 97, 91, 85),
-			new Tile("Woven Mat", 58, 139, 65),
 			new Tile("Scarlet Bridge", 168, 30, 46),
+			new Tile("Coral Bridge", 200, 92, 204),
+			new Tile("Galaxite Bridge", 172, 179, 169),
+			  //new Tile("Glass Bridge", 0, 0, 0), //Not visible on Map
+			new Tile("Gleam Wood Bridge", 15, 210, 190),
+			new Tile("Metal Grate", 197, 135, 54),
+			//Fences
+			new Tile("Wood Fence", 112, 72, 33),
+			new Tile("Stone Fence", 97, 91, 85),
 			new Tile("Scarlet Fence", 128, 36, 46),
-			new Tile("Flower Vessel", 205, 189, 48),
-			new Tile("Mold Vessel", 229, 229, 229),
-			new Tile("Conveyor Belt", 104, 127, 174),
-			new Tile("Coral Wood", 250, 89, 163),
+			new Tile("Coral Fence", 159, 61, 164),
+			new Tile("Galaxite Fence", 152, 161, 149),
+			new Tile("Gleam Wood Fence", 16, 154, 166),
+			//Destructibles (Crates & Vessels)
+			new Tile("Wooden Crate", 114, 60, 17),
+			new Tile("Overgrown Wooden Crate", 97, 72, 34),
+			new Tile("Alien Tech Crate",76, 233, 224),
+			new Tile("Ancient Crate",77, 168, 202),
+			new Tile("Charred Crate",103, 127, 174),
+			new Tile("Driftwood Wooden Crate", 143, 123, 119),
+			new Tile("Metropolis Crate", 77, 168, 202),
+			new Tile("Temple Crate",238, 205, 99),
+			new Tile("Fossil Cluster",215, 220, 251),
+			new Tile("Sun Crystal",219, 140, 38),
+			new Tile("Pandorium Crystal",8, 175, 67),
+			new Tile("Clay Pot",98, 47, 19),
+			new Tile("Beached Jelly",47, 124, 205),
+			new Tile("Slime Vessels",166, 53, 0),
+			new Tile("Poison Slime Vessels",91, 50, 110),
+			new Tile("Mold Vessel",229, 229, 229),
+			new Tile("Flower Vessel",205, 189, 48),
+			new Tile("Desert Flower Vessel",219, 92, 63),
+			new Tile("Oasis Flower Vessel",83, 109, 39),
 		]
 	},
-	{
+	/*{
 		"set": TileType.Ungrouped,
 		"tiles": [
 			new Tile("Pit", 31, 31, 31),
 			new Tile("Jellyfish", 48, 124, 205),
 			new Tile("Large Jellyfish", 48, 124, 205),
 		]
-	},
+	},*/
 ];
 
 let tileColorMap = [
