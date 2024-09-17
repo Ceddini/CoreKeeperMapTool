@@ -39,18 +39,19 @@ let tileColors = [
 		"set": TileType.SpawnTiles,
 		"tiles": [
 			new Tile("Fungal Soil", 183, 83, 60),
-			new Tile("Chrysalis", 252, 166, 148),
+			new Tile("Chrysalis", 252, 166, 148, true),
 			new Tile("Ground Slime", 217, 98, 23),
 			new Tile("Ground Poison Slime", 184, 86, 165),
 			/*new Tile("Ground Slippery Slime (legacy)", 47, 47, 255),*/
 			new Tile("Ground Slippery Slime", 51, 51, 238),
 			new Tile("Ground Magma Slime", 255, 84, 0),
-			new Tile("Stone Moss", 207, 241, 255),
+			new Tile("Stone Moss", 207, 241, 255, true),
 			new Tile("Clay Moss", 126, 87, 78),
-			new Tile("Lush Moss", 163, 206, 74),
+			new Tile("Lush Moss", 163, 206, 74, true ),
 			new Tile("Urban Moss", 42, 169, 71),
 			new Tile("Valley Moss", 249, 116, 67),
 			new Tile("Crystal Crust", 15, 162, 184),
+			new Tile("Ground Acid Slime", 193, 170, 33, true), //Not a spawning tile
 		]
 	},
 	{
@@ -59,8 +60,8 @@ let tileColors = [
 			new Tile("Normal Water", 30, 61, 129),
 			new Tile("Acid Water", 117, 103, 48),
 			new Tile("Mold Water", 222, 53, 1),
-			new Tile("Shimmering Water", 154, 198, 243),
-			new Tile("Sea Water", 52, 208, 255),
+			new Tile("Shimmering Water", 154, 198, 243, true),
+			new Tile("Sea Water", 52, 208, 255, true),
 		]
 	},
 	{
@@ -72,7 +73,7 @@ let tileColors = [
 			new Tile("Iron Boulder", 130, 155, 203),
 			new Tile("Scarlet Boulder", 206, 59, 59),
 			new Tile("Octarine Boulder", 139, 82, 238),
-			new Tile("Galaxite Boulder", 215, 220, 251),
+			new Tile("Galaxite Boulder", 215, 220, 251, true),
 			new Tile("Solarite Boulder", 226, 161, 44),
 			new Tile("Pandorium Boulder", 9, 175, 36),
 		]
@@ -83,14 +84,14 @@ let tileColors = [
 			new Tile("Ancient Gemstone", 0, 147, 255),
 			new Tile("Copper Ore", 237, 96, 87),
 			new Tile("Tin Ore", 142, 122, 118),
-			new Tile("Gold Ore", 242, 204, 61),
+			new Tile("Gold Ore", 242, 204, 61,true),
 			new Tile("Iron Ore", 130, 155, 203),
 			new Tile("Scarlet Ore", 206, 59, 59),
 			new Tile("Octarine Ore", 139, 82, 238),
 			new Tile("Galaxite Ore", 247, 240, 220, true),
-			new Tile("Solarite Ore", 255, 190, 78),
-			new Tile("Pandorium Rock (Large)", 9, 175, 68),
-			new Tile("Pandorium Rock (Small)", 9, 175, 36),
+			new Tile("Solarite Ore", 255, 190, 78, true),
+			new Tile("Pandorium Crystal (Large)", 9, 175, 68),
+			new Tile("Pandorium Crystal (Small)", 9, 175, 36),
 		]
 	},
 	{
@@ -100,7 +101,7 @@ let tileColors = [
 			new Tile("Sand", 172, 143, 58),
 			new Tile("Snow", 109, 177, 180),
 			new Tile("Dirt", 97, 73, 39),
-			new Tile("Meadow", 224, 201, 97),
+			new Tile("Meadow", 224, 201, 97, true),
 			new Tile("Turf", 70, 103, 81),
 			new Tile("Clay", 193, 100, 54),
 			  //new Tile("Dark Stone", 0,0,0), //Not visible on Map
@@ -127,18 +128,18 @@ let tileColors = [
 			  //new Tile("Thin Glass", 0,0,0), //Not visible on Map
 			new Tile("Eerie", 103, 79, 122),
 			  //new Tile("Paintable", 154, 165, 212), //See "Unpainted"
-			new Tile("Straw-bale", 219, 212, 137),
+			new Tile("Straw-bale", 219, 212, 137, true),
 			new Tile("Wood", 148, 105, 51),
 			new Tile("Stone Bricks", 106, 108, 114),
 			new Tile("Scarlet", 144, 38, 19),
 			new Tile("Coral", 222, 142, 178),
-			new Tile("Galaxite", 221, 221, 221),
+			new Tile("Galaxite", 221, 221, 221, true ),
 			new Tile("Gleam Wood", 15, 161, 174),
 			//Paintable Wall
 			new Tile("Red", 187, 10, 10),
 			new Tile("Orange", 226, 121, 41),
 			new Tile("Peach", 224, 112, 100),
-			new Tile("Yellow", 212, 194, 42),
+			new Tile("Yellow", 212, 194, 42, true),
 			new Tile("Green", 64, 169, 16),
 			new Tile("Teal", 26, 134, 117),
 			new Tile("Cyan", 31, 193, 179),
@@ -157,16 +158,16 @@ let tileColors = [
 		"tiles": [
 			//Natural Blocks
 			new Tile("Sand", 212, 185, 89),
-			new Tile("Snow", 155, 231, 235),
+			new Tile("Snow", 155, 231, 235, true),
 			new Tile("Dirt", 127, 95, 48),
-			new Tile("Meadow", 239, 225, 179),
+			new Tile("Meadow", 239, 225, 179, true),
 			new Tile("Turf", 86, 128, 100),
 			new Tile("Clay", 232, 139, 105),
 			new Tile("Dark Stone", 123, 140, 172),
 			new Tile("Stone", 103, 131, 151),
 			new Tile("Larva Hive", 199, 116, 99),
 			new Tile("Grass", 61, 155, 65),
-			new Tile("Beach", 235, 192, 190),
+			new Tile("Beach", 235, 192, 190, true),
 			new Tile("Mold", 108, 188, 224),
 			new Tile("Desert", 210, 154, 124),
 			new Tile("Metropolis", 87, 128, 132),
@@ -175,7 +176,7 @@ let tileColors = [
 			new Tile("Desert Temple", 134, 113, 110),
 			new Tile("Maze", 83, 100, 96),
 			new Tile("Lava Rock", 85, 78, 106),
-			new Tile("Fossil", 192, 186, 207),
+			new Tile("Fossil", 192, 186, 207, true),
 			//Unobtainable Blocks
 			new Tile("Obsidian", 31, 67, 62),
 		]
@@ -191,10 +192,10 @@ let tileColors = [
 			  //new Tile("Paintable", 174, 189, 241), //See "Unpainted"
 			new Tile("Scarlet", 178, 53, 38),
 			new Tile("Coral",213, 109, 183),
-			new Tile("Galaxite",197, 197, 197),
+			new Tile("Galaxite",197, 197, 197,true),
 			  //new Tile("Glass",0,0,0), //Not visible on Map
-			new Tile("Woven Straw",255, 243, 113),
-			new Tile("Gleam Wood",128, 242, 255),
+			new Tile("Woven Straw",255, 243, 113, true),
+			new Tile("Gleam Wood",128, 242, 255, true),
 			new Tile("Grimy Stone",54, 89, 86),
 			new Tile("Eerie",133, 102, 156),
 			//Rug
@@ -208,7 +209,7 @@ let tileColors = [
 			new Tile("Red", 223, 0, 0),
 			new Tile("Orange", 237, 144, 73),
 			new Tile("Peach", 255, 151, 124),
-			new Tile("Yellow", 255, 232, 46),
+			new Tile("Yellow", 255, 232, 46, true),
 			new Tile("Green", 85, 182, 39),
 			new Tile("Teal", 15, 158, 136),
 			new Tile("Cyan", 41, 226, 180),
@@ -218,8 +219,8 @@ let tileColors = [
 			new Tile("Brown", 151, 75, 40),
 			new Tile("Black", 76, 84, 85),
 			new Tile("Grey", 157, 175, 183),
-			new Tile("White",178, 206, 233),
-			new Tile("Unpainted", 174, 189, 241),
+			new Tile("White",178, 206, 233, true),
+			new Tile("Unpainted", 174, 189, 241, true),
 			//Furniture
 			new Tile("Caveling", 130, 130, 130),
 			new Tile("Alien",71, 104, 126),
@@ -234,7 +235,7 @@ let tileColors = [
 			//Wood
 			new Tile("Wood", 225, 163, 104),
 			new Tile("Coral Wood", 253, 106, 173),
-			new Tile("Gleam Wood", 173, 235, 253),
+			new Tile("Gleam Wood", 173, 235, 253, true ),
 			//Bridges
 			new Tile("Wood Bridge", 140, 88, 38),
 			new Tile("Stone Bridge", 123, 116, 108),
@@ -242,7 +243,7 @@ let tileColors = [
 			new Tile("Coral Bridge", 200, 92, 204),
 			new Tile("Galaxite Bridge", 172, 179, 169),
 			  //new Tile("Glass Bridge", 0, 0, 0), //Not visible on Map
-			new Tile("Gleam Wood Bridge", 15, 210, 190),
+			new Tile("Gleam Wood Bridge", 15, 210, 190,true),
 			new Tile("Metal Grate", 197, 135, 54),
 			//Fences
 			new Tile("Wood Fence", 112, 72, 33),
@@ -254,21 +255,21 @@ let tileColors = [
 			//Destructibles (Crates & Vessels)
 			new Tile("Wooden Crate", 114, 60, 17),
 			new Tile("Overgrown Wooden Crate", 97, 72, 34),
-			new Tile("Alien Tech Crate",76, 233, 224),
+			new Tile("Alien Tech Crate",76, 233, 224,true),
 			new Tile("Ancient Crate",77, 168, 202),
 			new Tile("Charred Crate",103, 127, 174),
 			new Tile("Driftwood Wooden Crate", 143, 123, 119),
 			new Tile("Metropolis Crate", 77, 168, 202),
-			new Tile("Temple Crate",238, 205, 99),
-			new Tile("Fossil Cluster",215, 220, 251),
+			new Tile("Temple Crate",238, 205, 99, true),
+			new Tile("Fossil Cluster",215, 220, 251, true),
 			new Tile("Sun Crystal",219, 140, 38),
-			new Tile("Pandorium Crystal",8, 175, 67),
+			  //new Tile("Pandorium Crystal",8, 175, 67), //See Ore
 			new Tile("Clay Pot",98, 47, 19),
 			new Tile("Beached Jelly",47, 124, 205),
 			new Tile("Slime Vessels",166, 53, 0),
 			new Tile("Poison Slime Vessels",91, 50, 110),
-			new Tile("Mold Vessel",229, 229, 229),
-			new Tile("Flower Vessel",205, 189, 48),
+			new Tile("Mold Vessel",229, 229, 229,true),
+			new Tile("Flower Vessel",205, 189, 48, true),
 			new Tile("Desert Flower Vessel",219, 92, 63),
 			new Tile("Oasis Flower Vessel",83, 109, 39),
 		]
@@ -276,9 +277,6 @@ let tileColors = [
 	/*{
 		"set": TileType.Ungrouped,
 		"tiles": [
-			new Tile("Pit", 31, 31, 31),
-			new Tile("Jellyfish", 48, 124, 205),
-			new Tile("Large Jellyfish", 48, 124, 205),
 		]
 	},*/
 ];
