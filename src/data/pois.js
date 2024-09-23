@@ -3,7 +3,8 @@ const RINGS = {
 	WILDERNESS: "Wilderness",
 	SUNKENSEA: "Sunken Sea",
 	STONE: "Stone",
-	CLAY: "Clay"
+	CLAY: "Clay",
+	PASSAGE: "Passage"
 };
 
 const BIOMES = {
@@ -14,7 +15,8 @@ const BIOMES = {
 	CLAY: { name: "clay", ring: RINGS.CLAY },
 	DIRT: { name: "the_underground" },
 	HIVE: { name: "larva_hive", ring: RINGS.CLAY },
-	RUINS: { name: "ruins", ring: RINGS.STONE }
+	RUINS: { name: "ruins", ring: RINGS.STONE },
+	PASSAGE: { name: "passage", ring: RINGS.PASSAGE }
 };
 
 class CircleItem {
@@ -86,20 +88,29 @@ class Category {
 // - TODO: Display text: "16x16 grid of cells used by the mob spawning algorithm. Each cell receives one spawn event every 15 to 22 minutes, staggered in time from other cells. Each spawn surface tile gives a chance to spawn a mob. See this guide: https://steamcommunity.com/sharedfiles/filedetails/?id=2846860078"
 
 const bosses = new Category("bosses", [
+	//Early game
 	new CircleItem("glurch", "Glurch the Abominous Mass", [BIOMES.DIRT], [65], "#D95917", "#FFFFFF", true, "#", "bosses/glurch.webp"),
-	new CircleItem("ghorm", "Ghorm the Devourer", [BIOMES.STONE, BIOMES.CLAY], [210], "#7F5F30", "#FFFFFF", true, "#", "bosses/ghorm.png"),
-	new CircleItem("hive_mother", "The Hive Mother", [BIOMES.HIVE], [300], "#FCA694", "#FFFFFF", true, "#", "bosses/hive_mother.png"),
+	new CircleItem("ghorm", "Ghorm the Devourer", [BIOMES.STONE, BIOMES.CLAY], [200], "#7F5F30", "#FFFFFF", true, "#", "bosses/ghorm.png"),
+	new CircleItem("malugaz", "Malugaz the Corrupted", [BIOMES.RUINS], [300], "#1f4ec9", "#FFFFFF", true, "#", "bosses/malugaz.png"),
+	//Mid game
 	new CircleItem("azeos", "Azeos the Sky Titan", [BIOMES.WILDERNESS], [550], "#d2b835", "#FFFFFF", true, "#", "bosses/azeos.png"),
 	new CircleItem("omoroth", "Omoroth the Sea Titan", [BIOMES.SUNKENSEA], [650], "#9E3F9B", "#FFFFFF", true, "#", "bosses/omoroth.png"),
 	new CircleItem("ra-akar", "Ra-Akar the Sand Titan", [BIOMES.DESERT], [600], "#1d9124", "#FFFFFF", true, "#", "bosses/Ra-Akar_the_Sand_Titan.png"),
+	//Late game
+	//new CircleItem("druidia", "Druidra the Wild Titan",[BIOMES.WILDERNESS], [0], "#000000", "#FFFFFF", true, "#", ""),
+	//new CircleItem("crydra", "Crydra the Ice Titan",[BIOMES.SUNKENSEA], [0], "#000000", "#FFFFFF", true, "#", ""),
+	//new CircleItem("pyrdra", "Pyrdra the Fire Titan",[BIOMES.DESERT], [0], "#000000", "#FFFFFF", true, "#", ""),
+	//new CircleItem("commander", "Core Commander", [BIOMES.DESERT], [0], "#000000", "#FFFFFF", true, "#", ""),
 ]);
 
 
 const optionalBosses = new Category("optional_bosses", [
-	new CircleItem("malugaz", "Malugaz the Corrupted", [BIOMES.RUINS], [300], "#1f4ec9", "#FFFFFF", true, "#", "bosses/malugaz.png"),
+	new CircleItem("hive_mother", "The Hive Mother", [BIOMES.HIVE], [330], "#FCA694", "#FFFFFF", true, "#", "bosses/hive_mother.png"),
 	new CircleItem("ivy", "Ivy the Poisonous Mass", [BIOMES.WILDERNESS], [600], "#FF00FF", "#FFFFFF", true, "#", "bosses/ivy.png"),
 	new CircleItem("morpha", "Morpha the Aquatic Mass", [BIOMES.SUNKENSEA], [700], "#1898F4", "#FFFFFF", true, "#", "bosses/morpha.png"),
 	new CircleItem("igneous", "Igneous the Molten Mass", [BIOMES.DESERT], [650], "#484454", "#FFFFFF", true, "#", "bosses/Igneous_the_Molten_Mass.png"),
+	//new CircleItem("Atlantean", "Atlantean Worm", [BIOMES.SUNKENSEA], [0], "#000000", "#FFFFFF", true, "#", ""),
+	//new CircleItem("urschleim", "Urschleim", [BIOMES.PASSAGE], [1250], "#484454", "#FFFFFF", true, "#", ""),
 ]);
 
 const pois = new Category("points_of_interest", [
