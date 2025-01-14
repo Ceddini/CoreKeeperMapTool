@@ -1,8 +1,4 @@
 {
-	"privacy": {
-		"question": "Privacy - Is my data uploaded?",
-		"answer": "<strong>No.</strong> The Map Tool workes entirely client-side, in your browser tab. No files are uploaded. The website only sees your basic ip address and stores no identifying information. If you allowed Google Analytics, I get anonymous information on what country people are from and the types of their devices / browsers. You need to allow this though.<br>For a slightly more technical answer, check <em>\"What information do you have access to?\"</em> in the FAQ"
-	},
 	"clear_gemstone": {
 		"question": "Where is the Clear Gemstone / Chipped Blade?",
 		"answer": "The <strong>Chipped Blade</strong> can be found inside of a temple in the Wilderness.<br> The <strong>Clear Gemstone</strong> is inside the <em>medium maze</em> in either the stone biome or the Wilderness. You can use the option \"Show Maze Holes\" to display where mazes could theoretically spawn (in the stone biome). See <em>\"What does 'Show Maze Holes' mean?\"</em> for more info."

@@ -1,23 +1,6 @@
 <html lang="en">
 
 <head>
-	<!-- Google tag (gtag.js) -->
-	<script async src="https://www.googletagmanager.com/gtag/js?id=G-W8K9L2Y21K"></script>
-	<script>
-		window.dataLayer = window.dataLayer || [];
-		function gtag(){dataLayer.push(arguments);}
-		gtag('consent', 'default', {
-			'ad_storage': 'denied',
-			'analytics_storage': 'denied'
-		});
-
-		gtag('js', new Date());
-
-		gtag('config', 'G-W8K9L2Y21K', {
-			'cookie_domain': 'maptool-dev.ceschmitt.de'
-		});
-	</script>
-
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -40,14 +23,13 @@
 	<script src="i18n/i18nextLocalStorageBackend.min.js"></script>
 	<script src="i18n/i18nextHttpBackend.min.js"></script>
 	<script src="i18n/index.js"></script>
-	
+
 	<script src="js/vendor/jqueryBrowser.js"></script>
 	<script src="https://unpkg.com/@panzoom/panzoom@4.5.1/dist/panzoom.min.js"></script>
 	<script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 	<script src="js/pako-inflate-2.0.4.min.js"></script>
 	<script src="data/pois.js"></script>
 	<script src="data/tilecolormap.js"></script>
-	<script src="js/cookies.js"></script>
 	<script src="js/maploader.js"></script>
 	<script src="js/canvastools.js"></script>
 	<script src="js/mapmonitor.js"></script>
@@ -57,16 +39,11 @@
 	<div id="curtain">
 		<h1>Loading...</h1>
 	</div>
-	
+
 	<div class="offcanvas offcanvas-start text-bg-dark show" data-bs-backdrop="false" tabindex="-1" id="offcanvas" aria-labelledby="offcanvasLabel">
 		<div class="offcanvas-header">
 			<div>
 				<img src="img/logo_dark.png" id="logo" alt="Core Keeper Map Tool Logo" class="w-100">
-				<!--
-					<h5 class="offcanvas-title" id="offcanvasLabel">Core Keeper Map Tool</h5>
-					<h6 class="text-secondary" style="margin-bottom: 4px;">Rewrite by Ceddini and ZeroGravitas</h6>
-					<h6 class="text-secondary" style="font-size: 10pt;">Originally by Mz, nineforty and Craigins</h6>
-				-->
 			</div>
 			<button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
 		</div>
@@ -78,7 +55,7 @@
 					<label class="form-check-label" for="flexSwitchCheckChecked" data-i18n="ui">ui</label>
 					<input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" onclick="toggleDarkMode();" checked>
 				</div>
-	
+
 				<div class="form-check form-switch">
 					<input class="form-check-input" x-model="backgroundDark" type="checkbox" role="switch" id="backgroundDarkModeChecked" checked>
 					<label class="form-check-label" for="backgroundDarkModeChecked" data-i18n="background">background</label>
@@ -87,62 +64,13 @@
 
 			<section class="bordered-box mt-2">
 				<div class="d-flex align-items-center justify-content-between">
-					<div class="d-inline-flex align-items-center" x-on:click="$store.data.cookiesOpen = ($store.data.savedCookies) ? !$store.data.cookiesOpen : $store.data.cookiesOpen" style="cursor: pointer;">
-						<svg x-show="$store.data.cookiesOpen" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor;"><path d="M7.41,15.41L12,10.83L16.59,15.41L18,14L12,8L6,14L7.41,15.41Z" /></svg>
-						<svg x-show="!$store.data.cookiesOpen" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor; display: none;"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" /></svg>
-						<span class="fs-5" data-i18n="cookies">cookies</span>
-					</div>
-				</div>
-				<template x-if="$store.data.savedCookies === false">
-					<span class="text-danger" data-i18n="cookies.choose_cookie_to_collapse">cookies.choose_cookie_to_collapse</span>
-				</template>
-
-				<div x-show="$store.data.cookiesOpen" class="mt-2 px-1" x-transition="">
-					<div class="form-check">
-						<input class="form-check-input" type="checkbox" value="" id="acceptedAnalytics" x-model="$store.data.acceptedAnalytics">
-						<label class="form-check-label" for="acceptedAnalytics">
-							<span data-i18n="cookies.enable_analytics">cookies.enable_analytics</span><br />
-							<small data-i18n="cookies.enable_analytics.description">cookies.enable_analytics.description</small>
-						</label>
-					</div>
-					<div class="form-check">
-						<input class="form-check-input" type="checkbox" value="" id="acceptedAdTracking" x-model="$store.data.acceptedAdTracking">
-						<label class="form-check-label" for="acceptedAdTracking">
-							<span data-i18n="cookies.enable_ad_tracking">cookies.enable_ad_tracking</span><br />
-							<small data-i18n="cookies.enable_ad_tracking.description">cookies.enable_ad_tracking.description</small>
-						</label>
-					</div>
-
-					<div class="question my-2" x-data="{q: false, question: $store.faq.shift()}">
-						<h6 style="cursor: pointer;" @click="q = !q">
-							<svg x-show="q" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" style="fill: currentColor;"><path d="M7.41,15.41L12,10.83L16.59,15.41L18,14L12,8L6,14L7.41,15.41Z" /></svg>
-							<svg x-show="!q" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" style="fill: currentColor;"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" /></svg>
-							
-							<span x-html="question.question" :data-i18n="question.question"></span>
-						</h6>
-						<p x-show="q" x-transition x-html="question.answer" :data-i18n="question.answer"></p>
-					</div>
-					
-					<div class="d-flex align-items-center flex-wrap justify-content-between">
-						<a href="https://maptool.ceschmitt.de/privacy-policy.html" target="_blank" rel="noopener noreferrer" data-i18n="privacy_policy">privacy_policy</a>
-						<div class="d-flex align-items-center mt-2">
-							<button class="btn btn-secondary me-1" x-on:click="saveCookieSelection" data-i18n="save">save</button>
-							<button class="btn btn-primary" x-on:click="allowAnalytics" data-i18n="allow_analytics">allow_analytics</button>
-						</div>
-					</div>
-				</div>
-			</section>
-			
-			<section class="bordered-box mt-2">
-				<div class="d-flex align-items-center justify-content-between">
 					<div class="d-inline-flex align-items-center" x-on:click="$store.data.aboutOpen = !$store.data.aboutOpen" style="cursor: pointer;">
 						<svg x-show="$store.data.aboutOpen" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor;"><path d="M7.41,15.41L12,10.83L16.59,15.41L18,14L12,8L6,14L7.41,15.41Z" /></svg>
 						<svg x-show="!$store.data.aboutOpen" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor; display: none;"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" /></svg>
 						<span class="fs-5" data-i18n="about">about</span>
 					</div>
 				</div>
-				
-				
+
 				<div x-show="$store.data.aboutOpen" class="mt-2" x-transition="">
 					<!-- HOW TO USE TOOL -->
 					<a href="https://www.youtube.com/watch?v=ZeM61AjhiS4" target="_blank" rel="noopener noreferrer">
@@ -162,7 +90,7 @@
 						</button>
 					</a>
 
-					<a target="_blank" href="https://github.com/Ceddini/CoreKeeperMapTool/discussions" rel="noopener noreferrer">
+					<a target="_blank" href="https://github.com/user004/CoreKeeperMapTool/discussions" rel="noopener noreferrer">
 						<button class="btn btn-outline-primary w-100 text-start mt-2 d-flex align-items-center">
 							<svg style="width:24px;height:24px" class="me-2" viewBox="0 0 24 24">
 								<path fill="currentColor" d="M9 22C8.4 22 8 21.6 8 21V18H4C2.9 18 2 17.1 2 16V4C2 2.9 2.9 2 4 2H20C21.1 2 22 2.9 22 4V16C22 17.1 21.1 18 20 18H13.9L10.2 21.7C10 21.9 9.8 22 9.5 22H9M10 16V19.1L13.1 16H20V4H4V16H10M16.3 6L14.9 9H17V13H13V8.8L14.3 6H16.3M10.3 6L8.9 9H11V13H7V8.8L8.3 6H10.3Z" />
@@ -171,23 +99,6 @@
 						</button>
 					</a>
 
-					<a target="_blank" href="https://maptool-dev.ceschmitt.de" rel="noopener noreferrer">
-						<button class="btn btn-outline-primary w-100 text-start mt-2">
-							<svg style="width:24px;height:24px" class="me-2" viewBox="0 0 24 24">
-								<path fill="currentColor" d="M8,3A2,2 0 0,0 6,5V9A2,2 0 0,1 4,11H3V13H4A2,2 0 0,1 6,15V19A2,2 0 0,0 8,21H10V19H8V14A2,2 0 0,0 6,12A2,2 0 0,0 8,10V5H10V3M16,3A2,2 0 0,1 18,5V9A2,2 0 0,0 20,11H21V13H20A2,2 0 0,0 18,15V19A2,2 0 0,1 16,21H14V19H16V14A2,2 0 0,1 18,12A2,2 0 0,1 16,10V5H14V3H16Z" />
-							</svg>
-							<span data-i18n="about.development_version">about.development_version</span>
-						</button>
-					</a>
-
-					<a target="_blank" href="https://linktr.ee/ceddini" rel="noopener noreferrer">
-						<button class="btn btn-outline-primary w-100 text-start mt-2">
-							<svg style="width:24px;height:24px" class="me-2" viewBox="0 0 24 24">
-								<path fill="currentColor" d="M22,12V20A2,2 0 0,1 20,22H4A2,2 0 0,1 2,20V12A1,1 0 0,1 1,11V8A2,2 0 0,1 3,6H6.17C6.06,5.69 6,5.35 6,5A3,3 0 0,1 9,2C10,2 10.88,2.5 11.43,3.24V3.23L12,4L12.57,3.23V3.24C13.12,2.5 14,2 15,2A3,3 0 0,1 18,5C18,5.35 17.94,5.69 17.83,6H21A2,2 0 0,1 23,8V11A1,1 0 0,1 22,12M4,20H11V12H4V20M20,20V12H13V20H20M9,4A1,1 0 0,0 8,5A1,1 0 0,0 9,6A1,1 0 0,0 10,5A1,1 0 0,0 9,4M15,4A1,1 0 0,0 14,5A1,1 0 0,0 15,6A1,1 0 0,0 16,5A1,1 0 0,0 15,4M3,8V10H11V8H3M13,8V10H21V8H13Z" />
-							</svg>
-							<span data-i18n="about.support_me">about.support_me</span>
-						</button>
-					</a>
 				</div>
 			</section>
 
@@ -197,24 +108,24 @@
 					<section class="bordered-box">
 						<div class="d-flex justify-content-between align-items-start mb-1">
 							<h4 data-i18n="load_map">load_map</h4>
-							<a href="#" onclick="loadExample()" style="font-size: 12pt; text-align:right;" data-i18n="load_map.example">load_map.example</a>
+							<!-- <a href="#" onclick="loadExample()" style="font-size: 12pt; text-align:right;" data-i18n="load_map.example">load_map.example</a> -->
 						</div>
 						<input id="mapupload" type="file" class="form-control d-none" />
 
 						<div class="input-group">
-							<input id="uploadbutton" type="button" onclick="registerMapFile();" class="btn btn-primary btn-sm" value="select_file" data-i18n="[value]load_map.select_file" /> 
-							<span 
+							<input id="uploadbutton" type="button" onclick="registerMapFile();" class="btn btn-primary btn-sm" value="select_file" data-i18n="[value]load_map.select_file" />
+							<span
 								:class="($store.data.canWatchFile) ? 'input-group-text' : 'input-group-text text-secondary'"
-								:data-bs-toggle="($store.data.canWatchFile) ? '' : 'tooltip'" 
+								:data-bs-toggle="($store.data.canWatchFile) ? '' : 'tooltip'"
 								data-bs-title="load_map.monitor_not_available"
 								data-bs-custom-class="custom-tooltip"
 								data-bs-html="true"
 								data-bs-placement="right"
 								data-i18n="[data-bs-title]load_map.monitor_not_available"
 							>
-								<input x-show="$store.data.canWatchFile" id="shouldrefresh" class="form-check-input me-2 mt-0" type="checkbox" value="" aria-label="Should refresh" 
+								<input x-show="$store.data.canWatchFile" id="shouldrefresh" class="form-check-input me-2 mt-0" type="checkbox" value="" aria-label="Should refresh"
 									:disabled="!$store.data.canWatchFile"
-									:data-bs-toggle="($store.data.canWatchFile) ? '' : 'tooltip'" 
+									:data-bs-toggle="($store.data.canWatchFile) ? '' : 'tooltip'"
 									data-bs-title="load_map.monitor_not_available"
 									data-bs-custom-class="custom-tooltip"
 									data-bs-html="true"
@@ -228,10 +139,10 @@
 								</span>
 								<span data-i18n="load_map.auto_refresh">load_map.auto_refresh</span>
 							</span>
-							<button 
-								type="button" 
-								class="btn btn-primary" 
-								:disabled="$store.data.mapLoaded === false || $store.data.isExampleMap === true || $store.data.canWatchFile === false" 
+							<button
+								type="button"
+								class="btn btn-primary"
+								:disabled="$store.data.mapLoaded === false || $store.data.isExampleMap === true || $store.data.canWatchFile === false"
 								onclick="MapMonitor.refreshMap()">
 								<svg style="width:24px;height:24px" viewBox="0 0 24 24">
 									<path fill="currentColor" d="M2 12C2 16.97 6.03 21 11 21C13.39 21 15.68 20.06 17.4 18.4L15.9 16.9C14.63 18.25 12.86 19 11 19C4.76 19 1.64 11.46 6.05 7.05C10.46 2.64 18 5.77 18 12H15L19 16H19.1L23 12H20C20 7.03 15.97 3 11 3C6.03 3 2 7.03 2 12Z" />
@@ -243,7 +154,7 @@
 						<div class="mt-2" x-data="{visible: false}" x-show="$store.data.firstTimeLoaded === false">
 							<a href="#" @click="openTutorial">
 								<h6 class="d-flex align-items-center">
-									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" style="fill: currentColor;" class="me-1"><path d="M11,18H13V16H11V18M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,6A4,4 0 0,0 8,10H10A2,2 0 0,1 12,8A2,2 0 0,1 14,10C14,12 11,11.75 11,15H13C13,12.75 16,12.5 16,10A4,4 0 0,0 12,6Z" /></svg> 
+									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" style="fill: currentColor;" class="me-1"><path d="M11,18H13V16H11V18M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,6A4,4 0 0,0 8,10H10A2,2 0 0,1 12,8A2,2 0 0,1 14,10C14,12 11,11.75 11,15H13C13,12.75 16,12.5 16,10A4,4 0 0,0 12,6Z" /></svg>
 									<span data-i18n="load_map.how_to_find_map">load_map.how_to_find_map</span>
 								</h6>
 							</a>
@@ -251,8 +162,8 @@
 
 						<div x-show="$store.data.mapLoaded" style="display: none;" class="mt-2">
 							<div class="d-flex align-items-center">
-								<button 
-									class="btn btn-outline-primary me-1" 
+								<button
+									class="btn btn-outline-primary me-1"
 									onclick="downloadMap(document.getElementById('mapcanvas'));"
 									data-bs-toggle="tooltip"
 									data-bs-placement="right"
@@ -267,7 +178,7 @@
 								<button class="btn btn-primary" onclick="recenterMap()" data-i18n="load_map.center_map">load_map.center_map</button>
 							</div>
 						</div>
-						
+
 					</section>
 
 					<div x-show="!$store.data.firstTimeLoaded" class="bordered-box" data-i18n="load_map_to_show_settings">load_map_to_show_settings</div>
@@ -300,7 +211,7 @@
 											<div class="d-inline-flex align-items-center" x-on:click="visible = !visible" style="cursor: pointer;">
 												<svg x-show="visible" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor;"><path d="M7.41,15.41L12,10.83L16.59,15.41L18,14L12,8L6,14L7.41,15.41Z" /></svg>
 												<svg x-show="!visible" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor;"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" /></svg>
-	
+
 												<span class="fs-5" :data-i18n="'poi:category.' + category.name" x-text="'poi:category.' + category.name"></span>
 											</div>
 											<div class="flex-fill border-bottom border-secondary mx-2"></div>
@@ -308,12 +219,12 @@
 										</div>
 										<div x-show="visible" x-transition style="display: none;">
 											<template x-for="circle in category.items" :key="circle.name">
-												<button type="button" :disabled="circle.disabled" 
-												class="btn btn-sm me-2 mb-2 d-inline-flex align-items-center" 
+												<button type="button" :disabled="circle.disabled"
+												class="btn btn-sm me-2 mb-2 d-inline-flex align-items-center"
 												:style="circle.visible ? `background-color: ${circle.color}; color: ${circle.textColor}` : `border-color: ${circle.color}; color: ${circle.color}`"
-												:data-bs-toggle="(circle.tooltip) ? 'tooltip' : ''" 
+												:data-bs-toggle="(circle.tooltip) ? 'tooltip' : ''"
 												data-bs-title="poi:description"
-												
+
 												data-i18ns="[data-bs-title]poi:description"
 												:data-i18ns-options="circle.getTooltipContentAsJsonString()"
 
@@ -325,9 +236,9 @@
 												x-on:click="toggleCircle(circle)">
 														<div
 														x-show="circle.image"
-														class="circle-image" 
-														:style="(circle.visible) 
-															? `background-image: url('img/${circle.image}'); margin-right: 8px; border-color: ${circle.color};` 
+														class="circle-image"
+														:style="(circle.visible)
+															? `background-image: url('img/${circle.image}'); margin-right: 8px; border-color: ${circle.color};`
 															: `background-image: url('img/${circle.image}'); margin-right: 8px; border-color: ${circle.color};`"></div>
 													<!-- <img x-show="circle.image" :src="`img/${circle.image}`" :alt="`Image of ${circle.name}`" width="32"> -->
 													<span :data-i18n="'poi:' + category.name + '.' + circle.name + '.name'" x-text="circle.name"></span>
@@ -336,13 +247,13 @@
 										</div>
 									</div>
 								</template>
-	
+
 								<div class="bordered-box-section" x-data="{visible: true}">
 									<div class="d-flex align-items-center mb-1">
 										<div class="d-inline-flex align-items-center" x-on:click="visible = !visible" style="cursor: pointer;">
 											<svg x-show="visible" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor;"><path d="M7.41,15.41L12,10.83L16.59,15.41L18,14L12,8L6,14L7.41,15.41Z" /></svg>
 											<svg x-show="!visible" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor;"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" /></svg>
-	
+
 											<span class="fs-5">Biomes</span>
 										</div>
 										<div class="flex-fill border-bottom border-secondary mx-2"></div>
@@ -353,7 +264,7 @@
 												<input type="checkbox" class="btn-check" id="showArcs" autocomplete="off" x-model="$store.data.showArcs" @change="onChangeShowArcs">
 												<label class="btn btn-outline-primary" for="showArcs">Show Biomes</label><br>
 											</div>
-				
+
 											<div>
 												<div class="input-group">
 													<span class="input-group-text">Manual Rotation</span>
@@ -363,7 +274,7 @@
 												</div>
 											</div>
 										</div>
-										
+
 										<div x-show="$store.data.manualArcRotation" style="display: none;" x-transition>
 											<div class="d-flex flex-column">
 												<div class="my-2">
@@ -403,13 +314,13 @@
 										</div>
 									</div>
 								</div>
-	
+
 								<div class="bordered-box-section" x-data="{visible: false}">
 									<div class="d-flex align-items-center mb-1">
 										<div class="d-inline-flex align-items-center" x-on:click="visible = !visible" style="cursor: pointer;">
 											<svg x-show="visible" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor;"><path d="M7.41,15.41L12,10.83L16.59,15.41L18,14L12,8L6,14L7.41,15.41Z" /></svg>
 											<svg x-show="!visible" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor;"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" /></svg>
-	
+
 											<span class="fs-5">Advanced Settings</span>
 										</div>
 										<div class="flex-fill border-bottom border-secondary mx-2"></div>
@@ -451,10 +362,10 @@
 							</div>
 							<div class="px-1" x-show="visible" x-transition>
 								<div>
-									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" style="fill: currentColor;"><path d="M11,18H13V16H11V18M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,6A4,4 0 0,0 8,10H10A2,2 0 0,1 12,8A2,2 0 0,1 14,10C14,12 11,11.75 11,15H13C13,12.75 16,12.5 16,10A4,4 0 0,0 12,6Z" /></svg> 
+									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" style="fill: currentColor;"><path d="M11,18H13V16H11V18M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,6A4,4 0 0,0 8,10H10A2,2 0 0,1 12,8A2,2 0 0,1 14,10C14,12 11,11.75 11,15H13C13,12.75 16,12.5 16,10A4,4 0 0,0 12,6Z" /></svg>
 									<a href="https://corekeeper.wikizet.com/en/World_Generation" target="_blank" rel="noopener noreferrer">
 										World Generation
-									</a>, 
+									</a>,
 									<a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2846860078" target="_blank" rel="noopener noreferrer">
 										Mob Spawning
 									</a>
@@ -463,15 +374,15 @@
 								<div class="d-inline-flex mt-2">
 									<input type="checkbox" class="btn-check" id="showChunkGrid" autocomplete="off" x-model="$store.data.showChunkGrid" @change="onChangeShowChunkGrid">
 									<label class="btn btn-outline-primary me-2" for="showChunkGrid"
-										data-bs-toggle="tooltip" 
-										data-bs-title="64x64 grid into which dynamically spawned scenes and dungeons are placed during the player's exploration of the world"
+										data-bs-toggle="tooltip"
+										data-bs-title="256x256 grid into which dynamically spawned scenes and dungeons are placed during the player's exploration of the world"
 										data-bs-custom-class="custom-tooltip"
 										data-bs-placement="right"
-									>Chunk Grid</label>
-	
+									>Scene Grid</label>
+
 									<input type="checkbox" class="btn-check" id="showMobGrid" autocomplete="off" x-model="$store.data.showMobGrid" @change="onChangeShowMobGrid">
 									<label class="btn btn-outline-primary" for="showMobGrid"
-										data-bs-toggle="tooltip" 
+										data-bs-toggle="tooltip"
 										data-bs-title="16x16 grid of cells used by the mob spawning algorithm - each one within 208 tiles of a player gets one spawn event every ~20 minutes, for each mob type with enough spawn surface tiles available"
 										data-bs-custom-class="custom-tooltip"
 										data-bs-placement="right"
@@ -492,7 +403,7 @@
 										<div class="d-inline-flex align-items-center" x-on:click="mazeHolesVisible = !mazeHolesVisible" style="cursor: pointer;">
 											<svg x-show="mazeHolesVisible" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor;"><path d="M7.41,15.41L12,10.83L16.59,15.41L18,14L12,8L6,14L7.41,15.41Z" /></svg>
 											<svg x-show="!mazeHolesVisible" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor;"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" /></svg>
-	
+
 											<span class="fs-5">Maze Holes</span>
 										</div>
 										<div class="flex-fill border-bottom border-secondary mx-2"></div>
@@ -503,29 +414,29 @@
 											<div class="d-inline-flex mt-2">
 												<input type="checkbox" class="btn-check" id="showSmallMazeHoles" autocomplete="off" x-model="$store.data.showSmallMazeHoles" @change="onChangeShowMazeHoles">
 												<label class="btn btn-outline-primary" :style="$store.data.showSmallMazeHoles ? `background-color: rgb(255,0,255); color: white;` : `border-color: rgb(255,0,255); color: rgb(255,0,255);`" for="showSmallMazeHoles"
-													data-bs-toggle="tooltip" 
+													data-bs-toggle="tooltip"
 													data-bs-title="Contains:<br />- Tin Sword"
 													data-bs-custom-class="custom-tooltip"
 													data-bs-html="true"
 													data-bs-placement="right"
 												>Small</label>
 											</div>
-			
+
 											<div class="d-inline-flex mt-2">
 												<input type="checkbox" class="btn-check" id="showMediumMazeHoles" autocomplete="off" x-model="$store.data.showMediumMazeHoles" @change="onChangeShowMazeHoles">
 												<label class="btn btn-outline-primary" :style="$store.data.showMediumMazeHoles ? `background-color: rgb(0,255,255); color: #2d3339;` : `border-color: rgb(0,255,255); color: rgb(0,255,255);`" for="showMediumMazeHoles"
-													data-bs-toggle="tooltip" 
+													data-bs-toggle="tooltip"
 													data-bs-title="Contains:<br />- <strong>Clear Gemstone</strong><br />- Ocarina"
 													data-bs-custom-class="custom-tooltip"
 													data-bs-html="true"
 													data-bs-placement="right"
 												>Medium</label>
 											</div>
-			
+
 											<div class="d-inline-flex mt-2">
 												<input type="checkbox" class="btn-check" id="showLargeMazeHoles" autocomplete="off" x-model="$store.data.showLargeMazeHoles" @change="onChangeShowMazeHoles">
 												<label class="btn btn-outline-primary" :style="$store.data.showLargeMazeHoles ? `background-color: rgb(0,255,0); color: #2d3339;` : `border-color: rgb(0,255,0); color: rgb(0,255,0);`" for="showLargeMazeHoles"
-													data-bs-toggle="tooltip" 
+													data-bs-toggle="tooltip"
 													data-bs-title='Contains:<br />- <strong>Broken Handle</strong><br />- <strong>Oracle Card "Aura"</strong><br />- Caveling Figurine<br />- Gold Crystal Necklace<br />- Chipped Plate x2<br />- Precious Urn x5'
 													data-bs-custom-class="custom-tooltip"
 													data-bs-html="true"
@@ -535,7 +446,7 @@
 										</div>
 
 										<a href="https://corekeeper.wikizet.com/en/How_to_Get_the_Rune_Song_Legendary_Sword" target="_blank" rel="noopener noreferrer">
-											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" style="fill: currentColor;"><path d="M11,18H13V16H11V18M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,6A4,4 0 0,0 8,10H10A2,2 0 0,1 12,8A2,2 0 0,1 14,10C14,12 11,11.75 11,15H13C13,12.75 16,12.5 16,10A4,4 0 0,0 12,6Z" /></svg> 
+											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" style="fill: currentColor;"><path d="M11,18H13V16H11V18M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,6A4,4 0 0,0 8,10H10A2,2 0 0,1 12,8A2,2 0 0,1 14,10C14,12 11,11.75 11,15H13C13,12.75 16,12.5 16,10A4,4 0 0,0 12,6Z" /></svg>
 											How to find Rune Song
 										</a>
 									</div>
@@ -565,7 +476,7 @@
 											<div class="d-inline-flex align-items-center" x-on:click="visible = !visible" style="cursor: pointer;">
 												<svg x-show="visible" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor;"><path d="M7.41,15.41L12,10.83L16.59,15.41L18,14L12,8L6,14L7.41,15.41Z" /></svg>
 												<svg x-show="!visible" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor;"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" /></svg>
-	
+
 												<span class="fs-5" x-text="category.set"></span>
 											</div>
 											<div class="flex-fill border-bottom border-secondary mx-2"></div>
@@ -574,7 +485,7 @@
 										<div x-show="visible" x-transition style="display: none;" class="px-1">
 											<template x-for="tile in category.tiles" :key="tile.name">
 												<button type="button" :disabled="tile.disabled"
-												:class="'btn btn-sm me-2 mb-2 d-inline-flex align-items-center'" 
+												:class="'btn btn-sm me-2 mb-2 d-inline-flex align-items-center'"
 												:style="tile.visible ? `background-color: rgb(${tile.r}, ${tile.g}, ${tile.b}); color: inherit;` : `border-color: rgb(${tile.r}, ${tile.g}, ${tile.b}); color: inherit;`"
 												x-on:click="toggleTile(tile)">
 													<span x-text="tile.name" :style="tile.visible ? `color: ${tile.textColor}` : ``"></span>
@@ -588,7 +499,7 @@
 										<div class="d-inline-flex align-items-center" x-on:click="visible = !visible" style="cursor: pointer;">
 											<svg x-show="visible" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor;"><path d="M7.41,15.41L12,10.83L16.59,15.41L18,14L12,8L6,14L7.41,15.41Z" /></svg>
 											<svg x-show="!visible" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor;"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" /></svg>
-	
+
 											<span class="fs-5">Advanced Settings</span>
 										</div>
 										<div class="flex-fill border-bottom border-secondary mx-2"></div>
@@ -637,7 +548,7 @@
 										<div class="d-inline-flex align-items-center" x-on:click="visible = !visible" style="cursor: pointer;">
 											<svg x-show="visible" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor;"><path d="M7.41,15.41L12,10.83L16.59,15.41L18,14L12,8L6,14L7.41,15.41Z" /></svg>
 											<svg x-show="!visible" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor;"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" /></svg>
-	
+
 											<span class="fs-5">Player Pos</span>
 										</div>
 										<div class="flex-fill border-bottom border-secondary mx-2"></div>
@@ -658,7 +569,7 @@
 											<input class="form-control form-control-sm me-1" type="number" placeholder="Pos Y" min="0" style="width: 70px;" x-model="$store.player.posY">
 										</div>
 
-										
+
 
 										<div class="d-flex align-items-center justify-content-between">
 											<span>Player Color</span>
@@ -691,7 +602,7 @@
 									<h6 style="cursor: pointer;" @click="q = !q">
 										<svg x-show="q" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" style="fill: currentColor;"><path d="M7.41,15.41L12,10.83L16.59,15.41L18,14L12,8L6,14L7.41,15.41Z" /></svg>
 										<svg x-show="!q" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" style="fill: currentColor;"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" /></svg>
-										
+
 										<span x-html="question.question" :data-i18n="question.question"></span>
 										<template x-if="question.spoilers === true">
 											<span class="badge bg-danger">Spoilers</span>
@@ -703,21 +614,6 @@
 						</div>
 					</div>
 
-					<!-- AD -->
-					<div style="max-width: 350px; margin-bottom: 12px;">
-						<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2412416006246050" crossorigin="anonymous"></script>
-						<!-- Maptool Sidebar Ad -->
-						<ins class="adsbygoogle"
-							style="display:block"
-							data-ad-client="ca-pub-2412416006246050"
-							data-ad-slot="2165576877"
-							data-ad-format="auto"
-							data-full-width-responsive="true"></ins>
-						<script>
-							(adsbygoogle = window.adsbygoogle || []).push({});
-						</script>
-					</div>
-
 					<div class="bordered-box" x-data="{visible: false}">
 						<div class="d-inline-flex align-items-center" x-on:click="visible = !visible" style="cursor: pointer;">
 							<svg x-show="visible" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="fill: currentColor; display:none;"><path d="M7.41,15.41L12,10.83L16.59,15.41L18,14L12,8L6,14L7.41,15.41Z" /></svg>
@@ -727,6 +623,16 @@
 						</div>
 
 						<div x-show="visible" x-transition style="display: none;" class="credits p-1">
+							<div class="contributor">
+								<div class="d-flex align-items-center justify-content-between">
+									<strong>user004</strong>
+									<div class="flex-fill border-bottom border-secondary mx-2"></div>
+									<div class="socials">
+										<a href="https://github.com/user004" target="_blank" rel="noopener noreferrer">GitHub</a>
+									</div>
+								</div>
+								<p>Continuation</p>
+							</div>
 							<div class="contributor">
 								<div class="d-flex align-items-center justify-content-between">
 									<strong>Ceddini</strong>
@@ -774,7 +680,7 @@
 									<div class="flex-fill border-bottom border-secondary mx-2"></div>
 									<div class="socials"></div>
 								</div>
-								<p>nineforty</p>
+								<p><a href="https://www.youtube.com/@DakonsMadhouse">Dakon the Mad</a>, nineforty</p>
 							</div>
 						</div>
 					</div>
@@ -798,17 +704,6 @@
 				</div>
 			</h4>
 			<div style="max-width: 432px;">
-				<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2412416006246050" crossorigin="anonymous"></script>
-				<ins class="adsbygoogle"
-					style="display:block"
-					data-ad-format="fluid"
-					data-ad-layout-key="-hl-7+2n-1d-69"
-					data-ad-client="ca-pub-2412416006246050"
-					data-ad-slot="4956898343"></ins>
-				<script>
-					(adsbygoogle = window.adsbygoogle || []).push({});
-				</script>
-
 				<h5>1. Click "Select File" Button</h5>
 				<img src="img/tutorial/step_1.png" class="d-block" width="400" height="200" alt="Select map file">
 				<p>Click the blue "Select File" button on the left-hand side.</p>
@@ -845,13 +740,13 @@
 		</div>
 	</template>
 
-	
+
 
 		<div class="canvas-container">
 		<canvas id="mapcanvas" width="1200px" height="800px" style="image-rendering: pixelated;" onclick="//toclick"></canvas>
 	</div>
 	<canvas id="overlaycanvas"></canvas>
-	
+
 
 	<!--
 	<div class="legend-container">
@@ -872,7 +767,6 @@
   	<script src="js/menubuilder.js"></script>
   	<script src="js/mazehunter.js"></script>
   	<script src="js/vendor/bootstrap.bundle.min.js"></script>
-	<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2412416006246050" crossorigin="anonymous"></script>
 	<script>
 		// const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
 		// const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))

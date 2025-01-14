@@ -12,7 +12,8 @@
 		"stone": "Stone",
 		"sunken_sea": "Sunken Sea",
 		"the_wilderness": "The Wilderness",
-		"desert_of_beginnings": "Desert of Beginnings"
+		"desert_of_beginnings": "Desert of Beginnings",
+		"passage": "The Passage"
 	},
 	"description": "<strong>{{name}}</strong><br>Location(s): {{locations}}<br>Distance(s) from Core: {{radii}}",
 	"bosses": {
@@ -24,9 +25,9 @@
 			"name": "Ghorm",
 			"full_name": "Ghorm the Devourer"
 		},
-		"hive_mother": {
-			"name": "Hive Mother",
-			"full_name": "The Hive Mother"
+		"malugaz": {
+			"name": "Malugaz",
+			"full_name": "Malugaz the Corrupted"
 		},
 		"azeos": {
 			"name": "Azeos",
@@ -39,12 +40,16 @@
 		"ra-akar": {
 			"name": "Ra-Akar",
 			"full_name": "Ra-Akar the Sand Titan"
+		},
+		"core-commander": {
+			"name": "Core Commander",
+			"full_name": "Core Commander"
 		}
 	},
 	"optional_bosses": {
-		"malugaz": {
-			"name": "Malugaz",
-			"full_name": "Malugaz the Corrupted"
+		"hive_mother": {
+			"name": "Hive Mother",
+			"full_name": "The Hive Mother"
 		},
 		"ivy": {
 			"name": "Ivy",
@@ -57,6 +62,10 @@
 		"igneous": {
 			"name": "Igneous",
 			"full_name": "Igneous the Molten Mass"
+		},
+		"urschleim": {
+			"name": "Urschleim",
+			"full_name": "Urschleim"
 		}
 	},
 	"points_of_interest": {

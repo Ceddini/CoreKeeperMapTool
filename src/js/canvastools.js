@@ -12,21 +12,20 @@ let mousePosElem;
 
 let shouldDrawOnOverlay = true;
 
-
 const STONE_ARC_START_OFFSET = Math.PI / 2;
-const STONE_ARC_END_OFFSET = Math.PI / 2;
+const STONE_ARC_END_OFFSET =   Math.PI / 2;
 
 const CLAY_ARC_START_OFFSET = -Math.PI / 2;
-const CLAY_ARC_END_OFFSET = -Math.PI / 2;
+const CLAY_ARC_END_OFFSET =   -Math.PI / 2;
 
-const DESERT_ARC_START_OFFSET = Math.PI / 2 + (2.25 * Math.PI / 180) + ((2 * Math.PI) / 3);
-const DESERT_ARC_END_OFFSET = Math.PI / 2 - (2.25 * Math.PI / 180) + ((2 * Math.PI) / 3);
+const DESERT_ARC_START_OFFSET = Math.PI / 2 + ((2 * Math.PI) / 3);
+const DESERT_ARC_END_OFFSET =   Math.PI / 2 + ((2 * Math.PI) / 3);
 
-const WILDERNESS_ARC_START_OFFSET = Math.PI / 2 + (2.25 * Math.PI / 180) + ((2 * Math.PI) / 3) * 2;
-const WILDERNESS_ARC_END_OFFSET = Math.PI / 2 - (2.25 * Math.PI / 180) + ((2 * Math.PI) / 3) * 2;
+const WILDERNESS_ARC_START_OFFSET = Math.PI / 2 + ((2 * Math.PI) / 3) * 2;
+const WILDERNESS_ARC_END_OFFSET =   Math.PI / 2 + ((2 * Math.PI) / 3) * 2;
 
-const SUNKENSEA_ARC_START_OFFSET = Math.PI / 2 + (2.25 * Math.PI / 180);
-const SUNKENSEA_ARC_END_OFFSET = Math.PI / 2 - (2.25 * Math.PI / 180);
+const SUNKENSEA_ARC_START_OFFSET = Math.PI / 2;
+const SUNKENSEA_ARC_END_OFFSET =   Math.PI / 2;
 
 function panImage(dx, dy) {
 	cameraOffset.x += dx;
@@ -201,6 +200,8 @@ function decorateMap(width, height) {
 		const outerEnd = (manualArcRotation) ? loop(document.getElementById('outerArcSlider').value - 120, 0, 359) * Math.PI / 180 : wildernessArc.end;
 
 		drawOuterArcs(outerStart, outerEnd);
+
+		drawOuterRing();
 	}
 
 	if (Alpine.store('data').showCustomRing) {
@@ -220,7 +221,12 @@ function decorateMap(width, height) {
 
 							circle.locations.forEach(location => {
 								if (location.ring) {
-									if (location.ring === RINGS.CLAY || location.ring === RINGS.STONE) {
+									if (location.ring === RINGS.PASSAGE) {
+										if (shouldDrawOnOverlay)
+											drawOverlayCircle(radius, circle.color);
+										else
+											drawCircle(radius, circle.color);
+									} else if (location.ring === RINGS.CLAY || location.ring === RINGS.STONE) {
 										const start = (manualArcRotation) ? document.getElementById('innerArcSlider').value * Math.PI / 180 : stoneArc.start;
 										const end = (manualArcRotation) ? loop(document.getElementById('innerArcSlider').value - 180, 0, 359) * Math.PI / 180 : stoneArc.end;
 
@@ -236,7 +242,7 @@ function decorateMap(width, height) {
 												break;
 										}
 
-										drawOverlayAnnulus(radius, start + (2.5 * Math.PI / 180) - startOffset, end - (2.5 * Math.PI / 180) - endOffset, circle.color, false);
+										drawOverlayAnnulus(radius, start - startOffset, end - endOffset, circle.color, false);
 										hasBeenCropped = true;
 									} else {
 										const start = (manualArcRotation) ? document.getElementById('outerArcSlider').value * Math.PI / 180 : wildernessArc.start;
@@ -293,7 +299,7 @@ function drawChunkGrid(ctx, width, height) {
 
 	ctx.lineWidth = 3;
 	ctx.strokeStyle = "#AAAAAA";
-	const gridsize = 64;
+	const gridsize = 256;
 	let x = 0;
 	while (x <= width) {
 		ctx.beginPath();
@@ -385,27 +391,111 @@ function annulus(ctx, centerX, centerY,
 }
 
 function drawArcs(start, end) {
-	start = start + (2.5 * Math.PI / 180);
-	end = end - (2.5 * Math.PI / 180);
-
 	if (shouldDrawOnOverlay) {
-		drawOverlayArcs(150, SEARCH_RADII.max - 50, start - STONE_ARC_START_OFFSET, end - STONE_ARC_END_OFFSET, "#C2C2C2", false);
-		drawOverlayArcs(150, SEARCH_RADII.max - 50, start - CLAY_ARC_START_OFFSET, end - CLAY_ARC_END_OFFSET, "#A66829", false);
+		// stone
+		drawOverlayArcs(
+			SEARCH_RADII.min,
+			SEARCH_RADII.max,
+			start - STONE_ARC_START_OFFSET,
+			end - STONE_ARC_END_OFFSET,
+			"#C2C2C2", false);
+		// clay
+		drawOverlayArcs(
+			SEARCH_RADII.min,
+			SEARCH_RADII.max,
+			start - CLAY_ARC_START_OFFSET,
+			end - CLAY_ARC_END_OFFSET,
+			"#A66829", false);
 	} else {
-		drawArc(150, SEARCH_RADII.max - 50, start - STONE_ARC_START_OFFSET, end - STONE_ARC_END_OFFSET, "#C2C2C2");
-		drawArc(150, SEARCH_RADII.max - 50, start - CLAY_ARC_START_OFFSET, end - CLAY_ARC_END_OFFSET, "#A66829");
+		// stone
+		drawArc(
+			SEARCH_RADII.min,
+			SEARCH_RADII.max,
+			start - STONE_ARC_START_OFFSET,
+			end - STONE_ARC_END_OFFSET,
+			"#C2C2C2");
+		// clay
+		drawArc(
+			SEARCH_RADII.min,
+			SEARCH_RADII.max,
+			start - CLAY_ARC_START_OFFSET,
+			end - CLAY_ARC_END_OFFSET,
+			"#A66829");
 	}
 }
 
 function drawOuterArcs(start, end) {
 	if (shouldDrawOnOverlay) {
-		drawOverlayArcs(OUTER_SEARCH_RADII.min + 20, OUTER_SEARCH_RADII.max + 700, start - Math.PI / 2 - (2.25 * Math.PI / 180), end - Math.PI / 2 + (2.25 * Math.PI / 180), "#3B7EDB", true)
-		drawOverlayArcs(OUTER_SEARCH_RADII.min + 20, OUTER_SEARCH_RADII.max + 700, start - Math.PI / 2 - (2.25 * Math.PI / 180) + ((2 * Math.PI) / 3), end - Math.PI / 2 + (2.25 * Math.PI / 180) + ((2 * Math.PI) / 3), "#2B941B", true);
-		drawOverlayArcs(OUTER_SEARCH_RADII.min + 20, OUTER_SEARCH_RADII.max + 700, start - Math.PI / 2 - (2.25 * Math.PI / 180) + ((2 * Math.PI) / 3) * 2, end - Math.PI / 2 + (2.25 * Math.PI / 180) + ((2 * Math.PI) / 3) * 2, "#CFC35D", true);
+		// sea
+		drawOverlayArcs(
+			OUTER_SEARCH_RADII.min,
+			OUTER_SEARCH_RADII.max,
+			start - SUNKENSEA_ARC_START_OFFSET,
+			end - SUNKENSEA_ARC_END_OFFSET,
+			"#3B7EDB",
+			true)
+		// wilderness
+		drawOverlayArcs(
+			OUTER_SEARCH_RADII.min,
+			OUTER_SEARCH_RADII.max,
+			start - WILDERNESS_ARC_START_OFFSET,
+			end - WILDERNESS_ARC_END_OFFSET,
+			"#2B941B",
+			true);
+		// desert
+		drawOverlayArcs(
+			OUTER_SEARCH_RADII.min,
+			OUTER_SEARCH_RADII.max,
+			start - DESERT_ARC_START_OFFSET,
+			end - DESERT_ARC_END_OFFSET,
+			"#CFC35D",
+			true);
 	} else {
-		drawArc(OUTER_SEARCH_RADII.min + 20, OUTER_SEARCH_RADII.max + 700, start - Math.PI / 2 - (2.25 * Math.PI / 180), end - Math.PI / 2 + (2.25 * Math.PI / 180), "#3B7EDB")
-		drawArc(OUTER_SEARCH_RADII.min + 20, OUTER_SEARCH_RADII.max + 700, start - Math.PI / 2 - (2.25 * Math.PI / 180) + ((2 * Math.PI) / 3), end - Math.PI / 2 + (2.25 * Math.PI / 180) + ((2 * Math.PI) / 3), "#2B941B");
-		drawArc(OUTER_SEARCH_RADII.min + 20, OUTER_SEARCH_RADII.max + 700, start - Math.PI / 2 - (2.25 * Math.PI / 180) + ((2 * Math.PI) / 3) * 2, end - Math.PI / 2 + (2.25 * Math.PI / 180) + ((2 * Math.PI) / 3) * 2, "#CFC35D");
+		// sea
+		drawArc(
+			OUTER_SEARCH_RADII.min,
+			OUTER_SEARCH_RADII.max,
+			start - SUNKENSEA_ARC_START_OFFSET,
+			end - SUNKENSEA_ARC_END_OFFSET,
+			"#3B7EDB")
+		// wilderness
+		drawArc(
+			OUTER_SEARCH_RADII.min,
+			OUTER_SEARCH_RADII.max,
+			start - WILDERNESS_ARC_START_OFFSET,
+			end - WILDERNESS_ARC_END_OFFSET,
+			"#2B941B");
+		// desert
+		drawArc(
+			OUTER_SEARCH_RADII.min,
+			OUTER_SEARCH_RADII.max,
+			start - DESERT_ARC_START_OFFSET,
+			end - DESERT_ARC_END_OFFSET,
+			"#CFC35D");
+	}
+}
+
+function drawOuterRing() {
+	start = 0;
+	end = 2 * Math.PI;
+
+	if (shouldDrawOnOverlay) {
+		// passage
+		drawOverlayArcs(
+			OUTER_SEARCH_RADII.max,
+			1350,
+			start,
+			end,
+			"#EFEFEF",
+			false);
+	} else {
+		// passage
+		drawArc(
+			OUTER_SEARCH_RADII.max,
+			1350,
+			start,
+			end,
+			"#EFEFEF");
 	}
 }
 
