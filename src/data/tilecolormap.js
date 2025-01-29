@@ -64,15 +64,6 @@ let tileColors = [
 			new Tile("Valley Moss", 249, 116, 67),
 			// shimmering
 			new Tile("Crystal Crust", 15, 162, 184),
-
-			// TODO: remove the rest, since they're in other sets?
-
-			// blocks
-			new Tile("Mold Block", 108, 188, 224),
-			new Tile("Beach Block", 235, 192, 190),
-			new Tile("Desert Block", 210, 154, 124),
-			// water
-			new Tile("Sea Water", 52, 208, 255),
 		],
 	},
 	{
@@ -341,7 +332,7 @@ let tileColors = [
 
 			// crates
 			new Tile("Wooden Crate", 114, 60, 17),
-			new Tile("Clay Pot", 98, 47, 19),// TODO: check me
+			new Tile("Clay Pot", 99, 48, 19),
 			new Tile("Ancient Crate / Metropolis Crate", 77, 168, 202),
 			new Tile("Flower Vessel", 205, 189, 48),
 			new Tile("Mold Vessel", 229, 229, 229),
