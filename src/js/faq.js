@@ -1,5 +1,10 @@
 const faq = [
 	{
+		question: "faq:privacy.question",
+		preopened: true,
+		answer: "[html]faq:privacy.answer"
+	},
+	{
 		question: "faq:clear_gemstone.question",
 		spoilers: true,
 		answer: "[html]faq:clear_gemstone.answer"
