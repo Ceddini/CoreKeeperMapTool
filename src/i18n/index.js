@@ -22,7 +22,7 @@ $(function () {
 				//{},
 				{
 					load: "languageOnly",
-					loadPath: "./locales/{{lng}}/{{ns}}.json"
+					loadPath: "/locales/{{lng}}/{{ns}}.json"
 				}
 			]
 		},
