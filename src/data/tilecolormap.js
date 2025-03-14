@@ -111,6 +111,7 @@ let tileColors = [
 			new Tile("Beach", 180, 147, 154),
 			new Tile("Mold", 89, 156, 186),
 			new Tile("Desert", 166, 146, 152),
+			new Tile("Oasis", 168, 76, 30),
 			new Tile("Metropolis", 49, 77, 87),
 			new Tile("Alien Tech", 70, 62, 102),
 			new Tile("Crystal", 42, 89, 238),
@@ -121,6 +122,8 @@ let tileColors = [
 			//Unobtainable Blocks
 			new Tile("Obsidian", 22, 42, 39),
 			//Natural Wall
+			new Tile("Molten Wall", 184, 38, 18),
+			new Tile("Poison Berry Wall", 185, 105, 209),
 			new Tile("Thermite Wall", 216, 39, 62),
 			//Craftable
 			new Tile("Explosives Deposit", 192, 23, 26),
@@ -170,6 +173,7 @@ let tileColors = [
 			new Tile("Beach", 235, 192, 190, true),
 			new Tile("Mold", 108, 188, 224),
 			new Tile("Desert", 210, 154, 124),
+			new Tile("Oasis", 199, 113, 56),
 			new Tile("Metropolis", 87, 128, 132),
 			new Tile("Alien Tech", 69, 106, 115),
 			new Tile("Crystal", 57, 136, 219),
