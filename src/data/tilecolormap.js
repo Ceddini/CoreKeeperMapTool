@@ -9,16 +9,26 @@
 			}
 */
 
+// https://core-keeper.fandom.com/wiki/Category:Items_visible_on_map
+
 const TileType = {
-	Ungrouped: "Ungrouped",
-	Grounds: "Grounds",
-	Floors: "Floors",
-	Walls: "Walls",
 	SpawnTiles: "Spawn Tiles",
 	Liquids: "Liquids",
 	Boulders: "Boulders",
 	Ores: "Ores",
-	Objects: "Objects"
+	GroundBlocks: "Ground (Blocks)",
+	WallsBlocks: "Walls (Blocks)",
+	Walls: "Walls",
+	WallsPaintable: "Walls (Paintable)",
+	Floors: "Floors",
+	FloorsPaintable: "Floors (Paintable)",
+	FloorsLit: "Floors (Lit)",
+	FloorsRug: "Floors (Rug)",
+	Bridges: "Bridges",
+	Fences: "Fences",
+	Electronics: "Electronics",
+	Objects: "Objects",
+	Ungrouped: "Ungrouped",
 };
 
 class Tile {
@@ -38,253 +48,323 @@ let tileColors = [
 	{
 		"set": TileType.SpawnTiles,
 		"tiles": [
+			// misc
 			new Tile("Fungal Soil", 183, 83, 60),
-			new Tile("Chrysalis", 252, 166, 148, true),
+			new Tile("Chrysalis", 252, 166, 148),
+			// slimes
 			new Tile("Ground Slime", 217, 98, 23),
 			new Tile("Ground Poison Slime", 184, 86, 165),
-			/*new Tile("Ground Slippery Slime (legacy)", 47, 47, 255),*/
 			new Tile("Ground Slippery Slime", 51, 51, 238),
 			new Tile("Ground Magma Slime", 255, 84, 0),
-			new Tile("Stone Moss", 207, 241, 255, true),
+			// cavelings
+			new Tile("Stone Moss", 207, 241, 255),
 			new Tile("Clay Moss", 126, 87, 78),
-			new Tile("Lush Moss", 163, 206, 74, true ),
+			new Tile("Lush Moss", 163, 206, 74),
 			new Tile("Urban Moss", 42, 169, 71),
 			new Tile("Valley Moss", 249, 116, 67),
+			// shimmering
 			new Tile("Crystal Crust", 15, 162, 184),
-			new Tile("Ground Acid Slime", 193, 170, 33, true), //Not a spawning tile
-		]
+		],
 	},
 	{
 		"set": TileType.Liquids,
 		"tiles": [
-			new Tile("Normal Water", 30, 61, 129),
+			// ordered by priority
+			new Tile("Water", 30, 61, 129),
+			new Tile("Lava", 222, 53, 1),
 			new Tile("Acid Water", 117, 103, 48),
 			new Tile("Mold Water", 61, 85, 135),
-			new Tile("Shimmering Water", 154, 198, 243, true),
-			new Tile("Grimy Water",61, 57, 89),
-			new Tile("Sea Water", 52, 208, 255, true),
-			new Tile("Lava",222, 53, 1),
-		]
+			new Tile("Shimmering Water", 154, 198, 243),
+			new Tile("Grimy Water", 61, 57, 89),
+			new Tile("Sea Water", 52, 208, 255),
+
+		],
+
 	},
 	{
 		"set": TileType.Boulders,
 		"tiles": [
 			new Tile("Copper Boulder", 237, 96, 87),
 			new Tile("Tin Boulder", 142, 122, 118),
-			new Tile("Gold Boulder", 242, 204, 61),
 			new Tile("Iron Boulder", 130, 155, 203),
+			new Tile("Gold Boulder", 242, 204, 61),
 			new Tile("Scarlet Boulder", 206, 59, 59),
 			new Tile("Octarine Boulder", 139, 82, 238),
-			new Tile("Galaxite Boulder", 215, 220, 251, true),
+			new Tile("Galaxite Boulder", 215, 220, 251),
 			new Tile("Solarite Boulder", 226, 161, 44),
 			new Tile("Pandorium Boulder", 9, 175, 36),
-		]
+		],
+
 	},
 	{
 		"set": TileType.Ores,
 		"tiles": [
-			new Tile("Ancient Gemstone", 0, 147, 255),
 			new Tile("Copper Ore", 237, 96, 87),
 			new Tile("Tin Ore", 142, 122, 118),
 			new Tile("Gold Ore", 242, 204, 61,true),
 			new Tile("Iron Ore", 130, 155, 203),
 			new Tile("Scarlet Ore", 206, 59, 59),
 			new Tile("Octarine Ore", 139, 82, 238),
-			new Tile("Galaxite Ore", 247, 240, 220, true),
-			new Tile("Solarite Ore", 255, 190, 78, true),
-			new Tile("Pandorium Crystal (Large)", 9, 175, 68),
-			new Tile("Pandorium Crystal (Small)", 9, 175, 36),
-		]
+			new Tile("Galaxite Ore", 247, 240, 220),
+			new Tile("Solarite Ore", 255, 190, 78),
+			new Tile("Pandorium Ore", 9, 175, 36),
+			// misc
+			new Tile("Ancient Gemstone", 0, 147, 255),
+		],
+	},
+	{
+		"set": TileType.WallsBlocks,
+		"tiles": [
+			// blocks, ordered by wall health
+			new Tile("Sand Block", 172, 143, 58),
+			new Tile("Snow Block", 109, 177, 180),
+			new Tile("Dirt Block", 97, 73, 39),
+			new Tile("Meadow Block", 224, 201, 97),
+			new Tile("Turf Block", 70, 103, 81),
+			new Tile("Clay Block", 193, 100, 54),
+			// doesn't show wall color on map...
+			// new Tile("Dark Stone Block", 123, 140, 172),
+			new Tile("Stone Block", 73, 103, 125),
+			new Tile("Larva Hive Block", 163, 97, 83),
+			new Tile("Grass Block", 22, 131, 27),
+			new Tile("Beach Block", 180, 147, 154),
+			new Tile("Mold Block", 89, 156, 186),
+			new Tile("Desert Block", 166, 146, 152),
+			new Tile("Metropolis Block", 49, 77, 87),
+			new Tile("Alien Tech Block", 70, 62, 102),
+			new Tile("Crystal Block", 42, 89, 238),
+			new Tile("Desert Temple Block", 0, 87, 163),
+			new Tile("Maze Block", 60, 79, 57),
+			new Tile("Lava Rock Block", 56, 52, 71),
+			new Tile("Fossil Block", 89, 86, 100),
+			new Tile("Obsidian Block", 22, 42, 39),
+		],
+	},
+	{
+		"set": TileType.GroundBlocks,
+		"tiles": [
+			// blocks, ordered by wall health
+			new Tile("Sand Block", 212, 185, 89),
+			new Tile("Snow Block", 155, 231, 235),
+			new Tile("Dirt Block", 127, 95, 48),
+			new Tile("Meadow Block", 239, 225, 179),
+			new Tile("Turf Block", 86, 128, 100),
+			new Tile("Clay Block", 232, 139, 105),
+			new Tile("Dark Stone Block", 123, 140, 172),
+			new Tile("Stone Block", 103, 131, 151),
+			new Tile("Larva Hive Block", 199, 116, 99),
+			new Tile("Grass Block", 61, 155, 65),
+			new Tile("Beach Block", 235, 192, 190),
+			new Tile("Mold Block", 108, 188, 224),
+			new Tile("Desert Block", 210, 154, 124),
+			new Tile("Metropolis Block", 87, 128, 132),
+			new Tile("Alien Tech Block", 69, 106, 115),
+			new Tile("Crystal Block", 57, 136, 219),
+			new Tile("Desert Temple Block", 134, 113, 110),
+			new Tile("Maze Block", 83, 100, 96),
+			new Tile("Lava Rock Block", 85, 78, 106),
+			new Tile("Fossil Block", 192, 186, 207),
+			new Tile("Obsidian Block", 31, 67, 62),
+		],
 	},
 	{
 		"set": TileType.Walls,
 		"tiles": [
-			//Natural Blocks
-			new Tile("Sand", 172, 143, 58),
-			new Tile("Snow", 109, 177, 180),
-			new Tile("Dirt", 97, 73, 39),
-			new Tile("Meadow", 224, 201, 97, true),
-			new Tile("Turf", 70, 103, 81),
-			new Tile("Clay", 193, 100, 54),
-			  //new Tile("Dark Stone", 0,0,0), //Not visible on Map
-			new Tile("Stone", 73, 103, 125),
-			new Tile("Larva Hive", 163, 97, 83),
-			new Tile("Grass", 22, 131, 27),
-			new Tile("Beach", 180, 147, 154),
-			new Tile("Mold", 89, 156, 186),
-			new Tile("Desert", 166, 146, 152),
-			new Tile("Oasis", 168, 76, 30),
-			new Tile("Metropolis", 49, 77, 87),
-			new Tile("Alien Tech", 70, 62, 102),
-			new Tile("Crystal", 42, 89, 238),
-			new Tile("Desert Temple", 0, 87, 163),
-			new Tile("Maze", 60, 79, 57),
-			new Tile("Lava Rock", 56, 52, 71),
-			new Tile("Fossil", 89, 86, 100),
-			//Unobtainable Blocks
-			new Tile("Obsidian", 22, 42, 39),
-			//Natural Wall
-			new Tile("Molten Wall", 184, 38, 18),
-			new Tile("Poison Berry Wall", 185, 105, 209),
+			// crafted
+			new Tile("Straw-bale Wall", 219, 212, 137),
+			new Tile("Wood Wall", 148, 105, 51),
+			new Tile("Stone Bricks Wall", 106, 108, 114),
+			new Tile("Scarlet Wall", 144, 38, 19),
+			new Tile("Coral Wall", 222, 142, 178),
+			new Tile("Galaxite Wall", 221, 221, 221),
+			new Tile("Gleam Wood Wall", 15, 161, 174),
+
+			// seasonal
+			new Tile("Eerie Wall", 103, 79, 122),
+
+			// found
 			new Tile("Thermite Wall", 216, 39, 62),
-			//Craftable
+
+			// misc
 			new Tile("Explosives Deposit", 192, 23, 26),
-			  //new Tile("Glass", 0,0,0), //Not visible on Map
-			  //new Tile("Thin Glass", 0,0,0), //Not visible on Map
-			new Tile("Eerie", 103, 79, 122),
-			  //new Tile("Paintable", 154, 165, 212), //See "Unpainted"
-			new Tile("Straw-bale", 219, 212, 137, true),
-			new Tile("Wood", 148, 105, 51),
-			new Tile("Stone Bricks", 106, 108, 114),
-			new Tile("Scarlet", 144, 38, 19),
-			new Tile("Coral", 222, 142, 178),
-			new Tile("Galaxite", 221, 221, 221, true ),
-			new Tile("Gleam Wood", 15, 161, 174),
-			//Paintable Wall
-			new Tile("Red", 187, 10, 10),
-			new Tile("Orange", 226, 121, 41),
-			new Tile("Peach", 224, 112, 100),
-			new Tile("Yellow", 212, 194, 42, true),
-			new Tile("Green", 64, 169, 16),
-			new Tile("Teal", 26, 134, 117),
-			new Tile("Cyan", 31, 193, 179),
-			new Tile("Blue", 28, 93, 216),
-			new Tile("Purple", 109, 49, 137),
-			new Tile("Pink", 246, 30, 120),
-			new Tile("Brown", 124, 58, 28),
-			new Tile("Black", 62, 62, 62),
-			new Tile("Grey", 131, 151, 159),
-			new Tile("White", 157, 180, 203),
-			new Tile("Unpainted", 154, 165, 212),
-		]
+		],
 	},
 	{
-		"set": TileType.Grounds,
+		"set": TileType.WallsPaintable,
 		"tiles": [
-			//Natural Blocks
-			new Tile("Sand", 212, 185, 89),
-			new Tile("Snow", 155, 231, 235, true),
-			new Tile("Dirt", 127, 95, 48),
-			new Tile("Meadow", 239, 225, 179, true),
-			new Tile("Turf", 86, 128, 100),
-			new Tile("Clay", 232, 139, 105),
-			new Tile("Dark Stone", 123, 140, 172),
-			new Tile("Stone", 103, 131, 151),
-			new Tile("Larva Hive", 199, 116, 99),
-			new Tile("Grass", 61, 155, 65),
-			new Tile("Beach", 235, 192, 190, true),
-			new Tile("Mold", 108, 188, 224),
-			new Tile("Desert", 210, 154, 124),
-			new Tile("Oasis", 199, 113, 56),
-			new Tile("Metropolis", 87, 128, 132),
-			new Tile("Alien Tech", 69, 106, 115),
-			new Tile("Crystal", 57, 136, 219),
-			new Tile("Desert Temple", 134, 113, 110),
-			new Tile("Maze", 83, 100, 96),
-			new Tile("Lava Rock", 85, 78, 106),
-			new Tile("Fossil", 192, 186, 207, true),
-			//Unobtainable Blocks
-			new Tile("Obsidian", 31, 67, 62),
-		]
+			new Tile("Paintable Wall", 154, 165, 212),
+			new Tile("Red Paintable Wall", 187, 10, 10),
+			new Tile("Purple Paintable Wall", 109, 49, 137),
+			new Tile("Blue Paintable Wall", 28, 93, 216),
+			new Tile("Brown Paintable Wall", 124, 58, 28),
+			new Tile("White Paintable Wall", 157, 180, 203),
+			new Tile("Black Paintable Wall", 62, 62, 62),
+			new Tile("Orange Paintable Wall", 226, 121, 41),
+			new Tile("Cyan Paintable Wall", 31, 193, 179),
+			new Tile("Pink Paintable Wall", 246, 30, 120),
+			new Tile("Grey Paintable Wall", 131, 151, 159),
+			new Tile("Peach Paintable Wall", 224, 112, 100),
+			new Tile("Teal Paintable Wall", 26, 134, 117),
+			new Tile("Yellow Paintable Wall", 212, 194, 42),
+			new Tile("Green Paintable Wall", 64, 169, 16),
+		],
 	},
 	{
 		"set": TileType.Floors,
 		"tiles": [
-			//Lit
-			new Tile("Lit",159, 159, 159),
-			//Basic
-			new Tile("Wood",199, 148, 79),
-			new Tile("Stone",129, 132, 140),
-			  //new Tile("Paintable", 174, 189, 241), //See "Unpainted"
-			new Tile("Scarlet", 178, 53, 38),
-			new Tile("Coral",213, 109, 183),
-			new Tile("Galaxite",197, 197, 197,true),
-			  //new Tile("Glass",0,0,0), //Not visible on Map
-			new Tile("Woven Straw",255, 243, 113, true),
-			new Tile("Gleam Wood",128, 242, 255, true),
-			new Tile("Grimy Stone",54, 89, 86),
-			new Tile("Eerie",133, 102, 156),
-			//Rug
-			new Tile("Rug",124, 71, 123),
-			new Tile("Woven Mat",58, 139, 65),
-			//Loose
-			  //new Tile("Loose",0,0,0), //Not visible on Map
-			  //new Tile("Rose Petal",0,0,0), //Not visible on Map
-			  //new Tile("Daisy",0,0,0), //Not visible on Map
-            //Paintable Floor
-			new Tile("Red", 223, 0, 0),
-			new Tile("Orange", 237, 144, 73),
-			new Tile("Peach", 255, 151, 124),
-			new Tile("Yellow", 255, 232, 46, true),
-			new Tile("Green", 85, 182, 39),
-			new Tile("Teal", 15, 158, 136),
-			new Tile("Cyan", 41, 226, 180),
-			new Tile("Blue", 43, 108, 228),
-			new Tile("Purple", 139, 79, 167),
-			new Tile("Pink", 250, 69, 144),
-			new Tile("Brown", 151, 75, 40),
-			new Tile("Black", 76, 84, 85),
-			new Tile("Grey", 157, 175, 183),
-			new Tile("White",178, 206, 233, true),
-			new Tile("Unpainted", 174, 189, 241, true),
-			//Furniture
-			new Tile("Caveling", 130, 130, 130),
-			new Tile("Alien",71, 104, 126),
-		]
+			// crafted
+			new Tile("Woven Straw Floor", 255, 243, 113),
+			new Tile("Wood Floor", 199, 148, 79),
+			new Tile("Stone Floor", 129, 132, 140),
+			new Tile("Scarlet Floor", 178, 53, 38),
+			new Tile("Coral Floor", 213, 109, 183),
+			new Tile("Galaxite Floor", 197, 197, 197),
+			new Tile("Gleam Wood Floor", 128, 242, 255),
+			new Tile("Grimy Stone Floor", 54, 89, 86),
+
+			// seasonal
+			new Tile("Eerie Floor", 133, 102, 156),
+
+			// found
+			new Tile("Caveling Floor Tile", 130, 130, 130),
+			new Tile("Woven Mat", 58, 139, 65),
+		],
 	},
 	{
-		"set": TileType.Objects,
+		"set": TileType.FloorsPaintable,
 		"tiles": [
-			//Transport
-			new Tile("Rail",122, 122, 122),
-			new Tile("Conveyor Belt",104, 127, 174),
-			//Wood
-			new Tile("Wood", 225, 163, 104),
-			new Tile("Coral Wood", 253, 106, 173),
-			new Tile("Gleam Wood", 173, 235, 253, true ),
-			//Bridges
+			new Tile("Paintable Floor", 174, 189, 241),
+			new Tile("Red Paintable Floor", 223, 0, 0),
+			new Tile("Purple Paintable Floor", 139, 79, 167),
+			new Tile("Blue Paintable Floor", 43, 108, 228),
+			new Tile("Brown Paintable Floor", 151, 75, 40),
+			new Tile("White Paintable Floor", 178, 206, 233),
+			new Tile("Black Paintable Floor", 76, 84, 85),
+			new Tile("Orange Paintable Floor", 237, 144, 73),
+			new Tile("Cyan Paintable Floor", 41, 226, 180),
+			new Tile("Pink Paintable Floor", 250, 69, 144),
+			new Tile("Grey Paintable Floor", 157, 175, 183),
+			new Tile("Peach Paintable Floor", 255, 151, 124),
+			new Tile("Teal Paintable Floor", 15, 158, 136),
+			new Tile("Yellow Paintable Floor", 255, 232, 46),
+			new Tile("Green Paintable Floor", 85, 182, 39),
+		],
+	},
+	{
+		"set": TileType.FloorsLit,
+		"tiles": [
+			new Tile("Lit Floor", 159, 159, 159),
+			new Tile("Red Lit Floor", 246, 115, 115),
+			new Tile("Purple Lit Floor", 191, 124, 222),
+			new Tile("Blue Lit Floor", 109, 133, 255),
+			new Tile("Brown Lit Floor", 246, 186, 108),
+			new Tile("White Lit Floor", 255, 255, 255),
+			new Tile("Black Lit Floor", 44, 44, 44),
+			new Tile("Orange Lit Floor", 255, 163, 95),
+			new Tile("Cyan Lit Floor", 150, 255, 232),
+			new Tile("Pink Lit Floor", 255, 177, 225),
+			new Tile("Grey Lit Floor", 186, 228, 246),
+			new Tile("Peach Lit Floor", 255, 176, 155),
+			new Tile("Teal Lit Floor", 75, 183, 173),
+			new Tile("Yellow Lit Floor", 255, 248, 131),
+			new Tile("Green Lit Floor", 155, 230, 120),
+		],
+	},
+	{
+		"set": TileType.FloorsRug,
+		"tiles": [
+			new Tile("Rug", 124, 71, 123),
+			new Tile("Red Rug", 255, 62, 37),
+			new Tile("Purple Rug", 205, 31, 255),
+			new Tile("Blue Rug", 78, 54, 255),
+			new Tile("Brown Rug", 208, 113, 0),
+			new Tile("White Rug", 255, 243, 243),
+			new Tile("Black Rug", 13, 32, 43),
+			new Tile("Orange Rug", 255, 129, 45),
+			new Tile("Cyan Rug", 34, 236, 225),
+			new Tile("Pink Rug", 255, 83, 202),
+			new Tile("Grey Rug", 126, 135, 137),
+			new Tile("Peach Rug", 255, 129, 105),
+			new Tile("Teal Rug", 73, 166, 130),
+			new Tile("Yellow Rug", 252, 255, 0),
+			new Tile("Green Rug", 132, 246, 63),
+		],
+	},
+	{
+		"set": TileType.Bridges,
+		"tiles": [
+			// crafted
 			new Tile("Wood Bridge", 140, 88, 38),
 			new Tile("Stone Bridge", 123, 116, 108),
 			new Tile("Scarlet Bridge", 168, 30, 46),
 			new Tile("Coral Bridge", 200, 92, 204),
 			new Tile("Galaxite Bridge", 172, 179, 169),
-			  //new Tile("Glass Bridge", 0, 0, 0), //Not visible on Map
-			new Tile("Gleam Wood Bridge", 15, 210, 190,true),
+			new Tile("Gleam Wood Bridge", 15, 210, 190),
+
+			// found
 			new Tile("Metal Grate", 197, 135, 54),
-			//Fences
+		],
+	},
+	{
+		"set": TileType.Fences,
+		"tiles": [
+			// crafted
 			new Tile("Wood Fence", 112, 72, 33),
 			new Tile("Stone Fence", 97, 91, 85),
 			new Tile("Scarlet Fence", 128, 36, 46),
 			new Tile("Coral Fence", 159, 61, 164),
 			new Tile("Galaxite Fence", 152, 161, 149),
 			new Tile("Gleam Wood Fence", 16, 154, 166),
-			//Destructibles (Crates & Vessels)
+		],
+	},
+	{
+		"set": TileType.Electronics,
+		"tiles": [
+			new Tile("Electrical Wire", 89, 80, 73),
+			new Tile("Conveyor Belt", 104, 127, 174),
+		],
+	},
+	{
+		"set": TileType.Objects,
+		"tiles": [
+			// wood
+			new Tile("Wood", 225, 163, 104),
+			new Tile("Coral Wood", 253, 106, 173),
+			new Tile("Gleam Wood", 173, 235, 253),
+
+			// crates
 			new Tile("Wooden Crate", 114, 60, 17),
-			new Tile("Overgrown Wooden Crate", 97, 72, 34),
-			new Tile("Alien Tech Crate",76, 233, 224,true),
-			new Tile("Ancient Crate",77, 168, 202),
-			new Tile("Charred Crate",103, 127, 174),
+			new Tile("Clay Pot", 99, 48, 19),
+			new Tile("Ancient Crate / Metropolis Crate", 77, 168, 202),
+			new Tile("Flower Vessel", 205, 189, 48),
+			new Tile("Mold Vessel", 229, 229, 229),
+			new Tile("Beached Jelly", 48, 124, 205),
+			new Tile("Charred Crate", 103, 127, 174),
+			new Tile("Alien Tech Crate", 76, 233, 224),
+			new Tile("Desert Flower Vessel", 219, 92, 63),
 			new Tile("Driftwood Wooden Crate", 143, 123, 119),
-			new Tile("Metropolis Crate", 77, 168, 202),
-			new Tile("Temple Crate",238, 205, 99, true),
-			new Tile("Fossil Cluster",215, 220, 251, true),
-			new Tile("Sun Crystal",219, 140, 38),
-			  //new Tile("Pandorium Crystal",8, 175, 67), //See Ore
-			new Tile("Clay Pot",98, 47, 19),
-			new Tile("Beached Jelly",47, 124, 205),
-			new Tile("Slime Vessels",166, 53, 0),
-			new Tile("Poison Slime Vessels",91, 50, 110),
-			new Tile("Mold Vessel",229, 229, 229,true),
-			new Tile("Flower Vessel",205, 189, 48, true),
-			new Tile("Desert Flower Vessel",219, 92, 63),
-			new Tile("Oasis Flower Vessel",83, 109, 39),
-		]
+			new Tile("Radiation Crystal", 38, 222, 81),
+			new Tile("Slime Vessels", 166, 53, 0),
+			new Tile("Poison Slime Vessels", 91, 50, 110),
+			new Tile("Temple Crate", 238, 205, 99),
+			new Tile("Fossil Cluster", 215, 220, 251),// same as galaxite boulder?
+		],
 	},
 	/*{
 		"set": TileType.Ungrouped,
 		"tiles": [
-		]
-	},*/
+			new Tile("Pit", 31, 31, 31),
+			new Tile("Ground Acid Slime", 193, 170, 33),
+			new Tile("Indestructible Ancient Wire", 66, 93, 94),
+			new Tile("Rail", 122, 122, 122),
+			new Tile("Alien Floor Vent", 71, 104, 126),
+
+			// corals
+			new Tile("Bicolor Coral", 74, 97, 218),
+			new Tile("Crimson Coral", 187, 64, 52),
+			new Tile("Dish Coral", 159, 78, 159),
+		],
+	},
 ];
 
 let tileColorMap = [
