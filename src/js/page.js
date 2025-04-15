@@ -2,6 +2,29 @@ const updatemap = () => { drawMap(tilelist) };
 
 let tilelist = [];
 
+document.addEventListener("keypress", function (event) {
+	if (Alpine.store('data').mapLoaded === false) return;
+
+	if (event.key === 'c') {
+		recenterMap();
+	}
+
+	if (event.key === 'h') {
+		Alpine.store('data').showMazeHoles = !Alpine.store('data').showMazeHoles;
+		redrawMap();
+	}
+
+	if (event.key === 'g') {
+		Alpine.store('data').showChunkGrid = !Alpine.store('data').showChunkGrid;
+		redrawMap();
+	}
+
+	if (event.key === 'G') {
+		Alpine.store('data').showMobGrid = !Alpine.store('data').showMobGrid;
+		redrawMap();
+	}
+});
+
 document.addEventListener('alpine:init', function () {
 
 	const canWatchFile = typeof window.showOpenFilePicker !== "undefined";

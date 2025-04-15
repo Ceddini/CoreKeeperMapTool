@@ -77,9 +77,8 @@ let tileColors = [
 			new Tile("Shimmering Water", 154, 198, 243),
 			new Tile("Grimy Water", 61, 57, 89),
 			new Tile("Sea Water", 52, 208, 255),
-
-		],
-
+			new Tile("Lava", 204, 68, 33),
+		]
 	},
 	{
 		"set": TileType.Boulders,
@@ -101,7 +100,7 @@ let tileColors = [
 		"tiles": [
 			new Tile("Copper Ore", 237, 96, 87),
 			new Tile("Tin Ore", 142, 122, 118),
-			new Tile("Gold Ore", 242, 204, 61,true),
+			new Tile("Gold Ore", 242, 204, 61, true),
 			new Tile("Iron Ore", 130, 155, 203),
 			new Tile("Scarlet Ore", 206, 59, 59),
 			new Tile("Octarine Ore", 139, 82, 238),
@@ -1120,4 +1119,72 @@ let tileColorMap = [
 		"g": "128",
 		"b": "132"
 	}
+];
+*/
+];
+
+let tileColorMap = [
+	{
+		"tilesetname": "Stone",
+		"name": "Stone Wall",
+		"r": "73",
+		"g": "103",
+		"b": "125"
+	},
+	{
+		"tilesetname": "Stone",
+		"type": "ground",
+		"name": "Stone Ground",
+		"r": "103",
+		"g": "131",
+		"b": "151"
+	},
+	{
+		"tilesetname": "Clay",
+		"type": "ground",
+		"name": "Clay Wall",
+		"r": "193",
+		"g": "100",
+		"b": "54"
+	},
+	{
+		"tilesetname": "Clay",
+		"type": "ground",
+		"name": "Clay Ground",
+		"r": "232",
+		"g": "139",
+		"b": "105"
+	},
+	{
+		"tilesetname": "Wilderness",
+		"type": "ground",
+		"name": "Grass Wall",
+		"r": "22",
+		"g": "131",
+		"b": "27"
+	},
+	{
+		"tilesetname": "Wilderness",
+		"type": "ground",
+		"name": "Grass Ground",
+		"r": "61",
+		"g": "155",
+		"b": "65"
+	},
+	{
+		"tilesetname": "SunkenSea",
+		"type": "ground",
+		"name": "Beach Wall",
+		"r": "180",
+		"g": "147",
+		"b": "154"
+	},
+	{
+		"tilesetname": "SunkenSea",
+		"type": "ground",
+		"name": "Beach Ground",
+		"r": "235",
+		"g": "192",
+		"b": "190"
+	},
 ];
