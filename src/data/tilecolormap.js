@@ -79,6 +79,7 @@ let tileColors = [
 			new Tile("Sea Water", 52, 208, 255),
 
 		],
+
 	},
 	{
 		"set": TileType.Boulders,
@@ -93,13 +94,14 @@ let tileColors = [
 			new Tile("Solarite Boulder", 226, 161, 44),
 			new Tile("Pandorium Boulder", 9, 175, 36),
 		],
+
 	},
 	{
 		"set": TileType.Ores,
 		"tiles": [
 			new Tile("Copper Ore", 237, 96, 87),
 			new Tile("Tin Ore", 142, 122, 118),
-			new Tile("Gold Ore", 242, 204, 61),
+			new Tile("Gold Ore", 242, 204, 61,true),
 			new Tile("Iron Ore", 130, 155, 203),
 			new Tile("Scarlet Ore", 206, 59, 59),
 			new Tile("Octarine Ore", 139, 82, 238),
@@ -348,7 +350,7 @@ let tileColors = [
 			new Tile("Fossil Cluster", 215, 220, 251),// same as galaxite boulder?
 		],
 	},
-	{
+	/*{
 		"set": TileType.Ungrouped,
 		"tiles": [
 			new Tile("Pit", 31, 31, 31),
