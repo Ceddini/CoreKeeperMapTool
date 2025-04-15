@@ -391,20 +391,22 @@ function annulus(ctx, centerX, centerY,
 }
 
 function drawArcs(start, end) {
+	console.log(start * (180 / Math.PI), end * (180 / Math.PI));
+	console.log(shouldDrawOnOverlay);
 	if (shouldDrawOnOverlay) {
 		// stone
 		drawOverlayArcs(
 			SEARCH_RADII.min,
 			SEARCH_RADII.max,
 			start - STONE_ARC_START_OFFSET,
-			end - STONE_ARC_END_OFFSET,
+			start + Math.PI - STONE_ARC_END_OFFSET,
 			"#C2C2C2", false);
 		// clay
 		drawOverlayArcs(
 			SEARCH_RADII.min,
 			SEARCH_RADII.max,
 			start - CLAY_ARC_START_OFFSET,
-			end - CLAY_ARC_END_OFFSET,
+			start + Math.PI - CLAY_ARC_END_OFFSET,
 			"#A66829", false);
 	} else {
 		// stone
@@ -425,6 +427,8 @@ function drawArcs(start, end) {
 }
 
 function drawOuterArcs(start, end) {
+	console.log(start * (180 / Math.PI), end * (180 / Math.PI));
+	console.log(shouldDrawOnOverlay);
 	if (shouldDrawOnOverlay) {
 		// sea
 		drawOverlayArcs(
@@ -576,11 +580,12 @@ function highlightSelected() {
 		highlightColors(myImage, searchobj);
 	}
 
-	if (Alpine.store("data").showMazeHoles || Alpine.store("data").cropRingsToBiome) {
+	if (Alpine.store("data").showMazeHoles || Alpine.store("data").cropRingsToBiome || Alpine.stsore("data").showArcs) {
 		findStone(myImage.data, canvas.width);
 
-		if (Alpine.store("data").cropRingsToBiome) {
+		if (Alpine.store("data").cropRingsToBiome || Alpine.stsore("data").showArcs) {
 			findWilderness(myImage.data, canvas.width);
+			console.log("FINDING WILDERNESS");
 		}
 	}
 	_global_ctx.putImageData(myImage, 0, 0);
@@ -632,11 +637,11 @@ function highlightBoulder(myImage, r, g, b, x, y) {
 
 	count = 0;
 	/*if (x > 0 &&  y > 0) {
-	  testBoulder(myImage.width, myImageData, r, g, b, x, y, x - 1, y - 1);
+		testBoulder(myImage.width, myImageData, r, g, b, x, y, x - 1, y - 1);
 	}
 	//test bottom left
 	if (x > 0 && y < myImage.height) {
-	  testBoulder(myImage.width, myImageData, r, g, b, x, y, x - 1, y + 1);
+		testBoulder(myImage.width, myImageData, r, g, b, x, y, x - 1, y + 1);
 	}*/
 	//test bottom right
 	if (x < myImage.width && y < myImage.height) {
