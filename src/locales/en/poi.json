@@ -1,0 +1,117 @@
+{
+	"category": {
+		"bosses": "Bosses",
+		"optional_bosses": "Optional Bosses",
+		"points_of_interest": "Points of Interest"
+	},
+	"location": {
+		"the_underground": "The Underground",
+		"larva_hive": "Larva Hive",
+		"ruins": "Ruins",
+		"clay": "Clay",
+		"stone": "Stone",
+		"sunken_sea": "Sunken Sea",
+		"the_wilderness": "The Wilderness",
+		"desert_of_beginnings": "Desert of Beginnings",
+		"passage": "The Passage"
+	},
+	"description": "<strong>{{name}}</strong><br>Location(s): {{locations}}<br>Distance(s) from Core: {{radii}}",
+	"bosses": {
+		"glurch": {
+			"name": "Glurch",
+			"full_name": "Glurch the Abominous Mass"
+		},
+		"ghorm": {
+			"name": "Ghorm",
+			"full_name": "Ghorm the Devourer"
+		},
+		"malugaz": {
+			"name": "Malugaz",
+			"full_name": "Malugaz the Corrupted"
+		},
+		"azeos": {
+			"name": "Azeos",
+			"full_name": "Azeos the Sky Titan"
+		},
+		"omoroth": {
+			"name": "Omoroth",
+			"full_name": "Omoroth the Sea Titan"
+		},
+		"ra-akar": {
+			"name": "Ra-Akar",
+			"full_name": "Ra-Akar the Sand Titan"
+		},
+		"core-commander": {
+			"name": "Core Commander",
+			"full_name": "Core Commander"
+		}
+	},
+	"optional_bosses": {
+		"hive_mother": {
+			"name": "Hive Mother",
+			"full_name": "The Hive Mother"
+		},
+		"ivy": {
+			"name": "Ivy",
+			"full_name": "Ivy the Poisonous Mass"
+		},
+		"morpha": {
+			"name": "Morpha",
+			"full_name": "Morpha the Aquatic Mass"
+		},
+		"igneous": {
+			"name": "Igneous",
+			"full_name": "Igneous the Molten Mass"
+		},
+		"urschleim": {
+			"name": "Urschleim",
+			"full_name": "Urschleim"
+		}
+	},
+	"points_of_interest": {
+		"mold_dungeon": {
+			"name": "Mold Dungeon",
+			"full_name": "Mold Dungeon"
+		},
+		"the_vault": {
+			"name": "The Vault",
+			"full_name": "The Vault"
+		},
+		"broken_core_1": {
+			"name": "Broken Core 1",
+			"full_name": "Broken Core 1"
+		},
+		"broken_core_2": {
+			"name": "Broken Core 2",
+			"full_name": "Broken Core 2"
+		},
+		"broken_core_3": {
+			"name": "Broken Core 3",
+			"full_name": "Broken Core 3"
+		},
+		"titan_temple": {
+			"name": "Titan Temple",
+			"full_name": "Titan Temple"
+		},
+		"prince_dungeon": {
+			"name": "Prince Dungeon",
+			"full_name": "Prince Dungeon"
+		},
+		"queen_dungeon": {
+			"name": "Queen Dungeon",
+			"full_name": "Queen Dungeon"
+		},
+		"king_dungeon": {
+			"name": "King Dungeon",
+			"full_name": "King Dungeon"
+		},
+		"ancient_forge": {
+			"name": "Ancient Forge",
+			"full_name": "Ancient Forge"
+		},
+		"crystal_meteor": {
+			"name": "Crystal Meteor",
+			"full_name": "Crystal Meteor"
+		}
+	}
+}

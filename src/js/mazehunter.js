@@ -1,5 +1,5 @@
-const SEARCH_RADII = { min: 140, min2: 19600, max: 500, max2: 250000 };
-const OUTER_SEARCH_RADII = { min: 500, max: 800 }
+const SEARCH_RADII = { min: 150, min2: 19600, max: 400, max2: 250000 };
+const OUTER_SEARCH_RADII = { min: 400, max: 1170 }
 const MAZE_HIGLIGHT = { 1: { r: 255, g: 0, b: 255 }, 2: { r: 0, g: 255, b: 255 }, 3: { r: 0, g: 255, b: 0 } };
 const STONE_FILTER = { count: 0 };
 const CLAY_FILTER = { count: 0 };
@@ -139,7 +139,9 @@ function findStone(myImageData, width) {
 	stoneArc.start = maxStone.index * deltaRadians;
 	stoneArc.endTicks = maxClay.index;
 	stoneArc.end = maxClay.index * deltaRadians;
-	findHole(myImageData, width);
+
+	if (Alpine.store("data").showSmallMazeHoles || Alpine.store("data").showMediumMazeHoles || Alpine.store("data").showLargeMazeHoles)
+		findHole(myImageData, width);
 }
 
 function findWilderness(myImageData, width) {
@@ -208,7 +210,18 @@ function findHole(myImageData, width) {
 					if (hole._fits > 0) {
 						let holeColor = MAZE_HIGLIGHT[hole._fits];
 						delete hole._fits;
-						colorHole(myImageData, width, hole, holeColor);
+
+						if (Alpine.store("data").showSmallMazeHoles && holeColor === MAZE_HIGLIGHT[1]) {
+							colorHole(myImageData, width, hole, holeColor);
+						}
+
+						if (Alpine.store("data").showMediumMazeHoles && holeColor === MAZE_HIGLIGHT[2]) {
+							colorHole(myImageData, width, hole, holeColor);
+						}
+
+						if (Alpine.store("data").showLargeMazeHoles && holeColor === MAZE_HIGLIGHT[3]) {
+							colorHole(myImageData, width, hole, holeColor);
+						}
 					}
 				}
 			}
@@ -392,3 +405,16 @@ function buildStoneFilter() {
 	}
 }
 buildStoneFilter();
+
+function toggleAllMazeHoles(event) {
+	if (Alpine.store("data").showSmallMazeHoles && Alpine.store("data").showMediumMazeHoles && Alpine.store("data").showLargeMazeHoles) {
+		Alpine.store("data").showSmallMazeHoles = false;
+		Alpine.store("data").showMediumMazeHoles = false;
+		Alpine.store("data").showLargeMazeHoles = false;
+	} else {
+		Alpine.store("data").showSmallMazeHoles = true;
+		Alpine.store("data").showMediumMazeHoles = true;
+		Alpine.store("data").showLargeMazeHoles = true;
+	}
+	redrawDebounce(event);
+}

@@ -2,9 +2,42 @@ a {
 	text-decoration: none;
 }
 
-#glowCookies-banner {
+#mouse-position {
 	position: absolute;
+	bottom: 0;
+	right: 0;
+	color: white;
+	background: rgba(0, 0, 0, 0.6);
+	padding: 4px;
+	text-align: right;
+}
+
+#curtain {
+	position: absolute;
+	inset: 0;
 	z-index: 10000;
+	background-color: rgb(33, 37, 41);
+	opacity: 1;
+	transition: opacity 300ms ease-in-out;
+
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+#curtain.hidden {
+	opacity: 0;
+	pointer-events: none;
+}
+
+#mapcanvas {
+	z-index: -2;
+}
+#overlaycanvas {
+	z-index: 1;
+	position: absolute;
+	inset: 0;
+	pointer-events: none;
+
 }
 
 .text-bg-dark .btn-close {
@@ -33,7 +66,7 @@ a {
 	background-color: white;
 }
 #findMapGuide > div {
-	padding: 16px;
+	margin: 16px;
 }
 #findMapGuide h4 {
 	color: inherit;

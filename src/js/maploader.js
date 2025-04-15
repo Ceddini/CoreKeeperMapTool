@@ -42,7 +42,7 @@ function loadMapFile(fileInput, gridarr, callback) {
 }
 
 async function loadStandardFile(gridarr, callback) {
-	const response = await fetch("https://maptool.ceschmitt.de/data/preview_map/1.mapparts.gzip")
+	const response = await fetch("https://maptool-dev.ceschmitt.de/data/preview_map/1.mapparts.gzip")
 		.then((response) => response.blob())
 		.then((blob) => {
 			loadSingleFile(0, [blob], gridarr, callback);
@@ -50,8 +50,17 @@ async function loadStandardFile(gridarr, callback) {
 }
 
 function downloadMap(canvas) {
-	var link = document.createElement('a');
+	const { x, y } = getCoreOffset();
+
+	shouldDrawOnOverlay = false;
+	redrawMap();
+
+	const link = document.createElement('a');
 	link.download = 'corekeeper_map.png';
 	link.href = canvas.toDataURL()
 	link.click();
+	link.remove();
+
+	shouldDrawOnOverlay = true;
+	redrawMap();
 }

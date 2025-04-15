@@ -8,6 +8,24 @@ let _global_ctx;
 let coreLoc = { x: 0, y: 0 };
 let pixelMap = {};
 let panZoomElem;
+let mousePosElem;
+
+let shouldDrawOnOverlay = true;
+
+const STONE_ARC_START_OFFSET = Math.PI / 2;
+const STONE_ARC_END_OFFSET = Math.PI / 2;
+
+const CLAY_ARC_START_OFFSET = -Math.PI / 2;
+const CLAY_ARC_END_OFFSET = -Math.PI / 2;
+
+const DESERT_ARC_START_OFFSET = Math.PI / 2 + ((2 * Math.PI) / 3);
+const DESERT_ARC_END_OFFSET = Math.PI / 2 + ((2 * Math.PI) / 3);
+
+const WILDERNESS_ARC_START_OFFSET = Math.PI / 2 + ((2 * Math.PI) / 3) * 2;
+const WILDERNESS_ARC_END_OFFSET = Math.PI / 2 + ((2 * Math.PI) / 3) * 2;
+
+const SUNKENSEA_ARC_START_OFFSET = Math.PI / 2;
+const SUNKENSEA_ARC_END_OFFSET = Math.PI / 2;
 
 function panImage(dx, dy) {
 	cameraOffset.x += dx;
@@ -31,7 +49,8 @@ function getCoreOffset() {
 
 function panToCore() {
 	const { x, y } = getCoreOffset();
-	panZoomElem.pan(x, y);
+	xOffset = (document.getElementById("offcanvas").classList.contains("show")) ? 200 : 0;
+	panZoomElem.pan(x + xOffset, y);
 }
 
 function panToPreviousCoreRelativeOffset() {
@@ -120,6 +139,32 @@ function updateCoordinates(event) {
 	if (tempY < 0) { tempY = 0; }
 }
 
+
+let mouseTilePos = { x: 0, y: 0 };
+
+function updateMousePos(event) {
+	if (Alpine.store("data").mapLoaded === false) return;
+
+	const mouseX = event.pageX - (window.innerWidth / 2);
+	const mouseY = event.pageY - (window.innerHeight / 2);
+
+	const { x, y } = getCoreRelativeOffset();
+
+	let posX = Math.round(mouseX / panZoomElem.getScale() + x);
+	let posY = Math.round(mouseY / panZoomElem.getScale() + y);
+
+	mouseTilePos.x = posX;
+	mouseTilePos.y = posY;
+
+	let distance = Math.round(Math.sqrt((posX * posX) + (posY * posY)));
+
+	mousePosElem.innerHTML = `X: ${posX}, Y: ${-posY}<br>Distance: ${distance}`;
+}
+
+function drawExamplePin() {
+	drawOverlayPin(0, 0, "Spawn location");
+}
+
 function setContext(ctx, width, height) {
 	ctx.imageSmoothingEnabled = false;
 	ctx.clearRect(0, 0, width, height);
@@ -129,6 +174,8 @@ function redrawMap() {
 	const canvas = document.getElementById("mapcanvas");
 	setContext(_global_ctx, canvas.width, canvas.height);
 	_global_ctx.drawImage(_image_cache, 0, 0);
+	// Reset overlays
+	resetOverlayLists();
 	decorateMap(canvas.width, canvas.height);
 }
 
@@ -139,24 +186,29 @@ function loop(val, min, max) {
 function decorateMap(width, height) {
 	highlightSelected();
 
-	const showArcsCheckbox = document.getElementById("showArcs");
+	const showArcs = document.getElementById("showArcs")?.checked;
+	const cropRingsToBiome = Alpine.store('data').cropRingsToBiome;
+	const manualArcRotation = Alpine.store('data').manualArcRotation;
 
-	if (showArcsCheckbox.checked) {
-		const manualArcRotation = Alpine.store('data').manualArcRotation;
-
+	if (showArcs) {
 		const innerStart = (manualArcRotation) ? document.getElementById('innerArcSlider').value * Math.PI / 180 : stoneArc.start;
 		const innerEnd = (manualArcRotation) ? loop(document.getElementById('innerArcSlider').value - 180, 0, 359) * Math.PI / 180 : stoneArc.end;
 
-		drawArcs(_global_ctx, innerStart, innerEnd);
+		drawArcs(innerStart, innerEnd);
 
 		const outerStart = (manualArcRotation) ? document.getElementById('outerArcSlider').value * Math.PI / 180 : wildernessArc.start;
 		const outerEnd = (manualArcRotation) ? loop(document.getElementById('outerArcSlider').value - 120, 0, 359) * Math.PI / 180 : wildernessArc.end;
 
-		drawOuterArcs(_global_ctx, outerStart, outerEnd);
+		drawOuterArcs(outerStart, outerEnd);
+
+		drawOuterRing();
 	}
 
 	if (Alpine.store('data').showCustomRing) {
-		drawCircle(_global_ctx, Alpine.store('data').customRing);
+		if (shouldDrawOnOverlay)
+			drawOverlayCircle(parseInt(Alpine.store('data').customRing));
+		else
+			drawCircle(parseInt(Alpine.store('data').customRing))
 	}
 
 	if (Alpine.store('data').mapLoaded) {
@@ -164,7 +216,70 @@ function decorateMap(width, height) {
 			category.items.forEach(circle => {
 				if (circle.visible)
 					circle.radii.forEach(radius => {
-						drawCircle(_global_ctx, radius, circle.color);
+						if (cropRingsToBiome) {
+							let hasBeenCropped = false;
+
+							circle.locations.forEach(location => {
+								if (location.ring) {
+									if (location.ring === RINGS.PASSAGE) {
+										if (shouldDrawOnOverlay)
+											drawOverlayCircle(radius, circle.color);
+										else
+											drawCircle(radius, circle.color);
+									} else if (location.ring === RINGS.CLAY || location.ring === RINGS.STONE) {
+										const start = (manualArcRotation) ? document.getElementById('innerArcSlider').value * Math.PI / 180 : stoneArc.start;
+										const end = (manualArcRotation) ? loop(document.getElementById('innerArcSlider').value - 180, 0, 359) * Math.PI / 180 : stoneArc.end;
+
+										let startOffset = endOffset = 0;
+										switch (location.ring) {
+											case RINGS.CLAY:
+												startOffset = CLAY_ARC_START_OFFSET;
+												endOffset = CLAY_ARC_END_OFFSET;
+												break;
+											case RINGS.STONE:
+												startOffset = STONE_ARC_START_OFFSET;
+												endOffset = STONE_ARC_END_OFFSET;
+												break;
+										}
+
+										drawOverlayAnnulus(radius, start - startOffset, end - endOffset, circle.color, false);
+										hasBeenCropped = true;
+									} else {
+										const start = (manualArcRotation) ? document.getElementById('outerArcSlider').value * Math.PI / 180 : wildernessArc.start;
+										const end = (manualArcRotation) ? loop(document.getElementById('outerArcSlider').value - 120, 0, 359) * Math.PI / 180 : wildernessArc.end;
+
+										let startOffset = endOffset = 0;
+										switch (location.ring) {
+											case RINGS.SUNKENSEA:
+												startOffset = SUNKENSEA_ARC_START_OFFSET;
+												endOffset = SUNKENSEA_ARC_END_OFFSET;
+												break;
+											case RINGS.WILDERNESS:
+												startOffset = WILDERNESS_ARC_START_OFFSET;
+												endOffset = WILDERNESS_ARC_END_OFFSET;
+												break;
+											case RINGS.DESERT:
+												startOffset = DESERT_ARC_START_OFFSET;
+												endOffset = DESERT_ARC_END_OFFSET;
+												break;
+										}
+										drawOverlayAnnulus(radius, start - startOffset, end - endOffset, circle.color, true);
+										hasBeenCropped = true;
+									}
+								}
+							});
+
+							if (hasBeenCropped === false)
+								if (shouldDrawOnOverlay)
+									drawOverlayCircle(radius, circle.color);
+								else
+									drawCircle(radius, circle.color);
+						} else {
+							if (shouldDrawOnOverlay)
+								drawOverlayCircle(radius, circle.color);
+							else
+								drawCircle(radius, circle.color);
+						}
 					});
 			});
 		});
@@ -241,17 +356,24 @@ function userDefinedChanged() {
 	}
 }
 
-function drawCircle(ctx, radius, color = "#FFFFFF") {
+function drawCircle(radius, color = "#FFFFFF") {
+	_global_ctx.globalAlpha = Alpine.store('data').ringTransparency / 100;
+	_global_ctx.lineWidth = 20;
+	_global_ctx.strokeStyle = color;
+	_global_ctx.beginPath();
+	_global_ctx.arc(coreLoc.x, coreLoc.y, radius, 0, 2 * Math.PI);
+	_global_ctx.stroke();
+	_global_ctx.globalAlpha = 1.0;
+}
+
+function drawAnnulus(ctx, radius, start, end, color = "#FFFFFF") {
 	ctx.globalAlpha = Alpine.store('data').ringTransparency / 100;
-	ctx.lineWidth = 20;
-	ctx.strokeStyle = color;
-	ctx.beginPath();
-	ctx.arc(coreLoc.x, coreLoc.y, radius, 0, 2 * Math.PI);
-	ctx.stroke();
+	ctx.fillStyle = color;
+	annulus(ctx, coreLoc.x, coreLoc.y, radius - 10, radius + 10, start, end, true);
 	ctx.globalAlpha = 1.0;
 }
 
-function annulus(centerX, centerY,
+function annulus(ctx, centerX, centerY,
 	innerRadius, outerRadius,
 	startAngle, endAngle,
 	anticlockwise) {
@@ -260,56 +382,128 @@ function annulus(centerX, centerY,
 	var startOfOuterArcX = outerRadius * Math.cos(th2) + centerX;
 	var startOfOuterArcY = outerRadius * Math.sin(th2) + centerY;
 
-	_global_ctx.beginPath();
-	_global_ctx.arc(centerX, centerY, innerRadius, th1, th2, anticlockwise);
-	_global_ctx.lineTo(startOfOuterArcX, startOfOuterArcY);
-	_global_ctx.arc(centerX, centerY, outerRadius, th2, th1, !anticlockwise);
-	_global_ctx.fill();
-	_global_ctx.closePath();
+	ctx.beginPath();
+	ctx.arc(centerX, centerY, innerRadius, th1, th2, anticlockwise);
+	ctx.lineTo(startOfOuterArcX, startOfOuterArcY);
+	ctx.arc(centerX, centerY, outerRadius, th2, th1, !anticlockwise);
+	ctx.fill();
+	ctx.closePath();
 }
 
-function drawArcs(ctx, start, end) {
-	ctx.globalAlpha = Alpine.store('data').biomeTransparency / 100;
-
-	start = start + (2.5 * Math.PI / 180);
-	end = end - (2.5 * Math.PI / 180);
-
-	//ARC starts 0 at 3 oclock
-	_global_ctx.fillStyle = "#C2C2C2";
-	annulus(coreLoc.x, coreLoc.y, 150, SEARCH_RADII.max - 50, start - Math.PI / 2, end - Math.PI / 2);
-
-	// _global_ctx.beginPath();
-	// _global_ctx.arc(coreLoc.x, coreLoc.y, SEARCH_RADII.max - 50, start - Math.PI / 2, end - Math.PI / 2);
-	// _global_ctx.fill();
-
-	_global_ctx.fillStyle = "#A66829";
-	annulus(coreLoc.x, coreLoc.y, 150, SEARCH_RADII.max - 50, start + Math.PI / 2, end + Math.PI / 2);
-
-	// _global_ctx.beginPath();
-	// _global_ctx.arc(coreLoc.x, coreLoc.y, SEARCH_RADII.max - 50, start + Math.PI / 2, end + Math.PI / 2);
-	// _global_ctx.fill();
-
-	ctx.globalAlpha = 1.0;
+function drawArcs(start, end) {
+	if (shouldDrawOnOverlay) {
+		// stone
+		drawOverlayArcs(
+			SEARCH_RADII.min,
+			SEARCH_RADII.max,
+			start - STONE_ARC_START_OFFSET,
+			end - STONE_ARC_END_OFFSET,
+			"#C2C2C2", false);
+		// clay
+		drawOverlayArcs(
+			SEARCH_RADII.min,
+			SEARCH_RADII.max,
+			start - CLAY_ARC_START_OFFSET,
+			end - CLAY_ARC_END_OFFSET,
+			"#A66829", false);
+	} else {
+		// stone
+		drawArc(
+			SEARCH_RADII.min,
+			SEARCH_RADII.max,
+			start - STONE_ARC_START_OFFSET,
+			end - STONE_ARC_END_OFFSET,
+			"#C2C2C2");
+		// clay
+		drawArc(
+			SEARCH_RADII.min,
+			SEARCH_RADII.max,
+			start - CLAY_ARC_START_OFFSET,
+			end - CLAY_ARC_END_OFFSET,
+			"#A66829");
+	}
 }
 
-function drawOuterArcs(ctx, start, end) {
-	ctx.globalAlpha = Alpine.store('data').biomeTransparency / 100;
+function drawOuterArcs(start, end) {
+	if (shouldDrawOnOverlay) {
+		// sea
+		drawOverlayArcs(
+			OUTER_SEARCH_RADII.min,
+			OUTER_SEARCH_RADII.max,
+			start - SUNKENSEA_ARC_START_OFFSET,
+			end - SUNKENSEA_ARC_END_OFFSET,
+			"#3B7EDB",
+			true)
+		// wilderness
+		drawOverlayArcs(
+			OUTER_SEARCH_RADII.min,
+			OUTER_SEARCH_RADII.max,
+			start - WILDERNESS_ARC_START_OFFSET,
+			end - WILDERNESS_ARC_END_OFFSET,
+			"#2B941B",
+			true);
+		// desert
+		drawOverlayArcs(
+			OUTER_SEARCH_RADII.min,
+			OUTER_SEARCH_RADII.max,
+			start - DESERT_ARC_START_OFFSET,
+			end - DESERT_ARC_END_OFFSET,
+			"#CFC35D",
+			true);
+	} else {
+		// sea
+		drawArc(
+			OUTER_SEARCH_RADII.min,
+			OUTER_SEARCH_RADII.max,
+			start - SUNKENSEA_ARC_START_OFFSET,
+			end - SUNKENSEA_ARC_END_OFFSET,
+			"#3B7EDB")
+		// wilderness
+		drawArc(
+			OUTER_SEARCH_RADII.min,
+			OUTER_SEARCH_RADII.max,
+			start - WILDERNESS_ARC_START_OFFSET,
+			end - WILDERNESS_ARC_END_OFFSET,
+			"#2B941B");
+		// desert
+		drawArc(
+			OUTER_SEARCH_RADII.min,
+			OUTER_SEARCH_RADII.max,
+			start - DESERT_ARC_START_OFFSET,
+			end - DESERT_ARC_END_OFFSET,
+			"#CFC35D");
+	}
+}
 
-	_global_ctx.fillStyle = "#3B7EDB";
-	annulus(coreLoc.x, coreLoc.y, OUTER_SEARCH_RADII.min + 20, OUTER_SEARCH_RADII.max + 700, start - Math.PI / 2 - (2.25 * Math.PI / 180), end - Math.PI / 2 + (2.25 * Math.PI / 180), true);
+function drawOuterRing() {
+	start = 0;
+	end = 2 * Math.PI;
 
-	_global_ctx.fillStyle = "#2B941B";
-	annulus(coreLoc.x, coreLoc.y, OUTER_SEARCH_RADII.min + 20, OUTER_SEARCH_RADII.max + 700, start - Math.PI / 2 - (2.25 * Math.PI / 180) + ((2 * Math.PI) / 3), end - Math.PI / 2 + (2.25 * Math.PI / 180) + ((2 * Math.PI) / 3), true);
+	if (shouldDrawOnOverlay) {
+		// passage
+		drawOverlayArcs(
+			OUTER_SEARCH_RADII.max,
+			1350,
+			start,
+			end,
+			"#EFEFEF",
+			false);
+	} else {
+		// passage
+		drawArc(
+			OUTER_SEARCH_RADII.max,
+			1350,
+			start,
+			end,
+			"#EFEFEF");
+	}
+}
 
-	_global_ctx.fillStyle = "#CFC35D";
-	annulus(coreLoc.x, coreLoc.y, OUTER_SEARCH_RADII.min + 20, OUTER_SEARCH_RADII.max + 700, start - Math.PI / 2 - (2.25 * Math.PI / 180) + ((2 * Math.PI) / 3) * 2, end - Math.PI / 2 + (2.25 * Math.PI / 180) + ((2 * Math.PI) / 3) * 2, true);
-
-	// _global_ctx.beginPath();
-	//_global_ctx.arc(coreLoc.x, coreLoc.y, OUTER_SEARCH_RADII.max, wildernessArc.start - Math.PI / 2, wildernessArc.end - Math.PI / 2, true);
-	//_global_ctx.lineTo()
-	//_global_ctx.arc(coreLoc.x, coreLoc.y, SEARCH_RADII.max, wildernessArc.start - Math.PI / 2, wildernessArc.end - Math.PI / 2, false);
-	// _global_ctx.fill();
-	ctx.globalAlpha = 1.0;
+function drawArc(innerRadius, outerRadius, start, end, color = "#FFFFFF", anticlockwise = true) {
+	_global_ctx.globalAlpha = Alpine.store('data').ringTransparency / 100;
+	_global_ctx.fillStyle = color;
+	annulus(_global_ctx, coreLoc.x, coreLoc.y, innerRadius * scale, outerRadius * scale, start, end, anticlockwise);
+	_global_ctx.globalAlpha = 1.0;
 }
 
 function drawMap(tiles) {
@@ -352,8 +546,21 @@ function drawMap(tiles) {
 		panToCore();
 	}
 
-	Alpine.store('data').mapLoaded = true;
-	Alpine.store('data').firstTimeLoaded = true;
+	if (Alpine.store("data").mapLoaded === false) {
+		panZoomElem.zoom(1, { animate: true });
+		resetOverlayLists();
+		panToCore();
+		Alpine.store('data').mapLoaded = true;
+		drawOverlay();
+	}
+
+	if (Alpine.store("data").firstTimeLoaded === false) {
+		Alpine.store("data").faqOpen = false;
+		Alpine.store("data").aboutOpen = false;
+		Alpine.store("data").cookiesOpen = false;
+	}
+	Alpine.store("data").firstTimeLoaded = true;
+
 	decorateMap(canvas.width, canvas.height);
 }
 
@@ -369,8 +576,12 @@ function highlightSelected() {
 		highlightColors(myImage, searchobj);
 	}
 
-	if (Alpine.store('data').showMazeHoles) {
+	if (Alpine.store("data").showMazeHoles || Alpine.store("data").cropRingsToBiome) {
 		findStone(myImage.data, canvas.width);
+
+		if (Alpine.store("data").cropRingsToBiome) {
+			findWilderness(myImage.data, canvas.width);
+		}
 	}
 	_global_ctx.putImageData(myImage, 0, 0);
 }

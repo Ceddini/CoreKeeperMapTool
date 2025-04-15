@@ -34,25 +34,50 @@ document.addEventListener('alpine:init', function () {
 
 	Alpine.store('tilecolormap', { list: tileColors, visible: [] });
 
+	Alpine.store("pins", []);
+
+	Alpine.store('player', {
+		posX: 0,
+		posY: 0,
+		radius: 208,
+		color: "#000000"
+	})
+
+
 	Alpine.store('data', {
+		// Loaded from savehandler.js
+		tutorialShown: loadSetting("tutorialShown"),
+		acceptedAdTracking: loadSetting("acceptedAdTracking"),
+		acceptedAnalytics: loadSetting("acceptedAnalytics"),
+		savedCookies: loadSetting("savedCookies"),
+
 		mapLoaded: false,
 		firstTimeLoaded: false,
+		faqOpen: true,
+		aboutOpen: true,
+		cookiesOpen: !loadSetting("savedCookies"),
 		isExampleMap: false,
 		canWatchFile,
 
-		tutorialShown: tutorialShown,
 		mapPickerShown: false, // TODO: RESET TO TRUE TO ENABLE
 		directoryHandle: null,
 
 		arcSlidersPrefilled: false,
 
+		showPlayerRadius: false,
+
 		showArcs: false,
 		showChunkGrid: false,
 		showMobGrid: false,
 		showCustomRing: false,
-		showMazeHoles: false,
+		showSmallMazeHoles: false,
+		showMediumMazeHoles: false,
+		showLargeMazeHoles: false,
 		manualArcRotation: false,
-		cropRingsToBiome: false,
+		cropRingsToBiome: true,
+
+		showCustomHighlightColor: false,
+		customHighlightColor: "#FF0000",
 
 		innerSlider: 0,
 		outerSlider: 0,
@@ -79,29 +104,14 @@ window.addEventListener('DOMContentLoaded', () => {
 		maxScale: MAX_ZOOM,
 		canvas: true,
 	});
+	mousePosElem = document.getElementById("mouse-position");
 
 	mapCanvas.parentElement.addEventListener('wheel', zoomWithMouseWheel);
 	mapCanvas.addEventListener('mousemove', updateCoordinates);
+	mapCanvas.addEventListener('mousemove', updateMousePos);
 	mapCanvas.addEventListener('panzoomend', storeCoreRelativeOffset);
 	mapCanvas.addEventListener('panzoomend', () => { MapMonitor.isPanning = false; });
 	mapCanvas.addEventListener('panzoomstart', () => { MapMonitor.isPanning = true; });
-
-	const menuheaders = document.querySelectorAll(".collapsable-menu");
-	const mnuclick = function (event) {
-		let menu_ul = document.getElementById(this.getAttribute("label-for"));
-		const cssObj = window.getComputedStyle(menu_ul, null);
-
-		let menu_visible = cssObj.getPropertyValue("display");
-		//let menu_visible = menu_ul.style.display;
-		menu_ul.style.display = (menu_visible == "none") ? "block" : "none";
-	};
-	for (let mnu of menuheaders) {
-		if (mnu.innerHTML.trim() == "Clear") continue;
-		mnu.onclick = mnuclick;
-	}
-
-	setFilterTop();
-
 }, false);
 
 function loadExample() {
@@ -116,12 +126,6 @@ function resetMap() {
 	HIGHEST_STONE = 0;
 	HIGHEST_WILDERNESS = 0;
 	document.getElementById('showArcs').checked = false;
-}
-
-function setFilterTop() {
-	let filterdiv = document.getElementById("tilefilter");
-	let navdiv = document.getElementById("navdiv").getBoundingClientRect();
-	filterdiv.style.top = navdiv.bottom;
 }
 
 function redrawDebounce(event) {
@@ -159,12 +163,28 @@ function onChangeTileTransparency(event) {
 	redrawMap();
 }
 
+function onChangeCropRingsToBiome(event) {
+	redrawDebounce(event);
+}
+
+function onChangeShowCustomHighlightColor(event) {
+	redrawDebounce(event);
+}
+
 function onChangeShowCustomRing(event) {
 	redrawDebounce(event);
 }
 
+function onChangeShowPlayerRadius(event) {
+
+}
+
 function onChangeCustomRing(event) {
 	redrawMap();
+}
+
+function onChangePlayerRadius(event) {
+
 }
 
 function onChangeShowChunkGrid(event) {
@@ -216,6 +236,24 @@ function onChangeManualArcRotation(event) {
 	setTimeout(() => {
 		event.target.removeAttribute("disabled");
 	}, 10);
+}
+
+function openColorPicker() {
+	const eyeDropper = new EyeDropper();
+	const abortController = new AbortController();
+
+	eyeDropper.open({ signal: abortController.signal }).then((result) => {
+		const temp = result.sRGBHex.split("(")[1].split(")")[0].split(", ");
+
+		const hex = "#" + temp.map(function (x) {
+			x = parseInt(x).toString(16);
+			return (x.length == 1) ? "0" + x : x;
+		}).join("");
+
+		Alpine.store('data').customHighlightColor = hex;
+	}).catch((e) => {
+		console.log(e);
+	});
 }
 
 function toggleDarkMode() {
