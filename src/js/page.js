@@ -243,7 +243,6 @@ function openColorPicker() {
 	const abortController = new AbortController();
 
 	eyeDropper.open({ signal: abortController.signal }).then((result) => {
-
 		// console.log(result.);
 		// const temp = result.sRGBHex.split("(")[1].split(")")[0].split(", ");
 
@@ -253,6 +252,7 @@ function openColorPicker() {
 		//}).join("");
 
 		Alpine.store('data').customHighlightColor = result.sRGBHex;
+
 	}).catch((e) => {
 		console.log(e);
 	});

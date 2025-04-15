@@ -391,8 +391,6 @@ function annulus(ctx, centerX, centerY,
 }
 
 function drawArcs(start, end) {
-	console.log(start * (180 / Math.PI), end * (180 / Math.PI));
-	console.log(shouldDrawOnOverlay);
 	if (shouldDrawOnOverlay) {
 		// stone
 		drawOverlayArcs(
@@ -427,8 +425,6 @@ function drawArcs(start, end) {
 }
 
 function drawOuterArcs(start, end) {
-	console.log(start * (180 / Math.PI), end * (180 / Math.PI));
-	console.log(shouldDrawOnOverlay);
 	if (shouldDrawOnOverlay) {
 		// sea
 		drawOverlayArcs(
