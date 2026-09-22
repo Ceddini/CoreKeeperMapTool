@@ -62,8 +62,13 @@ let tileColors = [
 			new Tile("Lush Moss", 163, 206, 74),
 			new Tile("Urban Moss", 42, 169, 71),
 			new Tile("Valley Moss", 249, 116, 67),
+			new Tile("Muddled Moss", 64, 118, 113),
 			// shimmering
 			new Tile("Crystal Crust", 15, 162, 184),
+			// breaker
+			new Tile("Rust Pile", 149, 144, 136),
+			// moss
+			new Tile("Mossy Soil", 161, 95, 65),
 		],
 	},
 	{
@@ -71,14 +76,13 @@ let tileColors = [
 		"tiles": [
 			// ordered by priority
 			new Tile("Water", 30, 61, 129),
-			new Tile("Lava", 222, 53, 1),
 			new Tile("Acid Water", 117, 103, 48),
 			new Tile("Mold Water", 61, 85, 135),
 			new Tile("Shimmering Water", 154, 198, 243),
 			new Tile("Grimy Water", 61, 57, 89),
 			new Tile("Sea Water", 52, 208, 255),
-			new Tile("Lava", 204, 68, 33),
-		]
+			new Tile("Lava", 222, 53, 1),
+		],
 	},
 	{
 		"set": TileType.Boulders,
@@ -92,8 +96,8 @@ let tileColors = [
 			new Tile("Galaxite Boulder", 215, 220, 251),
 			new Tile("Solarite Boulder", 226, 161, 44),
 			new Tile("Pandorium Boulder", 9, 175, 36),
+			new Tile("Relucite Boulder", 153, 61, 245),
 		],
-
 	},
 	{
 		"set": TileType.Ores,
@@ -106,7 +110,8 @@ let tileColors = [
 			new Tile("Octarine Ore", 139, 82, 238),
 			new Tile("Galaxite Ore", 247, 240, 220),
 			new Tile("Solarite Ore", 255, 190, 78),
-			new Tile("Pandorium Ore", 9, 175, 36),
+			new Tile("Pandorium Ore", 9, 175, 68),
+			new Tile("Relucite Ore", 153, 62, 246),
 			// misc
 			new Tile("Ancient Gemstone", 0, 147, 255),
 		],
@@ -121,21 +126,27 @@ let tileColors = [
 			new Tile("Meadow Block", 224, 201, 97),
 			new Tile("Turf Block", 70, 103, 81),
 			new Tile("Clay Block", 193, 100, 54),
-			// doesn't show wall color on map...
-			// new Tile("Dark Stone Block", 123, 140, 172),
+			new Tile("Dark Stone Block", 50, 70, 85),
 			new Tile("Stone Block", 73, 103, 125),
+			new Tile("Moss Block",36,87,67),
 			new Tile("Larva Hive Block", 163, 97, 83),
 			new Tile("Grass Block", 22, 131, 27),
 			new Tile("Beach Block", 180, 147, 154),
 			new Tile("Mold Block", 89, 156, 186),
 			new Tile("Desert Block", 166, 146, 152),
+			new Tile("Oasis Block", 168, 76, 30),
 			new Tile("Metropolis Block", 49, 77, 87),
 			new Tile("Alien Tech Block", 70, 62, 102),
 			new Tile("Crystal Block", 42, 89, 238),
 			new Tile("Desert Temple Block", 0, 87, 163),
 			new Tile("Maze Block", 60, 79, 57),
 			new Tile("Lava Rock Block", 56, 52, 71),
+			new Tile("Tuff Block", 80, 73, 49),
 			new Tile("Fossil Block", 89, 86, 100),
+			new Tile("Excavation Block", 42, 64, 48),
+			new Tile("Void Infused Tuff Block", 80, 49, 79),
+			new Tile("Industrial Block", 19, 54, 47),
+			new Tile("Silicate Block", 40, 70, 58),
 			new Tile("Obsidian Block", 22, 42, 39),
 		],
 	},
@@ -149,20 +160,27 @@ let tileColors = [
 			new Tile("Meadow Block", 239, 225, 179),
 			new Tile("Turf Block", 86, 128, 100),
 			new Tile("Clay Block", 232, 139, 105),
-			new Tile("Dark Stone Block", 123, 140, 172),
+			new Tile("Dark Stone Block", 85, 114, 135),
 			new Tile("Stone Block", 103, 131, 151),
+			new Tile("Moss Block", 80, 155,136),
 			new Tile("Larva Hive Block", 199, 116, 99),
 			new Tile("Grass Block", 61, 155, 65),
 			new Tile("Beach Block", 235, 192, 190),
 			new Tile("Mold Block", 108, 188, 224),
 			new Tile("Desert Block", 210, 154, 124),
+			new Tile("Oasis Block", 199, 113, 56),
 			new Tile("Metropolis Block", 87, 128, 132),
 			new Tile("Alien Tech Block", 69, 106, 115),
 			new Tile("Crystal Block", 57, 136, 219),
 			new Tile("Desert Temple Block", 134, 113, 110),
 			new Tile("Maze Block", 83, 100, 96),
 			new Tile("Lava Rock Block", 85, 78, 106),
+			new Tile("Tuff Block", 106, 98, 72),
 			new Tile("Fossil Block", 192, 186, 207),
+			new Tile("Excavation Block", 64, 91, 68),
+			new Tile("Void Infused Tuff Block", 106, 72, 102),
+			new Tile("Industrial Block", 43, 79, 59),
+			new Tile("Silicate Block", 43, 79, 59 ),
 			new Tile("Obsidian Block", 31, 67, 62),
 		],
 	},
@@ -177,6 +195,8 @@ let tileColors = [
 			new Tile("Coral Wall", 222, 142, 178),
 			new Tile("Galaxite Wall", 221, 221, 221),
 			new Tile("Gleam Wood Wall", 15, 161, 174),
+			new Tile("Poison Berry Wall", 185, 105, 209),
+			new Tile("Molten Wall", 184, 38, 18),
 
 			// seasonal
 			new Tile("Eerie Wall", 103, 79, 122),
@@ -227,6 +247,7 @@ let tileColors = [
 			// found
 			new Tile("Caveling Floor Tile", 130, 130, 130),
 			new Tile("Woven Mat", 58, 139, 65),
+			new Tile("Ground Oil", 72, 57, 120),
 		],
 	},
 	{
@@ -299,6 +320,7 @@ let tileColors = [
 			new Tile("Coral Bridge", 200, 92, 204),
 			new Tile("Galaxite Bridge", 172, 179, 169),
 			new Tile("Gleam Wood Bridge", 15, 210, 190),
+			new Tile("Industrial Bridge", 63, 91, 91),
 
 			// found
 			new Tile("Metal Grate", 197, 135, 54),
@@ -333,6 +355,7 @@ let tileColors = [
 
 			// crates
 			new Tile("Wooden Crate", 114, 60, 17),
+			new Tile("Overgrown Wooden Crate", 97, 72, 34),
 			new Tile("Clay Pot", 99, 48, 19),
 			new Tile("Ancient Crate / Metropolis Crate", 77, 168, 202),
 			new Tile("Flower Vessel", 205, 189, 48),
@@ -347,9 +370,13 @@ let tileColors = [
 			new Tile("Poison Slime Vessels", 91, 50, 110),
 			new Tile("Temple Crate", 238, 205, 99),
 			new Tile("Fossil Cluster", 215, 220, 251),// same as galaxite boulder?
+			new Tile("Sun Crystal",219, 140, 38),
+			new Tile("Oasis Flower Vessel", 83, 109, 39),
+			new Tile("Stoneware Pot", 52, 240, 193),
+			new Tile("Large Stoneware Pot", 36, 208, 165),
 		],
 	},
-	/*{
+	{
 		"set": TileType.Ungrouped,
 		"tiles": [
 			new Tile("Pit", 31, 31, 31),
@@ -366,6 +393,7 @@ let tileColors = [
 	},
 ];
 
+/*
 let tileColorMap = [
 	{
 		"tilesetname": "Dirt",
@@ -1120,8 +1148,8 @@ let tileColorMap = [
 		"b": "132"
 	}
 ];
-*/
 ];
+*/
 
 let tileColorMap = [
 	{
