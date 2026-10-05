@@ -1,8 +1,9 @@
 import type { Ctx } from '../../app/context.ts';
-import { patchSettings } from '../../core/store.ts';
+import { exampleWorld, patchSettings } from '../../core/store.ts';
 import { tilesByRgb } from '../../data/tiles.ts';
 import { fmt, t, tn } from '../../i18n/i18n.ts';
-import { badge, button, section, segmented, switchControl } from '../components.ts';
+import { badge, button, section, segmented, switchControl, toast } from '../components.ts';
+import { shareUrl } from '../../core/share.ts';
 import { h } from '../dom.ts';
 import { relativeTime } from '../format.ts';
 
@@ -26,7 +27,7 @@ export function mapPanel(ctx: Ctx): HTMLElement {
             variant: 'primary',
             onClick: () => void actions.open(),
           }),
-          button({ label: t('open.example'), icon: 'map', onClick: () => void actions.example() }),
+          button({ label: t('open.example'), icon: 'map', onClick: () => void actions.example('standard') }),
         ),
       );
     }
@@ -39,7 +40,9 @@ export function mapPanel(ctx: Ctx): HTMLElement {
         h(
           'div',
           { class: 'file-card__name', title: f.name },
-          f.source === 'example' ? t('mapPanel.exampleName') : f.name,
+          f.source === 'example'
+            ? t(exampleWorld(f) === 'classic' ? 'example.classic' : 'example.standard')
+            : f.name,
         ),
         h('div', { class: 'file-card__meta' }, tn('mapPanel.chunks', s.chunkCount), ' · ', () =>
           t('mapPanel.loadedAgo', { time: relativeTime(store.updatedAt.value ?? Date.now()) }),
@@ -122,6 +125,20 @@ export function mapPanel(ctx: Ctx): HTMLElement {
           onClick: () => actions.openExport(),
           disabled: () => !store.summary.value,
           kbd: 'E',
+        }),
+        h('p', { class: 'muted small' }, () => t('share.help')),
+        button({
+          label: () => t('share.button'),
+          icon: 'external',
+          disabled: () => !store.summary.value,
+          onClick: () => {
+            const c = store.camera.peek();
+            const url = shareUrl(c.x, c.y, c.zoom, store.settings.peek());
+            void navigator.clipboard?.writeText(url).then(
+              () => toast({ message: t('share.copied'), tone: 'success' }),
+              () => toast({ message: t('share.failed'), tone: 'warning' }),
+            );
+          },
         }),
       ],
     }),

@@ -7,7 +7,7 @@ import { findMazeHoles } from '../../src/workers/analysis/maze.ts';
 import { WORLD_LAYOUTS } from '../../src/data/world-layout.ts';
 import { TILES, hexToInt } from '../../src/data/tiles.ts';
 
-const gz = readFileSync('public/example/example.mapparts.gzip');
+const gz = readFileSync('public/example/classic.mapparts.gzip');
 let model: MapModel;
 
 beforeAll(async () => {
@@ -60,7 +60,7 @@ function angleDiff(a: number, b: number): number {
 
 describe('biome sector detection', () => {
   it('agrees with the original algorithm for the inner zone', () => {
-    const inner = WORLD_LAYOUTS.standard.zones.find((z) => z.id === 'inner')!;
+    const inner = WORLD_LAYOUTS.classic.zones.find((z) => z.id === 'inner')!;
     const t0 = performance.now();
     const res = detectZone(model, inner)!;
     console.log(
@@ -71,7 +71,7 @@ describe('biome sector detection', () => {
   });
 
   it('detects the outer zone with high confidence', () => {
-    const outer = WORLD_LAYOUTS.standard.zones.find((z) => z.id === 'outer')!;
+    const outer = WORLD_LAYOUTS.classic.zones.find((z) => z.id === 'outer')!;
     const t0 = performance.now();
     const res = detectZone(model, outer)!;
     console.log(
@@ -141,7 +141,7 @@ describe('maze holes', () => {
   });
 
   it('runs on the example map', () => {
-    const inner = WORLD_LAYOUTS.standard.zones.find((z) => z.id === 'inner')!;
+    const inner = WORLD_LAYOUTS.classic.zones.find((z) => z.id === 'inner')!;
     const rot = detectZone(model, inner)!.rotationDeg;
     const t0 = performance.now();
     const res = findMazeHoles(model, rot);

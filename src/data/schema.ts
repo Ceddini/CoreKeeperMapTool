@@ -64,9 +64,11 @@ export interface ZoneSector {
 }
 
 export interface ZoneDef {
-  id: 'inner' | 'outer' | 'shimmering' | 'passage';
+  id: 'inner' | 'outer' | 'shimmering' | 'passage' | 'breakers_reach';
   rMin: number;
   rMax: number;
+  /** The sectors don't go all the way around (e.g. a biome in one direction only). */
+  partial?: boolean;
   /** Zones with more than one sector have an unknown rotation that is detected from the map. */
   sectors: ZoneSector[];
 }
@@ -86,8 +88,6 @@ export interface PoiDef {
   radii: Partial<Record<WorldType, number[]>>;
   /** Distance ranges [from, to] (roaming bosses, or where only a range is known). */
   bands?: Partial<Record<WorldType, [number, number][]>>;
-  /** Where no area can be drawn (e.g. Breaker's Reach, "far north"): a labelled hint position. */
-  hint?: Partial<Record<WorldType, { bearingDeg: number; r: number }>>;
   color: Hex;
   icon?: string;
   since: string;

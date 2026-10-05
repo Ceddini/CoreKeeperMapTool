@@ -1,15 +1,17 @@
 import { computed, effect, signal, untracked } from '../core/signals.ts';
-import { patchSettings, type AppStore } from '../core/store.ts';
+import { mapKey, patchSettings, type AppStore, type Spot } from '../core/store.ts';
 import { tileById, tilesByRgb } from '../data/tiles.ts';
-import { poiName, t, tileName } from '../i18n/i18n.ts';
+import { lang, poiName, t, tileName, tn } from '../i18n/i18n.ts';
+import { exploreTimeToDate } from '../workers/analysis/timeline.ts';
 import { clampZoom, fitBounds, screenToWorld, worldToScreen, zoomAt, type Camera } from '../render/camera.ts';
 import { buildHighlightLut, lutIsActive, HL_CUSTOM } from '../render/highlight.ts';
-import { buildOverlayScene, type OverlayLabel } from '../render/overlay-scene.ts';
+import { buildOverlayScene, type OverlayLabel, type OverlayPrimitive } from '../render/overlay-scene.ts';
 import { GlRenderer, supportsWebGL2 } from '../render/webgl/gl-renderer.ts';
 import { C2dRenderer } from '../render/canvas2d/c2d-renderer.ts';
 import type { Renderer } from '../render/renderer.ts';
 import type { MapService } from '../services/map-service.ts';
 import { MAZE_WINDOW } from '../core/constants.ts';
+import { CLUSTER_STRIDE } from '../workers/analysis/clusters.ts';
 import { BLOCK_FLAG, INDEX_MASK } from '../workers/model/palette.ts';
 import type { TileDef, ZoneDef } from '../data/schema.ts';
 import { h } from './dom.ts';
@@ -18,7 +20,8 @@ import { poiIconUrl } from './poi-icons.ts';
 export interface MapView {
   el: HTMLElement;
   canvas: HTMLCanvasElement;
-  flyTo(x: number, y: number, zoom?: number): void;
+  /** `reveal`: centre the point in the part of the map not covered by an overlaying panel. */
+  flyTo(x: number, y: number, zoom?: number, reveal?: boolean): void;
   zoomBy(factor: number): void;
   centerCore(): void;
   fit(): void;
@@ -28,7 +31,12 @@ export interface MapView {
   lut(): Uint8Array | null;
   onContextMenu: ((x: number, y: number, sx: number, sy: number) => void) | null;
   onPick: ((x: number, y: number, cell: number) => void) | null;
+  /** Fly to a spot and pulse a ring around it. */
+  focusSpot(spot: Spot): void;
 }
+
+/** Distance from a pin label's left edge to the centre of its dot (see .map-label--pin). */
+const PIN_DOT_OFFSET = 11;
 
 const reducedMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -44,7 +52,9 @@ export function createMapView(store: AppStore, service: MapService): MapView {
   const labelsLayer = h('div', { class: 'map-labels', 'aria-hidden': 'true' });
   const help = h('p', { id: 'map-help', class: 'visually-hidden' }, () => t('map.keyboardHelp'));
   const announcer = h('div', { class: 'visually-hidden', role: 'status', 'aria-live': 'polite' });
-  const el = h('div', { class: 'map-view' }, canvas, labelsLayer, help, announcer);
+  const focusRing = h('div', { class: 'focus-ring', 'aria-hidden': 'true', hidden: true });
+  const el = h('div', { class: 'map-view' }, canvas, labelsLayer, focusRing, help, announcer);
+  let focused: { x0: number; y0: number; x1: number; y1: number; until: number } | null = null;
 
   const size = signal({ width: 1, height: 1, dpr: window.devicePixelRatio || 1 });
   /** Current size; measures directly if the ResizeObserver hasn't reported yet. */
@@ -116,7 +126,16 @@ export function createMapView(store: AppStore, service: MapService): MapView {
     return out;
   });
 
-  const scene = computed(() => {
+  /** The ruler with its end point following the cursor while it is being placed. */
+  const rulerLine = computed(() => {
+    const r = store.ruler.value;
+    if (!r) return null;
+    const b =
+      r.b ?? (store.hover.value ? ([store.hover.value.x, store.hover.value.y] as [number, number]) : null);
+    return b ? { a: r.a, b } : null;
+  });
+
+  const baseScene = computed(() => {
     // Nothing to annotate until a map is loaded (keeps the empty state calm).
     if (!store.summary.value) return { primitives: [], labels: [] };
     const s = store.settings.value;
@@ -131,7 +150,33 @@ export function createMapView(store: AppStore, service: MapService): MapView {
       alpha: { rings: s.alpha.rings, sectors: s.alpha.sectors, grid: s.alpha.grid },
       poiName,
       playerLabel: t('layers.player.label'),
+      pins: s.showPins ? (s.pins[mapKey(store) ?? ''] ?? []) : [],
     });
+  });
+
+  // The ruler changes with every mouse move, so it is added on top of the (cached) base scene.
+  const scene = computed(() => {
+    const base = baseScene.value;
+    const line = rulerLine.value;
+    if (!line) return base;
+    const [ax, ay] = line.a;
+    const [bx, by] = line.b;
+    const segment: OverlayPrimitive = {
+      kind: 'segment',
+      x0: ax + 0.5,
+      y0: ay + 0.5,
+      x1: bx + 0.5,
+      y1: by + 0.5,
+      color: [1, 0.81, 0.44, 1],
+    };
+    const label: OverlayLabel = {
+      id: 'ruler',
+      x: (ax + bx) / 2 + 0.5,
+      y: (ay + by) / 2 + 0.5,
+      text: formatDistance(ax, ay, bx, by),
+      color: '#ffcf70',
+    };
+    return { primitives: [...base.primitives, segment], labels: [label, ...base.labels] };
   });
 
   const lutVersion = signal(0);
@@ -168,6 +213,80 @@ export function createMapView(store: AppStore, service: MapService): MapView {
       renderer.setPoints(ev.points);
       request();
     });
+  });
+
+  // Exploration times: the summary is read after every load (for the inspector and the layer UI);
+  // per-tile times only go to the GPU while the history layer is on.
+  let timelineReq = 0;
+  effect(() => {
+    if (!store.summary.value) {
+      store.timeline.value = null;
+      return;
+    }
+    const id = ++timelineReq;
+    void service.timeline(false).then((ev) => {
+      if (id === timelineReq) store.timeline.value = ev.info;
+    });
+  });
+  const historyOn = computed(() => store.history.value.on);
+  let timesReq = 0;
+  effect(() => {
+    const on = historyOn.value;
+    void store.summary.value;
+    const id = ++timesReq;
+    if (!on) {
+      renderer.setTimes(null);
+      request();
+      return;
+    }
+    void service.timeline(true).then((ev) => {
+      if (id !== timesReq) return;
+      renderer.setTimes(ev.chunks);
+      request();
+    });
+  });
+  effect(() => {
+    void store.history.value;
+    void store.timeline.value;
+    request();
+  });
+
+  // Spots (connected groups of highlighted tiles) for "nearest / next".
+  let spotsReq = 0;
+  let spotsTimer: ReturnType<typeof setTimeout> | undefined;
+  effect(() => {
+    const l = lut.value;
+    const active = highlightActive.value;
+    void store.summary.value;
+    const id = ++spotsReq;
+    clearTimeout(spotsTimer);
+    if (!active) {
+      store.spots.value = null;
+      store.spotsBusy.value = false;
+      return;
+    }
+    store.spotsBusy.value = true;
+    spotsTimer = setTimeout(() => {
+      void service.clusters(l).then((ev) => {
+        if (id !== spotsReq) return;
+        const all: Spot[] = [];
+        for (let i = 0; i < ev.count; i++) {
+          const o = i * CLUSTER_STRIDE;
+          const c = ev.clusters;
+          all.push({
+            x: c[o]!,
+            y: c[o + 1]!,
+            count: c[o + 2]!,
+            minX: c[o + 3]!,
+            minY: c[o + 4]!,
+            maxX: c[o + 5]!,
+            maxY: c[o + 6]!,
+          });
+        }
+        store.spots.value = { all, truncated: ev.truncated, index: -1 };
+        store.spotsBusy.value = false;
+      });
+    }, 150);
   });
 
   // Maze holes.
@@ -225,15 +344,16 @@ export function createMapView(store: AppStore, service: MapService): MapView {
           const url = l.icon ? poiIconUrl(l.icon) : null;
           node = h(
             'div',
-            { class: 'map-label' },
+            { class: l.kind === 'pin' ? 'map-label map-label--pin' : 'map-label' },
             url ? h('img', { src: url, alt: '', width: '20', height: '20', decoding: 'async' }) : null,
             h('span', null, l.text),
           );
-          node.style.setProperty('--label-color', l.color);
-        } else {
+          if (l.kind === 'pin') node.dataset.anchor = 'left';
+        } else if (node.querySelector('span')!.textContent !== l.text) {
           node.querySelector('span')!.textContent = l.text;
           labelSize.delete(node);
         }
+        node.style.setProperty('--label-color', l.color);
         next.set(l.id, node);
       }
       for (const [id, node] of labelEls) if (!next.has(id)) node.remove();
@@ -261,10 +381,12 @@ export function createMapView(store: AppStore, service: MapService): MapView {
           sz = [node.offsetWidth, node.offsetHeight];
           if (sz[0]) labelSize.set(node, sz);
         }
+        // Pins sit with their dot on the point (left anchor); other labels are centred.
+        const left = node.dataset.anchor === 'left' ? sx - PIN_DOT_OFFSET : sx - sz[0] / 2;
         const r: [number, number, number, number] = [
-          sx - sz[0] / 2 - 4,
+          left - 4,
           sy - sz[1] / 2 - 2,
-          sx + sz[0] / 2 + 4,
+          left + sz[0] + 4,
           sy + sz[1] / 2 + 2,
         ];
         if (placed.some((p) => r[0] < p[2] && r[2] > p[0] && r[1] < p[3] && r[3] > p[1])) visible = false;
@@ -272,11 +394,41 @@ export function createMapView(store: AppStore, service: MapService): MapView {
       }
       node.style.display = visible ? '' : 'none';
       if (visible)
-        node.style.transform = `translate(${Math.round(sx)}px, ${Math.round(sy)}px) translate(-50%, -50%)`;
+        node.style.transform =
+          node.dataset.anchor === 'left'
+            ? `translate(${Math.round(sx - PIN_DOT_OFFSET)}px, ${Math.round(sy)}px) translate(0, -50%)`
+            : `translate(${Math.round(sx)}px, ${Math.round(sy)}px) translate(-50%, -50%)`;
     }
+    positionFocus();
+  }
+
+  function positionFocus(): void {
+    if (!focused || performance.now() > focused.until) {
+      focusRing.hidden = true;
+      focused = null;
+      return;
+    }
+    const cam = store.camera.peek();
+    const vp = viewport();
+    const [x0, y0] = worldToScreen(cam, vp, focused.x0, focused.y1);
+    const [x1, y1] = worldToScreen(cam, vp, focused.x1, focused.y0);
+    const pad = 10;
+    const size = Math.max(28, x1 - x0 + pad * 2, y1 - y0 + pad * 2);
+    focusRing.hidden = false;
+    focusRing.style.width = `${size}px`;
+    focusRing.style.height = `${size}px`;
+    focusRing.style.transform = `translate(${Math.round((x0 + x1) / 2 - size / 2)}px, ${Math.round((y0 + y1) / 2 - size / 2)}px)`;
   }
 
   // ---------- frame loop
+
+  function timeState(): { timeMode: 0 | 1 | 2; timeCut: number } {
+    const hist = store.history.peek();
+    const info = store.timeline.peek();
+    if (!hist.on || !info) return { timeMode: 0, timeCut: 0 };
+    const step = Math.floor((hist.cut - info.min) / info.unit) + 1;
+    return { timeMode: hist.mode === 'replay' ? 1 : 2, timeCut: Math.max(0, step) };
+  }
 
   function frame(now: number): void {
     raf = 0;
@@ -310,6 +462,7 @@ export function createMapView(store: AppStore, service: MapService): MapView {
         hover: hov ? [hov.x, hov.y] : null,
         points: highlightActive.peek() && cam.zoom * vp.dpr < 3,
         pointOverride: store.settings.peek().paint.on ? paintRgb.peek() : null,
+        ...timeState(),
       });
       positionLabels();
     }
@@ -350,8 +503,27 @@ export function createMapView(store: AppStore, service: MapService): MapView {
     store.camera.value = { ...c, zoom: clampZoom(c.zoom) };
   }
 
-  function flyTo(x: number, y: number, zoom = store.camera.peek().zoom): void {
-    const to = { x, y, zoom: clampZoom(zoom) };
+  /**
+   * Offset (CSS px) from the canvas centre to the centre of the area not covered by the panel,
+   * which overlays the map on tablets (left) and phones (bottom sheet).
+   */
+  function uncoveredOffset(): [number, number] {
+    const panel = document.getElementById('panel');
+    if (!panel || panel.hidden) return [0, 0];
+    const p = panel.getBoundingClientRect();
+    const c = canvas.getBoundingClientRect();
+    if (p.width === 0 || p.right <= c.left || p.left >= c.right || p.bottom <= c.top || p.top >= c.bottom)
+      return [0, 0];
+    if (p.top > c.top + 1) return [0, (p.top - c.top) / 2 - c.height / 2]; // bottom sheet
+    if (p.left <= c.left + 1 && p.right < c.right)
+      return [(c.right - p.right) / 2 + (p.right - c.left) - c.width / 2, 0]; // left panel
+    return [0, 0];
+  }
+
+  function flyTo(x: number, y: number, zoom = store.camera.peek().zoom, reveal = false): void {
+    const z = clampZoom(zoom);
+    const [ox, oy] = reveal ? uncoveredOffset() : [0, 0];
+    const to = { x: x - ox / z, y: y + oy / z, zoom: z };
     if (reducedMotion()) return setCamera(to);
     anim = { from: store.camera.peek(), to, start: performance.now(), dur: 320 };
     request();
@@ -375,7 +547,7 @@ export function createMapView(store: AppStore, service: MapService): MapView {
   }
 
   function centerCore(): void {
-    flyTo(0, 0, Math.max(store.camera.peek().zoom, 1));
+    flyTo(0, 0, Math.max(store.camera.peek().zoom, 1), true);
   }
 
   // ---------- input
@@ -536,9 +708,9 @@ export function createMapView(store: AppStore, service: MapService): MapView {
       const c = store.camera.peek();
       const x = Math.floor(c.x);
       const y = Math.floor(c.y);
-      const cell = await service.probe(x, y);
-      store.hover.value = { x, y, cell };
-      announcer.textContent = describeTile(store, x, y, cell);
+      const { cell, time } = await service.probeFull(x, y);
+      store.hover.value = { x, y, cell, time };
+      announcer.textContent = describeTile(store, x, y, cell, time);
     }, 400);
   }
 
@@ -559,8 +731,8 @@ export function createMapView(store: AppStore, service: MapService): MapView {
         const [px, py] = probeNext;
         probeNext = null;
         probeBusy = true;
-        const cell = await service.probe(px, py);
-        store.hover.value = { x: px, y: py, cell };
+        const { cell, time } = await service.probeFull(px, py);
+        store.hover.value = { x: px, y: py, cell, time };
         request();
       }
       probeBusy = false;
@@ -578,6 +750,17 @@ export function createMapView(store: AppStore, service: MapService): MapView {
     const [wx, wy] = screenToWorld(store.camera.peek(), viewport(), sx, sy);
     const x = Math.floor(wx);
     const y = Math.floor(wy);
+    if (mode === 'measure') {
+      const r = store.ruler.peek();
+      if (r && !r.b) {
+        store.ruler.value = { a: r.a, b: [x, y] };
+        store.pickMode.value = 'none';
+      } else {
+        store.ruler.value = { a: [x, y], b: null };
+      }
+      request();
+      return;
+    }
     if (mode === 'player') {
       patchSettings(store, (s) => ({ player: { ...s.player, on: true, x, y } }));
     } else {
@@ -608,12 +791,40 @@ export function createMapView(store: AppStore, service: MapService): MapView {
     lut: () => (highlightActive.peek() ? lut.peek() : null),
     onContextMenu: null,
     onPick: null,
+    focusSpot(spot) {
+      const w = spot.maxX - spot.minX + 1;
+      const hgt = spot.maxY - spot.minY + 1;
+      const vp = viewport();
+      // Close enough to see the spot clearly, without zooming out from a closer view.
+      const zoom = Math.max(
+        store.camera.peek().zoom,
+        Math.min(8, (Math.min(vp.width, vp.height) * 0.25) / Math.max(w, hgt)),
+      );
+      flyTo(spot.x + 0.5, spot.y + 0.5, zoom, true);
+      focused = {
+        x0: spot.minX,
+        y0: spot.minY,
+        x1: spot.maxX + 1,
+        y1: spot.maxY + 1,
+        until: performance.now() + 6000,
+      };
+      focusRing.classList.remove('is-pulsing');
+      void focusRing.offsetWidth;
+      focusRing.classList.add('is-pulsing');
+      setTimeout(() => request(), 6100);
+      request();
+    },
   };
   return view;
 }
 
+/** Straight-line distance between two tiles, e.g. "123.4 tiles". */
+export function formatDistance(ax: number, ay: number, bx: number, by: number): string {
+  return tn('ruler.tiles', Math.round(Math.hypot(bx - ax, by - ay) * 10) / 10);
+}
+
 /** One-line description of a tile for the status bar and screen readers. */
-export function describeTile(store: AppStore, x: number, y: number, cell: number): string {
+export function describeTile(store: AppStore, x: number, y: number, cell: number, time = 0): string {
   const idx = cell & INDEX_MASK;
   const dist = Math.round(Math.hypot(x + 0.5, y + 0.5));
   const base = t('status.position', { x, y, dist });
@@ -623,7 +834,15 @@ export function describeTile(store: AppStore, x: number, y: number, cell: number
   const name = tiles?.length
     ? tileLabel(tiles, cell)
     : t('status.unknownColor', { hex: `#${rgb.toString(16).padStart(6, '0')}` });
-  return `${base} · ${name}`;
+  const when = time ? ` · ${t('status.explored', { when: formatExploreTime(time) })}` : '';
+  return `${base} · ${name}${when}`;
+}
+
+/** Exploration time as a short local date and time. */
+export function formatExploreTime(seconds: number): string {
+  return new Intl.DateTimeFormat(lang.value, { dateStyle: 'medium', timeStyle: 'short' }).format(
+    exploreTimeToDate(seconds),
+  );
 }
 
 export function tileLabel(tiles: readonly TileDef[], cell: number): string {

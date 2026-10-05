@@ -3,7 +3,7 @@ import { computed, signal } from '../../core/signals.ts';
 import { patchSettings } from '../../core/store.ts';
 import type { TileCategoryId, TileDef } from '../../data/schema.ts';
 import { TILES, TILE_CATEGORIES, hexToInt, intToHex, tileById, tilesByRgb } from '../../data/tiles.ts';
-import { fmt, t, tileName, type MsgKey } from '../../i18n/i18n.ts';
+import { fmt, t, tileName, tn, type MsgKey } from '../../i18n/i18n.ts';
 import { badge, button, checkRow, slider, switchControl } from '../components.ts';
 import { h, uid } from '../dom.ts';
 import { icon } from '../icons.ts';
@@ -171,6 +171,51 @@ export function tilesPanel(ctx: Ctx): HTMLElement {
     );
   };
 
+  const spotBar = () => {
+    if (!selectedCount.value || !store.summary.value) return null;
+    const busy = store.spotsBusy.value;
+    const st = store.spots.value;
+    const list = ctx.spots.ranked.value;
+    let status: string;
+    if (busy && !st) status = t('spots.finding');
+    else if (!list.length) status = t('spots.none');
+    else if (!st || st.index < 0) status = tn('spots.count', list.length);
+    else {
+      const cur = list[st.index]!;
+      status = t('spots.status', {
+        i: fmt(st.index + 1),
+        n: fmt(list.length),
+        dist: fmt(Math.round(cur.dist)),
+        from: t(ctx.spots.origin.value === 'marker' ? 'spots.fromMarker' : 'spots.fromCore'),
+        size: tn('spots.tiles', cur.count),
+      });
+    }
+    const first = !st || st.index < 0;
+    return h(
+      'div',
+      { class: 'spot-bar' },
+      button({
+        label: t('spots.prev'),
+        icon: 'prev',
+        iconOnly: true,
+        size: 'sm',
+        disabled: !list.length,
+        onClick: () => ctx.spots.prev(),
+        kbd: 'Shift+N',
+      }),
+      button({
+        label: first ? t('spots.nearest') : t('spots.next'),
+        icon: 'next',
+        size: 'sm',
+        variant: 'primary',
+        disabled: !list.length,
+        onClick: () => ctx.spots.next(),
+        kbd: 'N',
+      }),
+      h('span', { class: 'spot-bar__status', role: 'status', 'aria-live': 'polite' }, status),
+    );
+  };
+
   return h(
     'div',
     { class: 'panel-content panel-content--tiles' },
@@ -226,6 +271,7 @@ export function tilesPanel(ctx: Ctx): HTMLElement {
             )
           : null,
       picked,
+      spotBar,
     ),
     h('div', { class: 'tile-list' }, groups, unknown),
     h(

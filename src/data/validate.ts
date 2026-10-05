@@ -63,7 +63,7 @@ export function validateData(opts: { iconExists?: (file: string) => boolean } = 
   for (const [world, layout] of Object.entries(WORLD_LAYOUTS)) {
     for (const z of layout.zones) {
       const total = z.sectors.reduce((s, x) => s + x.spanDeg, 0);
-      if (total !== 360) err(`${world} zone ${z.id} sectors cover ${total}° instead of 360°`);
+      if (total !== 360 && !z.partial) err(`${world} zone ${z.id} sectors cover ${total}° instead of 360°`);
       for (const s of z.sectors) {
         if (!biomeById.has(s.biome)) err(`${world} zone ${z.id} references unknown biome ${s.biome}`);
         for (const id of s.evidence?.ids ?? []) if (!ids.has(id)) err(`evidence tile ${id} does not exist`);

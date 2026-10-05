@@ -665,3 +665,95 @@
     opacity: 0;
   }
 }
+
+/* Spot navigation (Tiles panel) */
+.spot-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+.spot-bar__status {
+  flex: 1;
+  min-width: 0;
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Pulsing ring around the spot just jumped to */
+.focus-ring {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: var(--z-labels);
+  border: 3px solid var(--color-accent);
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 2px rgb(0 0 0 / 0.6),
+    0 0 24px var(--color-accent);
+  pointer-events: none;
+}
+.focus-ring.is-pulsing {
+  animation: focus-pulse 0.9s var(--ease-out) 3;
+}
+@keyframes focus-pulse {
+  0% {
+    opacity: 0;
+    scale: 1.8;
+  }
+  60% {
+    opacity: 1;
+    scale: 1;
+  }
+}
+
+/* User pins: a coloured dot on the point, name to the right */
+.map-label--pin {
+  padding: 3px 9px 3px 4px;
+  border-color: var(--label-color);
+}
+.map-label--pin::before {
+  content: '';
+  flex: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--label-color);
+  box-shadow:
+    0 0 0 2px rgb(12 11 10 / 0.9),
+    0 0 0 3px var(--label-color);
+}
+
+/* Ruler result: neutral variant of the pick banner */
+.pick-banner--info {
+  background: var(--color-overlay);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  backdrop-filter: blur(8px);
+  font-variant-numeric: tabular-nums;
+}
+.pick-banner--info .icon {
+  color: var(--color-accent);
+}
+.pick-banner--info .btn {
+  --btn-fg: var(--color-text-muted);
+}
+.pick-banner__detail {
+  font-weight: var(--weight-medium);
+  color: var(--color-text-muted);
+}
+.pick-banner > span {
+  white-space: nowrap;
+}
+@media (max-width: 719px) {
+  .pick-banner {
+    max-width: calc(100% - var(--space-6));
+  }
+  .pick-banner > span {
+    white-space: normal;
+  }
+}
+
+.panel-loading {
+  padding: var(--space-4);
+}

@@ -17,8 +17,11 @@ export class ScanError extends Error {
 
 export interface ScannerCallbacks {
   key(index: number, x: number, y: number): void;
-  /** `png` is null when the part has no image. `hash` is FNV-1a over the PNG bytes. */
-  part(index: number, png: Uint8Array | null, hash: number): void;
+  /**
+   * `png` is null when the part has no image. `ts` is the part's exploration-time image, if any.
+   * `hash` is FNV-1a over both byte arrays (changes whenever either changes).
+   */
+  part(index: number, png: Uint8Array | null, hash: number, ts: Uint8Array | null): void;
 }
 
 const S = {
@@ -73,8 +76,12 @@ export class MapPartsScanner {
   // Value item being built.
   private valueIndex = 0;
   private png: Uint8Array | null = null;
-  private pngLen = 0;
-  private pngHash = 0;
+  private ts: Uint8Array | null = null;
+  private partHash = 0;
+  /** Byte array currently being read, and where it goes when complete. */
+  private bytes: Uint8Array = new Uint8Array(0);
+  private bytesLen = 0;
+  private bytesTarget: 'png' | 'ts' = 'png';
   private acc = 0;
   private hasDigit = false;
 
@@ -155,13 +162,15 @@ export class MapPartsScanner {
               } else {
                 this.state = S.ValueItemKey;
                 this.png = null;
+                this.ts = null;
+                this.partHash = 0x811c9dc5;
               }
               i++;
               break;
             }
             if (this.state === S.ValuesItem && c === 110 /* n */) {
               if (i + 4 > n && !final) return i;
-              this.cb.part(this.valueIndex++, null, 0);
+              this.cb.part(this.valueIndex++, null, 0, null);
               this.sub = Sub.After;
               i += 4;
               break;
@@ -249,12 +258,12 @@ export class MapPartsScanner {
         }
         break;
       case S.ValueItemKey:
-        if (key === 'png') {
+        if (key === 'png' || key === 'timestampPng') {
           if (c === 110 /* null */) break;
-          if (c !== C_LBRACK) throw new ScanError('png is not a byte array');
-          this.png = new Uint8Array(this.png?.length ?? 40000);
-          this.pngLen = 0;
-          this.pngHash = 0x811c9dc5;
+          if (c !== C_LBRACK) throw new ScanError(`${key} is not a byte array`);
+          this.bytesTarget = key === 'png' ? 'png' : 'ts';
+          this.bytes = new Uint8Array(key === 'png' ? 40000 : 8000);
+          this.bytesLen = 0;
           this.acc = 0;
           this.hasDigit = false;
           this.sub = Sub.Bytes;
@@ -275,9 +284,9 @@ export class MapPartsScanner {
     const n = buf.length;
     let acc = this.acc;
     let has = this.hasDigit;
-    let png = this.png!;
-    let len = this.pngLen;
-    let h = this.pngHash;
+    let png = this.bytes;
+    let len = this.bytesLen;
+    let h = this.partHash;
     while (i < n) {
       const c = buf[i++]!;
       if (c >= C_ZERO && c <= C_NINE) {
@@ -296,9 +305,10 @@ export class MapPartsScanner {
           has = false;
         }
         if (c === C_RBRACK) {
-          this.png = png.subarray(0, len);
-          this.pngLen = len;
-          this.pngHash = h >>> 0;
+          const out = len > 0 ? png.subarray(0, len) : null;
+          if (this.bytesTarget === 'png') this.png = out;
+          else this.ts = out;
+          this.partHash = h;
           this.sub = Sub.After;
           return i;
         }
@@ -308,9 +318,9 @@ export class MapPartsScanner {
     }
     this.acc = acc;
     this.hasDigit = has;
-    this.png = png;
-    this.pngLen = len;
-    this.pngHash = h;
+    this.bytes = png;
+    this.bytesLen = len;
+    this.partHash = h;
     return i;
   }
 
@@ -367,9 +377,10 @@ export class MapPartsScanner {
         this.sub = Sub.After;
         return;
       case S.ValueItemKey: {
-        const png = this.png && this.pngLen > 0 ? this.png : null;
-        this.cb.part(this.valueIndex++, png, png ? this.pngHash : 0);
+        const png = this.png;
+        this.cb.part(this.valueIndex++, png, png ? this.partHash >>> 0 : 0, this.ts);
         this.png = null;
+        this.ts = null;
         this.state = S.ValuesItem;
         this.sub = Sub.After;
         return;

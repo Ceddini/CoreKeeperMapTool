@@ -1,13 +1,11 @@
 import type { Ctx } from '../../app/context.ts';
 import { TILE_DATA_INFO } from '../../data/tiles.ts';
 import { t, type MsgKey } from '../../i18n/i18n.ts';
-import { button, copyField, section } from '../components.ts';
+import { button, section } from '../components.ts';
 import { h } from '../dom.ts';
+import { findMapGuide } from '../find-map-guide.ts';
 import { icon } from '../icons.ts';
 import { FEEDBACK_URL } from './tiles-panel.ts';
-
-export const STEAM_PATH = '%USERPROFILE%\\AppData\\LocalLow\\Pugstorm\\Core Keeper\\Steam\\';
-export const SERVER_PATH = '%USERPROFILE%\\AppData\\LocalLow\\Pugstorm\\Core Keeper\\DedicatedServer\\';
 
 const FAQ: string[] = [
   'faq.private',
@@ -36,29 +34,6 @@ function extLink(href: string, label: () => string): HTMLElement {
     { href, target: '_blank', rel: 'noopener', class: 'link-row' },
     h('span', null, label),
     icon('external', 14),
-  );
-}
-
-export function findMapGuide(): HTMLElement {
-  return h(
-    'div',
-    { class: 'stack guide' },
-    h(
-      'ol',
-      { class: 'steps' },
-      h('li', null, () => t('guide.step1')),
-      h(
-        'li',
-        null,
-        () => t('guide.step2'),
-        copyField({ label: () => t('guide.steamPath'), value: STEAM_PATH }),
-      ),
-      h('li', null, () => t('guide.step3')),
-      h('li', null, () => t('guide.step4')),
-    ),
-    h('p', { class: 'muted small' }, () => t('guide.server')),
-    copyField({ label: () => t('guide.serverPath'), value: SERVER_PATH }),
-    h('p', { class: 'muted small' }, () => t('guide.tip')),
   );
 }
 

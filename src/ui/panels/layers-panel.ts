@@ -8,6 +8,141 @@ import { placeBiome } from '../../render/overlay-scene.ts';
 import { badge, button, checkRow, numberField, section, slider, switchControl } from '../components.ts';
 import { h } from '../dom.ts';
 import { poiIconUrl } from '../poi-icons.ts';
+import { historySection } from './history-section.ts';
+import { addPin, currentPins, exportPins, focusPinName, importPins, removePin, updatePin } from '../pins.ts';
+import { saveBlob } from '../../services/file-access.ts';
+import { toast } from '../components.ts';
+import { uid } from '../dom.ts';
+import type { Pin } from '../../core/store.ts';
+
+function pinsSection(ctx: Ctx): HTMLElement {
+  const { store } = ctx;
+  const pins = computed(() => currentPins(store));
+  const row = (p: Pin) => {
+    const nameId = uid('pin');
+    return h(
+      'li',
+      { class: 'pin-row' },
+      h(
+        'label',
+        { class: 'color-input pin-row__color' },
+        h('span', { class: 'visually-hidden' }, t('pins.color', { name: p.label })),
+        h('input', {
+          type: 'color',
+          value: p.color,
+          onChange: (e: Event) => updatePin(store, p.id, { color: (e.target as HTMLInputElement).value }),
+        }),
+      ),
+      h('label', { for: nameId, class: 'visually-hidden' }, t('pins.name')),
+      h('input', {
+        id: nameId,
+        class: 'input pin-row__name',
+        value: p.label,
+        maxlength: '60',
+        'data-pin-name': p.id,
+        onChange: (e: Event) => {
+          const label = (e.target as HTMLInputElement).value.trim();
+          if (label) updatePin(store, p.id, { label });
+        },
+        onKeydown: (e: KeyboardEvent) => {
+          if (e.key === 'Enter') (e.target as HTMLInputElement).blur();
+        },
+      }),
+      h('span', { class: 'pin-row__coords muted' }, `${fmt(p.x)}, ${fmt(p.y)}`),
+      button({
+        label: t('pins.goTo', { name: p.label }),
+        icon: 'locate',
+        iconOnly: true,
+        size: 'sm',
+        variant: 'ghost',
+        onClick: () => ctx.actions.goTo(p.x + 0.5, p.y + 0.5, Math.max(store.camera.peek().zoom, 4)),
+      }),
+      button({
+        label: t('pins.remove', { name: p.label }),
+        icon: 'close',
+        iconOnly: true,
+        size: 'sm',
+        variant: 'ghost',
+        onClick: () => removePin(store, p.id),
+      }),
+    );
+  };
+
+  const importInput = h('input', {
+    type: 'file',
+    accept: '.json,application/json',
+    hidden: true,
+    onChange: async (e: Event) => {
+      const input = e.target as HTMLInputElement;
+      const file = input.files?.[0];
+      input.value = '';
+      if (!file) return;
+      try {
+        const n = importPins(store, await file.text());
+        toast({ message: tn('pins.imported', n), tone: n ? 'success' : 'warning' });
+      } catch {
+        toast({ message: t('pins.importFailed'), tone: 'danger' });
+      }
+    },
+  });
+
+  return section({
+    id: 'pins-section',
+    title: () => t('pins.title'),
+    badge: () => (pins.value.length ? badge(fmt(pins.value.length)) : null),
+    children: [
+      () => {
+        if (!store.summary.value) return h('p', { class: 'muted small' }, t('pins.noMap'));
+        const list = pins.value;
+        return h(
+          'div',
+          { class: 'stack' },
+          list.length
+            ? [
+                switchControl({
+                  label: () => t('pins.show'),
+                  checked: () => store.settings.value.showPins,
+                  onChange: (showPins) => patchSettings(store, () => ({ showPins })),
+                }),
+                h('ul', { class: 'pin-list', 'aria-label': t('pins.title') }, list.map(row)),
+              ]
+            : h('p', { class: 'muted small' }, t('pins.empty')),
+          h(
+            'div',
+            { class: 'button-row' },
+            button({
+              label: t('pins.addCenter'),
+              icon: 'pin',
+              size: 'sm',
+              onClick: () => {
+                const c = store.camera.peek();
+                const pin = addPin(store, Math.floor(c.x), Math.floor(c.y));
+                if (pin) focusPinName(pin.id);
+              },
+            }),
+            list.length
+              ? button({
+                  label: t('pins.export'),
+                  icon: 'download',
+                  size: 'sm',
+                  variant: 'ghost',
+                  onClick: () => void saveBlob(exportPins(store), 'core-keeper-pins.json'),
+                })
+              : null,
+            button({
+              label: t('pins.import'),
+              icon: 'upload',
+              size: 'sm',
+              variant: 'ghost',
+              onClick: () => importInput.click(),
+            }),
+            importInput,
+          ),
+        );
+      },
+    ],
+  });
+}
 
 const GROUPS: { kind: PoiKind; title: MsgKey }[] = [
   { kind: 'boss', title: 'layers.bosses' },
@@ -26,8 +161,7 @@ export function layersPanel(ctx: Ctx): HTMLElement {
   const visiblePois = computed(() => {
     const w = world.value;
     return POIS.filter(
-      (p) =>
-        p.radii[w]?.length || p.bands?.[w]?.length || p.hint?.[w] || placeBiome(w, p.biomes[0]!, {}) !== null,
+      (p) => p.radii[w]?.length || p.bands?.[w]?.length || placeBiome(w, p.biomes[0]!, {}) !== null,
     );
   });
 
@@ -49,7 +183,6 @@ export function layersPanel(ctx: Ctx): HTMLElement {
       ...(p.bands?.[w] ?? []).map(([a, b]) => `${fmt(a)}–${fmt(b)}`),
     ];
     if (dist.length) return `${dist.join(', ')} · ${where}`;
-    if (p.hint?.[w]) return t('layers.farNorth', { biome: where });
     return t('layers.anywhere', { biome: where });
   };
 
@@ -96,7 +229,9 @@ export function layersPanel(ctx: Ctx): HTMLElement {
     if (manual.value) return badge(t('layers.sectors.manual'), 'info');
     const inner = zone('inner');
     if (!inner) return badge(t('layers.sectors.detecting'));
-    const conf = Math.min(inner.confidence, zone('outer')?.confidence ?? 1);
+    // Zones nobody has explored yet say nothing about the detection quality.
+    const outer = zone('outer');
+    const conf = Math.min(inner.confidence, outer && outer.evidence >= 500 ? outer.confidence : 1);
     const low = inner.evidence < 500 || conf < 0.7;
     return badge(
       low ? t('layers.sectors.low') : t('layers.sectors.auto', { pct: Math.round(conf * 100) }),
@@ -250,7 +385,9 @@ export function layersPanel(ctx: Ctx): HTMLElement {
         }),
       ],
     }),
+    pinsSection(ctx),
     sectors,
+    historySection(ctx),
     section({
       title: () => t('layers.maze'),
       open: false,

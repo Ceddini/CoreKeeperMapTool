@@ -5,6 +5,8 @@ import { WORLD_LAYOUTS } from '../data/world-layout.ts';
 import { HL_BLOCK } from '../render/highlight.ts';
 import { detectZone } from './analysis/biomes.ts';
 import { findMazeHoles } from './analysis/maze.ts';
+import { findClusters } from './analysis/clusters.ts';
+import { buildTimeline, timeAt } from './analysis/timeline.ts';
 import { exportPng } from './export/export.ts';
 import { ingest } from './ingest/ingest.ts';
 import { CELLS, MapModel, PART, type Chunk } from './model/map-model.ts';
@@ -171,9 +173,28 @@ self.onmessage = async (e: MessageEvent<WorkerRequest>) => {
       case 'points':
         handlePoints(req);
         break;
-      case 'probe':
-        post({ type: 'probe', id: req.id, cell: model.cellAt(req.x, req.y) });
+      case 'clusters': {
+        const res = findClusters(model, req.lut);
+        post({ type: 'clusters', id: req.id, ...res }, [res.clusters.buffer]);
         break;
+      }
+      case 'probe':
+        post({
+          type: 'probe',
+          id: req.id,
+          cell: model.cellAt(req.x, req.y),
+          time: timeAt(model, req.x, req.y),
+        });
+        break;
+      case 'timeline': {
+        const res = await buildTimeline(model);
+        const chunks = req.withChunks ? res.chunks : [];
+        post(
+          { type: 'timeline', id: req.id, info: res.info, chunks },
+          chunks.map((c) => c.times.buffer),
+        );
+        break;
+      }
       case 'chunks': {
         const list =
           req.keys === 'all'

@@ -944,3 +944,55 @@
   font-size: var(--text-md);
   font-weight: var(--weight-semibold);
 }
+
+/* Pin list (Layers panel) */
+.pin-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+.pin-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+.pin-row__color input[type='color'] {
+  width: 28px;
+  height: 28px;
+  padding: 1px;
+}
+.pin-row__name {
+  flex: 1;
+  min-width: 0;
+  min-height: max(30px, var(--target-min));
+}
+.pin-row__coords {
+  font: var(--text-xs) var(--font-mono);
+  white-space: nowrap;
+}
+
+/* Text-style button (secondary actions inside running text) */
+.link-button {
+  align-self: center;
+  min-height: var(--target-min);
+  padding: 0 var(--space-2);
+  border: 0;
+  background: none;
+  color: var(--color-accent-text);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+.link-button:hover {
+  color: var(--color-accent-hover);
+}
+
+/* Exploration-history sparkline above the time slider */
+.sparkline {
+  width: 100%;
+  height: 24px;
+  margin-bottom: calc(var(--space-1) * -1);
+  fill: var(--color-accent);
+  opacity: 0.55;
+}

@@ -181,6 +181,9 @@ export function shortcutsDialog(): { open(): void } {
     [['L'], () => t('shortcuts.live')],
     [['R'], () => t('shortcuts.reload')],
     [['E'], () => t('shortcuts.export')],
+    [['M'], () => t('shortcuts.measure')],
+    [['N'], () => t('shortcuts.nextSpot')],
+    [['Shift', 'N'], () => t('shortcuts.prevSpot')],
     [['Esc'], () => t('shortcuts.escape')],
     [['?'], () => t('shortcuts.help')],
   ];
@@ -242,9 +245,25 @@ export function commandPalette(ctx: Ctx): { open(): void } {
     const s = store.settings.peek();
     const out: Command[] = [
       { id: 'open', label: t('open.choose'), icon: 'folder', run: () => void actions.open() },
-      { id: 'example', label: t('open.example'), icon: 'map', run: () => void actions.example() },
+      { id: 'example', label: t('open.example'), icon: 'map', run: () => void actions.example('standard') },
+      {
+        id: 'example-classic',
+        label: t('open.exampleClassic'),
+        icon: 'map',
+        run: () => void actions.example('classic'),
+      },
       { id: 'export', label: t('mapPanel.exportButton'), icon: 'image', run: () => actions.openExport() },
       { id: 'center', label: t('controls.center'), icon: 'crosshair', run: () => view.centerCore() },
+      {
+        id: 'measure',
+        label: t('ruler.palette'),
+        icon: 'ruler',
+        run: () => {
+          store.ruler.value = null;
+          store.pickMode.value = 'measure';
+        },
+      },
+      { id: 'spot-next', label: t('spots.paletteNext'), icon: 'next', run: () => ctx.spots.next() },
       { id: 'fit', label: t('controls.fit'), icon: 'fit', run: () => view.fit() },
       {
         id: 'chunk',

@@ -8,7 +8,7 @@ import { MapModel } from '../../src/workers/model/map-model.ts';
 import { BLOCK_FLAG, INDEX_MASK } from '../../src/workers/model/palette.ts';
 import { IngestError } from '../../src/core/errors.ts';
 
-const gz = readFileSync('public/example/example.mapparts.gzip');
+const gz = readFileSync('public/example/classic.mapparts.gzip');
 const json = gunzipSync(gz);
 const parsed = JSON.parse(json.toString()) as {
   mapParts: { keys: { x: number; y: number }[]; values: { png: number[] }[] };

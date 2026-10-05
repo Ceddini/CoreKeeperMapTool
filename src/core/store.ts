@@ -4,6 +4,7 @@ import { PLAYER_RADIUS_DEFAULT } from '../data/world-layout.ts';
 import type { Lang } from '../i18n/i18n.ts';
 import type { MapSummary, ZoneResult } from './rpc.ts';
 import type { MazeHole } from '../workers/analysis/maze.ts';
+import type { TimelineInfo } from '../workers/analysis/timeline.ts';
 import type { SerializedIngestError } from './errors.ts';
 import type { Camera } from '../render/camera.ts';
 
@@ -32,6 +33,17 @@ export interface Settings {
   liveRefresh: boolean;
   /** Set after the first map load, when the Layers panel is opened once as the next step. */
   onboarded: boolean;
+  /** User pins per map (key: map file name, or "example:<file>" for the bundled examples). */
+  pins: Record<string, Pin[]>;
+  showPins: boolean;
+}
+
+export interface Pin {
+  id: string;
+  x: number;
+  y: number;
+  label: string;
+  color: string;
 }
 
 export const DEFAULT_SETTINGS: Settings = {
@@ -54,6 +66,8 @@ export const DEFAULT_SETTINGS: Settings = {
   onlyOnMap: true,
   liveRefresh: false,
   onboarded: false,
+  pins: {},
+  showPins: true,
 };
 
 const KEY = 'ckmt:settings';
@@ -81,6 +95,8 @@ function merge<T>(def: T, stored: unknown): T {
   if (Array.isArray(def)) return (Array.isArray(stored) ? stored : def) as T;
   if (typeof def === 'object' && def !== null) {
     if (typeof stored !== 'object' || Array.isArray(stored)) return def;
+    // An empty default object is a free-form map (e.g. pins per file): keep what was stored.
+    if (Object.keys(def).length === 0) return stored as T;
     const out: Record<string, unknown> = { ...(def as Record<string, unknown>) };
     for (const k of Object.keys(out)) out[k] = merge(out[k], (stored as Record<string, unknown>)[k]);
     return out as T;
@@ -108,6 +124,16 @@ export function saveSettings(s: Settings): void {
   storageSet(KEY, JSON.stringify({ v: VERSION, data: s }));
 }
 
+export interface HistoryState {
+  on: boolean;
+  /** recent: dim tiles explored before `cut`; replay: show only tiles explored up to `cut`. */
+  mode: 'recent' | 'replay';
+  /** Unix seconds. */
+  cut: number;
+}
+
+export type PickMode = 'none' | 'tile' | 'player' | 'measure';
+
 export type LoadStatus = 'idle' | 'loading' | 'ready' | 'error';
 
 export interface FileInfo {
@@ -121,6 +147,25 @@ export interface Progress {
   phase: 'read' | 'decode';
   loaded: number;
   total: number;
+}
+
+/** A connected group of highlighted tiles (an ore vein, a boulder, …). */
+export interface Spot {
+  /** Representative tile inside the spot. */
+  x: number;
+  y: number;
+  count: number;
+  minX: number;
+  minY: number;
+  maxX: number;
+  maxY: number;
+}
+
+export interface SpotState {
+  all: Spot[];
+  truncated: boolean;
+  /** Position in the distance-sorted list of the spot last jumped to (-1: none yet). */
+  index: number;
 }
 
 export interface Analysis {
@@ -141,10 +186,18 @@ export interface AppStore {
   maze: Signal<{ mask: Uint8Array; holes: MazeHole[] } | null>;
   mazeBusy: Signal<boolean>;
   camera: Signal<Camera>;
-  hover: Signal<{ x: number; y: number; cell: number } | null>;
+  hover: Signal<{ x: number; y: number; cell: number; time?: number } | null>;
+  /** Exploration-time summary of the loaded map (null: none or not read yet). */
+  timeline: Signal<TimelineInfo | null>;
+  /** Exploration history layer (not persisted: it is about the map you are looking at). */
+  history: Signal<HistoryState>;
   live: Signal<'off' | 'watching' | 'paused' | 'unsupported'>;
-  pickMode: Signal<'none' | 'tile' | 'player'>;
+  pickMode: Signal<PickMode>;
+  /** Distance measurement: start point, and end point once placed (null while following the cursor). */
+  ruler: Signal<{ a: [number, number]; b: [number, number] | null } | null>;
   canReopen: Signal<{ name: string } | null>;
+  spots: Signal<SpotState | null>;
+  spotsBusy: Signal<boolean>;
 }
 
 export function createStore(): AppStore {
@@ -170,10 +223,27 @@ export function createStore(): AppStore {
     mazeBusy: signal(false),
     camera: signal<Camera>({ x: 0, y: 0, zoom: 1 }),
     hover: signal<AppStore['hover']['value']>(null),
+    timeline: signal<TimelineInfo | null>(null),
+    history: signal<HistoryState>({ on: false, mode: 'recent', cut: 0 }),
     live: signal<AppStore['live']['value']>('off'),
-    pickMode: signal<'none' | 'tile' | 'player'>('none'),
+    pickMode: signal<PickMode>('none'),
+    ruler: signal<AppStore['ruler']['value']>(null),
     canReopen: signal<{ name: string } | null>(null),
+    spots: signal<SpotState | null>(null),
+    spotsBusy: signal(false),
   };
+}
+
+/** Key under which per-map data (pins) is stored for the loaded file. */
+export function mapKey(store: AppStore): string | null {
+  const f = store.file.value;
+  if (!f) return null;
+  return f.source === 'example' ? `example:${f.name}` : f.name;
+}
+
+/** Example files are named after their world type. */
+export function exampleWorld(f: FileInfo): WorldType {
+  return f.name.startsWith('classic') ? 'classic' : 'standard';
 }
 
 /** Update part of the settings immutably. */

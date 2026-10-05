@@ -1,15 +1,11 @@
 import type { Ctx } from '../app/context.ts';
 import { computed, effect, scope, untracked } from '../core/signals.ts';
-import { DEFAULT_SETTINGS, patchSettings, type PanelId } from '../core/store.ts';
+import { exampleWorld, DEFAULT_SETTINGS, patchSettings, type PanelId } from '../core/store.ts';
 import { LANGS, setLang, t, type Lang, type MsgKey } from '../i18n/i18n.ts';
 import { button, segmented, toast, toastRegion } from './components.ts';
 import { h, uid } from './dom.ts';
 import { relativeTime } from './format.ts';
 import { icon, type IconName } from './icons.ts';
-import { helpPanel } from './panels/help-panel.ts';
-import { layersPanel } from './panels/layers-panel.ts';
-import { mapPanel } from './panels/map-panel.ts';
-import { tilesPanel } from './panels/tiles-panel.ts';
 import { stage, wordmark } from './stage.ts';
 
 const NAV: { id: PanelId; icon: IconName; label: MsgKey; key: string }[] = [
@@ -42,7 +38,10 @@ function fileStatus(ctx: Ctx): HTMLElement {
       const f = store.file.value;
       if (st === 'loading') return t('fileStatus.loading');
       if (!f) return t('fileStatus.none');
-      const name = f.source === 'example' ? t('mapPanel.exampleName') : f.name;
+      const name =
+        f.source === 'example'
+          ? t(exampleWorld(f) === 'classic' ? 'example.classic' : 'example.standard')
+          : f.name;
       const live =
         store.live.value === 'watching'
           ? ` · ${t('fileStatus.live')}`
@@ -195,11 +194,12 @@ function nav(ctx: Ctx): HTMLElement {
 
 function panelHost(ctx: Ctx): HTMLElement {
   const { store } = ctx;
-  const panels: Record<PanelId, () => HTMLElement> = {
-    map: () => mapPanel(ctx),
-    layers: () => layersPanel(ctx),
-    tiles: () => tilesPanel(ctx),
-    help: () => helpPanel(ctx),
+  // Panels load on first use, so the first screen only downloads what it shows.
+  const panels: Record<PanelId, () => Promise<(ctx: Ctx) => HTMLElement>> = {
+    map: () => import('./panels/map-panel.ts').then((m) => m.mapPanel),
+    layers: () => import('./panels/layers-panel.ts').then((m) => m.layersPanel),
+    tiles: () => import('./panels/tiles-panel.ts').then((m) => m.tilesPanel),
+    help: () => import('./panels/help-panel.ts').then((m) => m.helpPanel),
   };
   const cache = new Map<PanelId, HTMLElement>();
   const body = h('div', { class: 'panel__body' });
@@ -235,12 +235,20 @@ function panelHost(ctx: Ctx): HTMLElement {
     if (!p) return;
     let el = cache.get(p);
     if (!el) {
-      // Own scope: the panel lives on when another panel is shown.
-      let built: HTMLElement | null = null;
-      untracked(() => scope(() => void (built = panels[p]())));
-      el = built!;
+      const placeholder = h('p', { class: 'panel-loading muted small' }, t('common.loading'));
+      el = placeholder;
       cache.set(p, el);
       body.appendChild(el);
+      void panels[p]().then((build) => {
+        // Own scope: the panel lives on when another panel is shown.
+        let built: HTMLElement | null = null;
+        untracked(() => scope(() => void (built = build(ctx))));
+        const real = built!;
+        real.hidden = shown !== placeholder;
+        placeholder.replaceWith(real);
+        cache.set(p, real);
+        if (shown === placeholder) shown = real;
+      });
     }
     if (shown && shown !== el) shown.hidden = true;
     el.hidden = false;

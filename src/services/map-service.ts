@@ -152,6 +152,33 @@ export class MapService {
     );
   }
 
+  async clusters(lut: Uint8Array) {
+    const copy = lut.slice();
+    return this.request<Extract<WorkerEvent, { type: 'clusters' }>>(
+      (id) => ({ type: 'clusters', id, lut: copy }),
+      [copy.buffer],
+    );
+  }
+
+  /** Tile cell and exploration time (Unix seconds, 0 if unknown). */
+  async probeFull(x: number, y: number): Promise<{ cell: number; time: number }> {
+    const ev = await this.request<Extract<WorkerEvent, { type: 'probe' }>>((id) => ({
+      type: 'probe',
+      id,
+      x,
+      y,
+    }));
+    return { cell: ev.cell, time: ev.time };
+  }
+
+  async timeline(withChunks: boolean) {
+    return this.request<Extract<WorkerEvent, { type: 'timeline' }>>((id) => ({
+      type: 'timeline',
+      id,
+      withChunks,
+    }));
+  }
+
   async probe(x: number, y: number): Promise<number> {
     const ev = await this.request<Extract<WorkerEvent, { type: 'probe' }>>((id) => ({
       type: 'probe',

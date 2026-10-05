@@ -72,6 +72,14 @@ export const WORLD_LAYOUTS: Record<WorldType, WorldLayout> = {
         sectors: [{ biome: 'shimmering', offsetDeg: 0, spanDeg: 360 }],
       },
       { id: 'passage', rMin: 1170, rMax: 1350, sectors: [{ biome: 'passage', offsetDeg: 0, spanDeg: 360 }] },
+      // Always due north (Fandom). Measured on a fully revealed world: ±13° and radius 1350–1700.
+      {
+        id: 'breakers_reach',
+        rMin: 1350,
+        rMax: 1700,
+        partial: true,
+        sectors: [{ biome: 'breakers_reach', offsetDeg: 345, spanDeg: 30 }],
+      },
     ],
   },
   // Classic (pre-1.0) worlds have no Passage and their outer biomes extend much further.

@@ -86,6 +86,8 @@ export class GlRenderer implements Renderer {
   private mazeTex!: WebGLTexture;
   private mazeSize = 1;
   private pages: Page[] = [];
+  /** Exploration-time textures, parallel to `pages` (same layer per chunk); created on demand. */
+  private timePages: (WebGLTexture | null)[] = [];
   private slots = new Map<number, Slot>();
   private instData = new Float32Array(0);
   private lost = false;
@@ -127,6 +129,7 @@ export class GlRenderer implements Renderer {
     if (!gl) throw new Error('webgl2-unavailable');
     this.gl = gl;
     this.pages = [];
+    this.timePages = [];
     this.slots.clear();
     this.pointCount = 0;
 
@@ -140,6 +143,9 @@ export class GlRenderer implements Renderer {
       'u_dim',
       'u_custom',
       'u_tilesPerPx',
+      'u_times',
+      'u_timeMode',
+      'u_timeCut',
     ]);
     this.overlayProg = compile(gl, OVERLAY_VS, OVERLAY_FS);
     this.ou = uniforms(gl, this.overlayProg, [
@@ -161,6 +167,8 @@ export class GlRenderer implements Renderer {
       'u_mazeClasses',
       'u_mazeRadius',
       'u_hover',
+      'u_segment',
+      'u_segmentColor',
     ]);
     this.pointsProg = compile(gl, POINTS_VS, POINTS_FS);
     this.pu = uniforms(gl, this.pointsProg, [
@@ -230,8 +238,53 @@ export class GlRenderer implements Renderer {
   clearChunks(): void {
     if (this.lost) return;
     for (const p of this.pages) this.gl.deleteTexture(p.tex);
+    for (const t of this.timePages) if (t) this.gl.deleteTexture(t);
     this.pages = [];
+    this.timePages = [];
     this.slots.clear();
+  }
+
+  private timePage(page: number): WebGLTexture {
+    let tex = this.timePages[page];
+    if (!tex) {
+      const gl = this.gl;
+      tex = gl.createTexture()!;
+      gl.bindTexture(gl.TEXTURE_2D_ARRAY, tex);
+      // texStorage zero-fills: chunks without times read as "unknown".
+      gl.texStorage3D(gl.TEXTURE_2D_ARRAY, 1, gl.R16UI, PART, PART, PAGE_LAYERS);
+      gl.texParameteri(gl.TEXTURE_2D_ARRAY, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+      gl.texParameteri(gl.TEXTURE_2D_ARRAY, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+      this.timePages[page] = tex;
+    }
+    return tex;
+  }
+
+  setTimes(chunks: readonly { key: number; times: Uint16Array }[] | null): void {
+    if (this.lost) return;
+    const gl = this.gl;
+    if (!chunks) {
+      for (const t of this.timePages) if (t) gl.deleteTexture(t);
+      this.timePages = [];
+      return;
+    }
+    for (const c of chunks) {
+      const slot = this.slots.get(c.key);
+      if (!slot) continue;
+      gl.bindTexture(gl.TEXTURE_2D_ARRAY, this.timePage(slot.page));
+      gl.texSubImage3D(
+        gl.TEXTURE_2D_ARRAY,
+        0,
+        0,
+        0,
+        slot.layer,
+        PART,
+        PART,
+        1,
+        gl.RED_INTEGER,
+        gl.UNSIGNED_SHORT,
+        c.times,
+      );
+    }
   }
 
   upsertChunks(chunks: readonly ChunkUpload[]): void {
@@ -366,6 +419,10 @@ export class GlRenderer implements Renderer {
     gl.uniform1f(this.cu.u_dim!, s.dim);
     gl.uniform3f(this.cu.u_custom!, ...s.customColor);
     gl.uniform1f(this.cu.u_tilesPerPx!, 1 / pxPerTile);
+    const timeMode = this.timePages.length ? s.timeMode : 0;
+    gl.uniform1i(this.cu.u_timeMode!, timeMode);
+    gl.uniform1ui(this.cu.u_timeCut!, Math.max(0, Math.round(s.timeCut)));
+    gl.uniform1i(this.cu.u_times!, 4);
     gl.activeTexture(gl.TEXTURE1);
     gl.bindTexture(gl.TEXTURE_2D, this.paletteTex);
     gl.activeTexture(gl.TEXTURE2);
@@ -382,6 +439,11 @@ export class GlRenderer implements Renderer {
       if (!list.length) return;
       if (this.instData.length < list.length) this.instData = new Float32Array(list.length * 2);
       this.instData.set(list);
+      if (timeMode) {
+        gl.activeTexture(gl.TEXTURE4);
+        gl.bindTexture(gl.TEXTURE_2D_ARRAY, this.timePage(page));
+        gl.activeTexture(gl.TEXTURE0);
+      }
       gl.bindTexture(gl.TEXTURE_2D_ARRAY, this.pages[page]!.tex);
       gl.bindBuffer(gl.ARRAY_BUFFER, this.instBuf);
       gl.bufferData(gl.ARRAY_BUFFER, this.instData.subarray(0, list.length), gl.STREAM_DRAW);
@@ -419,6 +481,8 @@ export class GlRenderer implements Renderer {
       nm = 0;
     let gridChunk: number[] = [0, 0, 0, 0];
     let gridMob: number[] = [0, 0, 0, 0];
+    let segment: number[] = [0, 0, 0, 0];
+    let segmentColor: number[] = [0, 0, 0, 0];
     const rad = Math.PI / 180;
     for (const p of s.primitives) {
       if (p.kind === 'ring' && nr < MAX_RINGS) {
@@ -433,6 +497,9 @@ export class GlRenderer implements Renderer {
       } else if (p.kind === 'grid') {
         if (p.strong) gridChunk = p.color;
         else gridMob = p.color;
+      } else if (p.kind === 'segment') {
+        segment = [p.x0, p.y0, p.x1, p.y1];
+        segmentColor = p.color;
       }
     }
     gl.uniform1i(ou.u_ringCount!, nr);
@@ -452,6 +519,8 @@ export class GlRenderer implements Renderer {
     gl.uniform1i(ou.u_mazeClasses!, this.mazeSize > 1 ? s.mazeClasses : 0);
     gl.uniform1f(ou.u_mazeRadius!, (this.mazeSize - 1) / 2);
     gl.uniform3f(ou.u_hover!, s.hover?.[0] ?? 0, s.hover?.[1] ?? 0, s.hover ? 1 : 0);
+    gl.uniform4fv(ou.u_segment!, segment);
+    gl.uniform4fv(ou.u_segmentColor!, segmentColor);
     gl.drawArrays(gl.TRIANGLES, 0, 3);
     gl.bindVertexArray(null);
   }

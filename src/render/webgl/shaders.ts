@@ -9,11 +9,20 @@ uniform highp usampler2D u_lut;
 uniform bool u_hlActive;
 uniform float u_dim;
 uniform vec3 u_custom;
+uniform highp usampler2DArray u_times;
+uniform int u_timeMode;   // 0 off, 1 replay, 2 highlight newer
+uniform uint u_timeCut;
 
 vec4 shade(ivec2 t, int layer) {
   uint v = texelFetch(u_cells, ivec3(t, layer), 0).r;
   uint idx = v & 0x7FFFu;
   if (idx == 0u) return vec4(0.0);
+  bool older = false;
+  if (u_timeMode != 0) {
+    uint tv = texelFetch(u_times, ivec3(t, layer), 0).r;
+    if (u_timeMode == 1 && (tv == 0u || tv > u_timeCut)) return vec4(0.0);
+    older = u_timeMode == 2 && tv < u_timeCut;
+  }
   ivec2 pc = ivec2(int(idx & 255u), int(idx >> 8u));
   vec4 c = texelFetch(u_palette, pc, 0);
   if (u_hlActive) {
@@ -22,6 +31,7 @@ vec4 shade(ivec2 t, int layer) {
     if (!on) c.a = u_dim;
     else if ((f & 4u) != 0u) c.rgb = u_custom;
   }
+  if (older) c.a = min(c.a, u_dim);
   return c;
 }
 `;
@@ -96,6 +106,8 @@ uniform highp usampler2D u_maze;
 uniform int u_mazeClasses;    // bit mask
 uniform float u_mazeRadius;
 uniform vec3 u_hover;         // x, y, enabled
+uniform vec4 u_segment;       // x0, y0, x1, y1 (world)
+uniform vec4 u_segmentColor;  // a = 0: off
 out vec4 o;
 
 const float TAU = 6.28318530718;
@@ -169,6 +181,20 @@ void main() {
     float lw = max(2.0, 0.35 * u_pxPerTile) * px;
     over(col, u_markerColors[i], (lw - abs(dm - m.z)) / px + 0.5);
     over(col, vec4(u_markerColors[i].rgb, 1.0), (max(5.0 * px, 0.9) - dm) / px + 0.5);
+  }
+
+  // Measurement line: dark outline, coloured core, dots at both ends.
+  if (u_segmentColor.a > 0.0) {
+    vec2 a = u_segment.xy;
+    vec2 b = u_segment.zw;
+    vec2 ab = b - a;
+    float t = clamp(dot(p - a, ab) / max(dot(ab, ab), 1e-6), 0.0, 1.0);
+    float ds = length(p - (a + ab * t)) / px;
+    over(col, vec4(0.0, 0.0, 0.0, 0.75), 3.5 - ds);
+    over(col, u_segmentColor, 1.75 - ds);
+    float de = min(length(p - a), length(p - b)) / px;
+    over(col, vec4(0.0, 0.0, 0.0, 0.85), 7.0 - de);
+    over(col, vec4(u_segmentColor.rgb, 1.0), 5.0 - de);
   }
 
   // Core marker.

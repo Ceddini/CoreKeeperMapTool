@@ -86,14 +86,14 @@ export async function ingest(source: Blob, model: MapModel, opts: IngestOptions 
   });
 
   const keys: { x: number; y: number }[] = [];
-  const pendingParts = new Map<number, { png: Uint8Array | null; hash: number }>();
+  const pendingParts = new Map<number, { png: Uint8Array | null; hash: number; ts: Uint8Array | null }>();
   const seen = new Set<ChunkKey>();
   const changed: ChunkKey[] = [];
   const warnings: IngestWarning[] = [];
   let partCount = 0;
   let firstByteChecked = false;
 
-  const queue: { cx: number; cy: number; png: Uint8Array; hash: number }[] = [];
+  const queue: { cx: number; cy: number; png: Uint8Array; hash: number; ts: Uint8Array | null }[] = [];
   const running = new Set<Promise<void>>();
   let batch: Chunk[] = [];
   let lastFlush = performance.now();
@@ -112,6 +112,7 @@ export async function ingest(source: Blob, model: MapModel, opts: IngestOptions 
       const cells = new Uint16Array(CELLS);
       model.palette.indexPixels(rgba, cells);
       const chunk: Chunk = { key: chunkKey(job.cx, job.cy), cx: job.cx, cy: job.cy, hash: job.hash, cells };
+      if (job.ts) chunk.ts = job.ts;
       model.set(chunk);
       changed.push(chunk.key);
       batch.push(chunk);
@@ -143,10 +144,10 @@ export async function ingest(source: Blob, model: MapModel, opts: IngestOptions 
     }
   };
 
-  const accept = (index: number, png: Uint8Array | null, hash: number) => {
+  const accept = (index: number, png: Uint8Array | null, hash: number, ts: Uint8Array | null = null) => {
     const k = keys[index];
     if (!k) {
-      pendingParts.set(index, { png, hash });
+      pendingParts.set(index, { png, hash, ts });
       return;
     }
     partCount++;
@@ -156,7 +157,7 @@ export async function ingest(source: Blob, model: MapModel, opts: IngestOptions 
     seen.add(key);
     const existing = model.chunks.get(key);
     if (opts.incremental && existing && existing.hash === hash) return;
-    queue.push({ cx: k.x, cy: k.y, png: png.slice(), hash });
+    queue.push({ cx: k.x, cy: k.y, png: png.slice(), hash, ts: ts ? ts.slice() : null });
   };
 
   const scanner = new MapPartsScanner({
@@ -165,7 +166,7 @@ export async function ingest(source: Blob, model: MapModel, opts: IngestOptions 
       const pending = pendingParts.get(index);
       if (pending) {
         pendingParts.delete(index);
-        accept(index, pending.png, pending.hash);
+        accept(index, pending.png, pending.hash, pending.ts);
       }
     },
     part: accept,

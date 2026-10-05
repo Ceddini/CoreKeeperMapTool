@@ -23,6 +23,8 @@ export interface Chunk {
    * Bit 15 marks tiles that belong to a 2×2 block of one colour (used for boulders).
    */
   cells: Uint16Array;
+  /** Compressed exploration-time image of this part (decoded on demand, see analysis/timeline.ts). */
+  ts?: Uint8Array;
 }
 
 export interface Bounds {

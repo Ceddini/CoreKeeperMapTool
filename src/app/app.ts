@@ -13,10 +13,12 @@ import {
 } from '../services/file-access.ts';
 import { FileWatcher } from '../services/file-watch.ts';
 import { MapService } from '../services/map-service.ts';
+import { decodeLayers, shareUrl } from '../core/share.ts';
 import { setupPwa } from '../services/pwa.ts';
 import { showMenu, toast } from '../ui/components.ts';
-import { commandPalette, exportDialog, shortcutsDialog } from '../ui/dialogs.ts';
 import { createMapView } from '../ui/map-view.ts';
+import { createSpotNav } from '../ui/spots.ts';
+import { addPin, focusPinName } from '../ui/pins.ts';
 import { confirmReset, shell } from '../ui/shell.ts';
 import { errorMessage } from '../ui/stage.ts';
 import { INDEX_MASK } from '../workers/model/palette.ts';
@@ -50,8 +52,9 @@ export async function startApp(root: HTMLElement): Promise<void> {
   effect(() => (void store.settings.value.theme, applyTheme()));
   dark.addEventListener('change', applyTheme);
 
-  // On phones the sheet would cover the open card: start with it closed until a map is loaded.
-  if (matchMedia('(max-width: 719px)').matches) patchSettings(store, () => ({ panel: null }));
+  // Where the panel overlays the map (phones, tablets) it would cover the open card: start with it
+  // closed until a map is loaded.
+  if (matchMedia('(max-width: 1023px)').matches) patchSettings(store, () => ({ panel: null }));
 
   const service = new MapService(store);
   const view = createMapView(store, service);
@@ -116,18 +119,17 @@ export async function startApp(root: HTMLElement): Promise<void> {
         toast({ message: t('toast.reopenFailed'), tone: 'warning' });
       }
     },
-    async example() {
+    async example(world = 'standard') {
       store.status.value = 'loading';
       store.progress.value = { phase: 'read', loaded: 0, total: 1 };
       try {
-        const res = await fetch(`${import.meta.env.BASE_URL}example/example.mapparts.gzip`);
+        const name = `${world}.mapparts.gzip`;
+        const res = await fetch(`${import.meta.env.BASE_URL}example/${name}`);
         if (!res.ok) throw new Error(String(res.status));
         const blob = await res.blob();
-        await load(
-          blob,
-          { name: 'example.mapparts.gzip', size: blob.size, lastModified: Date.now(), source: 'example' },
-          null,
-        );
+        // The examples know their world type, so rings and biome areas are right straight away.
+        patchSettings(store, () => ({ world }));
+        await load(blob, { name, size: blob.size, lastModified: Date.now(), source: 'example' }, null);
       } catch {
         store.status.value = store.summary.peek() ? 'ready' : 'idle';
         store.progress.value = null;
@@ -159,9 +161,9 @@ export async function startApp(root: HTMLElement): Promise<void> {
       watcher.setEnabled(on && !!handle);
       if (on && !handle) toast({ message: t('toast.liveNeedsPicker'), tone: 'warning' });
     },
-    openExport: () => exportDlg.open(),
-    openShortcuts: () => shortcutsDlg.open(),
-    openPalette: () => palette.open(),
+    openExport: () => void dialogs().then((d) => d.export.open()),
+    openShortcuts: () => void dialogs().then((d) => d.shortcuts.open()),
+    openPalette: () => void dialogs().then((d) => d.palette.open()),
     setPanel(id: PanelId | null) {
       patchSettings(store, () => ({ panel: id }));
     },
@@ -169,16 +171,28 @@ export async function startApp(root: HTMLElement): Promise<void> {
       patchSettings(store, (s) => ({ panel: s.panel === id ? null : id }));
     },
     goTo(x, y, zoom) {
-      view.flyTo(x, y, zoom ?? Math.max(store.camera.peek().zoom, 4));
-      if (innerWidth < 720) actions.setPanel(null);
+      view.flyTo(x, y, zoom ?? Math.max(store.camera.peek().zoom, 4), true);
     },
     resetSettings: () => confirmReset(ctx),
   };
 
-  const ctx: Ctx = { store, service, view, actions, supportsLive: supportsHandles };
-  const exportDlg = exportDialog(ctx);
-  const shortcutsDlg = shortcutsDialog();
-  const palette = commandPalette(ctx);
+  const ctx: Ctx = {
+    store,
+    service,
+    view,
+    actions,
+    supportsLive: supportsHandles,
+    spots: createSpotNav(store, view),
+  };
+  // Dialogs are only built (and downloaded) when first opened.
+  type Dialogs = { export: { open(): void }; shortcuts: { open(): void }; palette: { open(): void } };
+  let dialogsPromise: Promise<Dialogs> | null = null;
+  const dialogs = () =>
+    (dialogsPromise ??= import('../ui/dialogs.ts').then((m) => ({
+      export: m.exportDialog(ctx),
+      shortcuts: m.shortcutsDialog(),
+      palette: m.commandPalette(ctx),
+    })));
 
   root.append(shell(ctx));
   setupPwa();
@@ -206,6 +220,24 @@ export async function startApp(root: HTMLElement): Promise<void> {
       sy,
       [
         {
+          label: t('menu.addPin'),
+          icon: 'pin',
+          onSelect: () => {
+            const pin = addPin(store, x, y);
+            if (!pin) return;
+            actions.setPanel('layers');
+            focusPinName(pin.id);
+          },
+        },
+        {
+          label: t('menu.measure'),
+          icon: 'ruler',
+          onSelect: () => {
+            store.ruler.value = { a: [x, y], b: null };
+            store.pickMode.value = 'measure';
+          },
+        },
+        {
           label: t('menu.placePlayer'),
           icon: 'pin',
           onSelect: () => patchSettings(store, (s) => ({ player: { ...s.player, on: true, x, y } })),
@@ -227,7 +259,7 @@ export async function startApp(root: HTMLElement): Promise<void> {
           label: t('menu.copyLink'),
           icon: 'external',
           onSelect: () => {
-            const url = `${location.origin}${location.pathname}?at=${x},${y},${Math.round(store.camera.peek().zoom * 10) / 10}`;
+            const url = shareUrl(x + 0.5, y + 0.5, store.camera.peek().zoom, store.settings.peek());
             void navigator.clipboard?.writeText(url).then(() => toast({ message: t('toast.linkCopied') }));
           },
         },
@@ -241,9 +273,10 @@ export async function startApp(root: HTMLElement): Promise<void> {
   document.addEventListener('keydown', (e) => {
     if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
       e.preventDefault();
-      return palette.open();
+      return actions.openPalette();
     }
-    if (e.key === 'Escape' && store.pickMode.peek() !== 'none') {
+    if (e.key === 'Escape' && (store.pickMode.peek() !== 'none' || store.ruler.peek())) {
+      if (store.pickMode.peek() === 'measure' || store.pickMode.peek() === 'none') store.ruler.value = null;
       store.pickMode.value = 'none';
       return;
     }
@@ -251,8 +284,8 @@ export async function startApp(root: HTMLElement): Promise<void> {
     const has = !!store.summary.peek();
     const k = e.key;
     const map: Record<string, () => void> = {
-      '/': () => palette.open(),
-      '?': () => shortcutsDlg.open(),
+      '/': () => actions.openPalette(),
+      '?': () => actions.openShortcuts(),
       o: () => void actions.open(),
       '1': () => actions.togglePanel('map'),
       '2': () => actions.togglePanel('layers'),
@@ -273,10 +306,16 @@ export async function startApp(root: HTMLElement): Promise<void> {
         l: () => supportsHandles && actions.setLive(!store.settings.peek().liveRefresh),
         r: () => void actions.refresh(),
         e: () => actions.openExport(),
+        m: () => {
+          store.ruler.value = null;
+          store.pickMode.value = store.pickMode.peek() === 'measure' ? 'none' : 'measure';
+        },
+        n: () => ctx.spots.next(),
+        N: () => ctx.spots.prev(),
       });
     }
     const fn = map[k] ?? map[k.toLowerCase()];
-    if (fn && !(k === 'G' && !e.shiftKey)) {
+    if (fn && !((k === 'G' || k === 'N') && !e.shiftKey)) {
       e.preventDefault();
       fn();
     }
@@ -291,4 +330,22 @@ export async function startApp(root: HTMLElement): Promise<void> {
   });
 
   if (deepLink) store.camera.value = { x: deepLink.x, y: deepLink.y, zoom: deepLink.zoom };
+
+  // Shared view: apply its layers (undoable), then drop the parameters from the address bar so a
+  // reload doesn't re-apply them over later changes.
+  const params = new URLSearchParams(location.search);
+  const shared = params.get('l');
+  if (shared) {
+    const before = store.settings.peek();
+    const patch = decodeLayers(shared, before);
+    if (patch) {
+      patchSettings(store, () => patch);
+      toast({
+        message: t(store.summary.peek() ? 'share.applied' : 'share.appliedLoad'),
+        action: { label: t('common.undo'), onClick: () => (store.settings.value = before) },
+        duration: 12000,
+      });
+    }
+  }
+  if (params.has('l') || params.has('at')) history.replaceState(null, '', location.pathname + location.hash);
 }

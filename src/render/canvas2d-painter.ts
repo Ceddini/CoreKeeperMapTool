@@ -64,6 +64,32 @@ export function paintOverlay(ctx: Ctx2D, view: PaintView, primitives: readonly O
         ctx.stroke();
         break;
       }
+      case 'segment': {
+        const ax = (p.x0 - x0) * s;
+        const ay = (y0 - p.y0) * s;
+        const bx = (p.x1 - x0) * s;
+        const by = (y0 - p.y1) * s;
+        ctx.lineCap = 'round';
+        ctx.strokeStyle = 'rgba(0,0,0,0.75)';
+        ctx.lineWidth = 7;
+        ctx.beginPath();
+        ctx.moveTo(ax, ay);
+        ctx.lineTo(bx, by);
+        ctx.stroke();
+        ctx.strokeStyle = css(p.color);
+        ctx.lineWidth = 3.5;
+        ctx.stroke();
+        ctx.fillStyle = css([p.color[0], p.color[1], p.color[2], 1]);
+        for (const [cx, cy] of [
+          [ax, ay],
+          [bx, by],
+        ] as const) {
+          ctx.beginPath();
+          ctx.arc(cx, cy, 5, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        break;
+      }
       case 'marker': {
         const px = (p.x - x0) * s;
         const py = (y0 - p.y) * s;
@@ -97,6 +123,23 @@ export function paintLabels(
   for (const l of labels) {
     const px = (l.x - view.x0) * view.scale;
     const py = (view.y0 - l.y) * view.scale;
+    if (l.kind === 'pin') {
+      const r = Math.max(5, fontPx / 3);
+      ctx.fillStyle = l.color;
+      ctx.strokeStyle = 'rgba(0,0,0,0.85)';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.arc(px, py, r, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+      ctx.textAlign = 'left';
+      ctx.lineWidth = Math.max(3, fontPx / 4);
+      ctx.strokeText(l.text, px + r + 4, py);
+      ctx.fillStyle = '#fff';
+      ctx.fillText(l.text, px + r + 4, py);
+      ctx.textAlign = 'center';
+      continue;
+    }
     ctx.lineWidth = Math.max(3, fontPx / 4);
     ctx.strokeStyle = 'rgba(0,0,0,0.85)';
     ctx.strokeText(l.text, px, py);

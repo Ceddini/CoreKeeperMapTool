@@ -4,7 +4,7 @@ import type { PoiDef } from './schema.ts';
  * Bosses and points of interest. `radii.standard` are 1.0+ world distances from the Core;
  * `radii.classic` are pre-1.0 ("Classic") world distances. `bands` are distance ranges where the
  * wiki only gives a range or the boss roams. With neither, the POI spawns anywhere in its biome and
- * the UI shows the biome area; `hint` places a label where no area can be drawn.
+ * the UI shows the biome area.
  *
  * Sources: Core Keeper Wiki on Fandom (boss, merchant and place pages, retrieved 2026-10-05) and
  * corekeeper.atma.gg (World, Atlantean Worm). Icons are file names in src/assets/poi/.
@@ -31,8 +31,8 @@ export const POIS: readonly PoiDef[] = [
   { id: 'pyrdra', kind: 'optional_boss', biomes: ['desert'], radii: {}, color: '#e8622c', icon: 'pyrdra.webp', since: '1.0' },
   { id: 'atlantean_worm', kind: 'optional_boss', biomes: ['sunken_sea'], radii: {}, bands: { standard: [[800, 1000]] }, color: '#2f6db5', icon: 'atlantean_worm.webp', since: '1.0' },
   { id: 'nimruza', kind: 'optional_boss', biomes: ['desert'], radii: {}, color: '#c9a227', icon: 'nimruza.webp', since: '1.1' },
-  { id: 'sahabar', kind: 'optional_boss', biomes: ['breakers_reach'], radii: {}, hint: { standard: { bearingDeg: 0, r: 1420 } }, color: '#8a8f98', icon: 'sahabar.webp', since: '1.2' },
-  { id: 'oblidra', kind: 'optional_boss', biomes: ['breakers_reach'], radii: {}, hint: { standard: { bearingDeg: 0, r: 1480 } }, color: '#7b3fb0', icon: 'oblidra.webp', since: '1.2' },
+  { id: 'sahabar', kind: 'optional_boss', biomes: ['breakers_reach'], radii: {}, color: '#8a8f98', icon: 'sahabar.webp', since: '1.2' },
+  { id: 'oblidra', kind: 'optional_boss', biomes: ['breakers_reach'], radii: {}, color: '#7b3fb0', icon: 'oblidra.webp', since: '1.2' },
 
   // Points of interest
   { id: 'mold_dungeon', kind: 'poi', biomes: ['wilderness'], radii: { standard: [700], classic: [750] }, color: '#6cbbe0', icon: 'poisonous_sickle.png', since: '0.3' },

@@ -54,10 +54,10 @@ export default defineConfig({
         maximumFileSizeToCacheInBytes: 3 * 1024 * 1024,
         runtimeCaching: [
           {
-            // The example map is large: cache it only once someone opens it.
-            urlPattern: ({ url }) => url.pathname.endsWith('/example/example.mapparts.gzip'),
+            // The example maps are large: cache them only once someone opens one.
+            urlPattern: ({ url }) => url.pathname.startsWith('/example/'),
             handler: 'CacheFirst',
-            options: { cacheName: 'example-map', expiration: { maxEntries: 1 } },
+            options: { cacheName: 'example-maps', expiration: { maxEntries: 2 } },
           },
         ],
       },

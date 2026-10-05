@@ -6,7 +6,7 @@ import { exportPng } from '../../src/workers/export/export.ts';
 import { decodePng } from '../../src/workers/ingest/png.ts';
 import type { ExportOptions } from '../../src/core/rpc.ts';
 
-const gz = readFileSync('public/example/example.mapparts.gzip');
+const gz = readFileSync('public/example/classic.mapparts.gzip');
 
 describe('exportPng', () => {
   it('round-trips map pixels exactly at 1×', async () => {

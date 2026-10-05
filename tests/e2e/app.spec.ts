@@ -38,7 +38,7 @@ async function dropFile(page: Page, name: string, bytes: Buffer) {
 
 async function loadExample(page: Page) {
   await page.getByRole('button', { name: 'Try the example map' }).first().click();
-  await expect(page.locator('.file-status')).toContainText('Example map', { timeout: 20_000 });
+  await expect(page.locator('.file-status')).toContainText('Example:', { timeout: 20_000 });
 }
 
 test.beforeEach(async ({ page }) => {
@@ -86,7 +86,7 @@ test('finds tiles by search and shows counts', async ({ page, isMobile }) => {
   await page.getByRole('button', { name: 'Tiles', exact: true }).click();
   await page.getByRole('searchbox').fill('scarlet');
   const row = page.locator('.tile-list .check-row', { hasText: 'Scarlet Ore' }).first();
-  await expect(row).toContainText('11,026');
+  await expect(row).toContainText('5,364');
   await row.locator('label').click();
   await expect(page.locator('.selection-bar')).toContainText('1 highlighted');
   if (!isMobile) expect(await axe(page)).toEqual([]);
@@ -120,4 +120,47 @@ test('keyboard: shortcuts sheet and command palette', async ({ page, isMobile })
   await box.fill('ghorm');
   await page.keyboard.press('Enter');
   await expect(page.locator('.map-label', { hasText: 'Ghorm the Devourer' })).toBeAttached();
+});
+
+test('extras: pins, ruler, nearest spot and shared links', async ({ page, isMobile }) => {
+  test.skip(isMobile, 'right-click flows on desktop');
+  await page.goto('/');
+  await loadExample(page);
+  const canvas = page.locator('canvas.map-canvas');
+  const box = (await canvas.boundingBox())!;
+
+  // Pin via the context menu, renamed in the Layers panel.
+  await canvas.click({ button: 'right', position: { x: box.width * 0.6, y: box.height * 0.5 } });
+  await page.getByRole('menuitem', { name: 'Add pin here' }).click();
+  const name = page.getByRole('textbox', { name: 'Pin name' });
+  await expect(name).toBeFocused();
+  await name.fill('Base');
+  await name.press('Enter');
+  await expect(page.locator('.map-label--pin', { hasText: 'Base' })).toBeAttached();
+
+  // Ruler: start from the menu, finish with a click.
+  await canvas.click({ button: 'right', position: { x: box.width * 0.4, y: box.height * 0.5 } });
+  await page.getByRole('menuitem', { name: 'Measure from here' }).click();
+  await canvas.click({ position: { x: box.width * 0.4 + 100, y: box.height * 0.5 } });
+  await expect(page.getByRole('status').filter({ hasText: 'across' })).toBeVisible();
+
+  // Nearest spot of a highlighted tile.
+  await page.getByRole('button', { name: 'Tiles', exact: true }).click();
+  await page.getByRole('searchbox').fill('scarlet ore');
+  await page.locator('.tile-list .check-row label', { hasText: /^Scarlet Ore\d/ }).click();
+  await page.getByRole('button', { name: 'Nearest' }).click();
+  await expect(page.locator('.spot-bar__status')).toContainText(/^1 of /);
+  expect(await axe(page)).toEqual([]);
+});
+
+test('extras: exploration history replays a played map', async ({ page, isMobile }) => {
+  test.skip(isMobile, 'covered on desktop');
+  await page.goto('/');
+  await page.getByRole('button', { name: 'or a fully explored Classic world' }).click();
+  await expect(page.locator('.file-status')).toContainText('Classic', { timeout: 20_000 });
+  await page.locator('#history-section > summary').click();
+  await page.getByRole('radio', { name: 'Replay' }).check();
+  await expect(page.getByText(/Showing what was explored up to/)).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Play replay' })).toBeVisible();
+  expect(await axe(page)).toEqual([]);
 });

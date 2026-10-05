@@ -1,6 +1,7 @@
 import type { SerializedIngestError, IngestWarning } from './errors.ts';
 import type { ZoneDef, WorldType } from '../data/schema.ts';
 import type { MazeHole } from '../workers/analysis/maze.ts';
+import type { TimelineInfo } from '../workers/analysis/timeline.ts';
 import type { OverlayLabel, OverlayPrimitive } from '../render/overlay-scene.ts';
 
 export interface ChunkUpload {
@@ -59,6 +60,8 @@ export type WorkerRequest =
   | { type: 'maze'; id: number; stoneStartDeg: number }
   | { type: 'stats'; id: number }
   | { type: 'points'; id: number; lut: Uint8Array; limit: number }
+  | { type: 'clusters'; id: number; lut: Uint8Array }
+  | { type: 'timeline'; id: number; withChunks: boolean }
   | { type: 'probe'; id: number; x: number; y: number }
   | { type: 'chunks'; id: number; keys: number[] | 'all' }
   | { type: 'export'; id: number; opts: ExportOptions };
@@ -81,6 +84,20 @@ export type WorkerEvent =
       count: number;
       truncated: boolean;
     }
-  | { type: 'probe'; id: number; cell: number }
+  | {
+      type: 'probe';
+      id: number;
+      cell: number;
+      /** Unix seconds, 0 if unknown */ time: number;
+    }
+  | { type: 'timeline'; id: number; info: TimelineInfo | null; chunks: { key: number; times: Uint16Array }[] }
+  | {
+      type: 'clusters';
+      id: number;
+      /** CLUSTER_STRIDE ints per cluster: repX, repY, count, minX, minY, maxX, maxY */
+      clusters: Int32Array;
+      count: number;
+      truncated: boolean;
+    }
   | { type: 'export-progress'; id: number; done: number; total: number }
   | { type: 'exported'; id: number; blob: Blob };

@@ -11,7 +11,8 @@ export type OverlayPrimitive =
   | { kind: 'ring'; r: number; halfWidth: number; color: RGBA }
   | { kind: 'sector'; r0: number; r1: number; startDeg: number; spanDeg: number; color: RGBA }
   | { kind: 'grid'; spacing: number; color: RGBA; strong: boolean }
-  | { kind: 'marker'; x: number; y: number; radius: number; color: RGBA };
+  | { kind: 'marker'; x: number; y: number; radius: number; color: RGBA }
+  | { kind: 'segment'; x0: number; y0: number; x1: number; y1: number; color: RGBA };
 
 export interface OverlayLabel {
   id: string;
@@ -20,6 +21,8 @@ export interface OverlayLabel {
   text: string;
   color: string;
   icon?: string;
+  /** Pins are drawn as a dot with the name beside it, and win label collisions. */
+  kind?: 'pin';
 }
 
 export interface OverlayScene {
@@ -38,6 +41,7 @@ export interface OverlayInputs {
   alpha: { rings: number; sectors: number; grid: number };
   poiName(p: PoiDef): string;
   playerLabel: string;
+  pins: readonly { id: string; x: number; y: number; label: string; color: string }[];
 }
 
 export const RING_HALF_WIDTH = 10;
@@ -119,12 +123,6 @@ export function buildOverlayScene(inp: OverlayInputs): OverlayScene {
     ];
 
     if (!bands.length) {
-      const hint = poi.hint?.[inp.world];
-      if (hint) {
-        const [x, y] = polar(hint.bearingDeg, hint.r);
-        label(poi.id, x, y);
-        continue;
-      }
       // Spawns anywhere in its biome: show the biome area faintly.
       const place = placeBiome(inp.world, poi.biomes[0]!, inp.sectors.rotations);
       if (!place) continue;
@@ -208,5 +206,14 @@ export function buildOverlayScene(inp: OverlayInputs): OverlayScene {
       color: inp.player.color,
     });
   }
-  return { primitives, labels };
+  // Pins first: labels earlier in the list win when they would overlap.
+  const pinLabels: OverlayLabel[] = inp.pins.map((p) => ({
+    id: `pin:${p.id}`,
+    x: p.x + 0.5,
+    y: p.y + 0.5,
+    text: p.label,
+    color: p.color,
+    kind: 'pin',
+  }));
+  return { primitives, labels: [...pinLabels, ...labels] };
 }

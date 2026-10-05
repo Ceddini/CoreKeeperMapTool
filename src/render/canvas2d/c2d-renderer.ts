@@ -30,6 +30,8 @@ export class C2dRenderer implements Renderer {
   private mazeData: { mask: Uint8Array; size: number } | null = null;
   private mazeClasses = -1;
   private points: Float32Array | null = null;
+  private times = new Map<number, Uint16Array>();
+  private lastTime = '';
   private lastDim = -1;
   private lastCustom = '';
   private readonly canvas: HTMLCanvasElement;
@@ -86,11 +88,25 @@ export class C2dRenderer implements Renderer {
     this.mazeClasses = -1;
   }
 
+  setTimes(chunks: readonly { key: number; times: Uint16Array }[] | null): void {
+    if (!chunks) this.times.clear();
+    else for (const c of chunks) this.times.set(c.key, c.times);
+    this.invalidateAll();
+  }
+
   setPoints(points: Float32Array | null): void {
     this.points = points;
   }
 
-  private composite(t: Tile, active: boolean, dim: number, custom: [number, number, number]): void {
+  private composite(
+    t: Tile,
+    active: boolean,
+    dim: number,
+    custom: [number, number, number],
+    times: Uint16Array | undefined,
+    timeMode: number,
+    timeCut: number,
+  ): void {
     const img = new ImageData(PART, PART);
     const out = new Uint32Array(img.data.buffer);
     const pal = this.palette;
@@ -104,6 +120,8 @@ export class C2dRenderer implements Renderer {
       const v = t.cells[i]!;
       const idx = v & 0x7fff;
       if (!idx || idx >= this.paletteSize) continue;
+      const tv = times ? times[i]! : 0;
+      if (timeMode === 1 && (tv === 0 || tv > timeCut)) continue;
       const rgb = pal[idx]!;
       let a = 255;
       let color = ((rgb & 255) << 16) | (rgb & 0xff00) | ((rgb >> 16) & 255);
@@ -113,6 +131,7 @@ export class C2dRenderer implements Renderer {
         if (!on) a = dimA;
         else if (f & HL_CUSTOM) color = customAbgr & 0xffffff;
       }
+      if (timeMode === 2 && tv < timeCut) a = Math.min(a, dimA);
       out[i] = ((a << 24) | color) >>> 0;
     }
     t.canvas.getContext('2d')!.putImageData(img, 0, 0);
@@ -148,9 +167,11 @@ export class C2dRenderer implements Renderer {
     }
     // Re-composite everything when the dim level or paint colour changes.
     const customKey = s.customColor.join(',');
-    if (s.dim !== this.lastDim || customKey !== this.lastCustom) {
+    const timeKey = `${s.timeMode}:${Math.round(s.timeCut)}`;
+    if (s.dim !== this.lastDim || customKey !== this.lastCustom || timeKey !== this.lastTime) {
       this.lastDim = s.dim;
       this.lastCustom = customKey;
+      this.lastTime = timeKey;
       this.invalidateAll();
     }
 
@@ -170,7 +191,18 @@ export class C2dRenderer implements Renderer {
     const maxCy = Math.floor(y0 / PART);
     for (const t of this.tiles.values()) {
       if (t.cx < minCx || t.cx > maxCx || t.cy < minCy || t.cy > maxCy) continue;
-      if (t.dirty) this.composite(t, s.highlightActive, s.dim, s.customColor);
+      if (t.dirty) {
+        const key = (t.cx + 32768) * 65536 + (t.cy + 32768);
+        this.composite(
+          t,
+          s.highlightActive,
+          s.dim,
+          s.customColor,
+          this.times.get(key),
+          this.times.size ? s.timeMode : 0,
+          s.timeCut,
+        );
+      }
       ctx.drawImage(t.canvas, toX(t.cx * PART), toY(t.cy * PART + PART), PART * z, PART * z);
     }
 

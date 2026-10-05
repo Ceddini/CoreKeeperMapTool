@@ -14,6 +14,11 @@ Live: https://maptool.ceschmitt.de · Continuation of Craigins' Map Tool.
 - **Find tiles**: search ~340 tile types, counts on your map, highlight with dimming, zoomed-out markers, pick a
   tile from the map, list of unknown colours to report.
 - **Maze holes** for the Rune Song / Clear Gemstone quests, with a list of candidates.
+- **Nearest spot**: jump through ore veins, boulders or any highlighted tile type by distance (N / Shift+N).
+- **Pins** per map (right-click → Add pin here), import/export as JSON.
+- **Ruler**: measure the distance between two points.
+- **Exploration history**: see when areas were explored, highlight newer areas or replay the map growing, per play session.
+- **Share links** with the camera and your layers (no map data is shared).
 - Chunk grid (64) and mob grid (16), player marker with spawn radius, custom distance ring.
 - Hover/tap inspector (coordinates, distance from the Core, tile name), keyboard shortcuts, command palette (Ctrl K).
 - Export to PNG at 1–4× with layers, of the whole map or the current view.
@@ -33,6 +38,10 @@ npx vite build && npm run size   # production build + bundle budgets
 ```
 
 Append `?canvas2d` to the URL to try the Canvas 2D fallback renderer, `?at=x,y,zoom` to deep-link a spot.
+
+The bundled examples in `public/example/` are a fully revealed 1.0+ world and a fully explored Classic world.
+Map files also contain exploration times: a big-endian 32-bit value per tile that grows as tiles are revealed
+(see `src/workers/analysis/timeline.ts`).
 
 ### Architecture
 

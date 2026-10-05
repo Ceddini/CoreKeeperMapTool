@@ -31,7 +31,7 @@
   --ref-amber-800: #5f3e04;
 
   --ref-teal-300: #7fe3d9;
-  --ref-teal-600: #137a70;
+  --ref-teal-600: #0e6a61;
   --ref-red-300: #ffa3a3;
   --ref-red-700: #b42323;
   --ref-green-300: #8be3a8;
@@ -148,7 +148,7 @@
   --color-accent-text: var(--ref-amber-800);
   --color-focus: var(--ref-amber-700);
   --color-info: var(--ref-teal-600);
-  --color-info-soft: rgb(19 122 112 / 0.1);
+  --color-info-soft: rgb(14 106 97 / 0.1);
   --color-success: var(--ref-green-700);
   --color-success-soft: rgb(31 122 61 / 0.1);
   --color-warning: var(--ref-yellow-800);

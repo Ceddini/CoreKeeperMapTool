@@ -17,6 +17,10 @@ export interface RenderState {
   /** Show the highlight point layer (zoomed out with an active highlight). */
   points: boolean;
   pointOverride: [number, number, number] | null;
+  /** Exploration history: 0 off, 1 replay (hide tiles explored after the cut), 2 highlight newer. */
+  timeMode: 0 | 1 | 2;
+  /** 16-bit time step (see TimelineInfo.unit) used as the cut. */
+  timeCut: number;
 }
 
 /** Implemented by the WebGL2 renderer and the Canvas 2D fallback. */
@@ -31,6 +35,8 @@ export interface Renderer {
   setHighlightLut(lut: Uint8Array): void;
   setMazeMask(mask: Uint8Array | null, size: number): void;
   setPoints(points: Float32Array | null): void;
+  /** Per-chunk 16-bit exploration times (null clears them). */
+  setTimes(chunks: readonly { key: number; times: Uint16Array }[] | null): void;
   render(s: RenderState): void;
   dispose(): void;
 }

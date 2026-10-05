@@ -5,8 +5,8 @@ import { fmt, t, type MsgKey } from '../i18n/i18n.ts';
 import { button } from './components.ts';
 import { h } from './dom.ts';
 import { icon } from './icons.ts';
-import { describeTile } from './map-view.ts';
-import { findMapGuide } from './panels/help-panel.ts';
+import { describeTile, formatDistance } from './map-view.ts';
+import { findMapGuide } from './find-map-guide.ts';
 import wordmarkDark from '../assets/wordmark-dark.png';
 import wordmarkLight from '../assets/wordmark-light.png';
 
@@ -81,8 +81,13 @@ function openCard(ctx: Ctx): HTMLElement {
         label: () => t('open.example'),
         icon: 'map',
         variant: 'ghost',
-        onClick: () => void actions.example(),
+        onClick: () => void actions.example('standard'),
       }),
+      h(
+        'button',
+        { type: 'button', class: 'link-button small', onClick: () => void actions.example('classic') },
+        () => t('open.exampleClassic'),
+      ),
     ),
     h(
       'p',
@@ -195,13 +200,50 @@ function statusBar(ctx: Ctx): HTMLElement {
     h('span', { class: 'status-bar__text' }, () => {
       const hov = store.hover.value;
       if (!hov) return t(matchMedia('(pointer: coarse)').matches ? 'status.hintTouch' : 'status.hint');
-      return describeTile(store, hov.x, hov.y, hov.cell);
+      return describeTile(store, hov.x, hov.y, hov.cell, hov.time);
     }),
     h('span', { class: 'status-bar__zoom', title: () => t('status.zoom') }, () => {
       const z = store.camera.value.zoom;
       return z >= 1 ? `${fmt(z, 1)}×` : `1:${fmt(1 / z, 1)}`;
     }),
   );
+}
+
+/** Result of a finished measurement, with a text equivalent of the line on the map. */
+function rulerCard(ctx: Ctx): () => HTMLElement | null {
+  return () => {
+    const r = ctx.store.ruler.value;
+    if (!r?.b || ctx.store.pickMode.value !== 'none') return null;
+    const [ax, ay] = r.a;
+    const [bx, by] = r.b;
+    const steps = t('ruler.steps', { dx: fmt(Math.abs(bx - ax)), dy: fmt(Math.abs(by - ay)) });
+    return h(
+      'div',
+      { class: 'pick-banner pick-banner--info', role: 'status' },
+      icon('ruler', 16),
+      h(
+        'span',
+        null,
+        formatDistance(ax, ay, bx, by),
+        h('span', { class: 'pick-banner__detail' }, ` · ${steps}`),
+      ),
+      button({
+        label: t('ruler.again'),
+        size: 'sm',
+        variant: 'ghost',
+        onClick: () => {
+          ctx.store.ruler.value = null;
+          ctx.store.pickMode.value = 'measure';
+        },
+      }),
+      button({
+        label: t('ruler.clear'),
+        size: 'sm',
+        variant: 'ghost',
+        onClick: () => (ctx.store.ruler.value = null),
+      }),
+    );
+  };
 }
 
 function pickBanner(ctx: Ctx): () => HTMLElement | null {
@@ -211,13 +253,28 @@ function pickBanner(ctx: Ctx): () => HTMLElement | null {
     return h(
       'div',
       { class: 'pick-banner', role: 'status' },
-      icon(mode === 'tile' ? 'pipette' : 'pin', 16),
-      h('span', null, t(mode === 'tile' ? 'pick.tile' : 'pick.player')),
+      icon(mode === 'tile' ? 'pipette' : mode === 'measure' ? 'ruler' : 'pin', 16),
+      h(
+        'span',
+        null,
+        t(
+          mode === 'tile'
+            ? 'pick.tile'
+            : mode === 'player'
+              ? 'pick.player'
+              : ctx.store.ruler.value
+                ? 'pick.measureEnd'
+                : 'pick.measureStart',
+        ),
+      ),
       button({
         label: t('common.cancel'),
         size: 'sm',
         variant: 'ghost',
-        onClick: () => (ctx.store.pickMode.value = 'none'),
+        onClick: () => {
+          if (mode === 'measure') ctx.store.ruler.value = null;
+          ctx.store.pickMode.value = 'none';
+        },
       }),
     );
   };
@@ -243,6 +300,7 @@ export function stage(ctx: Ctx): HTMLElement {
     () => (!store.summary.value && store.status.value !== 'loading' ? openCard(ctx) : null),
     () => (store.status.value === 'loading' ? progressCard(ctx) : null),
     pickBanner(ctx),
+    rulerCard(ctx),
     () => (store.summary.value ? mapControls(ctx) : null),
     () => (store.summary.value ? statusBar(ctx) : null),
     drop,
