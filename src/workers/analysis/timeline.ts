@@ -35,21 +35,44 @@ export interface TimelineInfo {
 const SESSION_GAP_S = 20 * 60;
 const HIST_BINS = 120;
 
-/** Decoded seconds per tile, cached per chunk object (a changed part is a new chunk object). */
-const cache = new WeakMap<Chunk, Uint32Array | null>();
+/**
+ * Exact times of one chunk, kept compact: tile i was explored at `base + (steps[i] - 1) * 4` seconds
+ * (steps 0 = unknown). A chunk is usually explored within a few days, so 16-bit steps fit; chunks
+ * whose times span longer fall back to 32 bits.
+ */
+interface ChunkTimes {
+  base: number;
+  steps: Uint16Array | Uint32Array;
+}
 
-async function decodeTimes(c: Chunk): Promise<Uint32Array | null> {
+/** Cached per chunk object (a changed part is a new chunk object). */
+const cache = new WeakMap<Chunk, ChunkTimes | null>();
+
+async function decodeTimes(c: Chunk): Promise<ChunkTimes | null> {
   if (cache.has(c)) return cache.get(c)!;
-  let out: Uint32Array | null = null;
+  let out: ChunkTimes | null = null;
   if (c.ts) {
     try {
       const { width, height, rgba } = await decodePng(c.ts);
       if (width === 256 && height === 256) {
-        out = new Uint32Array(CELLS);
-        for (let i = 0, p = 0; i < CELLS; i++, p += 4)
-          out[i] =
-            (((rgba[p]! << 24) | (rgba[p + 1]! << 16) | (rgba[p + 2]! << 8) | rgba[p + 3]!) >>> 0) *
-            RAW_TIME_STEP_S;
+        const raw = new Uint32Array(CELLS);
+        let lo = Infinity;
+        let hi = 0;
+        for (let i = 0, p = 0; i < CELLS; i++, p += 4) {
+          const v = ((rgba[p]! << 24) | (rgba[p + 1]! << 16) | (rgba[p + 2]! << 8) | rgba[p + 3]!) >>> 0;
+          raw[i] = v;
+          if (!v) continue;
+          if (v < lo) lo = v;
+          if (v > hi) hi = v;
+        }
+        if (hi) {
+          const steps = hi - lo < 0xffff ? new Uint16Array(CELLS) : raw;
+          for (let i = 0; i < CELLS; i++) {
+            const v = raw[i]!;
+            steps[i] = v ? v - lo + 1 : 0;
+          }
+          out = { base: lo * RAW_TIME_STEP_S, steps };
+        }
       }
     } catch {
       out = null;
@@ -67,7 +90,15 @@ export function timeAt(model: MapModel, x: number, y: number): number {
   const t = c ? cache.get(c) : null;
   if (!c || !t) return 0;
   const row = 255 - (y - cy * 256);
-  return t[row * 256 + (x - cx * 256)]!;
+  const s = t.steps[row * 256 + (x - cx * 256)]!;
+  return s ? t.base + (s - 1) * RAW_TIME_STEP_S : 0;
+}
+
+/** Memory held by the decoded times of the current chunks (for tests). */
+export function timeCacheBytes(model: MapModel): number {
+  let n = 0;
+  for (const c of model.chunks.values()) n += cache.get(c)?.steps.byteLength ?? 0;
+  return n;
 }
 
 export interface TimelineResult {
@@ -87,9 +118,11 @@ export async function buildTimeline(model: MapModel): Promise<TimelineResult> {
   decoded.forEach((t, ci) => {
     if (!t) return;
     const cells = chunks[ci]!.cells;
+    const { base, steps: st } = t;
     for (let i = 0; i < CELLS; i++) {
-      const v = t[i]!;
-      if (!v || !(cells[i]! & 0x7fff)) continue;
+      const s = st[i]!;
+      if (!s || !(cells[i]! & 0x7fff)) continue;
+      const v = base + (s - 1) * RAW_TIME_STEP_S;
       tiles++;
       if (v < min) min = v;
       if (v > max) max = v;
@@ -108,9 +141,11 @@ export async function buildTimeline(model: MapModel): Promise<TimelineResult> {
     const times = new Uint16Array(CELLS);
     if (t) {
       const cells = chunk.cells;
+      const { base, steps: st } = t;
       for (let i = 0; i < CELLS; i++) {
-        const v = t[i]!;
-        if (!v || !(cells[i]! & 0x7fff)) continue;
+        const s0 = st[i]!;
+        if (!s0 || !(cells[i]! & 0x7fff)) continue;
+        const v = base + (s0 - 1) * RAW_TIME_STEP_S;
         const s = Math.floor((v - min) / unit);
         times[i] = s + 1;
         steps[s]!++;

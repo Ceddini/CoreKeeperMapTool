@@ -1,8 +1,13 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { ingest } from '../../src/workers/ingest/ingest.ts';
-import { MapModel } from '../../src/workers/model/map-model.ts';
-import { buildTimeline, exploreTimeToDate, timeAt } from '../../src/workers/analysis/timeline.ts';
+import { CELLS, MapModel } from '../../src/workers/model/map-model.ts';
+import {
+  buildTimeline,
+  exploreTimeToDate,
+  timeAt,
+  timeCacheBytes,
+} from '../../src/workers/analysis/timeline.ts';
 
 async function load(path: string) {
   const m = new MapModel();
@@ -33,6 +38,13 @@ describe('exploration timeline', () => {
     // The Core area is explored first.
     expect(timeAt(m, 0, 0)).toBeGreaterThanOrEqual(info!.min);
     expect(timeAt(m, 0, 0)).toBeLessThan(info!.min + 15 * 60);
+  });
+
+  it('keeps decoded times compact: 16 bits per tile instead of 32', async () => {
+    const m = await load('public/example/classic.mapparts.gzip');
+    await buildTimeline(m);
+    expect(timeCacheBytes(m)).toBeLessThanOrEqual(m.chunks.size * CELLS * 2);
+    // Still exact: the first test above reads the first and last tile to the second.
   });
 
   it('encodes times in 16 bits relative to the first exploration', async () => {
