@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en" class="is-booting">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Core Keeper Map Tool</title>
+    <meta
+      name="description"
+      content="Open your Core Keeper map in the browser: boss and dungeon rings, biome sectors, maze holes, ore and tile finder. Your map never leaves your device."
+    />
+    <meta name="color-scheme" content="dark light" />
+    <meta name="theme-color" content="#14120f" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#f4efe6" media="(prefers-color-scheme: light)" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/png" href="/icons/icon-192.png" />
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+    <script src="/theme-init.js"></script>
+  </head>
+  <body>
+    <div id="app"></div>
+    <noscript>
+      <p style="padding: 2rem; font-family: system-ui">
+        The Core Keeper Map Tool needs JavaScript to read your map file locally.
+      </p>
+    </noscript>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

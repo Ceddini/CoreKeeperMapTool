@@ -1,0 +1,174 @@
+/*
+ * Design tokens, three tiers:
+ *   1. reference  (--ref-*)  raw palette and scales
+ *   2. semantic   (--color-*, --space-*, …) what a value is for
+ *   3. component  (--btn-*, --panel-*, …) defined next to each component in components.css
+ * Components only reference semantic or component tokens.
+ */
+:root {
+  /* ---- Reference: warm "cavern stone" neutrals, Core amber, crystal teal */
+  --ref-stone-975: #0b0a09;
+  --ref-stone-950: #110f0d;
+  --ref-stone-900: #181613;
+  --ref-stone-850: #1f1c18;
+  --ref-stone-800: #27231f;
+  --ref-stone-750: #312c27;
+  --ref-stone-700: #3d3731;
+  --ref-stone-600: #534b43;
+  --ref-stone-500: #70675c;
+  --ref-stone-400: #958b7e;
+  --ref-stone-300: #b9afa1;
+  --ref-stone-200: #d8d0c3;
+  --ref-stone-100: #eee8de;
+  --ref-stone-50: #f8f4ed;
+  --ref-paper: #fffdf9;
+
+  --ref-amber-200: #ffe0a3;
+  --ref-amber-300: #ffcf70;
+  --ref-amber-400: #f7b843;
+  --ref-amber-500: #e5a01f;
+  --ref-amber-700: #8a5a06;
+  --ref-amber-800: #5f3e04;
+
+  --ref-teal-300: #7fe3d9;
+  --ref-teal-600: #137a70;
+  --ref-red-300: #ffa3a3;
+  --ref-red-700: #b42323;
+  --ref-green-300: #8be3a8;
+  --ref-green-700: #1f7a3d;
+  --ref-yellow-300: #ffd977;
+  --ref-yellow-800: #6e5100;
+
+  /* ---- Type */
+  --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: ui-monospace, 'Cascadia Mono', 'SF Mono', Menlo, Consolas, monospace;
+  --text-xs: 0.75rem; /* 12 */
+  --text-sm: 0.8125rem; /* 13 */
+  --text-md: 0.875rem; /* 14 */
+  --text-lg: 1rem; /* 16 */
+  --text-xl: 1.25rem; /* 20 */
+  --text-2xl: 1.5rem; /* 24 */
+  --leading-tight: 1.25;
+  --leading-normal: 1.5;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+
+  /* ---- Space (4px grid) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+
+  /* ---- Shape */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-full: 999px;
+
+  /* ---- Motion */
+  --dur-fast: 120ms;
+  --dur-base: 200ms;
+  --dur-slow: 320ms;
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+
+  /* ---- Layers */
+  --z-map: 0;
+  --z-labels: 5;
+  --z-overlay: 10;
+  --z-panel: 20;
+  --z-topbar: 30;
+  --z-popover: 40;
+  --z-toast: 50;
+
+  /* ---- Layout */
+  --topbar-h: 52px;
+  --rail-w: 76px;
+  --panel-w: 352px;
+  --tabbar-h: 60px;
+  --target-min: 32px;
+}
+
+/* ---- Semantic: dark (default) */
+:root,
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --color-bg: var(--ref-stone-975);
+  --color-surface-1: var(--ref-stone-900);
+  --color-surface-2: var(--ref-stone-850);
+  --color-surface-3: var(--ref-stone-800);
+  --color-surface-raised: var(--ref-stone-850);
+  --color-overlay: rgb(17 15 13 / 0.86);
+  --color-border: var(--ref-stone-750);
+  --color-border-strong: var(--ref-stone-600);
+  --color-text: var(--ref-stone-100);
+  --color-text-muted: var(--ref-stone-300);
+  --color-text-subtle: var(--ref-stone-400);
+  --color-accent: var(--ref-amber-400);
+  --color-accent-hover: var(--ref-amber-300);
+  --color-on-accent: #1d1302;
+  --color-accent-soft: rgb(247 184 67 / 0.14);
+  --color-accent-text: var(--ref-amber-300);
+  --color-focus: var(--ref-amber-300);
+  --color-info: var(--ref-teal-300);
+  --color-info-soft: rgb(127 227 217 / 0.12);
+  --color-success: var(--ref-green-300);
+  --color-success-soft: rgb(139 227 168 / 0.12);
+  --color-warning: var(--ref-yellow-300);
+  --color-warning-soft: rgb(255 217 119 / 0.12);
+  --color-danger: var(--ref-red-300);
+  --color-danger-soft: rgb(255 163 163 / 0.12);
+  --shadow-1: 0 1px 2px rgb(0 0 0 / 0.4), 0 2px 8px rgb(0 0 0 / 0.25);
+  --shadow-2: 0 8px 24px rgb(0 0 0 / 0.45), 0 2px 6px rgb(0 0 0 / 0.3);
+  --map-bg-dark: #0b0a09;
+  --map-bg-light: #e7e1d6;
+}
+
+/* ---- Semantic: light */
+:root[data-theme='light'] {
+  color-scheme: light;
+  --color-bg: var(--ref-stone-50);
+  --color-surface-1: var(--ref-paper);
+  --color-surface-2: var(--ref-stone-50);
+  --color-surface-3: var(--ref-stone-100);
+  --color-surface-raised: var(--ref-paper);
+  --color-overlay: rgb(255 253 249 / 0.9);
+  --color-border: var(--ref-stone-200);
+  --color-border-strong: var(--ref-stone-400);
+  --color-text: #1d1915;
+  --color-text-muted: #554c42;
+  --color-text-subtle: #6a6155;
+  --color-accent: var(--ref-amber-500);
+  --color-accent-hover: var(--ref-amber-400);
+  --color-on-accent: #1d1302;
+  --color-accent-soft: rgb(229 160 31 / 0.16);
+  --color-accent-text: var(--ref-amber-800);
+  --color-focus: var(--ref-amber-700);
+  --color-info: var(--ref-teal-600);
+  --color-info-soft: rgb(19 122 112 / 0.1);
+  --color-success: var(--ref-green-700);
+  --color-success-soft: rgb(31 122 61 / 0.1);
+  --color-warning: var(--ref-yellow-800);
+  --color-warning-soft: rgb(229 160 31 / 0.16);
+  --color-danger: var(--ref-red-700);
+  --color-danger-soft: rgb(180 35 35 / 0.1);
+  --shadow-1: 0 1px 2px rgb(60 45 25 / 0.12), 0 2px 8px rgb(60 45 25 / 0.08);
+  --shadow-2: 0 10px 28px rgb(60 45 25 / 0.18), 0 2px 6px rgb(60 45 25 / 0.1);
+}
+
+@media (pointer: coarse) {
+  :root {
+    --target-min: 44px;
+  }
+}
+
+@media (prefers-contrast: more) {
+  :root {
+    --color-border: var(--color-border-strong);
+    --color-text-muted: var(--color-text);
+    --color-text-subtle: var(--color-text-muted);
+  }
+}

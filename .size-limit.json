@@ -1,0 +1,6 @@
+[
+  { "name": "App shell + renderer (main JS)", "path": "dist/assets/main-*.js", "limit": "75 KB", "gzip": true },
+  { "name": "Map worker", "path": "dist/assets/map.worker-*.js", "limit": "32 KB", "gzip": true },
+  { "name": "German locale (lazy)", "path": "dist/assets/de-*.js", "limit": "8 KB", "gzip": true },
+  { "name": "CSS", "path": "dist/assets/main-*.css", "limit": "10 KB", "gzip": true }
+]

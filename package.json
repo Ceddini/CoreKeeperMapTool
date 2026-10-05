@@ -1,0 +1,46 @@
+{
+  "name": "core-keeper-map-tool",
+  "private": true,
+  "version": "2.0.0",
+  "description": "Browser-based map viewer and analysis tool for Core Keeper map files.",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "bench": "vitest bench --run",
+    "e2e": "playwright test",
+    "size": "size-limit",
+    "data:import": "node scripts/import-wiki-tiles.ts",
+    "data:validate": "node scripts/validate-data.ts",
+    "data:icons": "node scripts/make-icons.ts"
+  },
+  "engines": {
+    "node": ">=22.18"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
+    "@playwright/test": "^1.63.0",
+    "@size-limit/file": "^14.1.0",
+    "@types/node": "^26.6.4",
+    "eslint": "^10.12.0",
+    "luaparse": "^0.3.1",
+    "prettier": "^3.9.9",
+    "size-limit": "^14.1.0",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.71.0",
+    "vite": "^8.3.2",
+    "vite-plugin-pwa": "^2.0.0",
+    "vitest": "^5.0.3"
+  },
+  "dependencies": {
+    "fflate": "^0.8.3",
+    "lucide": "^1.52.0"
+  }
+}

@@ -1,0 +1,4 @@
+legacy/
+dist/
+src/data/tiles.generated.json
+package-lock.json

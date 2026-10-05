@@ -1,2 +1,9 @@
-
-src/img/screenshots/*
+node_modules/
+dist/
+dev-dist/
+coverage/
+test-results/
+playwright-report/
+.cache/
+*.local
+legacy/img/screenshots/*

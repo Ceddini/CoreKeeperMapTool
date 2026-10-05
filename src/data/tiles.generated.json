@@ -1,0 +1,4654 @@
+{
+ "source": "https://corekeeper.fandom.com/wiki/Module:ObjectInfo/data",
+ "license": "CC BY-SA 3.0",
+ "gameVersion": "1.2.0.7",
+ "revision": "2026-05-07T01:35:22Z",
+ "tiles": [
+  {
+   "key": "AFWoodenDestructible",
+   "name": "Office Crate",
+   "categories": [
+    "Environment",
+    "AbioticFactorBiome"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "id": "AFWoodenDestructible",
+   "rgb": "#723c11"
+  },
+  {
+   "key": "AFWoodenDestructible",
+   "name": "Large Office Crate",
+   "categories": [
+    "Environment",
+    "AbioticFactorBiome"
+   ],
+   "size": [
+    2,
+    1
+   ],
+   "id": "AFWoodenDestructible#1",
+   "rgb": "#723c11"
+  },
+  {
+   "key": "AlienFloorVent",
+   "name": "Alien Floor Vent",
+   "categories": [
+    "Environment",
+    "CrystalBiome"
+   ],
+   "size": [
+    2,
+    2
+   ],
+   "priority": 742,
+   "id": "AlienFloorVent",
+   "rgb": "#47687e"
+  },
+  {
+   "key": "AlienTechDestructible",
+   "name": "Alien Tech Crate",
+   "categories": [
+    "Environment",
+    "CrystalBiome"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "id": "AlienTechDestructible",
+   "rgb": "#4ce9e0"
+  },
+  {
+   "key": "AncientDestructible",
+   "name": "Ancient Crate",
+   "categories": [
+    "Environment",
+    "StoneBiome"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "id": "AncientDestructible",
+   "rgb": "#4da8ca"
+  },
+  {
+   "key": "AncientGemstone",
+   "name": "Ancient Gemstone",
+   "categories": [
+    "Material",
+    "RawMaterial"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "Dirt",
+   "tileType": "ancientCrystal",
+   "priority": 950,
+   "id": "AncientGemstone",
+   "rgb": "#0093ff"
+  },
+  {
+   "key": "BigFloorTileCaveling",
+   "name": "Stone tile \"Cavelings\"",
+   "categories": [
+    "Environment",
+    "CityBiome"
+   ],
+   "size": [
+    2,
+    2
+   ],
+   "priority": 741,
+   "id": "BigFloorTileCaveling",
+   "rgb": "#818181"
+  },
+  {
+   "key": "BigFloorTileGemstone",
+   "name": "Stone tile \"Gemstone\"",
+   "categories": [
+    "Environment",
+    "CityBiome"
+   ],
+   "size": [
+    2,
+    2
+   ],
+   "priority": 741,
+   "id": "BigFloorTileGemstone",
+   "rgb": "#818181"
+  },
+  {
+   "key": "BigFloorTileScholar",
+   "name": "Stone tile \"Scholar\"",
+   "categories": [
+    "Environment",
+    "CityBiome"
+   ],
+   "size": [
+    2,
+    2
+   ],
+   "priority": 741,
+   "id": "BigFloorTileScholar",
+   "rgb": "#818181"
+  },
+  {
+   "key": "CavelingFloorTile",
+   "name": "Caveling Floor Tile",
+   "categories": [
+    "Environment",
+    "StoneBiome"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "priority": 732,
+   "id": "CavelingFloorTile",
+   "rgb": "#818181"
+  },
+  {
+   "key": "CavelingFloorTileDark",
+   "name": "Dark Caveling Floor Tile",
+   "categories": [
+    "Environment",
+    "StoneBiome"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "priority": 732,
+   "id": "CavelingFloorTileDark",
+   "rgb": "#818181"
+  },
+  {
+   "key": "Chrysalis",
+   "name": "Chrysalis",
+   "categories": [
+    "Environment",
+    "ClayBiome"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "Dirt",
+   "tileType": "chrysalis",
+   "priority": 700,
+   "id": "Chrysalis",
+   "rgb": "#fca694"
+  },
+  {
+   "key": "CityCavelingMoss",
+   "name": "Urban Moss",
+   "categories": [
+    "Environment",
+    "CityBiome"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "City",
+   "tileType": "chrysalis",
+   "priority": 700,
+   "id": "CityCavelingMoss",
+   "rgb": "#2aa947"
+  },
+  {
+   "key": "CityDestructible",
+   "name": "Metropolis Crate",
+   "categories": [
+    "Environment",
+    "CityBiome"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "id": "CityDestructible",
+   "rgb": "#4da8ca"
+  },
+  {
+   "key": "ClayCavelingMoss",
+   "name": "Clay Moss",
+   "categories": [
+    "Environment",
+    "ClayBiome"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "Clay",
+   "tileType": "chrysalis",
+   "priority": 700,
+   "id": "ClayCavelingMoss",
+   "rgb": "#7e574e"
+  },
+  {
+   "key": "ClayPot",
+   "name": "Clay Pot",
+   "categories": [
+    "Environment",
+    "ClayBiome"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "id": "ClayPot",
+   "rgb": "#622f13"
+  },
+  {
+   "key": "ConveyorBelt",
+   "name": "Conveyor Belt",
+   "categories": [
+    "Technology",
+    "Automation"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "variant": "down",
+   "priority": 785,
+   "id": "ConveyorBelt",
+   "rgb": "#687fae"
+  },
+  {
+   "key": "ConveyorBelt",
+   "name": "Conveyor Belt",
+   "categories": [
+    "Technology",
+    "Automation"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "variant": "up",
+   "priority": 785,
+   "id": "ConveyorBelt#1",
+   "rgb": "#687fae"
+  },
+  {
+   "key": "ConveyorBelt",
+   "name": "Conveyor Belt",
+   "categories": [
+    "Technology",
+    "Automation"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "variant": "left",
+   "priority": 785,
+   "id": "ConveyorBelt#2",
+   "rgb": "#687fae"
+  },
+  {
+   "key": "ConveyorBelt",
+   "name": "Conveyor Belt",
+   "categories": [
+    "Technology",
+    "Automation"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "variant": "right",
+   "priority": 785,
+   "id": "ConveyorBelt#3",
+   "rgb": "#687fae"
+  },
+  {
+   "key": "ConveyorBeltSplitter",
+   "name": "Conveyor Belt Splitter",
+   "categories": [
+    "Technology",
+    "Automation"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "priority": 785,
+   "id": "ConveyorBeltSplitter",
+   "rgb": "#687fae"
+  },
+  {
+   "key": "CopperOre",
+   "name": "Copper Ore",
+   "categories": [
+    "Material",
+    "RawMaterial"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "Dirt",
+   "tileType": "ore",
+   "priority": 950,
+   "id": "CopperOre",
+   "rgb": "#ed6057"
+  },
+  {
+   "key": "CopperOreBoulder",
+   "name": "Copper Ore Boulder",
+   "categories": [
+    "Environment",
+    "OreBoulder"
+   ],
+   "size": [
+    2,
+    2
+   ],
+   "id": "CopperOreBoulder",
+   "rgb": "#ed6057"
+  },
+  {
+   "key": "CoralBridge",
+   "name": "Coral Bridge",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "BaseBuildingCoral",
+   "tileType": "bridge",
+   "priority": 650,
+   "id": "CoralBridge",
+   "rgb": "#c85ccc"
+  },
+  {
+   "key": "CoralFence",
+   "name": "Coral Fence",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "BaseBuildingCoral",
+   "tileType": "fence",
+   "priority": 850,
+   "id": "CoralFence",
+   "rgb": "#9f3da4"
+  },
+  {
+   "key": "CoralFloor",
+   "name": "Coral Floor",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "BaseBuildingCoral",
+   "tileType": "floor",
+   "priority": 730,
+   "id": "CoralFloor",
+   "rgb": "#d56db7"
+  },
+  {
+   "key": "CoralRootPlant",
+   "name": "Coral Root Plant",
+   "categories": [
+    "NonObtainable",
+    "Plant"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "id": "CoralRootPlant",
+   "rgb": "#fd6aad"
+  },
+  {
+   "key": "CoralWood",
+   "name": "Coral Wood",
+   "categories": [
+    "Material",
+    "RawMaterial"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "Sea",
+   "tileType": "bigRoot",
+   "priority": 800,
+   "id": "CoralWood",
+   "rgb": "#fd6aad"
+  },
+  {
+   "key": "CrystalCrust",
+   "name": "Crystal Crust",
+   "categories": [
+    "Environment",
+    "CrystalBiome"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "Crystal",
+   "tileType": "chrysalis",
+   "priority": 700,
+   "id": "CrystalCrust",
+   "rgb": "#0fa2b8"
+  },
+  {
+   "key": "CrystalDestructible",
+   "name": "Sun Crystal",
+   "categories": [
+    "Environment",
+    "CrystalBiome"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "id": "CrystalDestructible",
+   "rgb": "#db8c26"
+  },
+  {
+   "key": "DesertCavelingMoss",
+   "name": "Valley Moss",
+   "categories": [
+    "Environment",
+    "DesertBiome"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "Desert",
+   "tileType": "chrysalis",
+   "priority": 700,
+   "id": "DesertCavelingMoss",
+   "rgb": "#f97443"
+  },
+  {
+   "key": "DesertDestructible",
+   "name": "Desert Flower Vessel",
+   "categories": [
+    "Environment",
+    "DesertBiome"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "id": "DesertDestructible",
+   "rgb": "#db5c3f"
+  },
+  {
+   "key": "DesertTempleDestructible",
+   "name": "Temple Crate",
+   "categories": [
+    "Environment",
+    "DesertBiome"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "id": "DesertTempleDestructible",
+   "rgb": "#eecd63"
+  },
+  {
+   "key": "EerieFloor",
+   "name": "Eerie Floor",
+   "categories": [
+    "Seasonal",
+    "Halloween"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "Eerie",
+   "tileType": "floor",
+   "priority": 730,
+   "id": "EerieFloor",
+   "rgb": "#85669c"
+  },
+  {
+   "key": "ExcavationBridge",
+   "name": "Industrial Bridge",
+   "categories": [
+    "Environment",
+    "ExcavationBiome"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "BaseBuildingExcavation",
+   "tileType": "bridge",
+   "priority": 650,
+   "id": "ExcavationBridge",
+   "rgb": "#3f5b5b"
+  },
+  {
+   "key": "ExcavationMoss",
+   "name": "Rust Pile",
+   "categories": [
+    "Environment",
+    "ExcavationBiome"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "ExcavationRock",
+   "tileType": "chrysalis",
+   "priority": 700,
+   "id": "ExcavationMoss",
+   "rgb": "#959088"
+  },
+  {
+   "key": "ExcavationVoidMoss",
+   "name": "Muddled Moss",
+   "categories": [
+    "Environment",
+    "ExcavationBiome"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "ExcavationVoid",
+   "tileType": "chrysalis",
+   "priority": 700,
+   "id": "ExcavationVoidMoss",
+   "rgb": "#407671"
+  },
+  {
+   "key": "FungalGrowth",
+   "name": "Fungal Soil",
+   "categories": [
+    "Environment",
+    "DirtBiome"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "Turf",
+   "tileType": "chrysalis",
+   "priority": 700,
+   "id": "FungalGrowth",
+   "rgb": "#b7533c"
+  },
+  {
+   "key": "GalaxiteBridge",
+   "name": "Galaxite Bridge",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "BaseBuildingGalaxite",
+   "tileType": "bridge",
+   "priority": 650,
+   "id": "GalaxiteBridge",
+   "rgb": "#acb3a9"
+  },
+  {
+   "key": "GalaxiteFence",
+   "name": "Galaxite Fence",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "BaseBuildingGalaxite",
+   "tileType": "fence",
+   "priority": 850,
+   "id": "GalaxiteFence",
+   "rgb": "#98a195"
+  },
+  {
+   "key": "GalaxiteFloor",
+   "name": "Galaxite Floor",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "BaseBuildingGalaxite",
+   "tileType": "floor",
+   "priority": 730,
+   "id": "GalaxiteFloor",
+   "rgb": "#c5c5c5"
+  },
+  {
+   "key": "GalaxiteOre",
+   "name": "Galaxite Ore",
+   "categories": [
+    "Material",
+    "RawMaterial"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "Desert",
+   "tileType": "ore",
+   "priority": 950,
+   "id": "GalaxiteOre",
+   "rgb": "#f7f0dc"
+  },
+  {
+   "key": "GalaxiteOreBoulder",
+   "name": "Galaxite Ore Boulder",
+   "categories": [
+    "Environment",
+    "OreBoulder"
+   ],
+   "size": [
+    2,
+    2
+   ],
+   "id": "GalaxiteOreBoulder",
+   "rgb": "#d7dcfb"
+  },
+  {
+   "key": "GleamRootPlant",
+   "name": "Gleam Root Plant",
+   "categories": [
+    "NonObtainable",
+    "Plant"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "id": "GleamRootPlant",
+   "rgb": "#adebfd"
+  },
+  {
+   "key": "GleamWood",
+   "name": "Gleam Wood",
+   "categories": [
+    "Material",
+    "RawMaterial"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "Crystal",
+   "tileType": "bigRoot",
+   "priority": 800,
+   "id": "GleamWood",
+   "rgb": "#adebfd"
+  },
+  {
+   "key": "GleamWoodBridge",
+   "name": "Gleam Wood Bridge",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "BasebuildingGleamWood",
+   "tileType": "bridge",
+   "priority": 650,
+   "id": "GleamWoodBridge",
+   "rgb": "#0fd2be"
+  },
+  {
+   "key": "GleamWoodFence",
+   "name": "Gleam Wood Fence",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "BasebuildingGleamWood",
+   "tileType": "fence",
+   "priority": 850,
+   "id": "GleamWoodFence",
+   "rgb": "#109aa6"
+  },
+  {
+   "key": "GleamWoodFloor",
+   "name": "Gleam Wood Floor",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "BasebuildingGleamWood",
+   "tileType": "floor",
+   "priority": 730,
+   "id": "GleamWoodFloor",
+   "rgb": "#80f2ff"
+  },
+  {
+   "key": "GoldOre",
+   "name": "Gold Ore",
+   "categories": [
+    "Material",
+    "RawMaterial"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "Obsidian",
+   "tileType": "ore",
+   "priority": 950,
+   "id": "GoldOre",
+   "rgb": "#f2cc3d"
+  },
+  {
+   "key": "GoldOreBoulder",
+   "name": "Gold Ore Boulder",
+   "categories": [
+    "Environment",
+    "OreBoulder"
+   ],
+   "size": [
+    2,
+    2
+   ],
+   "id": "GoldOreBoulder",
+   "rgb": "#f2cc3d"
+  },
+  {
+   "key": "GreatWallBlock",
+   "name": "Great Wall",
+   "categories": [
+    "NonObtainable",
+    "Environment"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "Extras",
+   "tileType": "greatWall",
+   "priority": 1000,
+   "id": "GreatWallBlock",
+   "rgb": "#135e52"
+  },
+  {
+   "key": "GreenDesertDestructible",
+   "name": "Oasis Flower Vessel",
+   "categories": [
+    "Environment",
+    "OasisBiome"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "id": "GreenDesertDestructible",
+   "rgb": "#536d27"
+  },
+  {
+   "key": "GreenLargeDesertDestructible",
+   "name": "Large Oasis Flower Vessel",
+   "categories": [
+    "Environment",
+    "OasisBiome"
+   ],
+   "size": [
+    2,
+    2
+   ],
+   "id": "GreenLargeDesertDestructible",
+   "rgb": "#536d27"
+  },
+  {
+   "key": "GrimyStoneFloor",
+   "name": "Grimy Stone Floor",
+   "categories": [
+    "Environment",
+    "PassageBiome"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "GrimyStone",
+   "tileType": "floor",
+   "priority": 730,
+   "id": "GrimyStoneFloor",
+   "rgb": "#365956"
+  },
+  {
+   "key": "GroundAcidSlime",
+   "name": "Ground Acid Slime",
+   "categories": [
+    "Environment",
+    "SlimeBiome"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "LarvaHive",
+   "tileType": "groundSlime",
+   "priority": 750,
+   "id": "GroundAcidSlime",
+   "rgb": "#c1aa21"
+  },
+  {
+   "key": "GroundAlienBlock",
+   "name": "Alien Tech Floor",
+   "categories": [
+    "NonObtainable",
+    "Ground"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "Alien",
+   "tileType": "ground",
+   "priority": 400,
+   "id": "GroundAlienBlock",
+   "rgb": "#456a73"
+  },
+  {
+   "key": "GroundBeachSandBlock",
+   "name": "Beach Sand Ground",
+   "categories": [
+    "NonObtainable",
+    "Ground"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "Sea",
+   "tileType": "ground",
+   "priority": 400,
+   "id": "GroundBeachSandBlock",
+   "rgb": "#ebc0be"
+  },
+  {
+   "key": "GroundCityBlock",
+   "name": "City Floor",
+   "categories": [
+    "NonObtainable",
+    "Ground"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "City",
+   "tileType": "ground",
+   "priority": 400,
+   "id": "GroundCityBlock",
+   "rgb": "#578084"
+  },
+  {
+   "key": "GroundClayBlock",
+   "name": "Clay Ground",
+   "categories": [
+    "NonObtainable",
+    "Ground"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "Clay",
+   "tileType": "ground",
+   "priority": 400,
+   "id": "GroundClayBlock",
+   "rgb": "#e88b69"
+  },
+  {
+   "key": "GroundCrystalBlock",
+   "name": "Crystal Ground",
+   "categories": [
+    "NonObtainable",
+    "Ground"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "Crystal",
+   "tileType": "ground",
+   "priority": 400,
+   "id": "GroundCrystalBlock",
+   "rgb": "#3988db"
+  },
+  {
+   "key": "GroundDarkStoneBlock",
+   "name": "Dark Stone Ground",
+   "categories": [
+    "NonObtainable",
+    "Ground"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "DarkStone",
+   "tileType": "ground",
+   "priority": 400,
+   "id": "GroundDarkStoneBlock",
+   "rgb": "#557287"
+  },
+  {
+   "key": "GroundDesertSandBlock",
+   "name": "Desert Sand Ground",
+   "categories": [
+    "NonObtainable",
+    "Ground"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "Desert",
+   "tileType": "ground",
+   "priority": 400,
+   "id": "GroundDesertSandBlock",
+   "rgb": "#d29a7c"
+  },
+  {
+   "key": "GroundDesertTempleBlock",
+   "name": "Temple Floor",
+   "categories": [
+    "NonObtainable",
+    "Ground"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "DesertTemple",
+   "tileType": "ground",
+   "priority": 400,
+   "id": "GroundDesertTempleBlock",
+   "rgb": "#86716e"
+  },
+  {
+   "key": "GroundDesertTempleBlock2",
+   "name": "Maze Floor",
+   "categories": [
+    "NonObtainable",
+    "Ground"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "DesertTemple2",
+   "tileType": "ground",
+   "priority": 400,
+   "id": "GroundDesertTempleBlock2",
+   "rgb": "#536460"
+  },
+  {
+   "key": "GroundDirtBlock",
+   "name": "Dirt Ground",
+   "categories": [
+    "NonObtainable",
+    "Ground"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "Dirt",
+   "tileType": "ground",
+   "priority": 400,
+   "id": "GroundDirtBlock",
+   "rgb": "#7f5f30"
+  },
+  {
+   "key": "GroundGrassBlock",
+   "name": "Grass Ground",
+   "categories": [
+    "NonObtainable",
+    "Ground"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "Nature",
+   "tileType": "ground",
+   "priority": 400,
+   "id": "GroundGrassBlock",
+   "rgb": "#3d9b41"
+  },
+  {
+   "key": "GroundHiveBlock",
+   "name": "Larva Hive Ground",
+   "categories": [
+    "NonObtainable",
+    "Ground"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "LarvaHive",
+   "tileType": "ground",
+   "priority": 400,
+   "id": "GroundHiveBlock",
+   "rgb": "#c77463"
+  },
+  {
+   "key": "GroundLavaBlock",
+   "name": "Lava Rock Ground",
+   "categories": [
+    "NonObtainable",
+    "Ground"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "Lava",
+   "tileType": "ground",
+   "priority": 400,
+   "id": "GroundLavaBlock",
+   "rgb": "#554e6a"
+  },
+  {
+   "key": "GroundLavaSlime",
+   "name": "Ground Magma Slime",
+   "categories": [
+    "Environment",
+    "SlimeBiome"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "Lava",
+   "tileType": "groundSlime",
+   "priority": 750,
+   "id": "GroundLavaSlime",
+   "rgb": "#ff5400"
+  },
+  {
+   "key": "GroundMeadowBlock",
+   "name": "Meadow Ground",
+   "categories": [
+    "NonObtainable",
+    "Ground"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "Meadow",
+   "tileType": "ground",
+   "priority": 400,
+   "id": "GroundMeadowBlock",
+   "rgb": "#efe1b3"
+  },
+  {
+   "key": "GroundMoldBlock",
+   "name": "Mold Ground",
+   "categories": [
+    "NonObtainable",
+    "Ground"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "Mold",
+   "tileType": "ground",
+   "priority": 400,
+   "id": "GroundMoldBlock",
+   "rgb": "#6cbce0"
+  },
+  {
+   "key": "GroundObsidianBlock",
+   "name": "Obsidian Ground",
+   "categories": [
+    "NonObtainable",
+    "Ground"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "Obsidian",
+   "tileType": "ground",
+   "priority": 400,
+   "id": "GroundObsidianBlock",
+   "rgb": "#1f433e"
+  },
+  {
+   "key": "GroundOilSlime",
+   "name": "Ground Oil",
+   "categories": [
+    "Environment",
+    "ExcavationBiome"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "Excavation",
+   "tileType": "groundSlime",
+   "priority": 750,
+   "id": "GroundOilSlime",
+   "rgb": "#483978"
+  },
+  {
+   "key": "GroundPoisonSlime",
+   "name": "Ground Poison Slime",
+   "categories": [
+    "Environment",
+    "SlimeBiome"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "Nature",
+   "tileType": "groundSlime",
+   "priority": 750,
+   "id": "GroundPoisonSlime",
+   "rgb": "#b856a5"
+  },
+  {
+   "key": "GroundSandBlock",
+   "name": "Sand Ground",
+   "categories": [
+    "NonObtainable",
+    "Ground"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "Sand",
+   "tileType": "ground",
+   "priority": 400,
+   "id": "GroundSandBlock",
+   "rgb": "#d4b959"
+  },
+  {
+   "key": "GroundSlime",
+   "name": "Ground Slime",
+   "categories": [
+    "Environment",
+    "SlimeBiome"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "Dirt",
+   "tileType": "groundSlime",
+   "priority": 750,
+   "id": "GroundSlime",
+   "rgb": "#d96217"
+  },
+  {
+   "key": "GroundSlipperySlime",
+   "name": "Ground Slippery Slime",
+   "categories": [
+    "Environment",
+    "SlimeBiome"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "Sea",
+   "tileType": "groundSlime",
+   "priority": 750,
+   "id": "GroundSlipperySlime",
+   "rgb": "#3333ee"
+  },
+  {
+   "key": "GroundSnowBlock",
+   "name": "Snow Ground",
+   "categories": [
+    "NonObtainable",
+    "Ground"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "Snow",
+   "tileType": "ground",
+   "priority": 400,
+   "id": "GroundSnowBlock",
+   "rgb": "#9be7eb"
+  },
+  {
+   "key": "GroundStoneBlock",
+   "name": "Stone Ground",
+   "categories": [
+    "NonObtainable",
+    "Ground"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "Stone",
+   "tileType": "ground",
+   "priority": 400,
+   "id": "GroundStoneBlock",
+   "rgb": "#678397"
+  },
+  {
+   "key": "GroundTurfBlock",
+   "name": "Turf Ground",
+   "categories": [
+    "NonObtainable",
+    "Ground"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "Turf",
+   "tileType": "ground",
+   "priority": 400,
+   "id": "GroundTurfBlock",
+   "rgb": "#568064"
+  },
+  {
+   "key": "IronOre",
+   "name": "Iron Ore",
+   "categories": [
+    "Material",
+    "RawMaterial"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "Stone",
+   "tileType": "ore",
+   "priority": 950,
+   "id": "IronOre",
+   "rgb": "#829bcb"
+  },
+  {
+   "key": "IronOreBoulder",
+   "name": "Iron Ore Boulder",
+   "categories": [
+    "Environment",
+    "OreBoulder"
+   ],
+   "size": [
+    2,
+    2
+   ],
+   "id": "IronOreBoulder",
+   "rgb": "#829bcb"
+  },
+  {
+   "key": "JellyfishDestructable",
+   "name": "Beached Jelly",
+   "categories": [
+    "Environment",
+    "SeaBiome"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "id": "JellyfishDestructable",
+   "rgb": "#2f7ccd"
+  },
+  {
+   "key": "LargeAlienTechDestructible",
+   "name": "Large Alien Tech Destructible",
+   "categories": [
+    "Environment",
+    "CrystalBiome"
+   ],
+   "size": [
+    2,
+    2
+   ],
+   "id": "LargeAlienTechDestructible",
+   "rgb": "#4ce9e0"
+  },
+  {
+   "key": "LargeAncientDestructible",
+   "name": "Large Ancient Crate",
+   "categories": [
+    "Environment",
+    "StoneBiome"
+   ],
+   "size": [
+    2,
+    2
+   ],
+   "id": "LargeAncientDestructible",
+   "rgb": "#4da8ca"
+  },
+  {
+   "key": "LargeCityDestructible",
+   "name": "Large Metropolis Crate",
+   "categories": [
+    "Environment",
+    "CityBiome"
+   ],
+   "size": [
+    1,
+    2
+   ],
+   "id": "LargeCityDestructible",
+   "rgb": "#4da8ca"
+  },
+  {
+   "key": "LargeCrystalDestructible",
+   "name": "Large Sun Crystal",
+   "categories": [
+    "Environment",
+    "CrystalBiome"
+   ],
+   "size": [
+    2,
+    2
+   ],
+   "id": "LargeCrystalDestructible",
+   "rgb": "#db8c26"
+  },
+  {
+   "key": "LargeDesertDestructible",
+   "name": "Large Desert Flower Vessel",
+   "categories": [
+    "Environment",
+    "DesertBiome"
+   ],
+   "size": [
+    2,
+    2
+   ],
+   "id": "LargeDesertDestructible",
+   "rgb": "#db5c3f"
+  },
+  {
+   "key": "LargeDesertTempleDestructible",
+   "name": "Large Temple Crate",
+   "categories": [
+    "Environment",
+    "DesertBiome"
+   ],
+   "size": [
+    2,
+    2
+   ],
+   "id": "LargeDesertTempleDestructible",
+   "rgb": "#eecd63"
+  },
+  {
+   "key": "LargeJellyfishDestructable",
+   "name": "Large Beached Jelly",
+   "categories": [
+    "Environment",
+    "SeaBiome"
+   ],
+   "size": [
+    2,
+    2
+   ],
+   "id": "LargeJellyfishDestructable",
+   "rgb": "#2f7bcd"
+  },
+  {
+   "key": "LargeMoldDestructible",
+   "name": "Large Mold Vessel",
+   "categories": [
+    "Environment",
+    "MoldBiome"
+   ],
+   "size": [
+    2,
+    2
+   ],
+   "id": "LargeMoldDestructible",
+   "rgb": "#e4e4e4"
+  },
+  {
+   "key": "LargePassageDestructible",
+   "name": "Large Fossil Cluster",
+   "categories": [
+    "Environment",
+    "PassageBiome"
+   ],
+   "size": [
+    2,
+    2
+   ],
+   "id": "LargePassageDestructible",
+   "rgb": "#d7dcfb"
+  },
+  {
+   "key": "Lava",
+   "name": "Lava",
+   "categories": [
+    "NonObtainable",
+    "SpecialTile"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "Lava",
+   "tileType": "water",
+   "priority": 300,
+   "id": "Lava",
+   "rgb": "#de3501"
+  },
+  {
+   "key": "LavaWoodenDestructible",
+   "name": "Charred Crate",
+   "categories": [
+    "Environment",
+    "LavaBiome"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "id": "LavaWoodenDestructible",
+   "rgb": "#677fae"
+  },
+  {
+   "key": "LavaWoodenDestructible",
+   "name": "Large Charred Crate",
+   "categories": [
+    "Environment",
+    "LavaBiome"
+   ],
+   "size": [
+    2,
+    1
+   ],
+   "id": "LavaWoodenDestructible#1",
+   "rgb": "#677fae"
+  },
+  {
+   "key": "MetalGrateBridge",
+   "name": "Metal Grate",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "BaseBuildingMetal",
+   "tileType": "bridge",
+   "priority": 650,
+   "id": "MetalGrateBridge",
+   "rgb": "#c58736"
+  },
+  {
+   "key": "MoldDestructible",
+   "name": "Mold Vessel",
+   "categories": [
+    "Environment",
+    "MoldBiome"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "id": "MoldDestructible",
+   "rgb": "#e5e5e5"
+  },
+  {
+   "key": "NatureCavelingMoss",
+   "name": "Lush Moss",
+   "categories": [
+    "Environment",
+    "NatureBiome"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "Nature",
+   "tileType": "chrysalis",
+   "priority": 700,
+   "id": "NatureCavelingMoss",
+   "rgb": "#a3ce4a"
+  },
+  {
+   "key": "NatureDestructible",
+   "name": "Flower Vessel",
+   "categories": [
+    "Environment",
+    "NatureBiome"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "id": "NatureDestructible",
+   "rgb": "#cdbd30"
+  },
+  {
+   "key": "NatureDestructible",
+   "name": "Large Flower Vessel",
+   "categories": [
+    "Environment",
+    "NatureBiome"
+   ],
+   "size": [
+    2,
+    2
+   ],
+   "id": "NatureDestructible#1",
+   "rgb": "#cdbd30"
+  },
+  {
+   "key": "NatureWoodenDestructible",
+   "name": "Overgrown Wooden Crate",
+   "categories": [
+    "Environment",
+    "NatureBiome"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "id": "NatureWoodenDestructible",
+   "rgb": "#614822"
+  },
+  {
+   "key": "NatureWoodenDestructible",
+   "name": "Large Overgrown Wooden Crate",
+   "categories": [
+    "Environment",
+    "NatureBiome"
+   ],
+   "size": [
+    2,
+    1
+   ],
+   "id": "NatureWoodenDestructible#1",
+   "rgb": "#614822"
+  },
+  {
+   "key": "OctarineOre",
+   "name": "Octarine Ore",
+   "categories": [
+    "Material",
+    "RawMaterial"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "Sea",
+   "tileType": "ore",
+   "priority": 950,
+   "id": "OctarineOre",
+   "rgb": "#8b52ee"
+  },
+  {
+   "key": "OctarineOreBoulder",
+   "name": "Octarine Ore Boulder",
+   "categories": [
+    "Environment",
+    "OreBoulder"
+   ],
+   "size": [
+    2,
+    2
+   ],
+   "id": "OctarineOreBoulder",
+   "rgb": "#8b52ee"
+  },
+  {
+   "key": "PaintableFloor",
+   "name": "Paintable Floor",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "variant": "unpainted",
+   "tileset": "BaseBuildingUnpainted",
+   "tileType": "floor",
+   "priority": 730,
+   "id": "PaintableFloor",
+   "rgb": "#aebdf1"
+  },
+  {
+   "key": "PaintableFloor",
+   "name": "Paintable Floor",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "variant": "yellow",
+   "tileset": "BaseBuildingYellow",
+   "tileType": "floor",
+   "priority": 730,
+   "id": "PaintableFloor#1",
+   "rgb": "#ffe82e"
+  },
+  {
+   "key": "PaintableFloor",
+   "name": "Paintable Floor",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "variant": "cyan",
+   "tileset": "BaseBuildingCyan",
+   "tileType": "floor",
+   "priority": 730,
+   "id": "PaintableFloor#10",
+   "rgb": "#29e2b4"
+  },
+  {
+   "key": "PaintableFloor",
+   "name": "Paintable Floor",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "variant": "pink",
+   "tileset": "BaseBuildingPink",
+   "tileType": "floor",
+   "priority": 730,
+   "id": "PaintableFloor#11",
+   "rgb": "#fa4590"
+  },
+  {
+   "key": "PaintableFloor",
+   "name": "Paintable Floor",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "variant": "gray",
+   "tileset": "BaseBuildingGrey",
+   "tileType": "floor",
+   "priority": 730,
+   "id": "PaintableFloor#12",
+   "rgb": "#9dafb7"
+  },
+  {
+   "key": "PaintableFloor",
+   "name": "Paintable Floor",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "variant": "peach",
+   "tileset": "BaseBuildingPeach",
+   "tileType": "floor",
+   "priority": 730,
+   "id": "PaintableFloor#13",
+   "rgb": "#ff977c"
+  },
+  {
+   "key": "PaintableFloor",
+   "name": "Paintable Floor",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "variant": "teal",
+   "tileset": "BaseBuildingTeal",
+   "tileType": "floor",
+   "priority": 730,
+   "id": "PaintableFloor#14",
+   "rgb": "#0f9e88"
+  },
+  {
+   "key": "PaintableFloor",
+   "name": "Paintable Floor",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "variant": "green",
+   "tileset": "BaseBuildingGreen",
+   "tileType": "floor",
+   "priority": 730,
+   "id": "PaintableFloor#2",
+   "rgb": "#55b627"
+  },
+  {
+   "key": "PaintableFloor",
+   "name": "Paintable Floor",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "variant": "red",
+   "tileset": "BaseBuildingRed",
+   "tileType": "floor",
+   "priority": 730,
+   "id": "PaintableFloor#3",
+   "rgb": "#df0000"
+  },
+  {
+   "key": "PaintableFloor",
+   "name": "Paintable Floor",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "variant": "purple",
+   "tileset": "BaseBuildingPurple",
+   "tileType": "floor",
+   "priority": 730,
+   "id": "PaintableFloor#4",
+   "rgb": "#8b4fa7"
+  },
+  {
+   "key": "PaintableFloor",
+   "name": "Paintable Floor",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "variant": "blue",
+   "tileset": "BaseBuildingBlue",
+   "tileType": "floor",
+   "priority": 730,
+   "id": "PaintableFloor#5",
+   "rgb": "#2b6ce4"
+  },
+  {
+   "key": "PaintableFloor",
+   "name": "Paintable Floor",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "variant": "brown",
+   "tileset": "BaseBuildingBrown",
+   "tileType": "floor",
+   "priority": 730,
+   "id": "PaintableFloor#6",
+   "rgb": "#974b28"
+  },
+  {
+   "key": "PaintableFloor",
+   "name": "Paintable Floor",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "variant": "white",
+   "tileset": "BaseBuildingWhite",
+   "tileType": "floor",
+   "priority": 730,
+   "id": "PaintableFloor#7",
+   "rgb": "#b2cee9"
+  },
+  {
+   "key": "PaintableFloor",
+   "name": "Paintable Floor",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "variant": "black",
+   "tileset": "BaseBuildingBlack",
+   "tileType": "floor",
+   "priority": 730,
+   "id": "PaintableFloor#8",
+   "rgb": "#4c5455"
+  },
+  {
+   "key": "PaintableFloor",
+   "name": "Paintable Floor",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "variant": "orange",
+   "tileset": "BaseBuildingOrange",
+   "tileType": "floor",
+   "priority": 730,
+   "id": "PaintableFloor#9",
+   "rgb": "#ed9049"
+  },
+  {
+   "key": "PaintableLitFloor",
+   "name": "Lit Floor",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "variant": "unpainted",
+   "tileset": "BaseBuildingUnpainted",
+   "tileType": "litFloor",
+   "priority": 720,
+   "id": "PaintableLitFloor",
+   "rgb": "#9f9f9f"
+  },
+  {
+   "key": "PaintableLitFloor",
+   "name": "Lit Floor",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "variant": "yellow",
+   "tileset": "BaseBuildingYellow",
+   "tileType": "litFloor",
+   "priority": 720,
+   "id": "PaintableLitFloor#1",
+   "rgb": "#fff883"
+  },
+  {
+   "key": "PaintableLitFloor",
+   "name": "Lit Floor",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "variant": "cyan",
+   "tileset": "BaseBuildingCyan",
+   "tileType": "litFloor",
+   "priority": 720,
+   "id": "PaintableLitFloor#10",
+   "rgb": "#96ffe8"
+  },
+  {
+   "key": "PaintableLitFloor",
+   "name": "Lit Floor",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "variant": "pink",
+   "tileset": "BaseBuildingPink",
+   "tileType": "litFloor",
+   "priority": 720,
+   "id": "PaintableLitFloor#11",
+   "rgb": "#ffb1e1"
+  },
+  {
+   "key": "PaintableLitFloor",
+   "name": "Lit Floor",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "variant": "gray",
+   "tileset": "BaseBuildingGrey",
+   "tileType": "litFloor",
+   "priority": 720,
+   "id": "PaintableLitFloor#12",
+   "rgb": "#bae4f6"
+  },
+  {
+   "key": "PaintableLitFloor",
+   "name": "Lit Floor",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "variant": "peach",
+   "tileset": "BaseBuildingPeach",
+   "tileType": "litFloor",
+   "priority": 720,
+   "id": "PaintableLitFloor#13",
+   "rgb": "#ffb09b"
+  },
+  {
+   "key": "PaintableLitFloor",
+   "name": "Lit Floor",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "variant": "teal",
+   "tileset": "BaseBuildingTeal",
+   "tileType": "litFloor",
+   "priority": 720,
+   "id": "PaintableLitFloor#14",
+   "rgb": "#4bb7ad"
+  },
+  {
+   "key": "PaintableLitFloor",
+   "name": "Lit Floor",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "variant": "green",
+   "tileset": "BaseBuildingGreen",
+   "tileType": "litFloor",
+   "priority": 720,
+   "id": "PaintableLitFloor#2",
+   "rgb": "#9be678"
+  },
+  {
+   "key": "PaintableLitFloor",
+   "name": "Lit Floor",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "variant": "red",
+   "tileset": "BaseBuildingRed",
+   "tileType": "litFloor",
+   "priority": 720,
+   "id": "PaintableLitFloor#3",
+   "rgb": "#f67373"
+  },
+  {
+   "key": "PaintableLitFloor",
+   "name": "Lit Floor",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "variant": "purple",
+   "tileset": "BaseBuildingPurple",
+   "tileType": "litFloor",
+   "priority": 720,
+   "id": "PaintableLitFloor#4",
+   "rgb": "#bf7cde"
+  },
+  {
+   "key": "PaintableLitFloor",
+   "name": "Lit Floor",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "variant": "blue",
+   "tileset": "BaseBuildingBlue",
+   "tileType": "litFloor",
+   "priority": 720,
+   "id": "PaintableLitFloor#5",
+   "rgb": "#6d85ff"
+  },
+  {
+   "key": "PaintableLitFloor",
+   "name": "Lit Floor",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "variant": "brown",
+   "tileset": "BaseBuildingBrown",
+   "tileType": "litFloor",
+   "priority": 720,
+   "id": "PaintableLitFloor#6",
+   "rgb": "#f6ba6c"
+  },
+  {
+   "key": "PaintableLitFloor",
+   "name": "Lit Floor",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "variant": "white",
+   "tileset": "BaseBuildingWhite",
+   "tileType": "litFloor",
+   "priority": 720,
+   "id": "PaintableLitFloor#7",
+   "rgb": "#ffffff"
+  },
+  {
+   "key": "PaintableLitFloor",
+   "name": "Lit Floor",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "variant": "black",
+   "tileset": "BaseBuildingBlack",
+   "tileType": "litFloor",
+   "priority": 720,
+   "id": "PaintableLitFloor#8",
+   "rgb": "#2c2c2c"
+  },
+  {
+   "key": "PaintableLitFloor",
+   "name": "Lit Floor",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "variant": "orange",
+   "tileset": "BaseBuildingOrange",
+   "tileType": "litFloor",
+   "priority": 720,
+   "id": "PaintableLitFloor#9",
+   "rgb": "#ffa35f"
+  },
+  {
+   "key": "PandoriumCrystal",
+   "name": "Pandorium Crystal",
+   "categories": [
+    "Environment",
+    "PassageBiome"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "id": "PandoriumCrystal",
+   "rgb": "#08af43"
+  },
+  {
+   "key": "PandoriumOre",
+   "name": "Pandorium Ore",
+   "categories": [
+    "Material",
+    "RawMaterial"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "id": "PandoriumOre",
+   "rgb": "#ffbe4e"
+  },
+  {
+   "key": "PandoriumOreBoulder",
+   "name": "Pandorium Ore Boulder",
+   "categories": [
+    "Environment",
+    "OreBoulder"
+   ],
+   "size": [
+    2,
+    2
+   ],
+   "id": "PandoriumOreBoulder",
+   "rgb": "#09af24"
+  },
+  {
+   "key": "PassageDestructible",
+   "name": "Fossil Cluster",
+   "categories": [
+    "Environment",
+    "PassageBiome"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "id": "PassageDestructible",
+   "rgb": "#d7dcfb"
+  },
+  {
+   "key": "Pit",
+   "name": "Pit",
+   "categories": [
+    "NonObtainable",
+    "SpecialTile"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "Dirt",
+   "tileType": "pit",
+   "priority": 200,
+   "id": "Pit",
+   "rgb": "#1f1f1f"
+  },
+  {
+   "key": "PoisonSlimeDestructLarge",
+   "name": "Large Poison Slime Vessel",
+   "categories": [
+    "Environment",
+    "SlimeBiome"
+   ],
+   "size": [
+    2,
+    2
+   ],
+   "id": "PoisonSlimeDestructLarge",
+   "rgb": "#5b326e"
+  },
+  {
+   "key": "PoisonSlimeDestructMedium",
+   "name": "Medium Poison Slime Vessel",
+   "categories": [
+    "Environment",
+    "SlimeBiome"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "id": "PoisonSlimeDestructMedium",
+   "rgb": "#5b326e"
+  },
+  {
+   "key": "PoisonSlimeDestructSmall",
+   "name": "Small Poison Slime Vessel",
+   "categories": [
+    "Environment",
+    "SlimeBiome"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "id": "PoisonSlimeDestructSmall",
+   "rgb": "#5b326e"
+  },
+  {
+   "key": "RadiationCrystal",
+   "name": "Radiation Crystal",
+   "categories": [
+    "Environment",
+    "CrystalBiome"
+   ],
+   "size": [
+    2,
+    1
+   ],
+   "id": "RadiationCrystal",
+   "rgb": "#26de51"
+  },
+  {
+   "key": "Rail",
+   "name": "Rail",
+   "categories": [
+    "Technology",
+    "Railway"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "Extras",
+   "tileType": "rail",
+   "priority": 790,
+   "id": "Rail",
+   "rgb": "#7a7a7a"
+  },
+  {
+   "key": "ReluciteOre",
+   "name": "Relucite Ore",
+   "categories": [
+    "Material",
+    "RawMaterial"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "ExcavationRock",
+   "tileType": "ore",
+   "priority": 950,
+   "id": "ReluciteOre",
+   "rgb": "#993ef6"
+  },
+  {
+   "key": "ReluciteOreBoulder",
+   "name": "Relucite Ore Boulder",
+   "categories": [
+    "Environment",
+    "OreBoulder"
+   ],
+   "size": [
+    2,
+    2
+   ],
+   "id": "ReluciteOreBoulder",
+   "rgb": "#983df5"
+  },
+  {
+   "key": "Rug",
+   "name": "Rug",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "variant": "unpainted",
+   "tileset": "BaseBuildingWood",
+   "tileType": "rug",
+   "priority": 770,
+   "id": "Rug",
+   "rgb": "#7c477b"
+  },
+  {
+   "key": "Rug",
+   "name": "Rug",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "variant": "yellow",
+   "tileset": "BaseBuildingYellow",
+   "tileType": "rug",
+   "priority": 770,
+   "id": "Rug#1",
+   "rgb": "#fcff00"
+  },
+  {
+   "key": "Rug",
+   "name": "Rug",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "variant": "cyan",
+   "tileset": "BaseBuildingCyan",
+   "tileType": "rug",
+   "priority": 770,
+   "id": "Rug#10",
+   "rgb": "#22ece1"
+  },
+  {
+   "key": "Rug",
+   "name": "Rug",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "variant": "pink",
+   "tileset": "BaseBuildingPink",
+   "tileType": "rug",
+   "priority": 770,
+   "id": "Rug#11",
+   "rgb": "#ff53ca"
+  },
+  {
+   "key": "Rug",
+   "name": "Rug",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "variant": "gray",
+   "tileset": "BaseBuildingGrey",
+   "tileType": "rug",
+   "priority": 770,
+   "id": "Rug#12",
+   "rgb": "#7e8789"
+  },
+  {
+   "key": "Rug",
+   "name": "Rug",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "variant": "peach",
+   "tileset": "BaseBuildingPeach",
+   "tileType": "rug",
+   "priority": 770,
+   "id": "Rug#13",
+   "rgb": "#ff8169"
+  },
+  {
+   "key": "Rug",
+   "name": "Rug",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "variant": "teal",
+   "tileset": "BaseBuildingTeal",
+   "tileType": "rug",
+   "priority": 770,
+   "id": "Rug#14",
+   "rgb": "#49a682"
+  },
+  {
+   "key": "Rug",
+   "name": "Rug",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "variant": "green",
+   "tileset": "BaseBuildingGreen",
+   "tileType": "rug",
+   "priority": 770,
+   "id": "Rug#2",
+   "rgb": "#84f63f"
+  },
+  {
+   "key": "Rug",
+   "name": "Rug",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "variant": "red",
+   "tileset": "BaseBuildingRed",
+   "tileType": "rug",
+   "priority": 770,
+   "id": "Rug#3",
+   "rgb": "#ff3e25"
+  },
+  {
+   "key": "Rug",
+   "name": "Rug",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "variant": "purple",
+   "tileset": "BaseBuildingPurple",
+   "tileType": "rug",
+   "priority": 770,
+   "id": "Rug#4",
+   "rgb": "#cd1fff"
+  },
+  {
+   "key": "Rug",
+   "name": "Rug",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "variant": "blue",
+   "tileset": "BaseBuildingBlue",
+   "tileType": "rug",
+   "priority": 770,
+   "id": "Rug#5",
+   "rgb": "#4e36ff"
+  },
+  {
+   "key": "Rug",
+   "name": "Rug",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "variant": "brown",
+   "tileset": "BaseBuildingBrown",
+   "tileType": "rug",
+   "priority": 770,
+   "id": "Rug#6",
+   "rgb": "#d07100"
+  },
+  {
+   "key": "Rug",
+   "name": "Rug",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "variant": "white",
+   "tileset": "BaseBuildingWhite",
+   "tileType": "rug",
+   "priority": 770,
+   "id": "Rug#7",
+   "rgb": "#fff3f3"
+  },
+  {
+   "key": "Rug",
+   "name": "Rug",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "variant": "black",
+   "tileset": "BaseBuildingBlack",
+   "tileType": "rug",
+   "priority": 770,
+   "id": "Rug#8",
+   "rgb": "#0d202b"
+  },
+  {
+   "key": "Rug",
+   "name": "Rug",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "variant": "orange",
+   "tileset": "BaseBuildingOrange",
+   "tileType": "rug",
+   "priority": 770,
+   "id": "Rug#9",
+   "rgb": "#ff812d"
+  },
+  {
+   "key": "RuinsCoreRelief",
+   "name": "Core Relief Tile",
+   "categories": [
+    "Environment",
+    "CityBiome"
+   ],
+   "size": [
+    3,
+    3
+   ],
+   "priority": 740,
+   "id": "RuinsCoreRelief",
+   "rgb": "#818181"
+  },
+  {
+   "key": "ScarletBridge",
+   "name": "Scarlet Bridge",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "BaseBuildingScarlet",
+   "tileType": "bridge",
+   "priority": 650,
+   "id": "ScarletBridge",
+   "rgb": "#a81e2e"
+  },
+  {
+   "key": "ScarletFence",
+   "name": "Scarlet Fence",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "BaseBuildingScarlet",
+   "tileType": "fence",
+   "priority": 850,
+   "id": "ScarletFence",
+   "rgb": "#80242e"
+  },
+  {
+   "key": "ScarletFloor",
+   "name": "Scarlet Floor",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "BaseBuildingScarlet",
+   "tileType": "floor",
+   "priority": 730,
+   "id": "ScarletFloor",
+   "rgb": "#b23526"
+  },
+  {
+   "key": "ScarletOre",
+   "name": "Scarlet Ore",
+   "categories": [
+    "Material",
+    "RawMaterial"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "Nature",
+   "tileType": "ore",
+   "priority": 950,
+   "id": "ScarletOre",
+   "rgb": "#ce3b3b"
+  },
+  {
+   "key": "ScarletOreBoulder",
+   "name": "Scarlet Ore Boulder",
+   "categories": [
+    "Environment",
+    "OreBoulder"
+   ],
+   "size": [
+    2,
+    2
+   ],
+   "id": "ScarletOreBoulder",
+   "rgb": "#ce3b3b"
+  },
+  {
+   "key": "SeaWoodenDestructible",
+   "name": "Driftwood Wooden Crate",
+   "categories": [
+    "Environment",
+    "SeaBiome"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "id": "SeaWoodenDestructible",
+   "rgb": "#8f7b77"
+  },
+  {
+   "key": "SeaWoodenDestructible",
+   "name": "Large Driftwood Wooden Crate",
+   "categories": [
+    "Environment",
+    "SeaBiome"
+   ],
+   "size": [
+    2,
+    1
+   ],
+   "id": "SeaWoodenDestructible#1",
+   "rgb": "#8f7b77"
+  },
+  {
+   "key": "SlimeDestructLarge",
+   "name": "Large Slime Vessel",
+   "categories": [
+    "Environment",
+    "SlimeBiome"
+   ],
+   "size": [
+    2,
+    2
+   ],
+   "id": "SlimeDestructLarge",
+   "rgb": "#a63500"
+  },
+  {
+   "key": "SlimeDestructMedium",
+   "name": "Medium Slime Vessel",
+   "categories": [
+    "Environment",
+    "SlimeBiome"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "id": "SlimeDestructMedium",
+   "rgb": "#a63500"
+  },
+  {
+   "key": "SlimeDestructSmall",
+   "name": "Small Slime Vessel",
+   "categories": [
+    "Environment",
+    "SlimeBiome"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "id": "SlimeDestructSmall",
+   "rgb": "#a63500"
+  },
+  {
+   "key": "SmallPandoriumCrystal",
+   "name": "Small Pandorium Crystal",
+   "categories": [
+    "Environment",
+    "PassageBiome"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "id": "SmallPandoriumCrystal",
+   "rgb": "#09af44"
+  },
+  {
+   "key": "SolariteOre",
+   "name": "Solarite Ore",
+   "categories": [
+    "Material",
+    "RawMaterial"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "Crystal",
+   "tileType": "ore",
+   "priority": 950,
+   "id": "SolariteOre",
+   "rgb": "#ffbe4e"
+  },
+  {
+   "key": "SolariteOreBoulder",
+   "name": "Solarite Ore Boulder",
+   "categories": [
+    "Environment",
+    "OreBoulder"
+   ],
+   "size": [
+    2,
+    2
+   ],
+   "id": "SolariteOreBoulder",
+   "rgb": "#e2a12c"
+  },
+  {
+   "key": "StoneBridge",
+   "name": "Stone Bridge",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "BaseBuildingStone",
+   "tileType": "bridge",
+   "priority": 650,
+   "id": "StoneBridge",
+   "rgb": "#7b746c"
+  },
+  {
+   "key": "StoneCavelingMoss",
+   "name": "Stone Moss",
+   "categories": [
+    "Environment",
+    "StoneBiome"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "Stone",
+   "tileType": "chrysalis",
+   "priority": 700,
+   "id": "StoneCavelingMoss",
+   "rgb": "#cff1ff"
+  },
+  {
+   "key": "StoneFence",
+   "name": "Stone Fence",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "BaseBuildingStone",
+   "tileType": "fence",
+   "priority": 850,
+   "id": "StoneFence",
+   "rgb": "#615b55"
+  },
+  {
+   "key": "StoneFloor",
+   "name": "Stone Floor",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "BaseBuildingStone",
+   "tileType": "floor",
+   "priority": 730,
+   "id": "StoneFloor",
+   "rgb": "#81848c"
+  },
+  {
+   "key": "SurfaceCoral1Large",
+   "name": "Large Bicolor Coral",
+   "categories": [
+    "Environment",
+    "SeaBiome"
+   ],
+   "size": [
+    3,
+    3
+   ],
+   "id": "SurfaceCoral1Large",
+   "rgb": "#4a61da"
+  },
+  {
+   "key": "SurfaceCoral1Medium",
+   "name": "Bicolor Coral",
+   "categories": [
+    "Environment",
+    "SeaBiome"
+   ],
+   "size": [
+    2,
+    2
+   ],
+   "id": "SurfaceCoral1Medium",
+   "rgb": "#4a61da"
+  },
+  {
+   "key": "SurfaceCoral1Small",
+   "name": "Small Bicolor Coral",
+   "categories": [
+    "Environment",
+    "SeaBiome"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "id": "SurfaceCoral1Small",
+   "rgb": "#4a61da"
+  },
+  {
+   "key": "SurfaceCoral2Large",
+   "name": "Large Crimson Coral",
+   "categories": [
+    "Environment",
+    "SeaBiome"
+   ],
+   "size": [
+    3,
+    3
+   ],
+   "id": "SurfaceCoral2Large",
+   "rgb": "#bb3f34"
+  },
+  {
+   "key": "SurfaceCoral2Small",
+   "name": "Crimson Coral",
+   "categories": [
+    "Environment",
+    "SeaBiome"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "id": "SurfaceCoral2Small",
+   "rgb": "#bb4034"
+  },
+  {
+   "key": "SurfaceCoral3Large",
+   "name": "Large Dish Coral",
+   "categories": [
+    "Environment",
+    "SeaBiome"
+   ],
+   "size": [
+    2,
+    2
+   ],
+   "id": "SurfaceCoral3Large",
+   "rgb": "#9f4e9f"
+  },
+  {
+   "key": "SurfaceCoral3Small",
+   "name": "Dish Coral",
+   "categories": [
+    "Environment",
+    "SeaBiome"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "id": "SurfaceCoral3Small",
+   "rgb": "#9f4e9f"
+  },
+  {
+   "key": "ThornWood",
+   "name": "Thorn Wood",
+   "categories": [
+    "NonObtainable",
+    "Deprecated"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "Nature",
+   "tileType": "bigRoot",
+   "priority": 800,
+   "id": "ThornWood",
+   "rgb": "#e1a368"
+  },
+  {
+   "key": "TinOre",
+   "name": "Tin Ore",
+   "categories": [
+    "Material",
+    "RawMaterial"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "LarvaHive",
+   "tileType": "ore",
+   "priority": 950,
+   "id": "TinOre",
+   "rgb": "#8e7a76"
+  },
+  {
+   "key": "TinOreBoulder",
+   "name": "Tin Ore Boulder",
+   "categories": [
+    "Environment",
+    "OreBoulder"
+   ],
+   "size": [
+    2,
+    2
+   ],
+   "id": "TinOreBoulder",
+   "rgb": "#8e7a76"
+  },
+  {
+   "key": "WallAlienBlock",
+   "name": "Alien Tech Block",
+   "categories": [
+    "Environment",
+    "Block"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "Alien",
+   "tileType": "wall",
+   "priority": 900,
+   "id": "WallAlienBlock:wall",
+   "layer": "wall",
+   "rgb": "#463e66"
+  },
+  {
+   "key": "WallCityBlock",
+   "name": "Metropolis Block",
+   "categories": [
+    "Environment",
+    "Block"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "City",
+   "tileType": "wall",
+   "priority": 900,
+   "id": "WallCityBlock:wall",
+   "layer": "wall",
+   "rgb": "#314d57"
+  },
+  {
+   "key": "WallClayBlock",
+   "name": "Clay Block",
+   "categories": [
+    "Environment",
+    "Block"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "Clay",
+   "tileType": "wall",
+   "priority": 900,
+   "id": "WallClayBlock:wall",
+   "layer": "wall",
+   "rgb": "#c16436"
+  },
+  {
+   "key": "WallCoralBlock",
+   "name": "Coral Wall",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "BaseBuildingCoral",
+   "tileType": "wall",
+   "priority": 900,
+   "id": "WallCoralBlock",
+   "rgb": "#de8eb2"
+  },
+  {
+   "key": "WallCrystalBlock",
+   "name": "Crystal Block",
+   "categories": [
+    "Environment",
+    "Block"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "Crystal",
+   "tileType": "wall",
+   "priority": 900,
+   "id": "WallCrystalBlock:wall",
+   "layer": "wall",
+   "rgb": "#2a59ee"
+  },
+  {
+   "key": "WallDarkStoneBlock",
+   "name": "Dark Stone Block",
+   "categories": [
+    "Environment",
+    "Block"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "DarkStone",
+   "tileType": "wall",
+   "priority": 900,
+   "id": "WallDarkStoneBlock:wall",
+   "layer": "wall",
+   "rgb": "#324655"
+  },
+  {
+   "key": "WallDesertBlock",
+   "name": "Desert Block",
+   "categories": [
+    "Environment",
+    "Block"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "Desert",
+   "tileType": "wall",
+   "priority": 900,
+   "id": "WallDesertBlock:wall",
+   "layer": "wall",
+   "rgb": "#a69298"
+  },
+  {
+   "key": "WallDesertExplosiveBlock",
+   "name": "Molten Wall",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "ExplosiveDesert",
+   "tileType": "wall",
+   "priority": 900,
+   "id": "WallDesertExplosiveBlock",
+   "rgb": "#b82612"
+  },
+  {
+   "key": "WallDesertTempleBlock",
+   "name": "Desert Temple Block",
+   "categories": [
+    "Environment",
+    "Block"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "DesertTemple",
+   "tileType": "wall",
+   "priority": 900,
+   "id": "WallDesertTempleBlock:wall",
+   "layer": "wall",
+   "rgb": "#0057a3"
+  },
+  {
+   "key": "WallDesertTempleBlock2",
+   "name": "Maze Block",
+   "categories": [
+    "Environment",
+    "Block"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "DesertTemple2",
+   "tileType": "wall",
+   "priority": 900,
+   "id": "WallDesertTempleBlock2:wall",
+   "layer": "wall",
+   "rgb": "#3c4f39"
+  },
+  {
+   "key": "WallDirtBlock",
+   "name": "Dirt Block",
+   "categories": [
+    "Environment",
+    "Block"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "Dirt",
+   "tileType": "wall",
+   "priority": 900,
+   "id": "WallDirtBlock:wall",
+   "layer": "wall",
+   "rgb": "#614927"
+  },
+  {
+   "key": "WallEerieBlock",
+   "name": "Eerie Wall",
+   "categories": [
+    "Seasonal",
+    "Halloween"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "Eerie",
+   "tileType": "wall",
+   "priority": 900,
+   "id": "WallEerieBlock",
+   "rgb": "#674f7a"
+  },
+  {
+   "key": "WallExcavationBlock",
+   "name": "Excavation Block",
+   "categories": [
+    "Environment",
+    "Block"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "Excavation",
+   "tileType": "wall",
+   "priority": 900,
+   "id": "WallExcavationBlock:ground",
+   "layer": "ground",
+   "rgb": "#405b44"
+  },
+  {
+   "key": "WallExcavationBlock",
+   "name": "Excavation Block",
+   "categories": [
+    "Environment",
+    "Block"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "Excavation",
+   "tileType": "wall",
+   "priority": 900,
+   "id": "WallExcavationBlock:wall",
+   "layer": "wall",
+   "rgb": "#2a4030"
+  },
+  {
+   "key": "WallExcavationBorderBlock",
+   "name": "Silicate Block",
+   "categories": [
+    "Environment",
+    "Block"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "ExcavationBorder",
+   "tileType": "wall",
+   "priority": 900,
+   "id": "WallExcavationBorderBlock:ground",
+   "layer": "ground",
+   "rgb": "#43524b"
+  },
+  {
+   "key": "WallExcavationBorderBlock",
+   "name": "Silicate Block",
+   "categories": [
+    "Environment",
+    "Block"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "ExcavationBorder",
+   "tileType": "wall",
+   "priority": 900,
+   "id": "WallExcavationBorderBlock:wall",
+   "layer": "wall",
+   "rgb": "#28463a"
+  },
+  {
+   "key": "WallExcavationDungeonBlock",
+   "name": "Industrial Block",
+   "categories": [
+    "Environment",
+    "Block"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "ExcavationDungeon",
+   "tileType": "wall",
+   "priority": 900,
+   "id": "WallExcavationDungeonBlock:ground",
+   "layer": "ground",
+   "rgb": "#2b4f3b"
+  },
+  {
+   "key": "WallExcavationDungeonBlock",
+   "name": "Industrial Block",
+   "categories": [
+    "Environment",
+    "Block"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "ExcavationDungeon",
+   "tileType": "wall",
+   "priority": 900,
+   "id": "WallExcavationDungeonBlock:wall",
+   "layer": "wall",
+   "rgb": "#13362f"
+  },
+  {
+   "key": "WallExcavationRockBlock",
+   "name": "Tuff Block",
+   "categories": [
+    "Environment",
+    "Block"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "ExcavationRock",
+   "tileType": "wall",
+   "priority": 900,
+   "id": "WallExcavationRockBlock:ground",
+   "layer": "ground",
+   "rgb": "#6a6248"
+  },
+  {
+   "key": "WallExcavationRockBlock",
+   "name": "Tuff Block",
+   "categories": [
+    "Environment",
+    "Block"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "ExcavationRock",
+   "tileType": "wall",
+   "priority": 900,
+   "id": "WallExcavationRockBlock:wall",
+   "layer": "wall",
+   "rgb": "#504931"
+  },
+  {
+   "key": "WallExcavationVoidBlock",
+   "name": "Void Infused Tuff Block",
+   "categories": [
+    "Environment",
+    "Block"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "ExcavationVoid",
+   "tileType": "wall",
+   "priority": 900,
+   "id": "WallExcavationVoidBlock:ground",
+   "layer": "ground",
+   "rgb": "#6a4866"
+  },
+  {
+   "key": "WallExcavationVoidBlock",
+   "name": "Void Infused Tuff Block",
+   "categories": [
+    "Environment",
+    "Block"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "ExcavationVoid",
+   "tileType": "wall",
+   "priority": 900,
+   "id": "WallExcavationVoidBlock:wall",
+   "layer": "wall",
+   "rgb": "#50314f"
+  },
+  {
+   "key": "WallExplosiveBlock",
+   "name": "Explosives Deposit",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "Explosive",
+   "tileType": "wall",
+   "priority": 900,
+   "id": "WallExplosiveBlock",
+   "rgb": "#c0171a"
+  },
+  {
+   "key": "WallForestExplosiveBlock",
+   "name": "Poison Berry Wall",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "ExplosiveForest",
+   "tileType": "wall",
+   "priority": 900,
+   "id": "WallForestExplosiveBlock",
+   "rgb": "#b969d1"
+  },
+  {
+   "key": "WallGalaxiteBlock",
+   "name": "Galaxite Wall",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "BaseBuildingGalaxite",
+   "tileType": "wall",
+   "priority": 900,
+   "id": "WallGalaxiteBlock",
+   "rgb": "#dddddd"
+  },
+  {
+   "key": "WallGleamWoodBlock",
+   "name": "Gleam Wood Wall",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "BasebuildingGleamWood",
+   "tileType": "wall",
+   "priority": 900,
+   "id": "WallGleamWoodBlock",
+   "rgb": "#0fa1ae"
+  },
+  {
+   "key": "WallGrassBlock",
+   "name": "Grass Block",
+   "categories": [
+    "Environment",
+    "Block"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "Nature",
+   "tileType": "wall",
+   "priority": 900,
+   "id": "WallGrassBlock:wall",
+   "layer": "wall",
+   "rgb": "#16831b"
+  },
+  {
+   "key": "WallHiveBlock",
+   "name": "Larva Hive Block",
+   "categories": [
+    "Environment",
+    "Block"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "LarvaHive",
+   "tileType": "wall",
+   "priority": 900,
+   "id": "WallHiveBlock:wall",
+   "layer": "wall",
+   "rgb": "#a36153"
+  },
+  {
+   "key": "WallLavaBlock",
+   "name": "Lava Rock Block",
+   "categories": [
+    "Environment",
+    "Block"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "Lava",
+   "tileType": "wall",
+   "priority": 900,
+   "id": "WallLavaBlock:wall",
+   "layer": "wall",
+   "rgb": "#383447"
+  },
+  {
+   "key": "WallLimestoneBlock",
+   "name": "Beach Block",
+   "categories": [
+    "Environment",
+    "Block"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "Sea",
+   "tileType": "wall",
+   "priority": 900,
+   "id": "WallLimestoneBlock:wall",
+   "layer": "wall",
+   "rgb": "#b4939a"
+  },
+  {
+   "key": "WallMeadowBlock",
+   "name": "Meadow Block",
+   "categories": [
+    "Environment",
+    "Block"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "Meadow",
+   "tileType": "wall",
+   "priority": 900,
+   "id": "WallMeadowBlock:wall",
+   "layer": "wall",
+   "rgb": "#e0c961"
+  },
+  {
+   "key": "WallMoldBlock",
+   "name": "Mold Block",
+   "categories": [
+    "Environment",
+    "Block"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "Mold",
+   "tileType": "wall",
+   "priority": 900,
+   "id": "WallMoldBlock:wall",
+   "layer": "wall",
+   "rgb": "#599cba"
+  },
+  {
+   "key": "WallNaturalExplosiveBlock",
+   "name": "Thermite Wall",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "NaturalExplosive",
+   "tileType": "wall",
+   "priority": 900,
+   "id": "WallNaturalExplosiveBlock",
+   "rgb": "#d8273e"
+  },
+  {
+   "key": "WallOasisBlock",
+   "name": "Oasis Block",
+   "categories": [
+    "Environment",
+    "Block"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "Oasis",
+   "tileType": "wall",
+   "priority": 900,
+   "id": "WallOasisBlock:ground",
+   "layer": "ground",
+   "rgb": "#c77138"
+  },
+  {
+   "key": "WallOasisBlock",
+   "name": "Oasis Block",
+   "categories": [
+    "Environment",
+    "Block"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "Oasis",
+   "tileType": "wall",
+   "priority": 900,
+   "id": "WallOasisBlock:wall",
+   "layer": "wall",
+   "rgb": "#a84c1e"
+  },
+  {
+   "key": "WallObsidianBlock",
+   "name": "Obsidian Block",
+   "categories": [
+    "Environment",
+    "Block"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "Obsidian",
+   "tileType": "wall",
+   "priority": 900,
+   "id": "WallObsidianBlock:wall",
+   "layer": "wall",
+   "rgb": "#162a27"
+  },
+  {
+   "key": "WallPaintableBlock",
+   "name": "Paintable Wall",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "variant": "unpainted",
+   "tileset": "BaseBuildingUnpainted",
+   "tileType": "wall",
+   "priority": 900,
+   "id": "WallPaintableBlock",
+   "rgb": "#9aa5d4"
+  },
+  {
+   "key": "WallPaintableBlock",
+   "name": "Paintable Wall",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "variant": "yellow",
+   "tileset": "BaseBuildingYellow",
+   "tileType": "wall",
+   "priority": 900,
+   "id": "WallPaintableBlock#1",
+   "rgb": "#d4c22a"
+  },
+  {
+   "key": "WallPaintableBlock",
+   "name": "Paintable Wall",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "variant": "cyan",
+   "tileset": "BaseBuildingCyan",
+   "tileType": "wall",
+   "priority": 900,
+   "id": "WallPaintableBlock#10",
+   "rgb": "#1fc1b3"
+  },
+  {
+   "key": "WallPaintableBlock",
+   "name": "Paintable Wall",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "variant": "pink",
+   "tileset": "BaseBuildingPink",
+   "tileType": "wall",
+   "priority": 900,
+   "id": "WallPaintableBlock#11",
+   "rgb": "#f61e78"
+  },
+  {
+   "key": "WallPaintableBlock",
+   "name": "Paintable Wall",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "variant": "gray",
+   "tileset": "BaseBuildingGrey",
+   "tileType": "wall",
+   "priority": 900,
+   "id": "WallPaintableBlock#12",
+   "rgb": "#83979f"
+  },
+  {
+   "key": "WallPaintableBlock",
+   "name": "Paintable Wall",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "variant": "peach",
+   "tileset": "BaseBuildingPeach",
+   "tileType": "wall",
+   "priority": 900,
+   "id": "WallPaintableBlock#13",
+   "rgb": "#e07064"
+  },
+  {
+   "key": "WallPaintableBlock",
+   "name": "Paintable Wall",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "variant": "teal",
+   "tileset": "BaseBuildingTeal",
+   "tileType": "wall",
+   "priority": 900,
+   "id": "WallPaintableBlock#14",
+   "rgb": "#1a8675"
+  },
+  {
+   "key": "WallPaintableBlock",
+   "name": "Paintable Wall",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "variant": "green",
+   "tileset": "BaseBuildingGreen",
+   "tileType": "wall",
+   "priority": 900,
+   "id": "WallPaintableBlock#2",
+   "rgb": "#40a910"
+  },
+  {
+   "key": "WallPaintableBlock",
+   "name": "Paintable Wall",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "variant": "red",
+   "tileset": "BaseBuildingRed",
+   "tileType": "wall",
+   "priority": 900,
+   "id": "WallPaintableBlock#3",
+   "rgb": "#bb0a0a"
+  },
+  {
+   "key": "WallPaintableBlock",
+   "name": "Paintable Wall",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "variant": "purple",
+   "tileset": "BaseBuildingPurple",
+   "tileType": "wall",
+   "priority": 900,
+   "id": "WallPaintableBlock#4",
+   "rgb": "#6d3189"
+  },
+  {
+   "key": "WallPaintableBlock",
+   "name": "Paintable Wall",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "variant": "blue",
+   "tileset": "BaseBuildingBlue",
+   "tileType": "wall",
+   "priority": 900,
+   "id": "WallPaintableBlock#5",
+   "rgb": "#1c5dd8"
+  },
+  {
+   "key": "WallPaintableBlock",
+   "name": "Paintable Wall",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "variant": "brown",
+   "tileset": "BaseBuildingBrown",
+   "tileType": "wall",
+   "priority": 900,
+   "id": "WallPaintableBlock#6",
+   "rgb": "#7c3a1c"
+  },
+  {
+   "key": "WallPaintableBlock",
+   "name": "Paintable Wall",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "variant": "white",
+   "tileset": "BaseBuildingWhite",
+   "tileType": "wall",
+   "priority": 900,
+   "id": "WallPaintableBlock#7",
+   "rgb": "#9db4cb"
+  },
+  {
+   "key": "WallPaintableBlock",
+   "name": "Paintable Wall",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "variant": "black",
+   "tileset": "BaseBuildingBlack",
+   "tileType": "wall",
+   "priority": 900,
+   "id": "WallPaintableBlock#8",
+   "rgb": "#3e3e3e"
+  },
+  {
+   "key": "WallPaintableBlock",
+   "name": "Paintable Wall",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "variant": "orange",
+   "tileset": "BaseBuildingOrange",
+   "tileType": "wall",
+   "priority": 900,
+   "id": "WallPaintableBlock#9",
+   "rgb": "#e27929"
+  },
+  {
+   "key": "WallPassageBlock",
+   "name": "Fossil Block",
+   "categories": [
+    "Environment",
+    "Block"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "Passage",
+   "tileType": "wall",
+   "priority": 900,
+   "id": "WallPassageBlock:ground",
+   "layer": "ground",
+   "rgb": "#c0bacf"
+  },
+  {
+   "key": "WallPassageBlock",
+   "name": "Fossil Block",
+   "categories": [
+    "Environment",
+    "Block"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "Passage",
+   "tileType": "wall",
+   "priority": 900,
+   "id": "WallPassageBlock:wall",
+   "layer": "wall",
+   "rgb": "#595664"
+  },
+  {
+   "key": "WallSandBlock",
+   "name": "Sand Block",
+   "categories": [
+    "Environment",
+    "Block"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "Sand",
+   "tileType": "wall",
+   "priority": 900,
+   "id": "WallSandBlock:wall",
+   "layer": "wall",
+   "rgb": "#ac8f3a"
+  },
+  {
+   "key": "WallScarletBlock",
+   "name": "Scarlet Wall",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "BaseBuildingScarlet",
+   "tileType": "wall",
+   "priority": 900,
+   "id": "WallScarletBlock",
+   "rgb": "#902613"
+  },
+  {
+   "key": "WallSnowBlock",
+   "name": "Snow Block",
+   "categories": [
+    "Seasonal",
+    "Christmas"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "Snow",
+   "tileType": "wall",
+   "priority": 900,
+   "id": "WallSnowBlock:wall",
+   "layer": "wall",
+   "rgb": "#6db1b4"
+  },
+  {
+   "key": "WallStoneBlock",
+   "name": "Stone Block",
+   "categories": [
+    "Environment",
+    "Block"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "Stone",
+   "tileType": "wall",
+   "priority": 900,
+   "id": "WallStoneBlock:wall",
+   "layer": "wall",
+   "rgb": "#49677d"
+  },
+  {
+   "key": "WallStoneBricksBlock",
+   "name": "Stone Bricks Wall",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "BaseBuildingStone",
+   "tileType": "wall",
+   "priority": 900,
+   "id": "WallStoneBricksBlock",
+   "rgb": "#6a6c72"
+  },
+  {
+   "key": "WallStrawBlock",
+   "name": "Straw-bale Wall",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "BaseBuildingMeadow",
+   "tileType": "wall",
+   "priority": 900,
+   "id": "WallStrawBlock",
+   "rgb": "#dbd489"
+  },
+  {
+   "key": "WallTurfBlock",
+   "name": "Turf Block",
+   "categories": [
+    "Environment",
+    "Block"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "Turf",
+   "tileType": "wall",
+   "priority": 900,
+   "id": "WallTurfBlock:wall",
+   "layer": "wall",
+   "rgb": "#466751"
+  },
+  {
+   "key": "WallWoodBlock",
+   "name": "Wood Wall",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "BaseBuildingWood",
+   "tileType": "wall",
+   "priority": 900,
+   "id": "WallWoodBlock",
+   "rgb": "#946933"
+  },
+  {
+   "key": "Water",
+   "name": "Normal water",
+   "categories": [
+    "NonObtainable",
+    "SpecialTile"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "Dirt",
+   "tileType": "water",
+   "priority": 300,
+   "id": "Water",
+   "rgb": "#1e3d81"
+  },
+  {
+   "key": "Water",
+   "name": "Acid water",
+   "categories": [
+    "NonObtainable",
+    "SpecialTile"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "LarvaHive",
+   "tileType": "water",
+   "priority": 300,
+   "id": "Water#1",
+   "rgb": "#756730"
+  },
+  {
+   "key": "Water",
+   "name": "Mold water",
+   "categories": [
+    "NonObtainable",
+    "SpecialTile"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "Mold",
+   "tileType": "water",
+   "priority": 300,
+   "id": "Water#2",
+   "rgb": "#3d5587"
+  },
+  {
+   "key": "Water",
+   "name": "Sea water",
+   "categories": [
+    "NonObtainable",
+    "SpecialTile"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "Sea",
+   "tileType": "water",
+   "priority": 300,
+   "id": "Water#3",
+   "rgb": "#34d0ff"
+  },
+  {
+   "key": "Water",
+   "name": "Shimmering water",
+   "categories": [
+    "NonObtainable",
+    "SpecialTile"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "Crystal",
+   "tileType": "water",
+   "priority": 300,
+   "id": "Water#4",
+   "rgb": "#9ac6f3"
+  },
+  {
+   "key": "Water",
+   "name": "Grimy water",
+   "categories": [
+    "NonObtainable",
+    "SpecialTile"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "Passage",
+   "tileType": "water",
+   "priority": 300,
+   "id": "Water#5",
+   "rgb": "#3d3959"
+  },
+  {
+   "key": "WateredNatureGround",
+   "name": "Watered Grass Block",
+   "categories": [
+    "NonObtainable",
+    "WateredAndDugUpGround"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "Nature",
+   "tileType": "wateredGround",
+   "priority": 600,
+   "id": "WateredNatureGround",
+   "rgb": "#3d9b41"
+  },
+  {
+   "key": "Wood",
+   "name": "Wood",
+   "categories": [
+    "Material",
+    "RawMaterial"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "Dirt",
+   "tileType": "bigRoot",
+   "priority": 800,
+   "id": "Wood",
+   "rgb": "#e1a368"
+  },
+  {
+   "key": "WoodBridge",
+   "name": "Wood Bridge",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "BaseBuildingWood",
+   "tileType": "bridge",
+   "priority": 650,
+   "id": "WoodBridge",
+   "rgb": "#8c5826"
+  },
+  {
+   "key": "WoodenDestructible",
+   "name": "Wooden Crate",
+   "categories": [
+    "Environment",
+    "DirtBiome"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "id": "WoodenDestructible",
+   "rgb": "#723c11"
+  },
+  {
+   "key": "WoodenDestructible",
+   "name": "Large Wooden Crate",
+   "categories": [
+    "Environment",
+    "DirtBiome"
+   ],
+   "size": [
+    2,
+    1
+   ],
+   "id": "WoodenDestructible#1",
+   "rgb": "#723c11"
+  },
+  {
+   "key": "WoodFence",
+   "name": "Wood Fence",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "variant": "unpainted",
+   "tileset": "BaseBuildingWood",
+   "tileType": "fence",
+   "priority": 850,
+   "id": "WoodFence",
+   "rgb": "#704821"
+  },
+  {
+   "key": "WoodFence",
+   "name": "Wood Fence",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "variant": "yellow",
+   "tileset": "BaseBuildingYellow",
+   "tileType": "fence",
+   "priority": 850,
+   "id": "WoodFence#1",
+   "rgb": "#b9a30d"
+  },
+  {
+   "key": "WoodFence",
+   "name": "Wood Fence",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "variant": "cyan",
+   "tileset": "BaseBuildingCyan",
+   "tileType": "fence",
+   "priority": 850,
+   "id": "WoodFence#10",
+   "rgb": "#26aba4"
+  },
+  {
+   "key": "WoodFence",
+   "name": "Wood Fence",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "variant": "pink",
+   "tileset": "BaseBuildingPink",
+   "tileType": "fence",
+   "priority": 850,
+   "id": "WoodFence#11",
+   "rgb": "#bc3893"
+  },
+  {
+   "key": "WoodFence",
+   "name": "Wood Fence",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "variant": "gray",
+   "tileset": "BaseBuildingGrey",
+   "tileType": "fence",
+   "priority": 850,
+   "id": "WoodFence#12",
+   "rgb": "#516367"
+  },
+  {
+   "key": "WoodFence",
+   "name": "Wood Fence",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "variant": "peach",
+   "tileset": "BaseBuildingPeach",
+   "tileType": "fence",
+   "priority": 850,
+   "id": "WoodFence#13",
+   "rgb": "#e25e45"
+  },
+  {
+   "key": "WoodFence",
+   "name": "Wood Fence",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "variant": "teal",
+   "tileset": "BaseBuildingTeal",
+   "tileType": "fence",
+   "priority": 850,
+   "id": "WoodFence#14",
+   "rgb": "#2b785a"
+  },
+  {
+   "key": "WoodFence",
+   "name": "Wood Fence",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "variant": "green",
+   "tileset": "BaseBuildingGreen",
+   "tileType": "fence",
+   "priority": 850,
+   "id": "WoodFence#2",
+   "rgb": "#6fab23"
+  },
+  {
+   "key": "WoodFence",
+   "name": "Wood Fence",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "variant": "red",
+   "tileset": "BaseBuildingRed",
+   "tileType": "fence",
+   "priority": 850,
+   "id": "WoodFence#3",
+   "rgb": "#ab3516"
+  },
+  {
+   "key": "WoodFence",
+   "name": "Wood Fence",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "variant": "purple",
+   "tileset": "BaseBuildingPurple",
+   "tileType": "fence",
+   "priority": 850,
+   "id": "WoodFence#4",
+   "rgb": "#9720b9"
+  },
+  {
+   "key": "WoodFence",
+   "name": "Wood Fence",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "variant": "blue",
+   "tileset": "BaseBuildingBlue",
+   "tileType": "fence",
+   "priority": 850,
+   "id": "WoodFence#5",
+   "rgb": "#3d2bc0"
+  },
+  {
+   "key": "WoodFence",
+   "name": "Wood Fence",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "variant": "brown",
+   "tileset": "BaseBuildingBrown",
+   "tileType": "fence",
+   "priority": 850,
+   "id": "WoodFence#6",
+   "rgb": "#593715"
+  },
+  {
+   "key": "WoodFence",
+   "name": "Wood Fence",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "variant": "white",
+   "tileset": "BaseBuildingWhite",
+   "tileType": "fence",
+   "priority": 850,
+   "id": "WoodFence#7",
+   "rgb": "#c5b9b9"
+  },
+  {
+   "key": "WoodFence",
+   "name": "Wood Fence",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "variant": "black",
+   "tileset": "BaseBuildingBlack",
+   "tileType": "fence",
+   "priority": 850,
+   "id": "WoodFence#8",
+   "rgb": "#152c3a"
+  },
+  {
+   "key": "WoodFence",
+   "name": "Wood Fence",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "variant": "orange",
+   "tileset": "BaseBuildingOrange",
+   "tileType": "fence",
+   "priority": 850,
+   "id": "WoodFence#9",
+   "rgb": "#c36222"
+  },
+  {
+   "key": "WoodFloor",
+   "name": "Wood Floor",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "BaseBuildingWood",
+   "tileType": "floor",
+   "priority": 730,
+   "id": "WoodFloor",
+   "rgb": "#c7944f"
+  },
+  {
+   "key": "WovenMat",
+   "name": "Woven Mat",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "BaseBuildingStone",
+   "tileType": "rug",
+   "priority": 770,
+   "id": "WovenMat",
+   "rgb": "#3a8b41"
+  },
+  {
+   "key": "WovenStrawFloor",
+   "name": "Woven Straw Floor",
+   "categories": [
+    "Building",
+    "BaseBuilding"
+   ],
+   "size": [
+    1,
+    1
+   ],
+   "tileset": "BaseBuildingMeadow",
+   "tileType": "floor",
+   "priority": 730,
+   "id": "WovenStrawFloor",
+   "rgb": "#fff371"
+  }
+ ]
+}

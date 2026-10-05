@@ -1,0 +1,38 @@
+/* Simple long-form document pages (privacy). */
+body {
+  overflow: auto;
+}
+.doc {
+  max-width: 68ch;
+  margin: 0 auto;
+  padding: var(--space-8) var(--space-4) var(--space-10);
+  line-height: 1.65;
+}
+.doc h1 {
+  font-size: var(--text-2xl);
+  line-height: var(--leading-tight);
+  margin: var(--space-6) 0 var(--space-1);
+}
+.doc h2 {
+  font-size: var(--text-lg);
+  margin: var(--space-6) 0 var(--space-2);
+}
+.doc p,
+.doc ul {
+  margin-bottom: var(--space-3);
+  color: var(--color-text-muted);
+}
+.doc ul {
+  padding-left: var(--space-5);
+}
+.doc strong {
+  color: var(--color-text);
+}
+.doc__meta {
+  font-size: var(--text-sm);
+}
+.doc hr {
+  margin: var(--space-10) 0;
+  border: 0;
+  border-top: 1px solid var(--color-border);
+}
