@@ -25,6 +25,7 @@ const CREDITS: { name: string; role: MsgKey; href?: string }[] = [
   { name: 'MzHub', role: 'credits.mzhub', href: 'https://github.com/MzHub' },
   { name: 'user004', role: 'credits.user004' },
   { name: 'Micke', role: 'credits.micke' },
+  { name: 'Dakon The Mad', role: 'credits.dakon', href: 'https://www.youtube.com/c/DakonTheMad' },
   { name: 'nineforty', role: 'credits.nineforty' },
 ];
 
