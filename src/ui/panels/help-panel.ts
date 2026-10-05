@@ -17,17 +17,73 @@ const FAQ: string[] = [
   'faq.mobile',
 ];
 
-const CREDITS: { name: string; role: MsgKey; href?: string }[] = [
-  { name: 'Ceddini', role: 'credits.ceddini', href: 'https://github.com/Ceddini' },
-  { name: 'Soul Wade', role: 'credits.soulwade' },
-  { name: 'ZeroGravitas', role: 'credits.zerogravitas', href: 'https://www.youtube.com/c/ZeroGravitas' },
-  { name: 'Craigins', role: 'credits.craigins', href: 'https://github.com/craigins' },
-  { name: 'MzHub', role: 'credits.mzhub', href: 'https://github.com/MzHub' },
+interface Credit {
+  name: string;
+  role: MsgKey;
+  /** The first link goes on the name, the others are listed after the role. */
+  links?: { label: string; href: string }[];
+}
+
+const CREDITS: Credit[] = [
+  {
+    name: 'Ceddini',
+    role: 'credits.ceddini',
+    links: [{ label: 'GitHub', href: 'https://github.com/Ceddini' }],
+  },
+  {
+    name: 'Soul Wade',
+    role: 'credits.soulwade',
+    links: [{ label: 'Twitter', href: 'https://twitter.com/soul_wade' }],
+  },
+  {
+    name: 'Dakon The Mad',
+    role: 'credits.dakon',
+    links: [{ label: 'YouTube', href: 'https://www.youtube.com/c/DakonTheMad' }],
+  },
+];
+
+/** People who worked on earlier versions of the tool. */
+const EARLIER_CREDITS: Credit[] = [
+  {
+    name: 'ZeroGravitas',
+    role: 'credits.zerogravitas',
+    links: [
+      { label: 'YouTube', href: 'https://www.youtube.com/c/ZeroGravitas' },
+      {
+        label: 'Steam guides',
+        href: 'https://steamcommunity.com/profiles/76561197971318812/myworkshopfiles/?section=guides&appid=1621690',
+      },
+    ],
+  },
+  {
+    name: 'Craigins',
+    role: 'credits.craigins',
+    links: [{ label: 'GitHub', href: 'https://github.com/craigins' }],
+  },
+  { name: 'MzHub', role: 'credits.mzhub', links: [{ label: 'GitHub', href: 'https://github.com/MzHub' }] },
   { name: 'user004', role: 'credits.user004' },
   { name: 'Micke', role: 'credits.micke' },
-  { name: 'Dakon The Mad', role: 'credits.dakon', href: 'https://www.youtube.com/c/DakonTheMad' },
   { name: 'nineforty', role: 'credits.nineforty' },
 ];
+
+function creditList(list: Credit[]): HTMLElement {
+  const ext = (l: { label: string; href: string }, text: string) =>
+    h('a', { href: l.href, target: '_blank', rel: 'noopener' }, text);
+  return h(
+    'ul',
+    { class: 'credits' },
+    list.map((c) => {
+      const [main, ...more] = c.links ?? [];
+      return h(
+        'li',
+        null,
+        main ? ext(main, c.name) : h('strong', null, c.name),
+        h('span', { class: 'muted' }, () => ` · ${t(c.role)}`),
+        more.map((l) => [h('span', { class: 'muted' }, ' · '), ext(l, l.label)]),
+      );
+    }),
+  );
+}
 
 function extLink(href: string, label: () => string): HTMLElement {
   return h(
@@ -109,20 +165,9 @@ export function helpPanel(ctx: Ctx): HTMLElement {
       title: () => t('help.credits'),
       open: false,
       children: [
-        h(
-          'ul',
-          { class: 'credits' },
-          CREDITS.map((c) =>
-            h(
-              'li',
-              null,
-              c.href
-                ? h('a', { href: c.href, target: '_blank', rel: 'noopener' }, c.name)
-                : h('strong', null, c.name),
-              h('span', { class: 'muted' }, () => ` · ${t(c.role)}`),
-            ),
-          ),
-        ),
+        creditList(CREDITS),
+        h('h4', { class: 'credits__title' }, () => t('help.creditsEarlier')),
+        creditList(EARLIER_CREDITS),
       ],
     }),
   );

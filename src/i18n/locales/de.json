@@ -264,6 +264,7 @@
   "help.privacy": "Datenschutzerklärung",
   "help.data": "Kachelfarben aus Spieldaten {version} über das",
   "help.credits": "Mitwirkende",
+  "help.creditsEarlier": "Frühere Versionen",
   "faq.private.q": "Wird meine Karte irgendwo hochgeladen?",
   "faq.private.a": "Nein. Die Datei wird in deinem Browser gelesen und verlässt nie dein Gerät. Die Seite nutzt keine Analyse, keine Werbung und keine Cookies.",
   "faq.which.q": "Es gibt mehrere Kartendateien. Welche ist meine?",

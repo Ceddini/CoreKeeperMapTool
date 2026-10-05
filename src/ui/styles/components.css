@@ -671,6 +671,14 @@
   gap: var(--space-2);
   font-size: var(--text-sm);
 }
+.credits__title {
+  margin-top: var(--space-2);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-text-muted);
+}
 
 .steps {
   padding-left: var(--space-5);

@@ -264,6 +264,7 @@
   "help.privacy": "Privacy policy",
   "help.data": "Tile colours from game data {version} via the",
   "help.credits": "Credits",
+  "help.creditsEarlier": "Earlier versions",
   "faq.private.q": "Is my map uploaded anywhere?",
   "faq.private.a": "No. The file is read inside your browser and never leaves your device. The site uses no analytics, no ads and no cookies.",
   "faq.which.q": "There are several map files. Which one is mine?",
