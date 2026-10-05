@@ -1,5 +1,6 @@
 import { poiById } from '../data/pois.ts';
 import { tileById } from '../data/tiles.ts';
+import type { ChunkSize } from '../data/world-layout.ts';
 import type { Settings } from './store.ts';
 
 /**
@@ -29,7 +30,7 @@ interface Packed {
   pc?: number;
   c?: 0 | 1;
   s?: [0 | 1, 0 | 1, number, number];
-  g?: [0 | 1, 0 | 1];
+  g?: [0 | 1, 0 | 1, ChunkSize?];
   m?: [0 | 1, 0 | 1, 0 | 1];
   r?: [0 | 1, number];
   pl?: [0 | 1, number, number, number, string];
@@ -57,7 +58,7 @@ export function encodeLayers(s: Settings): string {
   if (!s.cropToBiome) p.c = 0;
   if (s.sectors.show || s.sectors.manual)
     p.s = [b(s.sectors.show), b(s.sectors.manual), s.sectors.inner, s.sectors.outer];
-  if (s.grids.chunk || s.grids.mob) p.g = [b(s.grids.chunk), b(s.grids.mob)];
+  if (s.grids.chunk || s.grids.mob) p.g = [b(s.grids.chunk), b(s.grids.mob), s.grids.chunkSize];
   if (s.maze.small || s.maze.medium || s.maze.large)
     p.m = [b(s.maze.small), b(s.maze.medium), b(s.maze.large)];
   if (s.customRing.on) p.r = [1, s.customRing.r];
@@ -86,7 +87,10 @@ export function decodeLayers(param: string, current: Settings): Partial<Shared> 
   out.sectors = Array.isArray(p.s)
     ? { show: !!p.s[0], manual: !!p.s[1], inner: num(p.s[2], 0, 359) ?? 0, outer: num(p.s[3], 0, 359) ?? 0 }
     : { ...current.sectors, show: false, manual: false };
-  out.grids = Array.isArray(p.g) ? { chunk: !!p.g[0], mob: !!p.g[1] } : { chunk: false, mob: false };
+  const chunkSize: ChunkSize = Array.isArray(p.g) && (p.g[2] === '64' || p.g[2] === '256') ? p.g[2] : 'auto';
+  out.grids = Array.isArray(p.g)
+    ? { chunk: !!p.g[0], mob: !!p.g[1], chunkSize }
+    : { chunk: false, mob: false, chunkSize: current.grids.chunkSize };
   out.maze = Array.isArray(p.m)
     ? { small: !!p.m[0], medium: !!p.m[1], large: !!p.m[2] }
     : { small: false, medium: false, large: false };

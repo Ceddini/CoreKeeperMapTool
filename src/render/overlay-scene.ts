@@ -1,7 +1,7 @@
 import { biomeById } from '../data/biomes.ts';
 import { POIS } from '../data/pois.ts';
 import type { BiomeId, PoiDef, WorldType, ZoneDef } from '../data/schema.ts';
-import { CHUNK_GRID, MOB_GRID, SECTOR_ALIASES, WORLD_LAYOUTS } from '../data/world-layout.ts';
+import { chunkGrid, MOB_GRID, type ChunkSize, SECTOR_ALIASES, WORLD_LAYOUTS } from '../data/world-layout.ts';
 
 /** Linear RGBA in 0–1. */
 export type RGBA = [number, number, number, number];
@@ -10,7 +10,7 @@ export type RGBA = [number, number, number, number];
 export type OverlayPrimitive =
   | { kind: 'ring'; r: number; halfWidth: number; color: RGBA }
   | { kind: 'sector'; r0: number; r1: number; startDeg: number; spanDeg: number; color: RGBA }
-  | { kind: 'grid'; spacing: number; color: RGBA; strong: boolean }
+  | { kind: 'grid'; spacing: number; offset: number; color: RGBA; strong: boolean }
   | { kind: 'marker'; x: number; y: number; radius: number; color: RGBA }
   | { kind: 'segment'; x0: number; y0: number; x1: number; y1: number; color: RGBA };
 
@@ -36,7 +36,7 @@ export interface OverlayInputs {
   cropToBiome: boolean;
   sectors: { show: boolean; rotations: Partial<Record<ZoneDef['id'], number>> };
   customRing: { on: boolean; r: number };
-  grids: { chunk: boolean; mob: boolean };
+  grids: { chunk: boolean; mob: boolean; chunkSize: ChunkSize };
   player: { on: boolean; x: number; y: number; r: number; color: string };
   alpha: { rings: number; sectors: number; grid: number };
   poiName(p: PoiDef): string;
@@ -180,16 +180,20 @@ export function buildOverlayScene(inp: OverlayInputs): OverlayScene {
     primitives.push({
       kind: 'grid',
       spacing: MOB_GRID,
+      offset: 0,
       color: [0.85, 0.85, 0.85, inp.alpha.grid * 0.7],
       strong: false,
     });
-  if (inp.grids.chunk)
+  if (inp.grids.chunk) {
+    const g = chunkGrid(inp.world, inp.grids.chunkSize);
     primitives.push({
       kind: 'grid',
-      spacing: CHUNK_GRID,
+      spacing: g.size,
+      offset: g.offset,
       color: [0.75, 0.75, 0.75, inp.alpha.grid],
       strong: true,
     });
+  }
   if (inp.player.on) {
     primitives.push({
       kind: 'marker',

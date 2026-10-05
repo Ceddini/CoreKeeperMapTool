@@ -8,7 +8,7 @@ const settings: Settings = {
   pois: ['ghorm', 'azeos'],
   highlight: ['ScarletOre'],
   sectors: { show: true, manual: true, inner: 45, outer: 300 },
-  grids: { chunk: true, mob: false },
+  grids: { chunk: true, mob: false, chunkSize: '256' },
   maze: { small: false, medium: true, large: true },
   player: { on: true, x: 120, y: -40, r: 208, color: '#ff5a5a' },
 };
@@ -21,7 +21,7 @@ describe('share links', () => {
       pois: ['ghorm', 'azeos'],
       highlight: ['ScarletOre'],
       sectors: { show: true, manual: true, inner: 45, outer: 300 },
-      grids: { chunk: true, mob: false },
+      grids: { chunk: true, mob: false, chunkSize: '256' },
       maze: { small: false, medium: true, large: true },
       player: { on: true, x: 120, y: -40 },
     });

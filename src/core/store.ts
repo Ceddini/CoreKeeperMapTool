@@ -1,6 +1,6 @@
 import { effect, signal, type Signal } from './signals.ts';
 import type { WorldType } from '../data/schema.ts';
-import { PLAYER_RADIUS_DEFAULT } from '../data/world-layout.ts';
+import { PLAYER_RADIUS_DEFAULT, type ChunkSize } from '../data/world-layout.ts';
 import type { Lang } from '../i18n/i18n.ts';
 import type { MapSummary, ZoneResult } from './rpc.ts';
 import type { MazeHole } from '../workers/analysis/maze.ts';
@@ -21,7 +21,7 @@ export interface Settings {
   cropToBiome: boolean;
   sectors: { show: boolean; manual: boolean; inner: number; outer: number };
   customRing: { on: boolean; r: number };
-  grids: { chunk: boolean; mob: boolean };
+  grids: { chunk: boolean; mob: boolean; chunkSize: ChunkSize };
   maze: { small: boolean; medium: boolean; large: boolean };
   player: { on: boolean; x: number; y: number; r: number; color: string };
   alpha: { rings: number; sectors: number; grid: number; dim: number };
@@ -55,7 +55,7 @@ export const DEFAULT_SETTINGS: Settings = {
   cropToBiome: true,
   sectors: { show: false, manual: false, inner: 0, outer: 0 },
   customRing: { on: false, r: 500 },
-  grids: { chunk: false, mob: false },
+  grids: { chunk: false, mob: false, chunkSize: 'auto' },
   maze: { small: false, medium: false, large: false },
   player: { on: false, x: 0, y: 0, r: PLAYER_RADIUS_DEFAULT, color: '#ff5a5a' },
   alpha: { rings: 0.75, sectors: 0.35, grid: 0.45, dim: 0.22 },

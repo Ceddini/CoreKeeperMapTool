@@ -3,7 +3,24 @@ import type { WorldLayout, WorldType, ZoneDef } from './schema.ts';
 /** Map files store the world as 256×256 tile parts; one pixel is one tile. */
 export const PART_SIZE = 256;
 
-export const CHUNK_GRID = 64;
+export type ChunkSize = 'auto' | '64' | '256';
+
+/**
+ * World generation chunks. 1.0+ worlds generate in 256 × 256 chunks with the Core in the middle of
+ * one (lines at ±128): measured on a fully revealed world, where dungeons and temples almost never
+ * cross those lines. Classic worlds used 64 × 64 chunks.
+ */
+export const CHUNK_GRIDS: Record<WorldType, { size: number; offset: number }> = {
+  standard: { size: 256, offset: 128 },
+  classic: { size: 64, offset: 0 },
+};
+
+export function chunkGrid(world: WorldType, choice: ChunkSize): { size: number; offset: number } {
+  if (choice === '256') return CHUNK_GRIDS.standard;
+  if (choice === '64') return CHUNK_GRIDS.classic;
+  return CHUNK_GRIDS[world];
+}
+
 export const MOB_GRID = 16;
 export const PLAYER_RADIUS_DEFAULT = 208;
 

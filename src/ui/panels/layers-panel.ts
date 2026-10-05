@@ -5,7 +5,17 @@ import { POIS } from '../../data/pois.ts';
 import type { PoiDef, PoiKind } from '../../data/schema.ts';
 import { biomeName, fmt, poiName, t, tn, type MsgKey } from '../../i18n/i18n.ts';
 import { placeBiome } from '../../render/overlay-scene.ts';
-import { badge, button, checkRow, numberField, section, slider, switchControl } from '../components.ts';
+import {
+  badge,
+  button,
+  checkRow,
+  numberField,
+  section,
+  segmented,
+  slider,
+  switchControl,
+} from '../components.ts';
+import type { ChunkSize } from '../../data/world-layout.ts';
 import { h } from '../dom.ts';
 import { poiIconUrl } from '../poi-icons.ts';
 import { historySection } from './history-section.ts';
@@ -412,6 +422,19 @@ export function layersPanel(ctx: Ctx): HTMLElement {
           description: () => t('layers.grids.chunkDesc'),
           checked: () => s().grids.chunk,
           onChange: (chunk) => patch((st) => ({ grids: { ...st.grids, chunk } })),
+        }),
+        segmented<ChunkSize>({
+          label: () => t('layers.grids.chunkSize'),
+          options: [
+            {
+              value: 'auto',
+              label: () => t('layers.grids.chunkAuto', { size: s().world === 'classic' ? 64 : 256 }),
+            },
+            { value: '64', label: '64 × 64' },
+            { value: '256', label: '256 × 256' },
+          ],
+          value: () => s().grids.chunkSize,
+          onChange: (chunkSize) => patch((st) => ({ grids: { ...st.grids, chunkSize } })),
         }),
         switchControl({
           label: () => t('layers.grids.mob'),

@@ -101,6 +101,7 @@ uniform int u_markerCount;
 uniform vec4 u_markers[${MAX_MARKERS}];   // x, y, radius
 uniform vec4 u_markerColors[${MAX_MARKERS}];
 uniform vec4 u_gridChunk;     // rgba (a = 0: off)
+uniform vec2 u_gridChunkSpec; // spacing, offset (tiles)
 uniform vec4 u_gridMob;
 uniform highp usampler2D u_maze;
 uniform int u_mazeClasses;    // bit mask
@@ -170,7 +171,8 @@ void main() {
   }
   if (u_gridChunk.a > 0.0 && u_pxPerTile >= 0.25) {
     float w = u_pxPerTile >= 4.0 ? 2.0 : 1.0;
-    float c = max(gridLine(p.x, 64.0, w), gridLine(p.y, 64.0, w));
+    vec2 q = p - u_gridChunkSpec.y;
+    float c = max(gridLine(q.x, u_gridChunkSpec.x, w), gridLine(q.y, u_gridChunkSpec.x, w));
     over(col, u_gridChunk, c);
   }
 

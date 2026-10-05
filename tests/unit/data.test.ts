@@ -4,6 +4,7 @@ import { validateData } from '../../src/data/validate.ts';
 import { POIS } from '../../src/data/pois.ts';
 import { BIOMES } from '../../src/data/biomes.ts';
 import { TILES, TILE_CATEGORIES, tileById } from '../../src/data/tiles.ts';
+import { chunkGrid } from '../../src/data/world-layout.ts';
 
 const en = JSON.parse(readFileSync('src/i18n/locales/en.json', 'utf8')) as Record<string, string>;
 const de = JSON.parse(readFileSync('src/i18n/locales/de.json', 'utf8')) as Record<string, string>;
@@ -46,5 +47,14 @@ describe('translations', () => {
       const want = (en[k]?.match(/\{\w+\}/g) ?? []).sort();
       expect((v.match(/\{\w+\}/g) ?? []).sort(), k).toEqual(want);
     }
+  });
+});
+
+describe('chunk grid', () => {
+  it('follows the world type on Auto and can be forced either way', () => {
+    expect(chunkGrid('standard', 'auto')).toEqual({ size: 256, offset: 128 });
+    expect(chunkGrid('classic', 'auto')).toEqual({ size: 64, offset: 0 });
+    expect(chunkGrid('classic', '256').size).toBe(256);
+    expect(chunkGrid('standard', '64').size).toBe(64);
   });
 });

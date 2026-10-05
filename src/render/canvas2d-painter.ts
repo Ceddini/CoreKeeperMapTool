@@ -51,12 +51,13 @@ export function paintOverlay(ctx: Ctx2D, view: PaintView, primitives: readonly O
           maxX = x0 + view.width / s;
         const maxY = y0,
           minY = y0 - view.height / s;
-        for (let x = Math.ceil(minX / p.spacing) * p.spacing; x <= maxX; x += p.spacing) {
+        const first = (v: number) => Math.ceil((v - p.offset) / p.spacing) * p.spacing + p.offset;
+        for (let x = first(minX); x <= maxX; x += p.spacing) {
           const px = Math.round((x - x0) * s) + 0.5;
           ctx.moveTo(px, 0);
           ctx.lineTo(px, view.height);
         }
-        for (let y = Math.ceil(minY / p.spacing) * p.spacing; y <= maxY; y += p.spacing) {
+        for (let y = first(minY); y <= maxY; y += p.spacing) {
           const py = Math.round((y0 - y) * s) + 0.5;
           ctx.moveTo(0, py);
           ctx.lineTo(view.width, py);

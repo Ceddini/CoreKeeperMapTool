@@ -162,6 +162,7 @@ export class GlRenderer implements Renderer {
       'u_markers',
       'u_markerColors',
       'u_gridChunk',
+      'u_gridChunkSpec',
       'u_gridMob',
       'u_maze',
       'u_mazeClasses',
@@ -480,6 +481,7 @@ export class GlRenderer implements Renderer {
       ns = 0,
       nm = 0;
     let gridChunk: number[] = [0, 0, 0, 0];
+    let gridChunkSpec: [number, number] = [256, 128];
     let gridMob: number[] = [0, 0, 0, 0];
     let segment: number[] = [0, 0, 0, 0];
     let segmentColor: number[] = [0, 0, 0, 0];
@@ -495,8 +497,10 @@ export class GlRenderer implements Renderer {
         markers.set([p.x, p.y, p.radius, 0], nm * 4);
         markerColors.set(p.color, nm++ * 4);
       } else if (p.kind === 'grid') {
-        if (p.strong) gridChunk = p.color;
-        else gridMob = p.color;
+        if (p.strong) {
+          gridChunk = p.color;
+          gridChunkSpec = [p.spacing, p.offset];
+        } else gridMob = p.color;
       } else if (p.kind === 'segment') {
         segment = [p.x0, p.y0, p.x1, p.y1];
         segmentColor = p.color;
@@ -512,6 +516,7 @@ export class GlRenderer implements Renderer {
     gl.uniform4fv(ou.u_markers!, markers);
     gl.uniform4fv(ou.u_markerColors!, markerColors);
     gl.uniform4fv(ou.u_gridChunk!, gridChunk);
+    gl.uniform2f(ou.u_gridChunkSpec!, ...gridChunkSpec);
     gl.uniform4fv(ou.u_gridMob!, gridMob);
     gl.activeTexture(gl.TEXTURE3);
     gl.bindTexture(gl.TEXTURE_2D, this.mazeTex);
